@@ -1,19 +1,39 @@
-body {
-  padding-top: 5rem;
-}
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
-}
-
-h1{
-	color:#0000FF;
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
 }
 
-h2{
-	color:#FF0000;
+.card-hover {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
 }
 
-.navbar-brand{
-    margin:0 2rem;
+.progress {
+    border-radius: 20px;
+    overflow: hidden;
+}
+.progress-bar {
+    font-weight: 500;
+}
+
+.navbar {
+    padding: 0.8rem 0;
+}
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .display-6 {
+        font-size: 1.4rem;
+    }
+    .navbar-nav {
+        margin-top: 1rem;
+    }
 }

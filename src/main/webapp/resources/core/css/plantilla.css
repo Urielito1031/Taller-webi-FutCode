@@ -1,0 +1,255 @@
+/* Estilos Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Contenedor Principal */
+.main-container {
+    background: #0e172a;
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 1200px;
+    margin: 20px auto;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+}
+
+/* Encabezado */
+.header {
+    background: #1a2e4e;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header-title {
+    color: #e0e7ff;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+/* Formaciones */
+.formation-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.formation-btn {
+    background: rgba(224, 231, 255, 0.1);
+    color: #e0e7ff;
+    border: 2px solid #2a4d7e;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.formation-btn:hover,
+.formation-btn.active {
+    background: #1e3a8a;
+    border-color: #4a90e2;
+    transform: translateY(-2px);
+}
+
+/* Campo de Juego */
+.field-area {
+    background: #2a3b52 url('/img/cancha-futbol.jpg') no-repeat center center;
+    background-size: cover;
+    border-radius: 12px;
+    min-height: 550px;
+    margin: 25px 0;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #1a2e4e;
+}
+
+/* Listado de Jugadores */
+.player-list {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    overflow-x: auto;
+    background: #0f1c2e;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.player-card {
+    width: 200px;
+    background: #1c2a44;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #2a3b52;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.player-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Sección de Imagen */
+.player-image {
+    height: 180px;
+    position: relative;
+    background: #0d1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid #2a3b52;
+}
+
+.card-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    padding: 12px;
+}
+
+/* Información del Jugador */
+.player-info {
+    padding: 15px;
+    background: #17233a;
+}
+
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.player-number {
+    width: 30px;
+    height: 30px;
+    background: #1e3a8a;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #e0e7ff;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.player-rating {
+    background: #f1c40f;
+    color: #1a2e4e;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.player-name {
+    color: #e0e7ff;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+
+.player-details {
+    color: #a3bffa;
+    font-size: 0.85rem;
+    line-height: 1.3;
+}
+
+.position-marker {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: rgba(224, 231, 255, 0.15);
+    border-radius: 10px;
+    border: 3px solid #4a90e2;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.position-marker:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+}
+
+.marker-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.marker-info {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #e0e7ff;
+}
+
+.marker-number {
+    display: inline-block;
+    margin-right: 5px;
+    font-weight: 600;
+}
+
+.marker-rating {
+    display: inline-block;
+    background: #f1c40f;
+    color: #1a2e4e;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.marker-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Utilidades */
+.disabled-card {
+    opacity: 0.5;
+    filter: grayscale(1);
+    pointer-events: none;
+}
+
+.dragging {
+    opacity: 0.9 !important;
+    border: 2px dashed #4a90e2;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e3a8a;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2a4d7e;
+}

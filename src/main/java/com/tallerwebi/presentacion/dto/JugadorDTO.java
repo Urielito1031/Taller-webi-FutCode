@@ -4,11 +4,13 @@ import com.tallerwebi.dominio.model.Pais;
 import com.tallerwebi.dominio.model.PosicionEnum;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class JugadorDTO {
    private Long id;
    private String nombre;
@@ -24,7 +26,8 @@ public class JugadorDTO {
    private Pais paisOrigen;
 
    public JugadorDTO() {}
-   public JugadorDTO(String nombre, String apellido, String imagen, Integer edad,Integer numeroCamiseta, Double rating, Double estadoFisico, List<PosicionEnum> posicion, Pais paisOrigen) {
+   public JugadorDTO(Long id,String nombre, String apellido, String imagen, Integer edad,Integer numeroCamiseta, Double rating, Double estadoFisico, List<PosicionEnum> posicion, Pais paisOrigen) {
+      this.id = id;
       this.nombre = nombre;
       this.apellido = apellido;
       this.imagen = imagen;
@@ -37,5 +40,6 @@ public class JugadorDTO {
       this.clubActual = null;
       this.paisOrigen = paisOrigen;
    }
+
 
 }

@@ -21,7 +21,6 @@
          </a>
       </div>
    </header>
-
    <!-- Área del campo -->
    <div class="field-area ratio ratio-16x9" id="field"
         th:style="'background: url(' + @{/img/cancha-futbol.jpg} + ') no-repeat center center; background-size: cover;'"
@@ -33,8 +32,7 @@
    <!-- Listado de jugadores -->
    <div class="player-list d-flex overflow-auto py-3">
       <div th:each="posicionJugador, stat : ${formacion.alineacion}" class="player-item flex-shrink-0">
-         <div class="player-card" draggable="true"
-              th:attr="data-player-id=${posicionJugador.jugador.id}">
+         <div class="player-card" draggable="true" th:attr="data-player-id=${posicionJugador.jugador.id}">
             <div class="player-image">
                <img th:src="@{'/img/jugadores/' + ${posicionJugador.jugador.imagen}}" alt="Imagen futbolista" class="card-img" />
             </div>

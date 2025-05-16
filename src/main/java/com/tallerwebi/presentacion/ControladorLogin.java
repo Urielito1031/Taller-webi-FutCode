@@ -77,7 +77,7 @@ public class ControladorLogin {
     @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
     public ModelAndView procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo) {
         ModelAndView mav = new ModelAndView("home");
-       // session.setAttribute("nombreEquipo", equipo.getNombre());
+        mav.addObject("nombreEquipo", equipo.getNombre());
         mav.addObject("equipo", equipo);
         return mav;
     }

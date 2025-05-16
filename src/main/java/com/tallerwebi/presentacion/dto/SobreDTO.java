@@ -7,6 +7,8 @@ import java.util.List;
 
 @Data
 public class SobreDTO {
-    private List<JugadorDTO> jugadores;
     private TipoSobre tipoSobre;
+    private List<JugadorDTO> jugadores;
+
+
 }

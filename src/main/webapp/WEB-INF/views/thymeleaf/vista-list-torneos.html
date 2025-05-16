@@ -1,10 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel del Director Técnico - Torneos</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link th:href="@{/css/list-torneos.css}" rel="stylesheet" />
 </head>
 <body>
-$END$
+<div class="main-content">
+  <div class="page-header">
+    <h1 class="page-title">Torneos Disponibles</h1>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-item">
+      <i class="fas fa-filter"></i>
+      <span class="filter-label">Formato:</span>
+      <select id="format-filter">
+        <option value="all">Todos</option>
+        <option value="league">Liga</option>
+        <option value="cup">Copa</option>
+      </select>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-globe-americas"></i>
+      <span class="filter-label">Región:</span>
+      <select id="region-filter">
+        <option value="all">Todas</option>
+        <option value="national">Nacional</option>
+        <option value="continental">Continental</option>
+        <option value="international">Internacional</option>
+      </select>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-calendar-alt"></i>
+      <span class="filter-label">Estado:</span>
+      <select id="status-filter">
+        <option value="all">Todos</option>
+        <option value="open">Inscripción Abierta</option>
+        <option value="coming">Próximamente</option>
+        <option value="joined">Inscrito</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="available">Torneos Disponibles</div>
+    <div class="tab" data-tab="joined">Mis Torneos</div>
+  </div>
+
+  <!-- Tournament Grid -->
+  <div class="tournament-grid">
+    <!-- Liga Premier Clásica -->
+    <div class="tournament-card" data-type="league" data-status="open">
+      <div class="tournament-type league">Liga</div>
+      <div class="tournament-header"></div>
+      <div class="tournament-details">
+        <h3 class="tournament-name">Liga Premier Clásica</h3>
+        <div class="tournament-info">
+          <div class="info-item">
+            <i class="fas fa-users"></i>
+            <span>16 equipos</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>30 Jornadas</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-star"></i>
+            <span class="status-badge status-open">Inscripción Abierta</span>
+          </div>
+        </div>
+        <button class="join-btn" onclick="showConfirmation('Liga Premier Clásica', 'Liga', '16 equipos', '30 Jornadas')">Unirse al Torneo</button>
+      </div>
+    </div>
+
+    <!-- Copa Libertadores -->
+    <div class="tournament-card" data-type="cup" data-status="open">
+      <div class="tournament-type cup">Copa</div>
+      <div class="tournament-header"></div>
+      <div class="tournament-details">
+        <h3 class="tournament-name">Copa Libertadores 2025</h3>
+        <div class="tournament-info">
+          <div class="info-item">
+            <i class="fas fa-users"></i>
+            <span>32 equipos</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Fase de grupos + Eliminatorias</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-star"></i>
+            <span class="status-badge status-open">Inscripción Abierta</span>
+          </div>
+        </div>
+        <button class="join-btn" onclick="showConfirmation('Copa Libertadores 2025', 'Copa', '32 equipos', 'Fase de grupos + Eliminatorias')">Unirse al Torneo</button>
+      </div>
+    </div>
+
+    <!-- Super Liga Elite -->
+    <div class="tournament-card" data-type="league" data-status="coming">
+      <div class="tournament-type league">Liga</div>
+      <div class="tournament-header"></div>
+      <div class="tournament-details">
+        <h3 class="tournament-name">Super Liga Elite</h3>
+        <div class="tournament-info">
+          <div class="info-item">
+            <i class="fas fa-users"></i>
+            <span>20 equipos</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>38 Jornadas</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-star"></i>
+            <span class="status-badge status-coming-soon">Próximamente</span>
+          </div>
+        </div>
+        <button class="join-btn disabled" disabled>Inscripción pronto</button>
+      </div>
+    </div>
+
+    <!-- Liga Continental (Joined) -->
+    <div class="tournament-card" data-type="league" data-status="joined">
+      <div class="tournament-type league">Liga</div>
+      <div class="tournament-header"></div>
+      <div class="tournament-details">
+        <h3 class="tournament-name">Liga Continental</h3>
+        <div class="tournament-info">
+          <div class="info-item">
+            <i class="fas fa-users"></i>
+            <span>12 equipos</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>22 Jornadas</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-star"></i>
+            <span class="status-badge status-joined">Inscrito</span>
+          </div>
+        </div>
+        <button class="join-btn disabled" disabled>Ya estás inscrito</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Overlay -->
+<div class="confirmation-overlay" id="confirmation-overlay">
+  <div class="confirmation-box">
+    <h2 class="confirmation-title">Confirmar Participación</h2>
+    <p>¿Estás seguro que deseas inscribir a tu equipo en este torneo?</p>
+    <div class="tournament-summary">
+      <div class="summary-item">
+        <span class="summary-label">Nombre:</span>
+        <span id="confirm-name"></span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Formato:</span>
+        <span id="confirm-format"></span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Equipos:</span>
+        <span id="confirm-teams"></span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Duración:</span>
+        <span id="confirm-duration"></span>
+      </div>
+    </div>
+    <div class="confirmation-actions">
+      <button class="confirm-btn confirm-yes" onclick="confirmJoin()">Confirmar</button>
+      <button class="confirm-btn confirm-no" onclick="closeConfirmation()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // Tab functionality
+    $('.tab').click(function() {
+      $('.tab').removeClass('active');
+      $(this).addClass('active');
+      filterTournaments();
+    });
+
+    // Filter functionality
+    $('#format-filter, #region-filter, #status-filter').change(filterTournaments);
+
+    function filterTournaments() {
+      const tab = $('.tab.active').data('tab');
+      const format = $('#format-filter').val();
+      const region = $('#region-filter').val();
+      const status = $('#status-filter').val();
+
+      $('.tournament-card').each(function() {
+        const card = $(this);
+        const cardType = card.data('type');
+        const cardStatus = card.data('status');
+
+        let showCard = true;
+
+        // Tab filtering
+        if (tab === 'available' && cardStatus === 'joined') {
+          showCard = false;
+        } else if (tab === 'joined' && cardStatus !== 'joined') {
+          showCard = false;
+        }
+
+        // Format filtering
+        if (format !== 'all' && cardType !== format) {
+          showCard = false;
+        }
+
+        // Status filtering
+        if (status !== 'all' && cardStatus !== status) {
+          showCard = false;
+        }
+
+        card.toggle(showCard);
+      });
+    }
+  });
+
+  function showConfirmation(name, format, teams, duration) {
+    $('#confirm-name').text(name);
+    $('#confirm-format').text(format);
+    $('#confirm-teams').text(teams);
+    $('#confirm-duration').text(duration);
+    $('#confirmation-overlay').fadeIn();
+  }
+
+  function closeConfirmation() {
+    $('#confirmation-overlay').fadeOut();
+  }
+
+  function confirmJoin() {
+    // Placeholder for backend integration with Thymeleaf and controller
+    closeConfirmation();
+  }
+</script>
 </body>
 </html>

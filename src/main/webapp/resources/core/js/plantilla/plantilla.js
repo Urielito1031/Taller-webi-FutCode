@@ -343,13 +343,57 @@ $(function () {
          playersOnField = 0;
          console.log(`Campo limpiado. playersOnField: ${playersOnField}`);
       },
+      //metodo para enviar input de los jugadores al formulario
+      setupFieldFormation() {
+         $("#form").on("submit", function(event) {
+            event.preventDefault();
+            const players = [];
+            $("#field .position-marker.occupied").each(function() {
+               const $marker = $(this);
+               const role = $marker.attr("id").split("-")[1]; //ej:"marker-arquero-123" -> "arquero"
+               players.push({
+                  id: $marker.data("player-id"),
+                  role: role.toUpperCase()
+               });
+            });
+
+            if (players.length !== MAX_PLAYERS_ON_FIELD) {
+               alert("Debes tener 11 jugadores en el campo de juego para guardar la formación");
+               return;
+            }
+
+            $("#form input[name^='alineacion']").remove();
+
+            players.forEach((player, index) => {
+               console.log(`Posición ${index}: ID = ${player.id}`);
+               if(!player.id){
+                  console.error(`ID de jugador es null en la posicion ${index}`);
+                  alert("Por favor, asigne un jugador valido en todas las posiciones.");
+                  return;
+               }
+               $("<input>", {
+                  type: "hidden",
+                  name: `alineacion[${index}].jugadorId`,
+                  value: player.id,
+               }).appendTo("#form");
+               $("<input>", {
+                  type: "hidden",
+                  name: `alineacion[${index}].posicionEnCampo`,
+                  value: player.role,
+               }).appendTo("#form");
+            });
+
+            this.submit();
+         });
+      }
    };
 
    // Inicialización
-   PlayerInteraction.setupPlayerData(); // Setear datos de las tarjetas al inicio
+   PlayerInteraction.setupPlayerData();
    PlayerInteraction.setupDraggablePlayers();
    TeamFormation.initializeField();
    PlayerInteraction.setupDroppableField();
    PlayerInteraction.setupClearFieldButton();
+   PlayerInteraction.setupFieldFormation();
    $(".player-card").attr("title", "Arrastra al campo");
 });

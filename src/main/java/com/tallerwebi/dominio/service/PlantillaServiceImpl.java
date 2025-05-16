@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @Service
-public class PlantillaServiceImpl {
+public class PlantillaServiceImpl implements PlantillaService{
 
    private FormacionDTO formacion;
 
@@ -122,5 +122,89 @@ public class PlantillaServiceImpl {
       formacion.setAlineacion(alineacion);
 
       return formacion;
+   }
+
+   @Override
+   public Boolean save(FormacionDTO formacion) {
+      //todavia sin logica para guardar formacion
+      return formacionIsValid(formacion);
+   }
+
+   @Override
+   public Boolean formacionIsValid(FormacionDTO formacion) {
+      return formacion != null
+            && formacion.getAlineacion() != null
+            && !formacion.getAlineacion().isEmpty();
+   }
+   public List<PosicionEnum> getPosicionesPorEsquema(FormacionEsquema esquema) {
+      List<PosicionEnum> posiciones = new ArrayList<>();
+      switch (esquema) {
+         case CUATRO_TRES_TRES:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_OFENSIVO);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case CUATRO_CUATRO_DOS:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case TRES_CINCO_DOS:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_OFENSIVO);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case CINCO_TRES_DOS:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case TRES_CUATRO_TRES:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+      }
+      return posiciones;
    }
 }

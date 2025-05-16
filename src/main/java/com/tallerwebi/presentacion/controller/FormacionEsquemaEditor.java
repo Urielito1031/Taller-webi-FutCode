@@ -1,4 +1,12 @@
 package com.tallerwebi.presentacion.controller;
 
-public class FormacionEsquemaEditor {
+import com.tallerwebi.dominio.model.FormacionEsquema;
+
+import java.beans.PropertyEditorSupport;
+
+public class FormacionEsquemaEditor extends PropertyEditorSupport {
+   @Override
+   public void setAsText(String text) throws IllegalArgumentException {
+      setValue(FormacionEsquema.fromString(text));
+   }
 }

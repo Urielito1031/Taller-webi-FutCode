@@ -20,13 +20,7 @@ public enum FormacionEsquema {
       this.totalJugadores = defensas + mediocampistas + delanteros;
    }
 
-   // Constructor para formaciones con 4 grupos (p. ej., 4-2-3-1)
-   FormacionEsquema(int defensas, int mediocampistasDefensivos, int mediocampistasOfensivos, int delanteros) {
-      this.defensas = defensas;
-      this.mediocampistas = mediocampistasDefensivos + mediocampistasOfensivos;
-      this.delanteros = delanteros;
-      this.totalJugadores = defensas + mediocampistas + delanteros;
-   }
+
 
    // Método para obtener la representación en texto (ej. "4-3-3")
    public String getFormacionTexto() {
@@ -50,7 +44,6 @@ public enum FormacionEsquema {
       return totalJugadores;
    }
 
-   // Método para obtener el enum a partir de una cadena (opcional)
    public static FormacionEsquema fromString(String formacionTexto) {
       switch (formacionTexto) {
          case "4-3-3":

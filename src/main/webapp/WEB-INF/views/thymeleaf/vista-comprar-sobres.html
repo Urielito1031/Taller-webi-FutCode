@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FutCode</title>
+    <link th:href="@{/css/estilos-comprar-sobres.css}" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <main>
+        <div class="fondo"></div>
+        <section>
+
+            <a href="#">
+                <article id="sobre-bronce">
+                    <h3>Sobre de Bronce</h3>
+                    <img th:src="@{/img/sobreFutCodeBronce.png}" alt="Sobre de Bronce">
+                    <h3>$2500</h3>
+                </article>
+            </a> 
+
+            <a href="#"> 
+                <article id="sobre-plata">
+                    <h3>Sobre de Plata</h3>
+                    <img th:src="@{/img/sobreFutCodePlata.png}" alt="Sobre de Plata">
+                    <h3>$5000</h3>
+                </article> 
+            </a> 
+
+            <a href="#">
+                <article id="sobre-oro">
+                    <h3>Sobre de Oro</h3>
+                    <img th:src="@{/img/sobreFutCodeOro.png}" alt="Sobre de Oro">
+                    <h3>$7500</h3>
+                </article>
+            </a> 
+
+            <a href="#"> 
+                <article id="sobre-especial">
+                    <h3>Sobre Especial</h3>
+                    <img th:src="@{/img/sobreFutCodeEspecial.png}" alt="Sobre Especial">
+                    <h3>$10000</h3>
+                </article>
+            </a>
+
+            <aside>
+                <h3 id="titulo-descripcion">Sobre de Oro</h3>
+                <p id="parrafo-descripcion">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab animi vitae debitis ex aliquid, sapiente, quaerat voluptatem accusamus voluptas quas explicabo assumenda ut magni laboriosam tenetur blanditiis beatae cupiditate eos.</p>
+            </aside>
+        </section>
+    </main>
+
+    <script th:src="@{/js/script-comprar-sobre.js}"></script>
+</body>
+</html>

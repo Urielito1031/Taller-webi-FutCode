@@ -12,7 +12,7 @@
 <div class="container main-container">
    <!-- Encabezado -->
    <header class="header text-center py-4">
-      <h1 class="header-title">TÁCTICAS LOS CRACKS FC</h1>
+      <h1 class="header-title">¡FORMACIÓN DE TU EQUIPO!</h1>
       <div class="formation-buttons d-flex justify-content-center gap-2 mt-3">
          <a th:each="esquema : ${esquemas}"
             th:href="@{/formacion-inicial(esquema=${esquema.getFormacionTexto()})}"
@@ -38,7 +38,7 @@
             </div>
             <div class="player-info p-3">
                <div class="player-header d-flex justify-content-between align-items-center mb-2">
-                  <span class="player-number" th:text="${posicionJugador.jugador.id}"></span>
+                  <span class="player-number" th:text="${posicionJugador.jugador.numeroCamiseta}"></span>
                   <span class="player-rating" th:text="${posicionJugador.jugador.rating}"></span>
                </div>
                <h6 th:text="${posicionJugador.jugador.nombre} + ' ' + ${posicionJugador.jugador.apellido}" class="player-name mb-1"></h6>

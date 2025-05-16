@@ -1,0 +1,893 @@
+[
+  {
+    "id": 1,
+    "nombre": "Lionel",
+    "apellido": "Messi",
+    "rating": 94.5,
+    "estadoFisico": 99.0,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "LEYENDA"
+  },
+  {
+    "id": 2,
+    "nombre": "Cristiano",
+    "apellido": "Ronaldo",
+    "rating": 92.3,
+    "estadoFisico": 97.5,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "LEYENDA"
+  },
+  {
+    "id": 3,
+    "nombre": "Kylian",
+    "apellido": "Mbappé",
+    "rating": 91.8,
+    "estadoFisico": 98.7,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "EPICO"
+  },
+  {
+    "id": 4,
+    "nombre": "Kevin",
+    "apellido": "De Bruyne",
+    "rating": 90.2,
+    "estadoFisico": 96.4,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "EPICO"
+  },
+  {
+    "id": 5,
+    "nombre": "Virgil",
+    "apellido": "van Dijk",
+    "rating": 89.0,
+    "estadoFisico": 95.8,
+    "posicionNatural": ["DEFENSOR_CENTRAL"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 6,
+    "nombre": "Thibaut",
+    "apellido": "Courtois",
+    "rating": 88.5,
+    "estadoFisico": 94.9,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 7,
+    "nombre": "Robert",
+    "apellido": "Lewandowski",
+    "rating": 91.5,
+    "estadoFisico": 98.2,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "EPICO"
+  },
+  {
+    "id": 8,
+    "nombre": "Erling",
+    "apellido": "Haaland",
+    "rating": 92.1,
+    "estadoFisico": 98.8,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "EPICO"
+  },
+  {
+    "id": 9,
+    "nombre": "Neymar",
+    "apellido": "Jr",
+    "rating": 90.0,
+    "estadoFisico": 97.0,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "EPICO"
+  },
+  {
+    "id": 10,
+    "nombre": "Luka",
+    "apellido": "Modrić",
+    "rating": 89.6,
+    "estadoFisico": 96.7,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 11,
+    "nombre": "Mohamed",
+    "apellido": "Salah",
+    "rating": 89.9,
+    "estadoFisico": 97.2,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 12,
+    "nombre": "Sadio",
+    "apellido": "Mané",
+    "rating": 88.7,
+    "estadoFisico": 96.5,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 13,
+    "nombre": "Casemiro",
+    "apellido": "Carlos",
+    "rating": 88.4,
+    "estadoFisico": 95.9,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 14,
+    "nombre": "Joshua",
+    "apellido": "Kimmich",
+    "rating": 89.2,
+    "estadoFisico": 96.0,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 15,
+    "nombre": "Rodri",
+    "apellido": "Hernández",
+    "rating": 87.9,
+    "estadoFisico": 95.5,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 16,
+    "nombre": "Bruno",
+    "apellido": "Fernandes",
+    "rating": 88.1,
+    "estadoFisico": 96.1,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 17,
+    "nombre": "Vinícius",
+    "apellido": "Jr",
+    "rating": 89.5,
+    "estadoFisico": 97.8,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 18,
+    "nombre": "Marc-André",
+    "apellido": "ter Stegen",
+    "rating": 87.5,
+    "estadoFisico": 95.2,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 19,
+    "nombre": "Alisson",
+    "apellido": "Becker",
+    "rating": 88.2,
+    "estadoFisico": 95.7,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 20,
+    "nombre": "Ederson",
+    "apellido": "Moraes",
+    "rating": 87.8,
+    "estadoFisico": 95.4,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 21,
+    "nombre": "Antonio",
+    "apellido": "Rüdiger",
+    "rating": 87.3,
+    "estadoFisico": 95.1,
+    "posicionNatural": ["DEFENSOR_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 22,
+    "nombre": "Marquinhos",
+    "apellido": "Marcos",
+    "rating": 88.0,
+    "estadoFisico": 95.6,
+    "posicionNatural": ["DEFENSOR_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 23,
+    "nombre": "João",
+    "apellido": "Cancelo",
+    "rating": 87.6,
+    "estadoFisico": 95.3,
+    "posicionNatural": ["DEFENSOR_LATERAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 24,
+    "nombre": "Trent",
+    "apellido": "Alexander-Arnold",
+    "rating": 87.4,
+    "estadoFisico": 95.0,
+    "posicionNatural": ["DEFENSOR_LATERAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 25,
+    "nombre": "Andrew",
+    "apellido": "Robertson",
+    "rating": 87.2,
+    "estadoFisico": 94.8,
+    "posicionNatural": ["DEFENSOR_LATERAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 26,
+    "nombre": "Theo",
+    "apellido": "Hernández",
+    "rating": 87.1,
+    "estadoFisico": 94.7,
+    "posicionNatural": ["DEFENSOR_LATERAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 27,
+    "nombre": "Achraf",
+    "apellido": "Hakimi",
+    "rating": 87.0,
+    "estadoFisico": 94.6,
+    "posicionNatural": ["DEFENSOR_LATERAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 28,
+    "nombre": "Paul",
+    "apellido": "Pogba",
+    "rating": 86.9,
+    "estadoFisico": 94.5,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 29,
+    "nombre": "Marco",
+    "apellido": "Verratti",
+    "rating": 86.8,
+    "estadoFisico": 94.4,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 30,
+    "nombre": "Son",
+    "apellido": "Heung-min",
+    "rating": 89.3,
+    "estadoFisico": 97.5,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 31,
+    "nombre": "Dusan",
+    "apellido": "Vlahović",
+    "rating": 86.7,
+    "estadoFisico": 94.3,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 32,
+    "nombre": "Lautaro",
+    "apellido": "Martínez",
+    "rating": 86.6,
+    "estadoFisico": 94.2,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 33,
+    "nombre": "Federico",
+    "apellido": "Chiesa",
+    "rating": 86.5,
+    "estadoFisico": 94.1,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 34,
+    "nombre": "Serge",
+    "apellido": "Gnabry",
+    "rating": 86.4,
+    "estadoFisico": 94.0,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 35,
+    "nombre": "Kai",
+    "apellido": "Havertz",
+    "rating": 86.3,
+    "estadoFisico": 93.9,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 36,
+    "nombre": "Christopher",
+    "apellido": "Nkunku",
+    "rating": 86.2,
+    "estadoFisico": 93.8,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 37,
+    "nombre": "Pedri",
+    "apellido": "González",
+    "rating": 86.1,
+    "estadoFisico": 93.7,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 38,
+    "nombre": "Gavi",
+    "apellido": "Paéz",
+    "rating": 85.9,
+    "estadoFisico": 93.6,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 39,
+    "nombre": "Jude",
+    "apellido": "Bellingham",
+    "rating": 85.8,
+    "estadoFisico": 93.5,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 40,
+    "nombre": "Declan",
+    "apellido": "Rice",
+    "rating": 85.7,
+    "estadoFisico": 93.4,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 41,
+    "nombre": "Mason",
+    "apellido": "Mount",
+    "rating": 85.6,
+    "estadoFisico": 93.3,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 42,
+    "nombre": "Phil",
+    "apellido": "Foden",
+    "rating": 85.5,
+    "estadoFisico": 93.2,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 43,
+    "nombre": "Bernardo",
+    "apellido": "Silva",
+    "rating": 88.6,
+    "estadoFisico": 96.3,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 44,
+    "nombre": "Rafael",
+    "apellido": "Leão",
+    "rating": 86.0,
+    "estadoFisico": 93.1,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 45,
+    "nombre": "Hugo",
+    "apellido": "Lloris",
+    "rating": 85.4,
+    "estadoFisico": 93.0,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 46,
+    "nombre": "Keylor",
+    "apellido": "Navas",
+    "rating": 85.3,
+    "estadoFisico": 92.9,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 47,
+    "nombre": "David",
+    "apellido": "de Gea",
+    "rating": 85.2,
+    "estadoFisico": 92.8,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 48,
+    "nombre": "Mike",
+    "apellido": "Maignan",
+    "rating": 85.1,
+    "estadoFisico": 92.7,
+    "posicionNatural": ["ARQUERO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 49,
+    "nombre": "Edin",
+    "apellido": "Džeko",
+    "rating": 85.0,
+    "estadoFisico": 92.6,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 50,
+    "nombre": "Memphis",
+    "apellido": "Depay",
+    "rating": 84.9,
+    "estadoFisico": 92.5,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 51,
+    "nombre": "Gabriel",
+    "apellido": "Jesus",
+    "rating": 84.8,
+    "estadoFisico": 92.4,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 52,
+    "nombre": "Raheem",
+    "apellido": "Sterling",
+    "rating": 84.7,
+    "estadoFisico": 92.3,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 53,
+    "nombre": "João",
+    "apellido": "Félix",
+    "rating": 84.6,
+    "estadoFisico": 92.2,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 54,
+    "nombre": "Alejandro",
+    "apellido": "Garnacho",
+    "rating": 83.5,
+    "estadoFisico": 91.5,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 55,
+    "nombre": "Francisco",
+    "apellido": "Trincão",
+    "rating": 83.4,
+    "estadoFisico": 91.4,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 56,
+    "nombre": "Ansu",
+    "apellido": "Fati",
+    "rating": 83.3,
+    "estadoFisico": 91.3,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 57,
+    "nombre": "Rodrygo",
+    "apellido": "Goes",
+    "rating": 83.2,
+    "estadoFisico": 91.2,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 58,
+    "nombre": "Ferran",
+    "apellido": "Torres",
+    "rating": 83.1,
+    "estadoFisico": 91.1,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 59,
+    "nombre": "Gonçalo",
+    "apellido": "Ramos",
+    "rating": 83.0,
+    "estadoFisico": 91.0,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 60,
+    "nombre": "Darwin",
+    "apellido": "Núñez",
+    "rating": 84.5,
+    "estadoFisico": 92.1,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 61,
+    "nombre": "Sebastien",
+    "apellido": "Haller",
+    "rating": 84.4,
+    "estadoFisico": 92.0,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 62,
+    "nombre": "Victor",
+    "apellido": "Osimhen",
+    "rating": 84.3,
+    "estadoFisico": 91.9,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 63,
+    "nombre": "Dušan",
+    "apellido": "Tadić",
+    "rating": 84.2,
+    "estadoFisico": 91.8,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 64,
+    "nombre": "Lucas",
+    "apellido": "Paquetá",
+    "rating": 84.1,
+    "estadoFisico": 91.7,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 65,
+    "nombre": "James",
+    "apellido": "Maddison",
+    "rating": 84.0,
+    "estadoFisico": 91.6,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 66,
+    "nombre": "Karim",
+    "apellido": "Benzema",
+    "rating": 91.7,
+    "estadoFisico": 98.5,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "LEYENDA"
+  },
+  {
+    "id": 67,
+    "nombre": "Harry",
+    "apellido": "Kane",
+    "rating": 91.2,
+    "estadoFisico": 98.0,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "EPICO"
+  },
+  {
+    "id": 68,
+    "nombre": "Antoine",
+    "apellido": "Griezmann",
+    "rating": 89.8,
+    "estadoFisico": 97.3,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 69,
+    "nombre": "Romelu",
+    "apellido": "Lukaku",
+    "rating": 88.9,
+    "estadoFisico": 96.6,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 70,
+    "nombre": "Paulo",
+    "apellido": "Dybala",
+    "rating": 88.3,
+    "estadoFisico": 96.2,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "RARO"
+  },
+  {
+    "id": 71,
+    "nombre": "Jadon",
+    "apellido": "Sancho",
+    "rating": 87.7,
+    "estadoFisico": 95.7,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 72,
+    "nombre": "Marcus",
+    "apellido": "Rashford",
+    "rating": 87.5,
+    "estadoFisico": 95.5,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 73,
+    "nombre": "Jack",
+    "apellido": "Grealish",
+    "rating": 87.2,
+    "estadoFisico": 95.2,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 74,
+    "nombre": "Mikel",
+    "apellido": "Oyarzabal",
+    "rating": 86.8,
+    "estadoFisico": 94.9,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 75,
+    "nombre": "Wilfried",
+    "apellido": "Zaha",
+    "rating": 86.5,
+    "estadoFisico": 94.6,
+    "posicionNatural": ["EXTREMO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 76,
+    "nombre": "Dominic",
+    "apellido": "Calvert-Lewin",
+    "rating": 86.3,
+    "estadoFisico": 94.4,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 77,
+    "nombre": "Tammy",
+    "apellido": "Abraham",
+    "rating": 86.1,
+    "estadoFisico": 94.2,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 78,
+    "nombre": "Olivier",
+    "apellido": "Giroud",
+    "rating": 85.9,
+    "estadoFisico": 94.0,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 79,
+    "nombre": "Arkadiusz",
+    "apellido": "Milik",
+    "rating": 85.7,
+    "estadoFisico": 93.8,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 80,
+    "nombre": "Sebastian",
+    "apellido": "Haller",
+    "rating": 85.5,
+    "estadoFisico": 93.6,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 81,
+    "nombre": "Ivan",
+    "apellido": "Toney",
+    "rating": 85.3,
+    "estadoFisico": 93.4,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 82,
+    "nombre": "Patrik",
+    "apellido": "Schick",
+    "rating": 85.1,
+    "estadoFisico": 93.2,
+    "posicionNatural": ["DELANTERO_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 83,
+    "nombre": "Florian",
+    "apellido": "Wirtz",
+    "rating": 84.9,
+    "estadoFisico": 93.0,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 84,
+    "nombre": "Nicolò",
+    "apellido": "Zaniolo",
+    "rating": 84.7,
+    "estadoFisico": 92.8,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 85,
+    "nombre": "Houssem",
+    "apellido": "Aouar",
+    "rating": 84.5,
+    "estadoFisico": 92.6,
+    "posicionNatural": ["VOLANTE_OFENSIVO"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 86,
+    "nombre": "James",
+    "apellido": "Milner",
+    "rating": 84.3,
+    "estadoFisico": 92.4,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 87,
+    "nombre": "Jordan",
+    "apellido": "Henderson",
+    "rating": 84.1,
+    "estadoFisico": 92.2,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 88,
+    "nombre": "Youri",
+    "apellido": "Tielemans",
+    "rating": 83.9,
+    "estadoFisico": 92.0,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 89,
+    "nombre": "Renato",
+    "apellido": "Sanches",
+    "rating": 83.7,
+    "estadoFisico": 91.8,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 90,
+    "nombre": "Weston",
+    "apellido": "McKennie",
+    "rating": 83.1,
+    "estadoFisico": 91.2,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 91,
+    "nombre": "Kalvin",
+    "apellido": "Phillips",
+    "rating": 82.9,
+    "estadoFisico": 91.0,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 92,
+    "nombre": "Declan",
+    "apellido": "Rice",
+    "rating": 82.7,
+    "estadoFisico": 90.8,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 93,
+    "nombre": "Wilfred",
+    "apellido": "Ndidi",
+    "rating": 82.5,
+    "estadoFisico": 90.6,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 94,
+    "nombre": "Sergio",
+    "apellido": "Busquets",
+    "rating": 82.3,
+    "estadoFisico": 90.4,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 95,
+    "nombre": "Rodrigo",
+    "apellido": "De Paul",
+    "rating": 82.1,
+    "estadoFisico": 90.2,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 96,
+    "nombre": "Lucas",
+    "apellido": "Torreira",
+    "rating": 81.9,
+    "estadoFisico": 90.0,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 97,
+    "nombre": "Leandro",
+    "apellido": "Paredes",
+    "rating": 81.7,
+    "estadoFisico": 89.8,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 98,
+    "nombre": "Matteo",
+    "apellido": "Guendouzi",
+    "rating": 81.5,
+    "estadoFisico": 89.6,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  },
+  {
+    "id": 99,
+    "nombre": "Ryan",
+    "apellido": "Gravenberch",
+    "rating": 83.3,
+    "estadoFisico": 91.4,
+    "posicionNatural": ["VOLANTE_CENTRAL"],
+    "rarezaJugador": "NORMAL"
+  }
+]

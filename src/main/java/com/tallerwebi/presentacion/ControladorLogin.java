@@ -20,6 +20,7 @@ public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
 
+
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
@@ -67,19 +68,6 @@ public class ControladorLogin {
         ModelMap model = new ModelMap();
         model.put("usuario", new Usuario());
         return new ModelAndView("nuevo-usuario", model);
-    }
-
-    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.GET)
-    public ModelAndView nuevoEquipo() {
-        return new ModelAndView("creacionEquipo").addObject("equipo", new EquipoDTO());
-    }
-
-    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
-    public ModelAndView procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo) {
-        ModelAndView mav = new ModelAndView("home");
-        mav.addObject("nombreEquipo", equipo.getNombre());
-        mav.addObject("equipo", equipo);
-        return mav;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)

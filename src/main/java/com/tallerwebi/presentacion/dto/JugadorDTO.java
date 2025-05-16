@@ -1,7 +1,10 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tallerwebi.dominio.model.Pais;
 import com.tallerwebi.dominio.model.PosicionEnum;
+import com.tallerwebi.dominio.model.RarezaJugador;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,9 +25,10 @@ public class JugadorDTO {
    private ClubDTO clubActual; // Puede ser null si es agente libre
    private List<PosicionEnum> posicionNatural;
    private Pais paisOrigen;
+   private RarezaJugador rarezaJugador;
 
    public JugadorDTO() {}
-   public JugadorDTO(String nombre, String apellido, String imagen, Integer edad,Integer numeroCamiseta, Double rating, Double estadoFisico, List<PosicionEnum> posicion, Pais paisOrigen) {
+   public JugadorDTO(String nombre, String apellido, String imagen, Integer edad,Integer numeroCamiseta, Double rating, Double estadoFisico, List<PosicionEnum> posicion, Pais paisOrigen, RarezaJugador rarezaJugador) {
       this.nombre = nombre;
       this.apellido = apellido;
       this.imagen = imagen;
@@ -34,8 +38,9 @@ public class JugadorDTO {
       this.estadoFisico = estadoFisico;
       this.posicionNatural = posicion;
       setLesionado(false);
-      this.clubActual = null;
+   this.clubActual = null;
       this.paisOrigen = paisOrigen;
+      this.rarezaJugador = rarezaJugador;
    }
 
 }

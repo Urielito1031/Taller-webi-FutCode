@@ -22,7 +22,7 @@ public enum FormacionEsquema {
 
 
 
-   // Método para obtener la representación en texto (ej. "4-3-3")
+   // obtener la representación en texto (ej. "4-3-3"), util para el thymealeaf
    public String getFormacionTexto() {
       return defensas + "-" + mediocampistas + "-" + delanteros;
    }

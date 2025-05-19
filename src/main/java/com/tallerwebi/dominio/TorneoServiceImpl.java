@@ -2,7 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.presentacion.dto.EquipoTorneo;
-import com.tallerwebi.presentacion.dto.PartidoDTO;
+import com.tallerwebi.presentacion.dto.PartidoDTO2;
 import com.tallerwebi.presentacion.dto.TablaGeneralDTO;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +36,8 @@ public class TorneoServiceImpl implements TorneoService {
     }
 
     @Override
-    public List<PartidoDTO> obtenerCalendario(Long id) {
-        List<PartidoDTO> partidos = new ArrayList<>();
+    public List<PartidoDTO2> obtenerCalendario(Long id) {
+        List<PartidoDTO2> partidos = new ArrayList<>();
 
 
         partidos.add(crearPartido("FARENSE", "farense.jpg", 3, "ESTORIL", "estoril.jpg", 0, 1, true));
@@ -50,21 +50,21 @@ public class TorneoServiceImpl implements TorneoService {
         return partidos;
     }
 
-    private PartidoDTO crearPartido(String local, String escudoLocal, Integer golesLocal,
-                                    String visitante, String escudoVisitante, Integer golesVisitante,
-                                    int numeroFecha, boolean jugado) {
+    private PartidoDTO2 crearPartido(String local, String escudoLocal, Integer golesLocal,
+                                     String visitante, String escudoVisitante, Integer golesVisitante,
+                                     int numeroFecha, boolean jugado) {
 
-        PartidoDTO partidoDTO = new PartidoDTO();
-        partidoDTO.setEquipoLocal(local);
-        partidoDTO.setEscudoLocal(escudoLocal);
-        partidoDTO.setGolesLocal(golesLocal);
+        PartidoDTO2 partidoDTO2 = new PartidoDTO2();
+        partidoDTO2.setEquipoLocal(local);
+        partidoDTO2.setEscudoLocal(escudoLocal);
+        partidoDTO2.setGolesLocal(golesLocal);
 
-        partidoDTO.setEquipoVisitante(visitante);
-        partidoDTO.setEscudoVisitante(escudoVisitante);
-        partidoDTO.setGolesVisitante(golesVisitante);
+        partidoDTO2.setEquipoVisitante(visitante);
+        partidoDTO2.setEscudoVisitante(escudoVisitante);
+        partidoDTO2.setGolesVisitante(golesVisitante);
 
-        partidoDTO.setNumeroFecha(numeroFecha);
-        partidoDTO.setJugado(jugado);
-        return partidoDTO;
+        partidoDTO2.setNumeroFecha(numeroFecha);
+        partidoDTO2.setJugado(jugado);
+        return partidoDTO2;
     }
 }

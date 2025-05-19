@@ -3,7 +3,7 @@ package com.tallerwebi.presentacion.dto;
 import lombok.Data;
 
 @Data
-public class PartidoDTO {
+public class PartidoDTO2 {
     private String equipoLocal;
     private String escudoLocal;
     private Integer golesLocal;

@@ -1,0 +1,190 @@
+package com.tallerwebi.dominio.service;
+
+import com.tallerwebi.dominio.model.enums.*;
+import com.tallerwebi.presentacion.dto.ClubDTO;
+import com.tallerwebi.presentacion.dto.FormacionDTO;
+import com.tallerwebi.presentacion.dto.JugadorDTO;
+import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+
+@Service
+public class PlantillaServiceImpl {
+
+   private FormacionDTO formacion;
+
+   public PlantillaServiceImpl() {
+
+   //a futuro para inyectar dependencias con el repository;
+   }
+   public FormacionDTO initPlantillaBase() {
+      // Crear una nueva formación 4-3-3
+      formacion = new FormacionDTO();
+      formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
+      formacion.setId(1L);
+
+      // Lista de posiciones y jugadores para una formación 4-3-3
+      List<PosicionJugadorDTO> alineacion = new ArrayList<>();
+
+      // Crear clubes
+      ClubDTO riverPlate = new ClubDTO();
+      riverPlate.setId(2L);
+      riverPlate.setNombre("River Plate");
+      riverPlate.setPais(Pais.ARGENTINA);
+      riverPlate.setEstadio(Estadio.MONUMENTAL);
+      riverPlate.setImagen("river_plate_logo.png");
+
+      ClubDTO bocaJuniors = new ClubDTO();
+      bocaJuniors.setId(1L);
+      bocaJuniors.setNombre("Boca Juniors");
+      bocaJuniors.setPais(Pais.ARGENTINA);
+      bocaJuniors.setEstadio(Estadio.BOMBONERA);
+      bocaJuniors.setImagen("boca_juniors_logo.png");
+
+
+      ClubDTO realMadrid = new ClubDTO();
+      realMadrid.setId(3L);
+      realMadrid.setNombre("Real Madrid");
+      realMadrid.setPais(Pais.ESPANIA);
+      realMadrid.setEstadio(Estadio.SANTIAGO_BERNABEU);
+      realMadrid.setImagen("real_madrid_logo.png");
+
+      // Crear jugadores para la formación 4-3-3
+      // Arquero
+      JugadorDTO arquero = new JugadorDTO(1L,"Emiliano", "Martínez", "emiliano_martinez.png", 31,1, 88.0, 95.0,
+            Arrays.asList(PosicionEnum.ARQUERO), Pais.ARGENTINA, RarezaJugador.RARO);
+
+      // Defensores
+      JugadorDTO defensor1 = new JugadorDTO(2L,"Cristian", "Romero", "cristian_romero.png", 26,23, 87.0, 90.0,
+            Arrays.asList(PosicionEnum.DEFENSOR_CENTRAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+      JugadorDTO defensor2 = new JugadorDTO(3L,"Nicolás", "Otamendi", "nicolas_otamendi.png", 36,3, 85.0, 88.0,
+            Arrays.asList(PosicionEnum.DEFENSOR_CENTRAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+
+      JugadorDTO defensor3 = new JugadorDTO(4L,"Marcos", "Acuña", "marcos_acuna.png", 32,8, 84.0, 87.0,
+            Arrays.asList(PosicionEnum.DEFENSOR_LATERAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+
+      JugadorDTO defensor4 = new JugadorDTO(5L,"Gonzalo", "Montiel", "gonzalo_montiel.png", 27,4, 83.0, 89.0,
+            Arrays.asList(PosicionEnum.DEFENSOR_LATERAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+
+      // Mediocampistas
+      JugadorDTO volante1 = new JugadorDTO(6L,"Rodrigo", "De Paul", "rodrigo_depaul.png", 29,16, 86.0, 91.0,
+            Arrays.asList(PosicionEnum.VOLANTE_CENTRAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+      JugadorDTO volante2 = new JugadorDTO(7L,"Alexis", "Mac Allister", "alexis_macallister.png", 25,5, 85.0, 90.0,
+            Arrays.asList(PosicionEnum.VOLANTE_CENTRAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+
+      JugadorDTO volante3 = new JugadorDTO(8L,"Enzo", "Fernández", "enzo_fernandez.png", 23,24, 87.0, 92.0,
+            Arrays.asList(PosicionEnum.VOLANTE_OFENSIVO), Pais.ARGENTINA,RarezaJugador.RARO);
+
+
+      // Delanteros
+      JugadorDTO extremo1 = new JugadorDTO(9L,"Lionel", "Messi", "lionel_messi.png", 36, 10,1094.0, 89.0,
+            Arrays.asList(PosicionEnum.EXTREMO, PosicionEnum.VOLANTE_OFENSIVO), Pais.ARGENTINA,RarezaJugador.LEYENDA);
+
+
+      JugadorDTO extremo2 = new JugadorDTO(10L,"Julián", "Álvarez", "julian_alvarez.png", 24,9, 86.0, 88.0,
+            Arrays.asList(PosicionEnum.EXTREMO, PosicionEnum.DELANTERO_CENTRAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+
+      JugadorDTO delantero = new JugadorDTO(11L,"Lautaro", "Martínez", "lautaro_martinez.png", 26,21, 88.0, 90.0,
+            Arrays.asList(PosicionEnum.DELANTERO_CENTRAL), Pais.ARGENTINA,RarezaJugador.RARO);
+
+      // Asignar jugadores a posiciones
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.ARQUERO, arquero));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.DEFENSOR_CENTRAL, defensor1));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.DEFENSOR_CENTRAL, defensor2));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.DEFENSOR_LATERAL, defensor3));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.DEFENSOR_LATERAL, defensor4));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.VOLANTE_CENTRAL, volante1));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.VOLANTE_CENTRAL, volante2));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.VOLANTE_OFENSIVO, volante3));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.EXTREMO, extremo1));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.EXTREMO, extremo2));
+      alineacion.add(new PosicionJugadorDTO(PosicionEnum.DELANTERO_CENTRAL, delantero));
+
+      // Asignar la alineación a la formación
+      formacion.setAlineacion(alineacion);
+
+      return formacion;
+   }
+   public List<PosicionEnum> getPosicionesPorEsquema(FormacionEsquema esquema) {
+      List<PosicionEnum> posiciones = new ArrayList<>();
+      switch (esquema) {
+         case CUATRO_TRES_TRES:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_OFENSIVO);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case CUATRO_CUATRO_DOS:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case TRES_CINCO_DOS:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_OFENSIVO);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case CINCO_TRES_DOS:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.DEFENSOR_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+         case TRES_CUATRO_TRES:
+            posiciones.add(PosicionEnum.ARQUERO);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.DEFENSOR_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_CENTRAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.VOLANTE_LATERAL);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.EXTREMO);
+            posiciones.add(PosicionEnum.DELANTERO_CENTRAL);
+            break;
+      }
+      return posiciones;
+   }
+}

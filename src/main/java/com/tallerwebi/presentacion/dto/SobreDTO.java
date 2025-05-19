@@ -1,11 +1,19 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.tallerwebi.dominio.model.enums.TipoSobre;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
 public class SobreDTO {
+    private TipoSobre tipoSobre;
+    private List<JugadorDTO> jugadores;
+
     private String titulo;
     private Double precio;
-    private TipoSobre rareza;
     private String descripcion;
     private String imagenUrl;
-    
+
 
 }

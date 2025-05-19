@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nuevo Equipo</title>
+    <link rel="stylesheet" th:href="@{/css/sesionUsuario.css}"/>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">FUTCODE</a>
+</nav>
+
+<div id="contenedor-principal">
+    <main role="main" id="main" class="container">
+
+        <h1>Empecemos!</h1>
+
+        <div class="container">
+            <div id="loginbox" class="formbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                <form action="#" th:action="@{/nuevo-equipo}" th:object="${equipo}" method="post">
+                    <h3 class="form-signin-heading">Nuevo Equipo</h3>
+                    <hr class="colorgraph"><br>
+
+                    <label for="equipoNombre" class="sr-only">Nombre</label>
+                    <input th:field="*{nombre}" id="equipoNombre" type="text" class="form-control" required/>
+
+                    <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" Type="Submit">Siguiente</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

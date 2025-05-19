@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-@RequestMapping("/torneo")
 public class TorneoController {
     private TorneoService torneoService;
 
@@ -22,7 +21,7 @@ public class TorneoController {
         this.torneoService=torneoService;
     }
 
-    @GetMapping("/{id}/tabla-general")
+    @GetMapping("/torneo/{id}/tabla-general")
     public ModelAndView getTorneo (@PathVariable Long id){
         TablaGeneralDTO tablaGeneral;
         tablaGeneral = torneoService.obtenerTablaGeneral(id);
@@ -32,7 +31,7 @@ public class TorneoController {
         return mav;
     }
 
-    @GetMapping("/{id}/calendario")
+    @GetMapping("/torneo/{id}/calendario")
     public ModelAndView getCalendario(@PathVariable Long id) {
         List<PartidoDTO2> calendario = torneoService.obtenerCalendario(id);
         ModelAndView mav = new ModelAndView("torneo/calendario");

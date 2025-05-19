@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.service.TorneoService;
+import com.tallerwebi.dominio.service.TorneoService2;
 import com.tallerwebi.presentacion.dto.EquipoTorneo;
 import com.tallerwebi.presentacion.dto.PartidoDTO2;
 import com.tallerwebi.presentacion.dto.TablaGeneralDTO;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TorneoServiceImpl implements TorneoService {
+public class TorneoService2Impl implements TorneoService2 {
 
     @Override
     public TablaGeneralDTO obtenerTablaGeneral(Long id) {

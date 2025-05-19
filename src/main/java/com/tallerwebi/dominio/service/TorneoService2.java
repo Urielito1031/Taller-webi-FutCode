@@ -5,7 +5,7 @@ import com.tallerwebi.presentacion.dto.TablaGeneralDTO;
 
 import java.util.List;
 
-public interface TorneoService {
+public interface TorneoService2 {
     TablaGeneralDTO obtenerTablaGeneral(Long id);
 
     List<PartidoDTO2> obtenerCalendario(Long id);

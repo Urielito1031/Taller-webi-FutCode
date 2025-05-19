@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.model.TipoSobre;
+import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 
 public interface SobreService {

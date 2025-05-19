@@ -3,10 +3,8 @@ package com.tallerwebi.presentacion.controller;
 import com.tallerwebi.dominio.service.SorteoServiceImpl;
 import com.tallerwebi.infraestructura.JugadorLoader;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
-import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

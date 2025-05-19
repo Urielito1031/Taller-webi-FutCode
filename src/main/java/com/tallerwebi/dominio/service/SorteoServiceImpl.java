@@ -1,7 +1,7 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.model.PosicionEnum;
-import com.tallerwebi.dominio.model.RarezaJugador;
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
+import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.infraestructura.JugadorLoader;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.stereotype.Service;

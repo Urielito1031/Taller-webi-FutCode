@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.model.Estadio;
-import com.tallerwebi.dominio.model.Pais;
+import com.tallerwebi.dominio.model.enums.Estadio;
+import com.tallerwebi.dominio.model.enums.Pais;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

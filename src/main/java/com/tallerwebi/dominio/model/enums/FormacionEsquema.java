@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio.model;
+package com.tallerwebi.dominio.model.enums;
 
 public enum FormacionEsquema {
    CUATRO_TRES_TRES(4, 3, 3),

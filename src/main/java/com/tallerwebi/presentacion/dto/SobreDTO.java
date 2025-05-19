@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.model.TipoSobre;
+import com.tallerwebi.dominio.model.enums.TipoSobre;
 import lombok.Data;
 
 import java.util.List;

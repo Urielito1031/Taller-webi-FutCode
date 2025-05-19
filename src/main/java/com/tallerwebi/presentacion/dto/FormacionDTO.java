@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.model.FormacionEsquema;
+import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

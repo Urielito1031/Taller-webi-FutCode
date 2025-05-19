@@ -1,6 +1,17 @@
-package com.tallerwebi.dominio.model;
+package com.tallerwebi.dominio.model.enums;
 
 public enum EstadoTorneoEnum {
-   ABIERTO,
-   CERRADO,
+   ABIERTO("Abierto para inscripciones"),
+   EN_CURSO("En curso"),
+   CERRADO("Finalizado");
+
+   private final String descripcion;
+
+   EstadoTorneoEnum(String descripcion) {
+      this.descripcion = descripcion;
+   }
+
+   public String getDescripcion() {
+      return descripcion;
+   }
 }

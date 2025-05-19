@@ -1,8 +1,7 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.model.PosicionEnum;
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter

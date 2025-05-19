@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion.controller;
 
-import com.tallerwebi.dominio.model.FormacionEsquema;
+import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 
 import java.beans.PropertyEditorSupport;
 

@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio.model.enums;
 
-public enum EstadoPartidoEnum {
+public enum EstadoPartido {
    SIN_JUGAR,
    EN_PROCESO,
    JUGADO

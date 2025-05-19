@@ -3,249 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel del Director Técnico - Torneos</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <link th:href="@{/css/list-torneos.css}" rel="stylesheet" />
-</head>
-<body>
-<div class="main-content">
-  <div class="page-header">
-    <h1 class="page-title">Torneos Disponibles</h1>
-  </div>
-
-  <!-- Filters -->
-  <div class="filters">
-    <div class="filter-item">
-      <i class="fas fa-filter"></i>
-      <span class="filter-label">Formato:</span>
-      <select id="format-filter">
-        <option value="all">Todos</option>
-        <option value="league">Liga</option>
-        <option value="cup">Copa</option>
-      </select>
-    </div>
-    <div class="filter-item">
-      <i class="fas fa-globe-americas"></i>
-      <span class="filter-label">Región:</span>
-      <select id="region-filter">
-        <option value="all">Todas</option>
-        <option value="national">Nacional</option>
-        <option value="continental">Continental</option>
-        <option value="international">Internacional</option>
-      </select>
-    </div>
-    <div class="filter-item">
-      <i class="fas fa-calendar-alt"></i>
-      <span class="filter-label">Estado:</span>
-      <select id="status-filter">
-        <option value="all">Todos</option>
-        <option value="open">Inscripción Abierta</option>
-        <option value="coming">Próximamente</option>
-        <option value="joined">Inscrito</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <div class="tab active" data-tab="available">Torneos Disponibles</div>
-    <div class="tab" data-tab="joined">Mis Torneos</div>
-  </div>
-
-  <!-- Tournament Grid -->
-  <div class="tournament-grid">
-    <!-- Liga Premier Clásica -->
-    <div class="tournament-card" data-type="league" data-status="open">
-      <div class="tournament-type league">Liga</div>
-      <div class="tournament-header"></div>
-      <div class="tournament-details">
-        <h3 class="tournament-name">Liga Premier Clásica</h3>
-        <div class="tournament-info">
-          <div class="info-item">
-            <i class="fas fa-users"></i>
-            <span>16 equipos</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>30 Jornadas</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-star"></i>
-            <span class="status-badge status-open">Inscripción Abierta</span>
-          </div>
-        </div>
-        <button class="join-btn" onclick="showConfirmation('Liga Premier Clásica', 'Liga', '16 equipos', '30 Jornadas')">Unirse al Torneo</button>
-      </div>
-    </div>
-
-    <!-- Copa Libertadores -->
-    <div class="tournament-card" data-type="cup" data-status="open">
-      <div class="tournament-type cup">Copa</div>
-      <div class="tournament-header"></div>
-      <div class="tournament-details">
-        <h3 class="tournament-name">Copa Libertadores 2025</h3>
-        <div class="tournament-info">
-          <div class="info-item">
-            <i class="fas fa-users"></i>
-            <span>32 equipos</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Fase de grupos + Eliminatorias</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-star"></i>
-            <span class="status-badge status-open">Inscripción Abierta</span>
-          </div>
-        </div>
-        <button class="join-btn" onclick="showConfirmation('Copa Libertadores 2025', 'Copa', '32 equipos', 'Fase de grupos + Eliminatorias')">Unirse al Torneo</button>
-      </div>
-    </div>
-
-    <!-- Super Liga Elite -->
-    <div class="tournament-card" data-type="league" data-status="coming">
-      <div class="tournament-type league">Liga</div>
-      <div class="tournament-header"></div>
-      <div class="tournament-details">
-        <h3 class="tournament-name">Super Liga Elite</h3>
-        <div class="tournament-info">
-          <div class="info-item">
-            <i class="fas fa-users"></i>
-            <span>20 equipos</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>38 Jornadas</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-star"></i>
-            <span class="status-badge status-coming-soon">Próximamente</span>
-          </div>
-        </div>
-        <button class="join-btn disabled" disabled>Inscripción pronto</button>
-      </div>
-    </div>
-
-    <!-- Liga Continental (Joined) -->
-    <div class="tournament-card" data-type="league" data-status="joined">
-      <div class="tournament-type league">Liga</div>
-      <div class="tournament-header"></div>
-      <div class="tournament-details">
-        <h3 class="tournament-name">Liga Continental</h3>
-        <div class="tournament-info">
-          <div class="info-item">
-            <i class="fas fa-users"></i>
-            <span>12 equipos</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>22 Jornadas</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-star"></i>
-            <span class="status-badge status-joined">Inscrito</span>
-          </div>
-        </div>
-        <button class="join-btn disabled" disabled>Ya estás inscrito</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Confirmation Overlay -->
-<div class="confirmation-overlay" id="confirmation-overlay">
-  <div class="confirmation-box">
-    <h2 class="confirmation-title">Confirmar Participación</h2>
-    <p>¿Estás seguro que deseas inscribir a tu equipo en este torneo?</p>
-    <div class="tournament-summary">
-      <div class="summary-item">
-        <span class="summary-label">Nombre:</span>
-        <span id="confirm-name"></span>
-      </div>
-      <div class="summary-item">
-        <span class="summary-label">Formato:</span>
-        <span id="confirm-format"></span>
-      </div>
-      <div class="summary-item">
-        <span class="summary-label">Equipos:</span>
-        <span id="confirm-teams"></span>
-      </div>
-      <div class="summary-item">
-        <span class="summary-label">Duración:</span>
-        <span id="confirm-duration"></span>
-      </div>
-    </div>
-    <div class="confirmation-actions">
-      <button class="confirm-btn confirm-yes" onclick="confirmJoin()">Confirmar</button>
-      <button class="confirm-btn confirm-no" onclick="closeConfirmation()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  $(document).ready(function() {
-    // Tab functionality
-    $('.tab').click(function() {
-      $('.tab').removeClass('active');
-      $(this).addClass('active');
-      filterTournaments();
-    });
-
-    // Filter functionality
-    $('#format-filter, #region-filter, #status-filter').change(filterTournaments);
-
-    function filterTournaments() {
-      const tab = $('.tab.active').data('tab');
-      const format = $('#format-filter').val();
-      const region = $('#region-filter').val();
-      const status = $('#status-filter').val();
-
-      $('.tournament-card').each(function() {
-        const card = $(this);
-        const cardType = card.data('type');
-        const cardStatus = card.data('status');
-
-        let showCard = true;
-
-        // Tab filtering
-        if (tab === 'available' && cardStatus === 'joined') {
-          showCard = false;
-        } else if (tab === 'joined' && cardStatus !== 'joined') {
-          showCard = false;
-        }
-
-        // Format filtering
-        if (format !== 'all' && cardType !== format) {
-          showCard = false;
-        }
-
-        // Status filtering
-        if (status !== 'all' && cardStatus !== status) {
-          showCard = false;
-        }
-
-        card.toggle(showCard);
-      });
+  <title>Torneos | FutCode</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+    .torneo-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 1rem;
     }
-  });
+    .torneo-card:hover {
+      transform: translateY(-0.25rem);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    .estado-badge {
+      top: 1rem;
+      right: 1rem;
+      border-radius: 2rem;
+      padding: 0.5rem 1rem;
+    }
+    .format-badge {
+      font-size: 0.9rem;
+      padding: 0.5rem 0.75rem;
+    }
+    .phase-list {
+      column-count: 2;
+    }
+  </style>
+</head>
+<body class="bg-light">
+<main class="container py-5">
+  <header class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary">
+      <i class="bi bi-trophy me-2"></i>Torneos
+    </h1>
+  </header>
 
-  function showConfirmation(name, format, teams, duration) {
-    $('#confirm-name').text(name);
-    $('#confirm-format').text(format);
-    $('#confirm-teams').text(teams);
-    $('#confirm-duration').text(duration);
-    $('#confirmation-overlay').fadeIn();
-  }
+  <section class="row g-4">
+    <article th:each="torneo : ${torneos}" class="col-12 col-md-6 col-lg-4">
+      <div class="torneo-card card h-100 shadow-sm position-relative">
+        <th:block th:switch="${torneo.estado.name()}">
+          <div th:case="ABIERTO" class="estado-badge position-absolute bg-success">
+            <i class="bi bi-unlock"></i> Abierto
+          </div>
+          <div th:case="EN_CURSO" class="estado-badge position-absolute bg-warning">
+            <i class="bi bi-clock-history"></i> En curso
+          </div>
+          <div th:case="*" class="estado-badge position-absolute bg-danger">
+            <i class="bi bi-lock"></i> Cerrado
+          </div>
+        </th:block>
 
-  function closeConfirmation() {
-    $('#confirmation-overlay').fadeOut();
-  }
+        <div class="card-body d-flex flex-column">
+          <h2 class="h4 mb-3" th:text="${torneo.nombre}"></h2>
+          <p class="text-muted small mb-3" th:text="${torneo.descripcion}"></p>
 
-  function confirmJoin() {
-    // Placeholder for backend integration with Thymeleaf and controller
-    closeConfirmation();
-  }
-</script>
+          <th:block th:if="${torneo.formatoTorneo}">
+            <div class="bg-light p-3 rounded mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h6 mb-0">
+                  <i class="bi bi-diagram-3 me-2"></i>
+                  <span th:text="${torneo.formatoTorneo.tipo == T(com.tallerwebi.dominio.model.enums.TipoFormato).LIGA} ? 'Liga' : 'Copa'"></span>
+                </h3>
+                <th:block th:if="${torneo.formatoTorneo.tipo == T(com.tallerwebi.dominio.model.enums.TipoFormato).COPA}">
+                  <span class="badge format-badge bg-info">
+                    <i class="bi bi-people"></i>
+                    <span th:text="${torneo.formatoTorneo.equiposPorGrupo} + 'x' + ${torneo.formatoTorneo.equiposQueAvanzan}"></span>
+                  </span>
+                </th:block>
+              </div>
+
+              <th:block th:switch="${torneo.formatoTorneo.tipo.name()}">
+                <!-- Formato Liga -->
+                <div th:case="LIGA" class="text-center">
+                  <div class="d-flex justify-content-around align-items-center">
+                    <div>
+                      <div class="text-muted small mb-1">Jornadas totales</div>
+                      <div class="h4 text-primary" th:text="${torneo.formatoTorneo.rondas}"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Formato Copa -->
+                <div th:case="COPA">
+                  <div class="mb-3">
+                    <div class="row g-2 text-center">
+                      <div class="col-6">
+                        <div class="text-muted small">Equipos por grupo</div>
+                        <div class="h5" th:text="${torneo.formatoTorneo.equiposPorGrupo}"></div>
+                      </div>
+                      <div class="col-6">
+                        <div class="text-muted small">Clasifican</div>
+                        <div class="h5" th:text="${torneo.formatoTorneo.equiposQueAvanzan}"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <th:block th:if="${not #lists.isEmpty(torneo.formatoTorneo.fases)}">
+                    <div class="mt-2">
+                      <div class="text-muted small mb-2">Fases del torneo</div>
+                      <ul class="phase-list list-unstyled mb-0">
+                        <li th:each="fase : ${torneo.formatoTorneo.fases}"
+                            class="text-nowrap">
+                          <i class="bi bi-chevron-right me-1"></i>
+                          <span th:text="${fase}"></span>
+                        </li>
+                      </ul>
+                    </div>
+                  </th:block>
+                </div>
+              </th:block>
+            </div>
+          </th:block>
+
+          <th:block th:if="${not #lists.isEmpty(torneo.equiposParticipantes)}">
+            <div class="mt-auto">
+              <h3 class="h6 mb-2"><i class="bi bi-people me-2"></i>Equipos</h3>
+              <ul class="list-unstyled">
+                <li th:each="equipo : ${torneo.equiposParticipantes}"
+                    class="d-flex justify-content-between small py-1">
+                  <span th:text="${equipo.nombre}"></span>
+                  <em class="text-muted" th:text="${equipo.club.nombre}"></em>
+                </li>
+              </ul>
+            </div>
+          </th:block>
+
+          <button th:if="${torneo.estado.name() == 'ABIERTO'}"
+                  class="btn btn-primary w-100 mt-3">
+            Unirse <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

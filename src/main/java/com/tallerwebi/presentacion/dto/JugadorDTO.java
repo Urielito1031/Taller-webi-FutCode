@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.model.Pais;
-import com.tallerwebi.dominio.model.PosicionEnum;
-import com.tallerwebi.dominio.model.RarezaJugador;
+import com.tallerwebi.dominio.model.enums.Pais;
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
+import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +26,7 @@ public class JugadorDTO {
    private RarezaJugador rarezaJugador;
 
    public JugadorDTO() {}
-   public JugadorDTO(Long id,String  nombre, String apellido, String imagen, Integer edad,Integer numeroCamiseta, Double rating, Double estadoFisico, List<PosicionEnum> posicion, Pais paisOrigen) {
+   public JugadorDTO(Long id,String  nombre, String apellido, String imagen, Integer edad,Integer numeroCamiseta, Double rating, Double estadoFisico, List<PosicionEnum> posicion, Pais paisOrigen,RarezaJugador rarezaJugador) {
       this.id = id;
       this.nombre = nombre;
       this.apellido = apellido;
@@ -39,6 +39,7 @@ public class JugadorDTO {
       setLesionado(false);
       this.clubActual = null;
       this.paisOrigen = paisOrigen;
+      this.rarezaJugador = rarezaJugador;
    }
 
 }

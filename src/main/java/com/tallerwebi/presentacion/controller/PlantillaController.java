@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion.controller;
 
-import com.tallerwebi.dominio.model.FormacionEsquema;
-import com.tallerwebi.dominio.model.PosicionEnum;
+import com.tallerwebi.dominio.model.enums.FormacionEsquema;
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.service.PlantillaServiceImpl;
 import com.tallerwebi.presentacion.dto.FormacionDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;

@@ -10,9 +10,18 @@
 <body th:style="'background: url(' + @{/img/plantilla-fondo.jpg} + ') no-repeat center center fixed; background-size: cover; min-height: 100vh;'">
 
 <div class="container main-container">
+   <div th:if="${message}" class="alert alert-success mt-3" role="alert">
+      <span th:text="${message}"></span>
+   </div>
+   <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+      <span th:text="${error}"></span>
+   </div>
+
+
    <!-- Encabezado -->
    <header class="header text-center py-4">
-      <h1 class="header-title">TÁCTICAS LOS CRACKS FC</h1>
+      <a th:href="@{/home}">VOLVER</a>
+      <h1 class="header-title">¡FORMACIÓN DE TU EQUIPO!</h1>
       <div class="formation-buttons d-flex justify-content-center gap-2 mt-3">
          <a th:each="esquema : ${esquemas}"
             th:href="@{/formacion-inicial(esquema=${esquema.getFormacionTexto()})}"
@@ -20,27 +29,31 @@
             th:text="${esquema.getFormacionTexto()}">
          </a>
       </div>
-   </header>
+      <div class="mt-3">
 
+         <form id="form" method="POST" th:action="@{/guardar-formacion}">
+            <input type="hidden" id="esquema" name="esquema" th:value="${formacion.esquema.getFormacionTexto()}">
+            <button type="submit" id="btn-save"  class="btn btn-success">Guardar Formación</button>
+         </form>
+      </div>
+   </header>
    <!-- Área del campo -->
    <div class="field-area ratio ratio-16x9" id="field"
         th:style="'background: url(' + @{/img/cancha-futbol.jpg} + ') no-repeat center center; background-size: cover;'"
         th:attr="data-esquema=${formacion.esquema.getFormacionTexto()},
                  data-default-img=@{/img/jugadores/futbolista-default.png}">
-      <!-- Marcadores de posición se añadirán dinámicamente -->
    </div>
 
    <!-- Listado de jugadores -->
    <div class="player-list d-flex overflow-auto py-3">
       <div th:each="posicionJugador, stat : ${formacion.alineacion}" class="player-item flex-shrink-0">
-         <div class="player-card" draggable="true"
-              th:attr="data-player-id=${posicionJugador.jugador.id}">
+         <div class="player-card" draggable="true" th:attr="data-player-id=${posicionJugador.jugador.id}">
             <div class="player-image">
                <img th:src="@{'/img/jugadores/' + ${posicionJugador.jugador.imagen}}" alt="Imagen futbolista" class="card-img" />
             </div>
             <div class="player-info p-3">
                <div class="player-header d-flex justify-content-between align-items-center mb-2">
-                  <span class="player-number" th:text="${posicionJugador.jugador.id}"></span>
+                  <span class="player-number" th:text="${posicionJugador.jugador.numeroCamiseta}"></span>
                   <span class="player-rating" th:text="${posicionJugador.jugador.rating}"></span>
                </div>
                <h6 th:text="${posicionJugador.jugador.nombre} + ' ' + ${posicionJugador.jugador.apellido}" class="player-name mb-1"></h6>

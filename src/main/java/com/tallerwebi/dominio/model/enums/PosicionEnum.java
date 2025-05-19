@@ -1,11 +1,16 @@
-package com.tallerwebi.dominio.model;
+package com.tallerwebi.dominio.model.enums;
 
 public enum PosicionEnum {
    ARQUERO,
    DEFENSOR_CENTRAL,
    DEFENSOR_LATERAL,
    VOLANTE_CENTRAL,
+   VOLANTE_LATERAL,
    VOLANTE_OFENSIVO,
    EXTREMO,
-   DELANTERO_CENTRAL
+   DELANTERO_CENTRAL,
+   DELANTERO,
+   DEFENSOR,
+   MEDIOCAMPISTA
+
 }

@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio.model;
+package com.tallerwebi.dominio.model.enums;
 
 public enum Estadio {
    BOMBONERA("La Bombonera", "Buenos Aires, Argentina"),

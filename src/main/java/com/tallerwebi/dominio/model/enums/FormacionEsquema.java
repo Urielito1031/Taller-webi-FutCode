@@ -1,10 +1,9 @@
-package com.tallerwebi.dominio.model;
+package com.tallerwebi.dominio.model.enums;
 
 public enum FormacionEsquema {
    CUATRO_TRES_TRES(4, 3, 3),
    CUATRO_CUATRO_DOS(4, 4, 2),
    TRES_CINCO_DOS(3, 5, 2),
-   CUATRO_DOS_TRES_UNO(4, 2, 3, 1),
    CINCO_TRES_DOS(5, 3, 2),
    TRES_CUATRO_TRES(3, 4, 3);
 
@@ -21,19 +20,10 @@ public enum FormacionEsquema {
       this.totalJugadores = defensas + mediocampistas + delanteros;
    }
 
-   // Constructor para formaciones con 4 grupos (p. ej., 4-2-3-1)
-   FormacionEsquema(int defensas, int mediocampistasDefensivos, int mediocampistasOfensivos, int delanteros) {
-      this.defensas = defensas;
-      this.mediocampistas = mediocampistasDefensivos + mediocampistasOfensivos;
-      this.delanteros = delanteros;
-      this.totalJugadores = defensas + mediocampistas + delanteros;
-   }
 
-   // Método para obtener la representación en texto (ej. "4-3-3")
+
+   // obtener la representación en texto (ej. "4-3-3"), util para el thymealeaf
    public String getFormacionTexto() {
-      if (this == CUATRO_DOS_TRES_UNO) {
-         return "4-2-3-1";
-      }
       return defensas + "-" + mediocampistas + "-" + delanteros;
    }
 
@@ -54,7 +44,6 @@ public enum FormacionEsquema {
       return totalJugadores;
    }
 
-   // Método para obtener el enum a partir de una cadena (opcional)
    public static FormacionEsquema fromString(String formacionTexto) {
       switch (formacionTexto) {
          case "4-3-3":
@@ -63,8 +52,7 @@ public enum FormacionEsquema {
             return CUATRO_CUATRO_DOS;
          case "3-5-2":
             return TRES_CINCO_DOS;
-         case "4-2-3-1":
-            return CUATRO_DOS_TRES_UNO;
+
          case "5-3-2":
             return CINCO_TRES_DOS;
          case "3-4-3":

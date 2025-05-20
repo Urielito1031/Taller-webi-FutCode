@@ -4,23 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FutCode - Dashboard</title>
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <!-- Estilos personalizados -->
   <link th:href="@{/css/main.css}" rel="stylesheet">
   <!-- Iconos Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
-<body class="bg-light">
+<body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
+<nav class="navbar">
+  <a id="titulo-nav" class="navbar-brand" href="#">FUTCODE</a>
   <div class="container">
-    <a class="navbar-brand fw-bold" href="#"><i class="bi bi-controller"></i> FutCode</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+    <div id="navbarNav">
+      <ul class="ms-auto">
         <li class="nav-item">
           <a class="nav-link" href="/equipo"><i class="bi bi-people-fill"></i> Mi Equipo</a>
         </li>
@@ -40,14 +36,16 @@
           </a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
-            <i class="bi bi-person-circle"></i> Diego Maradona
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="/perfil"><i class="bi bi-gear"></i> Configuración</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right"></i> Salir</a></li>
-          </ul>
+          <div class="dropdown">
+            <button class="dropdown-toggle">
+              <i class="bi bi-person-circle"></i><span id="nombre-usuario">Diego Maradona </span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>
+              <hr>
+              <a href="#" class="danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -55,84 +53,93 @@
 </nav>
 
 <!-- Contenido Principal -->
-<main class="container mt-5 pt-4">
+<main class="container-principal mt-5 pt-4">
+  <h1 class="display-6 mb-3">Bienvenido, DT <span class="text-primary">[[${nombreEquipo}]]</span></h1>
   <!-- Sección Bienvenida -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card shadow-sm border-0">
-        <div class="card-body text-center py-4">
-          <h1 class="display-6 mb-3">Bienvenido, DT <span class="text-primary">[[${nombreEquipo}]]</span></h1>
-          <div class="row g-4">
-            <div class="col-md-3">
-              <div class="card h-100 border-primary">
-                <div class="card-body">
-                  <i class="bi bi-joystick fs-1 text-primary"></i>
-                  <h5 class="card-title mt-2">Armá tu 11 inicial</h5>
-                  <a href="plantilla" class="btn btn-primary btn-sm">Ver mi plantilla</a>
-                </div>
+
+  <div id="contenedor-padre">
+    <div id="contenedor-contenedores">
+
+      <div class="seccion-home sh1">
+        <div class="plantilla">
+          <i class="bi bi-joystick fs-1 text-primary"></i>
+          <span><h5 class="card-title mt-2">Tu Formación</h5></span>
+        </div>
+        <a href="plantilla" class="plantilla">Ver mi plantilla</a>
+      </div>
+
+
+
+      <!-- Sección Estado del Equipo -->
+
+      <div class="col-md-6">
+        <div class="seccion-home sh2">
+          <div class="card-header bg-primary text-white">
+            <i class="bi bi-heart-pulse"></i> Estado del Equipo
+          </div>
+          <div class="card-body">
+            <h6 class="titulo-seccion">Stamina General</h6>
+            <div class="progress">
+              <div class="progress-bar" style="width: 78%"><span id="porcetaje">78%</span></div>
+            </div>
+            <hr>
+            <h6 class="titulo-seccion">Lesionados</h6>
+            <div class="sector-lesionados-scroll">
+              <div class="lesionado">
+                Lionel Messi
+                <span class="badge bg-danger">5 días</span>
+              </div>
+              <div class="lesionado">
+                Cristiano Ronaldo
+                <span class="badge bg-danger">2 días</span>
+              </div>
+              <div class="lesionado">
+                Ronaldinho
+                <span class="badge bg-danger">2 semanas</span>
+              </div>
+              <div class="lesionado">
+                Neymar JR
+                <span class="badge bg-danger">2 años</span>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Sección Estado del Equipo -->
-  <div class="row mb-4">
-    <div class="col-md-6">
-      <div class="card shadow-sm h-100">
-        <div class="card-header bg-primary text-white">
-          <i class="bi bi-heart-pulse"></i> Estado del Equipo
-        </div>
-        <div class="card-body">
-          <h6 class="text-muted mb-3">Stamina General</h6>
-          <div class="progress" style="height: 25px">
-            <div class="progress-bar bg-success" style="width: 78%">78%</div>
+    <div>
+      <!-- Sección Próximo Partido -->
+      <div class="seccion-home sh3">
+        <div class="card shadow-sm h-100 border-warning">
+          <div class="card-header bg-warning text-dark">
+            <i class="bi bi-calendar-event"></i> Próximo Partido
           </div>
-          <hr>
-          <h6 class="text-muted mb-3">Lesionados</h6>
-          <div class="list-group">
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-              Lionel Messi
-              <span class="badge bg-danger">5 días</span>
+          <div class="contenedor-proximo-partido">
+            <div id="equipos-torneo-contenedor">
+              <div class="evento-torneo">
+                <div class="equipo-local">
+                  <div class="texto-equipo text-primary">Los Cracks FC</div>
+                  <small class="text-muted">Local</small>
+                </div>
+                <div class="vs-equipo-text">
+                  <div class="display-6">VS</div>
+                </div>
+                <div class="equipo-visitante">
+                  <div class="texto-equipo text-danger">Bayern Múnich</div>
+                  <small class="text-muted">Visitante</small>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="partido-a-jugar">
+              <span><i class="bi bi-trophy"></i> Champions League - Fecha 5</span>
+              <span><i class="bi bi-clock"></i> 15/08/2024 20:45</span>
+              <span><i class="bi bi-geo-alt"></i> Allianz Arena</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Sección Próximo Partido -->
-    <div class="col-md-6 mt-4 mt-md-0">
-      <div class="card shadow-sm h-100 border-warning">
-        <div class="card-header bg-warning text-dark">
-          <i class="bi bi-calendar-event"></i> Próximo Partido
-        </div>
-        <div class="card-body text-center">
-          <div class="row align-items-center">
-            <div class="col-5">
-              <div class="fw-bold text-primary">Los Cracks FC</div>
-              <small class="text-muted">Local</small>
-            </div>
-            <div class="col-2">
-              <div class="display-6">VS</div>
-            </div>
-            <div class="col-5">
-              <div class="fw-bold text-danger">Bayern Múnich</div>
-              <small class="text-muted">Visitante</small>
-            </div>
-          </div>
-          <hr>
-          <div class="text-muted small">
-            <i class="bi bi-trophy"></i> Champions League - Fecha 5<br>
-            <i class="bi bi-clock"></i> 15/08/2024 20:45<br>
-            <i class="bi bi-geo-alt"></i> Allianz Arena
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
-
   <!-- Otras secciones similares con estructura de grid -->
 </main>
 

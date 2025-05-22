@@ -43,7 +43,7 @@
             <div class="dropdown-menu">
               <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>
               <hr>
-              <a href="#" class="danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
+              <a th:href="@{/login}" class="danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
             </div>
           </div>
         </li>
@@ -54,7 +54,8 @@
 
 <!-- Contenido Principal -->
 <main class="container-principal mt-5 pt-4">
-  <h1 class="display-6 mb-3">Bienvenido, DT <span class="text-primary">[[${nombreEquipo}]]</span></h1>
+  <h1 class="display-6 mb-3">Bienvenido, DT <span class="text-primary" th:text="${#httpSession.getAttribute('equipo') != null ? #httpSession.getAttribute('equipo').nombre : ''}"></span>
+  </h1>
   <!-- Sección Bienvenida -->
 
   <div id="contenedor-padre">

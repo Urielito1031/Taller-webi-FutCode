@@ -18,7 +18,8 @@ public class UsuarioServiceImpl implements  UsuarioService{
     }
 
     public void agregarSobreAJugador(Long id, TipoSobre tipoSobre) {
-        Usuario usuario = jugadores.get(id);
+        // Usuario usuario = jugadores.get(id);
+        Usuario usuario = jugadores.get(1L);
         SobreDTO sobre = null;
 
         switch (tipoSobre) {
@@ -39,7 +40,7 @@ public class UsuarioServiceImpl implements  UsuarioService{
                 break;
         }
 
-        usuario.agregarSobre(sobre);
+        usuario.getSobres().add(sobre);
     }
 
 }

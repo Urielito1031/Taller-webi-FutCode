@@ -49,16 +49,11 @@ public class Usuario {
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
-
+    public List<SobreDTO> getSobres() {return sobres;}
     public boolean activo() {
         return activo;
     }
-
     public void activar() {
         activo = true;
-    }
-
-    public void agregarSobre(SobreDTO sobre) {
-        sobres.add(sobre);
     }
 }

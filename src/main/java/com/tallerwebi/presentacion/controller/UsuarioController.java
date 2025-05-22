@@ -23,6 +23,5 @@ public class UsuarioController {
         Long id = usuario.getId();
         usuarioService.agregarSobreAJugador(id, tipoSobre);
         return "redirect:/comprar-sobres";
-
     }
 }

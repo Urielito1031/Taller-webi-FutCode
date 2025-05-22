@@ -79,5 +79,4 @@ public class ControladorPlantillaTest {
       verifyNoMoreInteractions(model);
    }
 
-
 }

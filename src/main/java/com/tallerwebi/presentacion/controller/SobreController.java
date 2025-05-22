@@ -17,6 +17,7 @@ public class SobreController {
     public SobreController(SobreService sobreService){
         this.sobreService = sobreService;
     }
+
     @GetMapping("/sobre")
     public ModelAndView getSobre(@RequestParam("tipoSobre")TipoSobre tipoSobre) {
         SobreDTO sobre = sobreService.obtenerSobre(tipoSobre);
@@ -24,4 +25,5 @@ public class SobreController {
         mav.addObject("sobre", sobre);
         return mav;
     }
+
 }

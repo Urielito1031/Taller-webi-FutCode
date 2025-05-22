@@ -120,4 +120,16 @@ public class SobreServiceImpl implements SobreService {
         }
         return posiciones;
     }
+
+
+    public List<SobreDTO> obtenerSobresDTO(){
+        List<SobreDTO> sobres = new ArrayList<>();
+
+        sobres.add(new SobreDTO("Sobre de Bronce", 2500.0, TipoSobre.BRONCE, "sobreFutCodeBronce.png"));
+        sobres.add(new SobreDTO("Sobre de Plata", 5000.0, TipoSobre.PLATA, "sobreFutCodePlata.png"));
+        sobres.add(new SobreDTO("Sobre de Oro", 7500.0, TipoSobre.ORO, "sobreFutCodeOro.png"));
+        sobres.add(new SobreDTO("Sobre Especial", 10000.0, TipoSobre.ESPECIAL, "sobreFutCodeEspecial.png"));
+
+        return sobres;
+    }
 }

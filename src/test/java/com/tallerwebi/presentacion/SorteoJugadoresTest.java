@@ -27,7 +27,7 @@ public class SorteoJugadoresTest {
     }
 
     @Test
-    public void dadoQueTengoCargado100JugadoresDeseoCargarUnEquipoCon14JugadoresRandomDeCategoriaNORMAL() throws Exception {
+    public void dadoQueTengoCargado100JugadoresDeseoCargarUnEquipoCon13JugadoresRandomDeCategoriaNORMAL() throws Exception {
 
         List<JugadorDTO> listaDeJugadores = this.sorteoService.sortearEquipoInicial();
 

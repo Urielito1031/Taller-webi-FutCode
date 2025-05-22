@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioServiceImpl usuarioServiceImpl;
+    private UsuarioServiceImpl usuarioService;
+
+    public UsuarioController(UsuarioServiceImpl usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping("/agregarSobre")
     public String agregarSobre(@RequestParam("TipoDeSobre") TipoSobre tipoSobre, Usuario usuario){
         Long id = usuario.getId();
-        usuarioServiceImpl.agregarSobreAJugador(id, tipoSobre);
+        usuarioService.agregarSobreAJugador(id, tipoSobre);
         return "redirect:/comprar-sobres";
 
     }

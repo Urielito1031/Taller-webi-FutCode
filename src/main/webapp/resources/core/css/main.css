@@ -1,3 +1,297 @@
+body {
+    background-color: #0d1b2a;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    height: 100vh;
+}
+
+
+.nav-link, .dropdown-toggle i, .dropdown-toggle span , #titulo-nav, a{
+    text-decoration: none;
+    color: #00ffc3;
+}
+
+#titulo-nav{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1b263b;
+    padding: 10px;
+}
+
+ul{
+    list-style-type: none;
+}
+
+.ms-auto{
+    display: flex;
+    justify-content: right;
+}
+
+.nav-item{
+    margin-left: 40px;
+}
+
+.nav-link, #nombre-usuario, .bi-person-circle{
+    transition: 0.1111s ease;
+}
+
+.nav-link:hover{
+    color: #00ffc3a7;;
+
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    color: #a6cfff;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-toggle:focus + .dropdown-menu,
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #1c2a3a;
+    border: 1px solid #334;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    padding: 10px 0;
+    border-radius: 8px;
+    min-width: 150px;
+    z-index: 100;
+}
+
+.dropdown-menu a {
+    color: #ddd;
+    padding: 10px 16px;
+    display: block;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #2e3d4f;
+}
+
+.dropdown-menu hr {
+    margin: 5px 0;
+    border: 0;
+    height: 1px;
+    background: #445;
+}
+
+.dropdown-menu a.danger {
+    color: #ff6666;
+}
+
+.badge{
+    background-color: red;
+    border-radius: 50px;
+    padding: 0.2px 6px ;
+    color: white;
+}
+
+h1{
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    color: #00ffc3;
+    margin: 50px 10px;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+#contenedor-padre{
+    justify-content: center;
+    align-items: center;
+
+}
+
+.seccion-home {
+    width: 190px;
+    background-color: #1e2a3c;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 255, 180, 0.1);
+}
+
+#contenedor-contenedores{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.sh1{
+    width: 250px;
+    padding: 15px 15px;
+    height: 200px;
+}
+
+.sh1 .plantilla{
+    display: flex;
+    align-items: center;
+}
+
+.sh1 .plantilla h5{
+    margin-left: 6px;
+}
+
+.sh2{
+    width: 400px;
+    padding: 15px;
+
+}
+
+.sh2 h6, .sh1 h5{
+    font-size: 18px;
+}
+
+.progress{
+    display: flex;
+    align-items: center;
+    background-color: #2e3d4f;
+    border-radius: 12px;
+    height: 25px;
+    padding: 5px;
+    margin: 24px 0px;
+}
+
+.progress-bar{
+    background-color: #00ffc3;
+    border-radius: 12px;
+    padding: 2px;
+}
+
+#porcetaje{
+    margin-left: 5px;
+    font-size: 20px;
+    color: #0d1b2a;
+    font-weight: bold;
+}
+
+.sh3{
+    width: 750px;
+    padding: 15px;
+}
+
+.evento-torneo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1e2a3c;
+    padding: 15px;
+    background-color: #0d1b2a;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 255, 180, 0.1);
+    margin: 20px 0;
+    width: 660px;
+}
+
+#equipos-torneo-contenedor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.texto-equipo{
+    font-size: 20px;
+    color: #00ffc3;
+    font-weight: bold;
+}
+
+.partido-a-jugar{
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lesionado{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2e3d4f;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #0d1b2a;
+    margin-top: 5px;
+}
+
+.sector-lesionados-scroll{
+    max-height: 135px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.sector-lesionados-scroll::-webkit-scrollbar{
+    width: 6px;
+}
+
+.sector-lesionados-scroll::-webkit-scrollbar-track{
+    background: #0d1b2a;
+    border-radius: 10px;
+}
+
+.sector-lesionados-scroll::-webkit-scrollbar-thumb{
+    background: #2e3d4f;
+    border-radius: 10px;
+}
+
+.sector-lesionados-scroll::-webkit-scrollbar-thumb:hover{
+    background: #00ffc3;
+
+}
+
+.titulo-seccion{
+    margin: 18px 0px;
+}
+
+/*
+body {
+    background-color: #0d1b2a;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    height: 100vh;
+}
+
+.navbar {
+    background-color: #1b263b;
+    padding: 10px;
+}
+
+.navbar-brand {
+    color: #00ffc3 !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
 :root {
     --primary-color: #0d6efd;
     --secondary-color: #6c757d;
@@ -36,4 +330,4 @@
     .navbar-nav {
         margin-top: 1rem;
     }
-}
+}*/

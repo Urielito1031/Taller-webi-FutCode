@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class ClubDTO {
    private Long id;
    private String nombre;
@@ -16,4 +15,13 @@ public class ClubDTO {
    private Estadio estadio;
    private String imagen;
 
+   public ClubDTO() {}
+
+   public ClubDTO(Long id, String nombre, Pais pais, Estadio estadio, String imagen) {
+      this.id = id;
+      this.nombre = nombre;
+      this.pais = pais;
+      this.estadio = estadio;
+      this.imagen = imagen;
+   }
 }

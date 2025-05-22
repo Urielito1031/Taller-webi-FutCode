@@ -1,9 +1,10 @@
 package com.tallerwebi.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.tallerwebi.presentacion.dto.SobreDTO;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -15,6 +16,8 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    @Transient
+    private List<SobreDTO> sobres;
 
     public Long getId() {
         return id;
@@ -53,5 +56,9 @@ public class Usuario {
 
     public void activar() {
         activo = true;
+    }
+
+    public void agregarSobre(SobreDTO sobre) {
+        sobres.add(sobre);
     }
 }

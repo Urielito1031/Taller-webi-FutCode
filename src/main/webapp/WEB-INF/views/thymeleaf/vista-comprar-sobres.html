@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FutCode</title>
+    <link th:href="@{/css/estilos-comprar-sobres.css}" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <main>
+        <div class="fondo"></div>
+        <section>
+            <div class="sobres">
+                <article th:each="sobre : ${sobres}" >
+                    <form th:action="@{/jugador/agregarSobre}" method="post">
+                        <button type="submit">
+                            <h3 th:text="${sobre.titulo}">Titulo</h3>
+
+                            <img th:src="@{/img/{nombre}(nombre=${sobre.imagenUrl})}" alt="Imagen del sobre" class="imagen-sobre">
+
+                            <h3 th:text="${sobre.precio}">Precio</h3>
+
+                            <input type="hidden" name="tipoDeSobre" th:value="${sobre.tipoSobre}">
+                        </button>
+                    </form>
+                </article>
+            </div>
+            <aside>
+                <h3 id="titulo-descripcion">Sobre de Oro</h3>
+                <p id="parrafo-descripcion">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab animi vitae debitis ex aliquid, sapiente, quaerat voluptatem accusamus voluptas quas explicabo assumenda ut magni laboriosam tenetur blanditiis beatae cupiditate eos.</p>
+            </aside>
+        </section>
+
+    </main>
+
+    <script th:src="@{/js/script-comprar-sobre.js}"></script>
+</body>
+</html>

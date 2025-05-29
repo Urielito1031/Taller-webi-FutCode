@@ -3,7 +3,11 @@ package com.tallerwebi.presentacion.dto;
 import lombok.Data;
 
 @Data
-public class EquipoTorneo {
+
+
+public class EquipoTorneoDTO {
+
+    private Long id;
     private int posicion;
     private String nombre;
     private String nombreImagen;
@@ -15,7 +19,7 @@ public class EquipoTorneo {
     private int golesEnContra;
     private int puntos;
 
-    public EquipoTorneo(int posicion, String nombre, String nombreImagen, int partidosJugados, int partidosGanados, int partidosEmpatados, int partidosPerdidos, int golesAFavor, int golesEnContra, int puntos) {
+    public EquipoTorneoDTO(int posicion, String nombre, String nombreImagen, int partidosJugados, int partidosGanados, int partidosEmpatados, int partidosPerdidos, int golesAFavor, int golesEnContra, int puntos) {
         this.nombre = nombre;
         this.posicion = posicion;
         this.nombreImagen = nombreImagen;
@@ -26,6 +30,10 @@ public class EquipoTorneo {
         this.golesAFavor = golesAFavor;
         this.golesEnContra = golesEnContra;
         this.puntos = puntos;
+    }
+
+    public EquipoTorneoDTO() {
+
     }
 
     public int getDg() {

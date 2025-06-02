@@ -30,6 +30,9 @@ public class ServicioLoginImpl implements ServicioLogin {
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();
         }
+        usuario.setRol("USER");
+        usuario.setActivo(true);
+
         repositorioUsuario.guardar(usuario);
     }
 

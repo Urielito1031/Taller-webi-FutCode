@@ -12,7 +12,7 @@ public class Usuario {
     private String email;
     private String password;
     private String rol;
-    private Boolean activo = false;
+    private Boolean activo;
     @OneToMany
     private List<Sobre> sobres;
 
@@ -55,5 +55,9 @@ public class Usuario {
     }
     public void activar() {
         activo = true;
+    }
+
+    public String toString() {
+        return "ID: " + id + " \nEmail: " + email + " \nRol: " + rol + " \nActivo: " + activo;
     }
 }

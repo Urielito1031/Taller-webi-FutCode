@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "jugador_posiciones")
-public class JugadorPosicione {
+public class JugadorPosiciones {
    @EmbeddedId
    private JugadorPosicioneId id;
 

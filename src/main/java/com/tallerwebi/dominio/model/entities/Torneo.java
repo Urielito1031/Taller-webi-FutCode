@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +12,8 @@ import javax.persistence.*;
 @Table(name = "torneo")
 public class Torneo {
    @Id
-   @Column(name = "id", nullable = false)
-   private Integer id;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
    @javax.validation.constraints.Size(max = 100)
    @javax.validation.constraints.NotNull
@@ -27,9 +28,8 @@ public class Torneo {
    @JoinColumn(name = "formato_torneo_id")
    private FormatoTorneo formatoTorneo;
 
-   @javax.validation.constraints.NotNull
-   @Lob
+   @Enumerated(EnumType.STRING)
    @Column(name = "estado", nullable = false)
-   private String estado;
+   private EstadoTorneoEnum estado;
 
 }

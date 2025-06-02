@@ -1,9 +1,11 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.TipoFormato;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -11,13 +13,12 @@ import javax.persistence.*;
 @Table(name = "formato_torneo")
 public class FormatoTorneo {
    @Id
-   @Column(name = "id", nullable = false)
-   private Integer id;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
-   @javax.validation.constraints.NotNull
-   @Lob
+   @Enumerated(EnumType.STRING)
    @Column(name = "tipo", nullable = false)
-   private String tipo;
+   private TipoFormato tipo;
 
    @Column(name = "rondas")
    private Integer rondas;

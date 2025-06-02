@@ -3,7 +3,6 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,6 +17,9 @@ public class Usuario {
     private Boolean activo = false;
     @Transient
     private List<SobreDTO> sobres;
+
+//    @Transient
+//    private Equipo equipoAsignado;
 
     public Long getId() {
         return id;

@@ -2,11 +2,12 @@ package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
+import com.tallerwebi.dominio.service.PlantillaService;
 import com.tallerwebi.dominio.service.PlantillaServiceImpl;
 import com.tallerwebi.presentacion.dto.FormacionDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,8 +23,8 @@ import java.util.Objects;
 @Controller
 public class PlantillaController {
 
-   private PlantillaServiceImpl service;
-   public PlantillaController(PlantillaServiceImpl service) {
+   private PlantillaService service;
+   public PlantillaController(PlantillaService service) {
       this.service = service;
    }
 

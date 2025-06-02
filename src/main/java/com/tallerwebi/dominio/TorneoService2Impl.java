@@ -1,7 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.service.TorneoService2;
-import com.tallerwebi.presentacion.dto.EquipoTorneo;
+import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.PartidoDTO2;
 import com.tallerwebi.presentacion.dto.TablaGeneralDTO;
 import org.springframework.stereotype.Service;
@@ -14,19 +14,19 @@ public class TorneoService2Impl implements TorneoService2 {
 
     @Override
     public TablaGeneralDTO obtenerTablaGeneral(Long id) {
-        List<EquipoTorneo> equipos = new ArrayList<>();
+        List<EquipoTorneoDTO> equipos = new ArrayList<>();
 
-        equipos.add(new EquipoTorneo(1,"FARENSE", "farense.jpg",1,1,0,0,3,0,3));
-        equipos.add(new EquipoTorneo(2,"OXFORD","oxford.jpg",1,1,0,0,2,0,3));
-        equipos.add(new EquipoTorneo(3,"HEERENVEEN","heerenveen.jpg",1,1,0,0,2,0,3));
-        equipos.add(new EquipoTorneo(4,"BOAVISTA","boavista.jpg",1,1,0,0,1,0,3));
-        equipos.add(new EquipoTorneo(5,"PORTSMOUTH","portsmouth.jpg",1,0,1,0,2,2,1));
-        equipos.add(new EquipoTorneo(6,"BRISTOL","bristol.jpg",1,0,1,0,2,2,1));
-        equipos.add(new EquipoTorneo(7,"ROTTERDAM","rotterdam.jpg",1,0,1,0,2,2,1));
-        equipos.add(new EquipoTorneo(8,"AVES","aves.jpg",1,0,1,0,2,2,1));
-        equipos.add(new EquipoTorneo(9,"DERBY","derby.jpg",1,0,1,0,1,1,1));
-        equipos.add(new EquipoTorneo(10,"ESTORIL","estoril.jpg",1,0,1,0,1,1,1));
-        equipos.add(new EquipoTorneo(11,"BARCELOS","barcelos.jpg",1,0,1,0,0,0,1));
+        equipos.add(new EquipoTorneoDTO(1,"FARENSE", "farense.jpg",1,1,0,0,3,0,3));
+        equipos.add(new EquipoTorneoDTO(2,"OXFORD","oxford.jpg",1,1,0,0,2,0,3));
+        equipos.add(new EquipoTorneoDTO(3,"HEERENVEEN","heerenveen.jpg",1,1,0,0,2,0,3));
+        equipos.add(new EquipoTorneoDTO(4,"BOAVISTA","boavista.jpg",1,1,0,0,1,0,3));
+        equipos.add(new EquipoTorneoDTO(5,"PORTSMOUTH","portsmouth.jpg",1,0,1,0,2,2,1));
+        equipos.add(new EquipoTorneoDTO(6,"BRISTOL","bristol.jpg",1,0,1,0,2,2,1));
+        equipos.add(new EquipoTorneoDTO(7,"ROTTERDAM","rotterdam.jpg",1,0,1,0,2,2,1));
+        equipos.add(new EquipoTorneoDTO(8,"AVES","aves.jpg",1,0,1,0,2,2,1));
+        equipos.add(new EquipoTorneoDTO(9,"DERBY","derby.jpg",1,0,1,0,1,1,1));
+        equipos.add(new EquipoTorneoDTO(10,"ESTORIL","estoril.jpg",1,0,1,0,1,1,1));
+        equipos.add(new EquipoTorneoDTO(11,"BARCELOS","barcelos.jpg",1,0,1,0,0,0,1));
 
         TablaGeneralDTO tablaGeneralDTO = new TablaGeneralDTO();
         tablaGeneralDTO.setNombreTorneo("Champions League");

@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class TablaGeneralDTO {
     private String nombreTorneo;
-    private List<EquipoTorneo> equipos;
+    private List<EquipoTorneoDTO> equipos;
 }

@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion.controller;
 
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

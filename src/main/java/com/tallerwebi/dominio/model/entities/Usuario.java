@@ -1,6 +1,4 @@
-package com.tallerwebi.dominio;
-
-import com.tallerwebi.presentacion.dto.SobreDTO;
+package com.tallerwebi.dominio.model.entities;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,8 +13,8 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
-    @Transient
-    private List<SobreDTO> sobres;
+    @OneToMany
+    private List<Sobre> sobres;
 
 //    @Transient
 //    private Equipo equipoAsignado;
@@ -51,7 +49,7 @@ public class Usuario {
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
-    public List<SobreDTO> getSobres() {return sobres;}
+    public List<Sobre> getSobres() {return sobres;}
     public boolean activo() {
         return activo;
     }

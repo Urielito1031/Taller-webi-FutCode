@@ -18,11 +18,12 @@ public class DatabaseInitializationConfig {
     @Bean
     public DataSourceInitializer dataSourceInitializer() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("data.sql"));
+        //populator.addScript(new ClassPathResource("db_futcode.sql"));
 
         DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
         initializer.setDatabasePopulator(populator);
+        initializer.setEnabled(false);
 
         return initializer;
     }

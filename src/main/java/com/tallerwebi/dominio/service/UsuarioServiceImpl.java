@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.model.entities.Sobre;
+import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,8 @@ public class UsuarioServiceImpl implements  UsuarioService{
                 break;
         }
 
-        usuario.getSobres().add(sobre);
+        Sobre sobreToEntity = sobre.fromEntity();
+        usuario.getSobres().add(sobreToEntity);
     }
 
 }

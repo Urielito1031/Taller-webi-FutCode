@@ -44,4 +44,13 @@ public class FormatoTorneo {
    @Column(name = "puntos_por_derrota")
    private Integer puntosPorDerrota;
 
+   public String toString(){
+      return "Tipo: " + tipo + ", \nRondas: " + rondas+"\nEquipos por grupo: "+
+            equiposPorGrupo+"\nEquipos que avanzan:"+ equiposQueAvanzan
+            +"\nTipo grupo: "+tipoGrupo
+            +"\nIda y vuelta: "+idaYVuelta
+            +"\nPuntos por victoria: "+puntosPorVictoria
+            +"\nPuntos por empate: "+puntosPorEmpate
+            +"\nPuntos por derrota: "+puntosPorDerrota;
+   }
 }

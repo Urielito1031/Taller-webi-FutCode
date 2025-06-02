@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @Table(name = "jugador")
 public class Jugador {
    @Id
-   @Column(name = "id", nullable = false)
-   private Integer id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
    @javax.validation.constraints.Size(max = 50)
    @javax.validation.constraints.NotNull

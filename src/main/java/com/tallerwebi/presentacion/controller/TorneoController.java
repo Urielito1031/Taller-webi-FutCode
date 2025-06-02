@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.enums.TipoFormato;
-import com.tallerwebi.dominio.service.TorneoServiceImpl;
+import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +14,14 @@ import java.util.List;
 public class TorneoController {
 
 
-   private TorneoServiceImpl service;
+   private final TorneoService service;
 
    @Autowired
-   public TorneoController(TorneoServiceImpl service) {
+   public TorneoController(TorneoService service) {
       this.service = service;
    }
+
+
    @GetMapping("/torneos")
    public String vistaTorneos(Model model) {
       List<TorneoDTO> torneos = service.getAll();

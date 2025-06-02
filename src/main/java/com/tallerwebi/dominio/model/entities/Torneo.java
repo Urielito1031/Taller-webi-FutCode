@@ -24,7 +24,7 @@ public class Torneo {
    @Column(name = "descripcion")
    private String descripcion;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "formato_torneo_id")
    private FormatoTorneo formatoTorneo;
 
@@ -32,4 +32,8 @@ public class Torneo {
    @Column(name = "estado", nullable = false)
    private EstadoTorneoEnum estado;
 
+
+   public String toString(){
+      return "id: "+id+",\n nombre: "+nombre+", \ndescripcion: "+descripcion+ "\nformato: "+formatoTorneo+", \nestado: "+estado;
+   }
 }

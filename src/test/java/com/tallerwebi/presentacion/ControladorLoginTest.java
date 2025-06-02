@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.dominio.service.TorneoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.*;
 public class ControladorLoginTest {
 
 	private ControladorLogin controladorLogin;
+	private TorneoService torneoServiceMock;
 	private Usuario usuarioMock;
 	private DatosLogin datosLoginMock;
 	private HttpServletRequest requestMock;
@@ -32,7 +34,7 @@ public class ControladorLoginTest {
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
 		servicioLoginMock = mock(ServicioLogin.class);
-		controladorLogin = new ControladorLogin(servicioLoginMock);
+		controladorLogin = new ControladorLogin(servicioLoginMock, torneoServiceMock);
 	}
 
 	@Test

@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.dominio.service.TorneoService;
+import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,19 +15,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
 
-    @Autowired
-    private  TorneoService torneoService;
+    private final TorneoService torneoService;
 
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin){
+    public ControladorLogin(ServicioLogin servicioLogin, TorneoService torneoService){
         this.servicioLogin = servicioLogin;
+       this.torneoService = torneoService;
     }
 
     @RequestMapping("/login")
@@ -77,7 +79,18 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public String irAHome(Model model) {
-        model.addAttribute("torneos", torneoService.getAll());
+
+        try{
+        List<TorneoDTO> torneos = torneoService.getAll();
+        if(torneos == null){
+            System.out.println("No se encontro el torneo");
+            model.addAttribute("error", "torneos no encontrados");
+        }
+        model.addAttribute("torneos", torneos);
+
+        }catch(Exception e){
+            System.out.println("la lista de torneos devuelve nullpointer" + e);
+        }
 
         return "home";
     }

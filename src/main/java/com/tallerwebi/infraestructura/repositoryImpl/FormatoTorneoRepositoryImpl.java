@@ -16,6 +16,7 @@ public class FormatoTorneoRepositoryImpl implements FormatoTorneoRepository {
 
    @Autowired
    public FormatoTorneoRepositoryImpl(SessionFactory sessionFactory) {
+
       this.sessionFactory = sessionFactory;
    }
 

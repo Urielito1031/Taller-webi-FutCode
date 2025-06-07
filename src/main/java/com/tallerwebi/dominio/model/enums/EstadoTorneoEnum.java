@@ -3,7 +3,7 @@ package com.tallerwebi.dominio.model.enums;
 public enum EstadoTorneoEnum {
    ABIERTO("Abierto para inscripciones"),
    EN_CURSO("En curso"),
-   CERRADO("Finalizado");
+   FINALIZADO("Finalizado");
 
    private final String descripcion;
 

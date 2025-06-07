@@ -12,8 +12,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "grupo_equipo")
 public class GrupoEquipo {
-   @EmbeddedId
-   private GrupoEquipoId id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
    @MapsId("grupoId")
    @ManyToOne(fetch = FetchType.LAZY, optional = false)

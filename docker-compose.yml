@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: DockerfileSQL
+    container_name: mysql-futcode
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_futcode
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  jetty-app:
+    build:
+      context: .
+      dockerfile: DockerfileJetty
+    container_name: tallerwebi
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      # Cambia según cómo hagas la conexión, por ejemplo:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: db_futcode
+      DB_USER: root
+      DB_PASSWORD: root
+    # Si tu app necesita conectarse a la base, usa el nombre "mysql" como host (el nombre del servicio)
+    # para que Docker resuelva la IP interna automáticamente
+
+volumes:
+  mysql-data:

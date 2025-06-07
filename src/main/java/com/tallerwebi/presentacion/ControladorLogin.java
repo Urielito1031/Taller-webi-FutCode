@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -79,19 +80,8 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public String irAHome(Model model) {
-
-        try{
         List<TorneoDTO> torneos = torneoService.getAll();
-        if(torneos == null){
-            System.out.println("No se encontro el torneo");
-            model.addAttribute("error", "torneos no encontrados");
-        }
-        model.addAttribute("torneos", torneos);
-
-        }catch(Exception e){
-            System.out.println("la lista de torneos devuelve nullpointer" + e);
-        }
-
+        model.addAttribute("torneos", torneos!= null ? torneos : new ArrayList<TorneoDTO>());
         return "home";
     }
 

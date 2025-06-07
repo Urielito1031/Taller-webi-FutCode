@@ -23,6 +23,22 @@ public class HibernateConfig {
         dataSource.setPassword("");
         return dataSource;
     }
+//    @Bean
+//    public DataSource dataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//        // Usa variables de entorno para la conexión
+//        String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "mysql";
+//        String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+//        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
+//        String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
+//        String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "root";
+//
+//        dataSource.setUrl("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false&serverTimezone=UTC");
+//        dataSource.setUsername(dbUser);
+//        dataSource.setPassword(dbPassword);
+//        return dataSource;
+//    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
@@ -40,7 +56,8 @@ public class HibernateConfig {
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        // Usa el dialecto correcto para MySQL 5.7
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.hbm2ddl.auto", "update");

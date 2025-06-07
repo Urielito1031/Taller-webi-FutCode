@@ -23,7 +23,7 @@ public class TorneoServiceImpl implements TorneoService{
    private final FormatoTorneoRepository repoFormatoTorneo;
 
    @Autowired
-   public TorneoServiceImpl(TorneoRepository repository, FormatoTorneoRepository repoFormatoTorneo) {
+   public TorneoServiceImpl(TorneoRepository repository,FormatoTorneoRepository repoFormatoTorneo) {
       this.repository = repository;
       this.repoFormatoTorneo = repoFormatoTorneo;
    }
@@ -34,8 +34,19 @@ public class TorneoServiceImpl implements TorneoService{
 
    @Override
    public List<TorneoDTO> getAll() {
+      List<Torneo> torneos = repository.findAll();
+      if(torneos.isEmpty()){
+         System.out.println("No tiene torneos");
+         return null;
+      }
+      List<TorneoDTO> torneosDTO = new ArrayList<>();
+      for(Torneo torneo : torneos){
+         System.out.println("Torneos de la db: ");
+         System.out.println(torneo);
+      }
 
-      return repository.findAll().stream()
+
+      return torneos.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
    }

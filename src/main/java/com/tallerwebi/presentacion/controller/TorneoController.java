@@ -23,7 +23,7 @@ public class TorneoController {
 
 
    @GetMapping("/torneos")
-   public String vistaTorneos(Model model) {
+   public String listarTorneos(Model model) {
       List<TorneoDTO> torneos = service.getAll();
       model.addAttribute("torneos", torneos);
       model.addAttribute("tiposFormato", TipoFormato.values());

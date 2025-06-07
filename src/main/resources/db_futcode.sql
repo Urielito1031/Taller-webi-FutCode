@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2025 a las 05:42:17
+-- Tiempo de generación: 07-06-2025 a las 16:49:36
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -166,19 +166,20 @@ INSERT INTO `formato_torneo` (`id`, `tipo`, `rondas`, `equipos_por_grupo`, `equi
 CREATE TABLE `formato_torneo_fases` (
   `formato_torneo_id` int(11) NOT NULL,
   `fase` varchar(50) NOT NULL,
-  `equipos` int(11) DEFAULT NULL
+  `equipos` int(11) DEFAULT NULL,
+  `id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `formato_torneo_fases`
 --
 
-INSERT INTO `formato_torneo_fases` (`formato_torneo_id`, `fase`, `equipos`) VALUES
-(1, 'Cuartos de final', 8),
-(1, 'Fase de grupos', 32),
-(1, 'Final', 2),
-(1, 'Octavos de final', 16),
-(1, 'Semifinales', 4);
+INSERT INTO `formato_torneo_fases` (`formato_torneo_id`, `fase`, `equipos`, `id`) VALUES
+(1, 'Cuartos de final', 8, 0),
+(1, 'Fase de grupos', 32, 0),
+(1, 'Final', 2, 0),
+(1, 'Octavos de final', 16, 0),
+(1, 'Semifinales', 4, 0);
 
 -- --------------------------------------------------------
 
@@ -200,7 +201,8 @@ CREATE TABLE `grupo` (
 
 CREATE TABLE `grupo_equipo` (
   `grupo_id` int(11) NOT NULL,
-  `equipo_id` int(11) NOT NULL
+  `equipo_id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -251,7 +253,8 @@ CREATE TABLE `jugador` (
 
 CREATE TABLE `jugador_posiciones` (
   `jugador_id` int(11) NOT NULL,
-  `posicion_natural` enum('ARQUERO','DEFENSOR_CENTRAL','DEFENSOR_LATERAL','VOLANTE_CENTRAL','VOLANTE_LATERAL','VOLANTE_OFENSIVO','EXTREMO','DELANTERO_CENTRAL','DELANTERO','DEFENSOR','MEDIOCAMPISTA') NOT NULL
+  `posicion_natural` enum('ARQUERO','DEFENSOR_CENTRAL','DEFENSOR_LATERAL','VOLANTE_CENTRAL','VOLANTE_LATERAL','VOLANTE_OFENSIVO','EXTREMO','DELANTERO_CENTRAL','DELANTERO','DEFENSOR','MEDIOCAMPISTA') NOT NULL,
+  `posicion_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -345,7 +348,13 @@ CREATE TABLE `torneo` (
 --
 
 INSERT INTO `torneo` (`id`, `nombre`, `descripcion`, `formato_torneo_id`, `estado`) VALUES
-(1, 'Copa Mundial 2025', 'Torneo eliminatorio con 16 equipos', NULL, 'ABIERTO');
+(1, 'Copa Mundial 2025', 'Torneo eliminatorio con 16 equipos', 1, 'ABIERTO'),
+(2, 'Copa Libertadores 2025', 'Torneo internacional de clubes más prestigioso de América del Sur, con equipos argentinos como River Plate y Boca Juniors compitiendo por el título.', 1, 'ABIERTO'),
+(3, 'Liga Profesional Argentina 2025', 'Competencia de fútbol de primera división en Argentina, con 28 equipos luchando por el campeonato nacional.', 2, 'EN_CURSO'),
+(4, 'Copa Argentina 2025', 'Torneo eliminatorio que incluye equipos de todas las categorías del fútbol argentino, con gran emoción en cada fase.', 1, 'ABIERTO'),
+(5, 'Liga Madero 2025', 'Liga regional en la zona de Buenos Aires, destacando el talento local en un formato de puntos corridos.', 2, 'EN_CURSO'),
+(6, 'Copa Sudamericana 2025', 'Competencia internacional de clubes sudamericanos, con equipos argentinos buscando gloria continental.', 1, 'FINALIZADO'),
+(7, 'Liga Interior Argentina 2025', 'Torneo de fútbol para equipos del interior de Argentina, promoviendo el talento fuera de las grandes ciudades.', 2, 'ABIERTO');
 
 -- --------------------------------------------------------
 
@@ -359,6 +368,24 @@ CREATE TABLE `usuario` (
   `password` varchar(255) NOT NULL,
   `rol` varchar(50) NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`) VALUES
+(1, 'test@unlam.edu.ar', 'test', 'ADMIN', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_sobre`
+--
+
+CREATE TABLE `usuario_sobre` (
+  `Usuario_id` bigint(20) NOT NULL,
+  `sobres_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -502,6 +529,12 @@ ALTER TABLE `usuario`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indices de la tabla `usuario_sobre`
+--
+ALTER TABLE `usuario_sobre`
+  ADD UNIQUE KEY `UK_c9c9isw8x8tunow1dr5f7vhkf` (`sobres_id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -593,13 +626,13 @@ ALTER TABLE `sobre`
 -- AUTO_INCREMENT de la tabla `torneo`
 --
 ALTER TABLE `torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -690,6 +723,12 @@ ALTER TABLE `posicion_jugador`
 --
 ALTER TABLE `torneo`
   ADD CONSTRAINT `torneo_ibfk_1` FOREIGN KEY (`formato_torneo_id`) REFERENCES `formato_torneo` (`id`) ON DELETE SET NULL;
+
+--
+-- Filtros para la tabla `usuario_sobre`
+--
+ALTER TABLE `usuario_sobre`
+  ADD CONSTRAINT `FKdkvw82ysebsc2gy2j6t1ug04l` FOREIGN KEY (`sobres_id`) REFERENCES `sobre` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

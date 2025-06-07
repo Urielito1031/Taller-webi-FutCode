@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class FormatoTorneoDTO {
+
    private TipoFormato tipo;
 
    // Atributo para liga

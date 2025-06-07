@@ -12,9 +12,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "formato_torneo_fases")
 public class FormatoTorneoFase {
-   @EmbeddedId
-   private FormatoTorneoFaseId id;
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
    @MapsId("formatoTorneoId")
    @ManyToOne(fetch = FetchType.LAZY, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)

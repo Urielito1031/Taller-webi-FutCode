@@ -16,6 +16,7 @@ public class EquipoDTO {
     private ClubDTO club;
     private List<JugadorDTO> jugadores;
     private FormacionDTO formacionActual;
+    private Double ratingEquipo;
     public EquipoDTO() {}
 
 
@@ -25,4 +26,14 @@ public class EquipoDTO {
         this.formacionActual = new FormacionDTO();
         this.jugadores = new ArrayList<>();
     }
+
+    public Double ratingEquipo(List<JugadorDTO> jugadores){
+        double total = 0;
+
+        for (JugadorDTO j : jugadores) {
+            total += j.getRating();
+        }
+        return total/jugadores.size();
+    }
+
 }

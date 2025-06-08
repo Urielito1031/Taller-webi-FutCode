@@ -11,10 +11,13 @@
   <a class="navbar-brand" href="#">FUTCODE</a>
 </nav>
 
-<h1>Equipo Sorteado</h1>
+<h1>Jugadores Sorteados</h1>
+
+<h4 style="text-align: center">Estos serán tus jugadores disponibles. Con ellos podrás armar tu equipo de 11 inicial.</h4>
 
 <div id="contenedor-principal">
   <div id="subContenedor">
+<!--    <span th:text="${equipo.getRatingEquipo()}"></span>-->
     <ul class="container">
       <li class="contenedor-jugador" th:each="jugador : ${equipo.jugadores}">
         <h3>Jugador</h3>

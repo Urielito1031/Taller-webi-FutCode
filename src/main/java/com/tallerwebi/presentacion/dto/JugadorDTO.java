@@ -26,6 +26,7 @@ public class JugadorDTO {
    private RarezaJugador rarezaJugador;
 
    public JugadorDTO() {}
+
    public JugadorDTO(Long id,String  nombre, String apellido, String imagen, Integer edad,Integer numeroCamiseta, Double rating, Double estadoFisico, List<PosicionEnum> posicion, Pais paisOrigen,RarezaJugador rarezaJugador) {
       this.id = id;
       this.nombre = nombre;

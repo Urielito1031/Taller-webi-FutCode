@@ -23,8 +23,7 @@ public class SobreDTO {
 
     public SobreDTO(){
         this.jugadores = new ArrayList<>();
-
-    };
+    }
 
     public SobreDTO(String titulo, Double precio, TipoSobre tipoSobre, String imagenUrl) {
         this.titulo = titulo;
@@ -32,9 +31,13 @@ public class SobreDTO {
         this.tipoSobre = tipoSobre;
         this.imagenUrl = imagenUrl;
         this.jugadores = new ArrayList<>();
-
-
     }
+
+    public SobreDTO(TipoSobre tipoSobre) {
+        this.tipoSobre = tipoSobre;
+        this.jugadores = new ArrayList<>();
+    }
+
     public Sobre fromEntity(){
         System.out.println("llego aca" );
         Sobre sobre = new Sobre();

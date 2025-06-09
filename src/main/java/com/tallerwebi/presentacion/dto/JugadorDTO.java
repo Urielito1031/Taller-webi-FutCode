@@ -70,4 +70,8 @@ public class JugadorDTO {
       return jugador;
    }
 
+    public JugadorDTO(String nombre, RarezaJugador rarezaJugador) {
+      this.nombre = nombre;
+      this.rarezaJugador = rarezaJugador;
+    }
 }

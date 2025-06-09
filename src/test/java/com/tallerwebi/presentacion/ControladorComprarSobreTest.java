@@ -1,9 +1,13 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.SobreServiceImpl;
+import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
+import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 import com.tallerwebi.presentacion.controller.ComprarSobreController;
+import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mock;
@@ -20,16 +24,22 @@ import static org.mockito.Mockito.when;
 
 public class ControladorComprarSobreTest {
 
-    @Mock
     private SobreServiceImpl sobreService;
-
-    @Mock
+    private UsuarioServiceImpl usuarioService;
     private ComprarSobreController comprarSobreController;
 
+
+    @BeforeEach
+    public void setUp() {
+        sobreService = Mockito.mock(SobreServiceImpl.class);
+        usuarioService = Mockito.mock(UsuarioServiceImpl.class);
+        this.comprarSobreController = new ComprarSobreController(sobreService, usuarioService);
+    }
+
     @Test
-    void testShowViewComprarSobre(){
+    public void testShowViewComprarSobre(){
         SobreServiceImpl sobreService = Mockito.mock(SobreServiceImpl.class);
-        ComprarSobreController comprarSobreController = new ComprarSobreController(sobreService);
+        ComprarSobreController comprarSobreController = new ComprarSobreController(sobreService, usuarioService);
 
         List<SobreDTO> sobresEsperados = new ArrayList<>();
         sobresEsperados.add(new SobreDTO("Sobre de Bronce", 2500.0, TipoSobre.BRONCE, "sobreFutCodeBronce.png"));
@@ -46,9 +56,26 @@ public class ControladorComprarSobreTest {
         assertThat(mav.getModel().get("sobres"), is(sobresEsperados));
     }
 
-    void testComprarSobre(){
+    @Test
+    public void dadoQueCreoUnSobreMeDevuelveUnMensajeDeExito(){
+        SobreDTO sobre = new SobreDTO(TipoSobre.BRONCE);
+        Mockito.when(this.sobreService.crearSobre(TipoSobre.BRONCE)).thenReturn(sobre);
 
+        String respuesta = this.comprarSobreController.crearSobre(TipoSobre.BRONCE);
+
+        assertThat(respuesta, is("Sobre creado con exito"));
     }
+
+    @Test
+    public void dadoQueElSobreNoSePuedeCrearDevuelveUnMensajeDeError(){
+        Mockito.when(this.sobreService.crearSobre(TipoSobre.BRONCE)).thenReturn(null);
+
+        String respuesta = this.comprarSobreController.crearSobre(TipoSobre.BRONCE);
+
+        assertThat(respuesta, is("No se pudo crear el sobre"));
+    }
+
+
 
 
 }

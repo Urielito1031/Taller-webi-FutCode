@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UsuarioService{
 
-    void agregarSobreAJugador(Long idUsuario, TipoSobre tipoSobre);
+    Boolean agregarSobreAJugador(Long idUsuario, SobreDTO sobreDTO);
 }

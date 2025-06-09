@@ -1,9 +1,11 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.TipoSobre;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,5 +37,7 @@ public class Sobre {
    @javax.validation.constraints.Size(max = 255)
    @Column(name = "imagen_url")
    private String imagenUrl;
+
+   private List<Jugador> jugadores;
 
 }

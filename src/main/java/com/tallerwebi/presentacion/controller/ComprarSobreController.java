@@ -1,12 +1,17 @@
 package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.SobreServiceImpl;
+import com.tallerwebi.dominio.model.enums.TipoSobre;
+import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -15,8 +20,12 @@ public class ComprarSobreController {
     @Autowired
     private SobreServiceImpl sobreService;
 
-    public ComprarSobreController(SobreServiceImpl sobreService) {
+    @Autowired
+    private UsuarioServiceImpl usuarioService;
+
+    public ComprarSobreController(SobreServiceImpl sobreService, UsuarioServiceImpl usuarioService) {
         this.sobreService = sobreService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping("/comprar-sobres")
@@ -28,5 +37,19 @@ public class ComprarSobreController {
 
         return mav;
     }
+
+    @PostMapping("/jugador/agregarSobre")
+    public String crearSobre(@RequestParam("tipoDeSobre")TipoSobre tipo){
+        String returnText = "No se pudo crear el sobre";
+
+        SobreDTO sobreObtenido = this.sobreService.crearSobre(tipo);
+
+        if(sobreObtenido != null){
+            returnText = "Sobre creado con exito";
+        }
+
+        return returnText;
+    }
+
 
 }

@@ -44,6 +44,13 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         getCurrentSession().update(usuario);
     }
 
+    @Override
+    public Usuario buscarUsuarioPorId(Long id) {
+        return getCurrentSession().createQuery("FROM Usuario u WHERE u.id = :id", Usuario.class)
+                .setParameter("id", id)
+                .uniqueResult();
+    }
+
     //para evitar instanciar en cada metodo el Session session = sessionFactory.getCurrentSession();
     private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();

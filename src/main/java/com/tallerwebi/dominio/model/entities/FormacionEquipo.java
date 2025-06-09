@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -16,7 +17,7 @@ public class FormacionEquipo{
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
 
    @NotNull
    @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -31,8 +32,8 @@ public class FormacionEquipo{
    private Jugador jugador;
 
    @NotNull
-   @Lob
+   @Enumerated(EnumType.STRING)
    @Column(name = "posicion_en_campo", nullable = false)
-   private String posicionEnCampo;
+   private PosicionEnum posicionEnCampo;
 
 }

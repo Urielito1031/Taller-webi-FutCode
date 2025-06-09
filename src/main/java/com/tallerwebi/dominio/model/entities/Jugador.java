@@ -69,7 +69,7 @@ public class Jugador {
  @NotNull
  @Lob
  @Column(name = "posicion", nullable = false)
- private String posicion;
+ private PosicionEnum posicion;
 
  @ManyToOne(fetch = FetchType.LAZY)
  @JoinColumn(name = "equipo_id")
@@ -89,12 +89,9 @@ public class Jugador {
 
   // String a enum
   dto.setRarezaJugador(RarezaJugador.valueOf(jugador.getRarezaJugador()));
+  dto.setPosicionNatural(jugador.getPosicion());
 
-  // String separado por coma a lista de enums
-  List<PosicionEnum> posiciones = Arrays.stream(jugador.getPosicion().split(","))
-      .map(PosicionEnum::valueOf)
-      .collect(Collectors.toList());
-  dto.setPosicionNatural(posiciones);
+
 
   if (jugador.getEquipo() != null) {
    EquipoDTO equipoDTO = new EquipoDTO(); // Este debe ser implementado

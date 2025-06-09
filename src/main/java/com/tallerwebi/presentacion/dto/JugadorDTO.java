@@ -61,7 +61,7 @@ public class JugadorDTO {
       // Enum a String
       jugador.setRarezaJugador(dto.getRarezaJugador().name());
 
-      jugador.setPosicion(this.posicionNatural.name());
+      jugador.setPosicion(this.posicionNatural);
 
       if (dto.getEquipo() != null) {
          jugador.setEquipo(dto.getEquipo().convertToEntity(dto.getEquipo()));

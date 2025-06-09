@@ -38,6 +38,6 @@ public class Sobre {
    @Column(name = "imagen_url")
    private String imagenUrl;
 
-   private List<Jugador> jugadores;
+   //private List<Jugador> jugadores;
 
 }

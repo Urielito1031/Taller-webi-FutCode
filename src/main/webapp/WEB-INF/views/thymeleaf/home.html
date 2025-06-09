@@ -1,3 +1,4 @@
+<!-- dashboard.html - Página principal corregida -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
@@ -37,7 +38,8 @@
         <li class="nav-item dropdown">
           <div class="dropdown">
             <button class="dropdown-toggle">
-              <i class="bi bi-person-circle"></i><span id="nombre-usuario">Diego Maradona </span>
+              <i class="bi bi-person-circle"></i>
+              <span id="nombre-usuario" th:text="${#httpSession.getAttribute('usuario') != null ? #httpSession.getAttribute('usuario').nombre : 'Diego Maradona'}">Diego Maradona</span>
             </button>
             <div class="dropdown-menu">
               <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>
@@ -53,7 +55,10 @@
 
 <!-- Contenido Principal -->
 <main class="container-principal mt-5 pt-4">
-  <h1 class="display-6 mb-3">Bienvenido, DT <span class="text-primary" th:text="${#httpSession.getAttribute('equipo') != null ? #httpSession.getAttribute('equipo').nombre : 'Coco basile'}"></span></h1>
+  <h1 class="display-6 mb-3">
+    Bienvenido, DT
+    <span class="text-primary" th:text="${#httpSession.getAttribute('equipo') != null ? #httpSession.getAttribute('equipo').nombre : 'Coco Basile'}">Coco Basile</span>
+  </h1>
 
   <div id="contenedor-padre">
     <div id="contenedor-contenedores">
@@ -73,7 +78,9 @@
           <div class="card-body">
             <h6 class="titulo-seccion">Stamina General</h6>
             <div class="progress">
-              <div class="progress-bar" style="width: 78%"><span id="porcetaje">78%</span></div>
+              <div class="progress-bar" style="width: 78%">
+                <span id="porcentaje">78%</span>
+              </div>
             </div>
             <hr>
             <h6 class="titulo-seccion">Lesionados</h6>
@@ -99,8 +106,9 @@
         </div>
       </div>
 
-<!--      llama a otro fragmento html para evitar poner todo el maquetado aca-->
-    <div th:replace="~{vista-list-torneos :: torneoList}"></div>
+      <!-- fragmento de torneos -->
+      <div th:replace="~{vista-list-torneos :: torneoList}"></div>
+    </div>
   </div>
 </main>
 

@@ -2,16 +2,14 @@ package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
-import com.tallerwebi.presentacion.dto.FormacionDTO;
-import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
+import com.tallerwebi.presentacion.dto.EsquemaDTO;
 
 import java.util.List;
 
 public interface PlantillaService {
-   FormacionDTO initPlantillaBase();
-   Boolean save(FormacionDTO formacion);
-   Boolean validarFormacion(FormacionDTO formacion);
-   void asignarPosicionesYJugadores(FormacionDTO formacion);
+   Boolean save(EsquemaDTO formacion);
+   Boolean validarFormacion(EsquemaDTO formacion);
+   void asignarPosicionesYJugadores(EsquemaDTO formacion);
    List<PosicionEnum> getPosicionesPorEsquema(FormacionEsquema esquema);
 
 }

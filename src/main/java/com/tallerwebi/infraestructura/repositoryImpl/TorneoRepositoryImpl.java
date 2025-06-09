@@ -30,6 +30,13 @@ public class TorneoRepositoryImpl implements TorneoRepository{
    public void save(Torneo torneo) {
       getSession().saveOrUpdate(torneo);
    }
+
+   @Override
+   public Torneo getById(Long id){
+
+      return getSession().get(Torneo.class,id);
+   }
+
    private Session getSession() {
       return sessionFactory.getCurrentSession();
    }

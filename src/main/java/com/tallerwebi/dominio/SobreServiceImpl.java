@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.model.entities.Pais;
 import com.tallerwebi.dominio.model.enums.*;
 import com.tallerwebi.dominio.service.SobreService;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -16,7 +17,7 @@ public class SobreServiceImpl implements SobreService {
         List<JugadorDTO> jugadores = new ArrayList<>();
 
         jugadores.add(new JugadorDTO(1L,"Lionel", "Messi", "lionel_messi.png", 36, 10, 94.5, 95.0,
-                List.of(PosicionEnum.DELANTERO_CENTRAL), Pais.ARGENTINA, RarezaJugador.RARO));
+                PosicionEnum.DELANTERO,new Pais(), RarezaJugador.RARO));
 
         jugadores.add(new JugadorDTO(2L,"Emiliano", "Martínez", "emiliano_martinez.png", 31, 23, 88.0, 92.0,
                 List.of(PosicionEnum.ARQUERO), Pais.ARGENTINA, RarezaJugador.RARO));

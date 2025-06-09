@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 @Getter
 @Setter
-public class FormacionDTO {
+public class EsquemaDTO{
    private Long id;
    @NotNull(message = "El esquema es obligatorio")
    private FormacionEsquema esquema;
    @Size(min = 11, max = 11, message = "Debes tener exactamente 11 jugadores")
    private List<PosicionJugadorDTO> alineacion;
 
-   public FormacionDTO(){
+   public EsquemaDTO(){
       this.alineacion = new ArrayList<>();
    }
 

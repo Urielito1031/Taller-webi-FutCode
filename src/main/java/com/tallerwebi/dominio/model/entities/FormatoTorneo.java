@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -20,37 +19,9 @@ public class FormatoTorneo {
    @Column(name = "tipo", nullable = false)
    private TipoFormato tipo;
 
-   @Column(name = "rondas")
-   private Integer rondas;
 
-   @Column(name = "equipos_por_grupo")
-   private Integer equiposPorGrupo;
-
-   @Column(name = "equipos_que_avanzan")
-   private Integer equiposQueAvanzan;
-
-   @Column(name = "tipo_grupo")
-   private Boolean tipoGrupo;
-
-   @Column(name = "ida_y_vuelta")
-   private Boolean idaYVuelta;
-
-   @Column(name = "puntos_por_victoria")
-   private Integer puntosPorVictoria;
-
-   @Column(name = "puntos_por_empate")
-   private Integer puntosPorEmpate;
-
-   @Column(name = "puntos_por_derrota")
-   private Integer puntosPorDerrota;
 
    public String toString(){
-      return "Tipo: " + tipo + ", \nRondas: " + rondas+"\nEquipos por grupo: "+
-            equiposPorGrupo+"\nEquipos que avanzan:"+ equiposQueAvanzan
-            +"\nTipo grupo: "+tipoGrupo
-            +"\nIda y vuelta: "+idaYVuelta
-            +"\nPuntos por victoria: "+puntosPorVictoria
-            +"\nPuntos por empate: "+puntosPorEmpate
-            +"\nPuntos por derrota: "+puntosPorDerrota;
+      return "Tipo: " + tipo;
    }
 }

@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Detalle torneo</title>
 </head>
 <body>
-$END$
+<h1>Vista detalle torneo</h1>
+<div th:object="${torneo}">
+   <h2>Nombre: <span th:text="*{nombre}"></span></h2>
+   <p>Descripción: <span th:text="*{descripcion} ?: 'Sin descripción'"></span></p>
+   <p>Estado: <span th:text="*{estado}"></span></p>
+   <!-- Agrega más campos según tu TorneoDTO -->
+</div>
+
+<!-- Botón para unirse si el torneo está abierto -->
+<th:block th:if="${torneo.estado.name() == 'ABIERTO'}">
+   <a
+           th:href="@{/detalle-torneo/{id}(id=${torneo.id})}"
+           class="btn btn-primary w-100 mt-3">
+      Unirse <i class="bi bi-arrow-right ms-2"></i>
+   </a>
+</th:block>
 </body>
 </html>

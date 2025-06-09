@@ -1,10 +1,12 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.model.enums.Estadio;
-import com.tallerwebi.dominio.model.enums.Pais;
+import com.tallerwebi.dominio.model.entities.Club;
+import com.tallerwebi.dominio.model.entities.Estadio;
+import com.tallerwebi.dominio.model.entities.Pais;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.GenerationType;
 
 @Getter
 @Setter
@@ -24,4 +26,15 @@ public class ClubDTO {
       this.estadio = estadio;
       this.imagen = imagen;
    }
+
+   public Club convertToEntity(ClubDTO dto){
+      Club entity = new Club();
+      entity.setId(dto.getId());
+      entity.setNombre(dto.getNombre());
+      entity.setPais(dto.getPais());
+      entity.setImagen(dto.getImagen());
+      entity.setEstadio(dto.getEstadio());
+      return entity;
+   }
+
 }

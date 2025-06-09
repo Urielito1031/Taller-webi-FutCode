@@ -81,6 +81,10 @@ public class ControladorLogin {
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public String irAHome(Model model) {
         List<TorneoDTO> torneos = torneoService.getAll();
+        System.out.println("aca debagueamos");
+        for (TorneoDTO torneo : torneos){
+            System.out.println(torneo.getId());
+        }
         model.addAttribute("torneos", torneos!= null ? torneos : new ArrayList<TorneoDTO>());
         return "home";
     }

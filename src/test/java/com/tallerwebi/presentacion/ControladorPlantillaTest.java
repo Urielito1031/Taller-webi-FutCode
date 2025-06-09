@@ -3,7 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.service.PlantillaServiceImpl;
 import com.tallerwebi.presentacion.controller.PlantillaController;
-import com.tallerwebi.presentacion.dto.FormacionDTO;
+import com.tallerwebi.presentacion.dto.EsquemaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -45,7 +45,7 @@ public class ControladorPlantillaTest {
    @Test
    public void testShowViewPlantilla() {
       // Arrange
-      FormacionDTO formacion = new FormacionDTO();
+      EsquemaDTO formacion = new EsquemaDTO();
       when(service.initPlantillaBase()).thenReturn(formacion);
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
 
@@ -64,7 +64,7 @@ public class ControladorPlantillaTest {
       // Arrange
       String esquemaTexto = "4-4-2";
       FormacionEsquema esquemaSeleccionado = FormacionEsquema.fromString(esquemaTexto);
-      FormacionDTO formacion = new FormacionDTO();
+      EsquemaDTO formacion = new EsquemaDTO();
       formacion.setEsquema(esquemaSeleccionado);
       when(service.initPlantillaBase()).thenReturn(formacion);
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());

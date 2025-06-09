@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-06-2025 a las 15:03:56
+-- Tiempo de generación: 09-06-2025 a las 21:33:04
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -355,6 +355,17 @@ INSERT INTO `fase` (`id`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `formacion`
+--
+
+CREATE TABLE `formacion` (
+  `id` int(11) NOT NULL,
+  `esquema` longtext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `formacion_equipo`
 --
 
@@ -364,6 +375,23 @@ CREATE TABLE `formacion_equipo` (
   `jugador_id` int(11) NOT NULL,
   `posicion_en_campo` enum('ARQUERO','DEFENSOR','MEDIOCAMPISTA','DELANTERO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `formacion_equipo`
+--
+
+INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_campo`) VALUES
+(1, 1, 1, 'ARQUERO'),
+(2, 1, 2, 'DEFENSOR'),
+(3, 1, 3, 'DEFENSOR'),
+(4, 1, 4, 'DEFENSOR'),
+(5, 1, 5, 'DEFENSOR'),
+(6, 1, 6, 'MEDIOCAMPISTA'),
+(7, 1, 7, 'MEDIOCAMPISTA'),
+(8, 1, 8, 'MEDIOCAMPISTA'),
+(9, 9, 9, 'DELANTERO'),
+(10, 1, 10, 'DELANTERO'),
+(11, 1, 11, 'DELANTERO');
 
 -- --------------------------------------------------------
 
@@ -556,6 +584,17 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`) VALUES
 (1, 'test@unlam.edu.ar', 'test', 'ADMIN', 1);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_sobre`
+--
+
+CREATE TABLE `usuario_sobre` (
+  `Usuario_id` bigint(20) NOT NULL,
+  `sobres_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Índices para tablas volcadas
 --
@@ -608,6 +647,12 @@ ALTER TABLE `evento_partido`
 -- Indices de la tabla `fase`
 --
 ALTER TABLE `fase`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `formacion`
+--
+ALTER TABLE `formacion`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -683,6 +728,12 @@ ALTER TABLE `usuario`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indices de la tabla `usuario_sobre`
+--
+ALTER TABLE `usuario_sobre`
+  ADD UNIQUE KEY `UK_c9c9isw8x8tunow1dr5f7vhkf` (`sobres_id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -732,7 +783,7 @@ ALTER TABLE `fase`
 -- AUTO_INCREMENT de la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `formato_torneo`
@@ -847,6 +898,12 @@ ALTER TABLE `torneo_copa`
 --
 ALTER TABLE `torneo_liga`
   ADD CONSTRAINT `torneo_liga_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`);
+
+--
+-- Filtros para la tabla `usuario_sobre`
+--
+ALTER TABLE `usuario_sobre`
+  ADD CONSTRAINT `FKdkvw82ysebsc2gy2j6t1ug04l` FOREIGN KEY (`sobres_id`) REFERENCES `sobre` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

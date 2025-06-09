@@ -36,6 +36,7 @@ public class PlantillaServiceImpl implements PlantillaService {
 
 
       Long equipoId = 1L;
+      //error de serializacion. ver findByEquipoId()
       List<FormacionEquipo> formaciones = formacionEquipoRepository.findByEquipoId(equipoId);
       if (!formaciones.isEmpty()) {
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
@@ -145,13 +146,23 @@ public class PlantillaServiceImpl implements PlantillaService {
       return formaciones.stream()
           .map(fe -> {
              PosicionJugadorDTO dto = new PosicionJugadorDTO();
-             dto.setJugadorId(fe.getJugador().getId());
+             dto.setJugadorId(fe.getJugador() != null ? fe.getJugador().getId() : null);
              dto.setPosicionEnCampo(fe.getPosicionEnCampo());
+             if (fe.getJugador() != null) {
+                JugadorDTO jugadorDTO = new JugadorDTO();
+                jugadorDTO.setId(fe.getJugador().getId());
+                jugadorDTO.setNombre(fe.getJugador().getNombre());
+                jugadorDTO.setApellido(fe.getJugador().getApellido());
+                jugadorDTO.setImagen(fe.getJugador().getImagen());
+                jugadorDTO.setNumeroCamiseta(fe.getJugador().getNumeroCamiseta());
+                jugadorDTO.setRating(fe.getJugador().getRating());
+                jugadorDTO.setEstadoFisico(fe.getJugador().getEstadoFisico());
+                dto.setJugador(jugadorDTO);
+             }
              return dto;
           })
           .collect(Collectors.toList());
    }
-
    private FormacionEsquema detectarEsquema(List<FormacionEquipo> formaciones) {
       long defensores = formaciones.stream().filter(fe -> fe.getPosicionEnCampo() == PosicionEnum.DEFENSOR).count();
       long mediocampistas = formaciones.stream().filter(fe -> fe.getPosicionEnCampo() == PosicionEnum.MEDIOCAMPISTA).count();

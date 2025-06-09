@@ -24,5 +24,8 @@ public class PosicionJugadorDTO {
       this.jugador = jugador;
    }
 
+   public String toString(){
+      return  "JugadorID: "+ this.getJugadorId()+"\nJugador: " + jugador.getNombre() + "\nPosicion: " + posicionEnCampo;
+   }
 
 }

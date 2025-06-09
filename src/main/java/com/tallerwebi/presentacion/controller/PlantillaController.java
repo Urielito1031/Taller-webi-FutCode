@@ -42,6 +42,7 @@ public class PlantillaController {
    @GetMapping("/plantilla")
    public String showViewPlantilla(Model model) {
       EsquemaDTO formacion = service.initPlantillaBase();
+      System.out.println("Alineación en /plantilla: " + formacion.getAlineacion());
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
       model.addAttribute("formacion", formacion);
@@ -50,16 +51,14 @@ public class PlantillaController {
 
    @GetMapping("/formacion-inicial")
    public String cambiarFormacion(@RequestParam("esquema") String esquemaTexto, Model model) {
-      //convertir el valor string a enum
       FormacionEsquema esquemaSeleccionado = FormacionEsquema.fromString(esquemaTexto);
       EsquemaDTO formacion = service.initPlantillaBase();
       formacion.setEsquema(esquemaSeleccionado);
+      System.out.println("Alineación en /formacion-inicial: " + formacion.getAlineacion());
       model.addAttribute("formacion", formacion);
-      List<FormacionEsquema>esquemas = Arrays.asList(FormacionEsquema.values());
+      List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
       return "vista-plantilla";
-
-
    }
    @PostMapping("/guardar-formacion")
    public String guardarFormacion(@Valid @ModelAttribute EsquemaDTO formacionAGuardar,

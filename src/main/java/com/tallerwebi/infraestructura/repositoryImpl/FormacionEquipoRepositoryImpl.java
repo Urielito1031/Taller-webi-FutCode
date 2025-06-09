@@ -21,11 +21,18 @@ public class FormacionEquipoRepositoryImpl implements FormacionEquipoRepository 
    public FormacionEquipoRepositoryImpl(SessionFactory sessionFactory) {
       this.sessionFactory = sessionFactory;
    }
+
+   //depurar en un try catch...
    @Override
    public List<FormacionEquipo> findByEquipoId(Long equipoId) {
-      String hql = "FROM FormacionEquipo fe WHERE fe.equipo.id = :equipoId";
+      System.out.println("metodo findByEquipoId()" );
+      String hql = "SELECT fe FROM FormacionEquipo fe " +
+          "JOIN FETCH fe.jugador j " +
+          "JOIN FETCH fe.equipo e " +
+          "WHERE e.id = :equipoId";
       Query<FormacionEquipo> query = getSession().createQuery(hql, FormacionEquipo.class);
       query.setParameter("equipoId", equipoId);
+      System.out.println("ACA EL RESULTADO: ."+query.getResultList());
       return query.list();
    }
 

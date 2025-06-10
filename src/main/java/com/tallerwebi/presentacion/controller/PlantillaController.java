@@ -3,10 +3,8 @@ package com.tallerwebi.presentacion.controller;
 import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.service.PlantillaService;
-import com.tallerwebi.dominio.service.PlantillaServiceImpl;
-import com.tallerwebi.presentacion.dto.FormacionDTO;
-import com.tallerwebi.presentacion.dto.JugadorDTO;
-import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
+import com.tallerwebi.presentacion.dto.EsquemaDTO;
+
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +21,9 @@ import java.util.Objects;
 @Controller
 public class PlantillaController {
 
-   private PlantillaService service;
+   private final PlantillaService service;
+
+
    public PlantillaController(PlantillaService service) {
       this.service = service;
    }
@@ -41,7 +41,8 @@ public class PlantillaController {
 
    @GetMapping("/plantilla")
    public String showViewPlantilla(Model model) {
-      FormacionDTO formacion = service.initPlantillaBase();
+      EsquemaDTO formacion = service.initPlantillaBase();
+      System.out.println("Alineación en /plantilla: " + formacion.getAlineacion());
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
       model.addAttribute("formacion", formacion);
@@ -50,29 +51,25 @@ public class PlantillaController {
 
    @GetMapping("/formacion-inicial")
    public String cambiarFormacion(@RequestParam("esquema") String esquemaTexto, Model model) {
-      //convertir el valor string a enum
       FormacionEsquema esquemaSeleccionado = FormacionEsquema.fromString(esquemaTexto);
-      FormacionDTO formacion = service.initPlantillaBase();
+      EsquemaDTO formacion = service.initPlantillaBase();
       formacion.setEsquema(esquemaSeleccionado);
+      System.out.println("Alineación en /formacion-inicial: " + formacion.getAlineacion());
       model.addAttribute("formacion", formacion);
-      List<FormacionEsquema>esquemas = Arrays.asList(FormacionEsquema.values());
+      List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
       return "vista-plantilla";
-
-
    }
    @PostMapping("/guardar-formacion")
-   public String guardarFormacion(@Valid @ModelAttribute FormacionDTO formacionAGuardar,
+   public String guardarFormacion(@Valid @ModelAttribute EsquemaDTO formacionAGuardar,
                                   BindingResult result, Model model, HttpServletRequest request) {
       System.out.println("Parámetros recibidos:");
       request.getParameterMap().forEach((key, value) -> System.out.println(key + ": " + Arrays.toString(value)));
       System.out.println("Formación recibida: " + formacionAGuardar);
-      for (PosicionJugadorDTO pj : formacionAGuardar.getAlineacion()) {
-         System.out.println("Posición: " + pj.getPosicionEnCampo() + ", JugadorId: " + pj.getJugadorId());
-      }
+
       if (result.hasErrors()) {
          System.out.println("tiene errores");
-         FormacionDTO formacion = service.initPlantillaBase();
+         EsquemaDTO formacion = service.initPlantillaBase();
          model.addAttribute("formacion", formacion);
          List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
          model.addAttribute("esquemas", esquemas);
@@ -83,27 +80,10 @@ public class PlantillaController {
       // Asignar posiciones y construir JugadorDTO desde jugadorId
       FormacionEsquema esquema = formacionAGuardar.getEsquema();
       List<PosicionEnum> posiciones = service.getPosicionesPorEsquema(esquema);
-      List<PosicionJugadorDTO> alineacion = formacionAGuardar.getAlineacion();
-      for (int i = 0; i < alineacion.size(); i++) {
-         PosicionJugadorDTO posicionJugador = alineacion.get(i);
-         posicionJugador.setPosicionEnCampo(posiciones.get(i));
 
-         Long jugadorId = posicionJugador.getJugadorId();
-         if (jugadorId == null) {
-            throw new IllegalArgumentException("ID de jugador es null para la posición " + i);
-         }
-         JugadorDTO jugador = new JugadorDTO();
-         jugador.setId(jugadorId);
-         posicionJugador.setJugador(jugador);
-      }
 
-      // Simular guardado
-      System.out.println("Esquema: " + formacionAGuardar.getEsquema().getFormacionTexto());
-      formacionAGuardar.getAlineacion().forEach(posicionJugador ->
-            System.out.println("Jugador guardado: " + posicionJugador.getJugador().getId() +
-                  ", Posición: " + posicionJugador.getPosicionEnCampo()));
 
-      FormacionDTO formacion = service.initPlantillaBase();
+      EsquemaDTO formacion = service.initPlantillaBase();
       formacion.setEsquema(FormacionEsquema.fromString(formacionAGuardar.getEsquema().getFormacionTexto()));
       model.addAttribute("formacion", formacion);
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());

@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.tallerwebi.dominio.model.entities.Equipo;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -15,14 +15,33 @@ public class EquipoDTO {
     private String nombre;
     private ClubDTO club;
     private List<JugadorDTO> jugadores;
-    private FormacionDTO formacionActual;
+    private Double ratingEquipo;
+
+    private EsquemaDTO formacionActual;
     public EquipoDTO() {}
 
 
     public EquipoDTO(String nombre, ClubDTO club) {
         this.nombre = nombre;
         this.club = club;
-        this.formacionActual = new FormacionDTO();
         this.jugadores = new ArrayList<>();
+        this.formacionActual = new EsquemaDTO();
     }
+
+    public Double ratingEquipo(List<JugadorDTO> jugadores){
+        double total = 0;
+
+        for (JugadorDTO j : jugadores) {
+            total += j.getRating();
+        }
+        return total/jugadores.size();
+    }
+
+//todavia no tiene logica
+    public Equipo convertToEntity(EquipoDTO equipo){
+   return null;
+    }
+
+    public EquipoDTO convertFromEntity(Equipo equipo){
+    return null;}
 }

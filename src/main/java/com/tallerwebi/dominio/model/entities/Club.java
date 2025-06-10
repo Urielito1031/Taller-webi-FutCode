@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.presentacion.dto.ClubDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,7 @@ import javax.persistence.*;
 public class Club {
    @Id
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
 
    @javax.validation.constraints.Size(max = 100)
    @javax.validation.constraints.NotNull
@@ -31,4 +32,29 @@ public class Club {
    @Column(name = "imagen")
    private String imagen;
 
+   public ClubDTO convertToDTO() {
+      ClubDTO dto = new ClubDTO();
+      dto.setId(this.id);
+      dto.setNombre(this.nombre);
+      dto.setPais(this.pais);
+      dto.setImagen(this.imagen);
+      return dto;
+   }
+   public static Club convertToEntity(ClubDTO dto) {
+      Club entity = new Club();
+      entity.setId(dto.getId());
+      entity.setNombre(dto.getNombre());
+      entity.setImagen(dto.getImagen());
+      if (dto.getPais() != null) {
+         Pais pais = new Pais();
+         pais.setId(dto.getPais().getId());
+         entity.setPais(pais);
+      }
+      if(dto.getEstadio() != null) {
+         Estadio estadio = new Estadio();
+         estadio.setId(dto.getEstadio().getId());
+         entity.setEstadio(estadio);
+      }
+      return entity;
+   }
 }

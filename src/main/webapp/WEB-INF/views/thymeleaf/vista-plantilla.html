@@ -58,7 +58,7 @@
                <h6 th:text="${posicionJugador.jugador.nombre} + ' ' + ${posicionJugador.jugador.apellido}" class="player-name mb-1"></h6>
                <div class="player-details">
                   <small th:text="${posicionJugador.posicionEnCampo}" class="d-block"></small>
-                  <small th:text="${posicionJugador.jugador.clubActual?.nombre ?: 'Sin club'}" class="d-block"></small>
+                  <small th:text="${posicionJugador.jugador.getEquipo()?.nombre ?: 'Sin club'}" class="d-block"></small>
                   <small th:text="'Estado: ' + ${posicionJugador.jugador.estadoFisico} + '%'" class="d-block"></small>
                </div>
             </div>
@@ -66,6 +66,8 @@
       </div>
    </div>
 </div>
+
+
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

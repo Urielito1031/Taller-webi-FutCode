@@ -18,10 +18,10 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @PostMapping("/agregarSobre")
-    public String agregarSobre(@RequestParam("TipoDeSobre") TipoSobre tipoSobre, Usuario usuario){
-        Long id = usuario.getId();
-        usuarioService.agregarSobreAJugador(id, tipoSobre);
-        return "redirect:/comprar-sobres";
-    }
+//    @PostMapping("/agregarSobre")
+//    public String agregarSobre(@RequestParam("TipoDeSobre") TipoSobre tipoSobre, Usuario usuario){
+//        Long id = usuario.getId();
+//        usuarioService.agregarSobreAJugador(id, tipoSobre);
+//        return "redirect:/comprar-sobres";
+//    }
 }

@@ -1,10 +1,17 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
+import com.tallerwebi.dominio.model.enums.RarezaJugador;
+import com.tallerwebi.presentacion.dto.EquipoDTO;
+import com.tallerwebi.presentacion.dto.JugadorDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -39,7 +46,7 @@ public class Jugador {
 
    @javax.validation.constraints.NotNull
    @Column(name = "rating", nullable = false, precision = 4, scale = 1)
-   private BigDecimal rating;
+   private Double rating;
 
    @javax.validation.constraints.NotNull
    @Column(name = "lesionado", nullable = false)
@@ -47,11 +54,8 @@ public class Jugador {
 
    @javax.validation.constraints.NotNull
    @Column(name = "estado_fisico", nullable = false, precision = 5, scale = 2)
-   private BigDecimal estadoFisico;
+   private Double estadoFisico;
 
-   @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "club_id")
-   private Club club;
 
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "pais_id")
@@ -61,5 +65,42 @@ public class Jugador {
    @Lob
    @Column(name = "rareza_jugador", nullable = false)
    private String rarezaJugador;
+
+ @NotNull
+ @Lob
+ @Column(name = "posicion", nullable = false)
+ private PosicionEnum posicion;
+
+ @ManyToOne(fetch = FetchType.LAZY)
+ @JoinColumn(name = "equipo_id")
+ private Equipo equipo;
+ public JugadorDTO convertToDTO(Jugador jugador) {
+  JugadorDTO dto = new JugadorDTO();
+  dto.setId(jugador.getId());
+  dto.setNombre(jugador.getNombre());
+  dto.setApellido(jugador.getApellido());
+  dto.setImagen(jugador.getImagen());
+  dto.setEdad(jugador.getEdad());
+  dto.setNumeroCamiseta(jugador.getNumeroCamiseta());
+  dto.setRating(jugador.getRating());
+  dto.setEstadoFisico(jugador.getEstadoFisico());
+  dto.setLesionado(jugador.getLesionado());
+  dto.setPaisOrigen(jugador.getPais());
+
+  // String a enum
+  dto.setRarezaJugador(RarezaJugador.valueOf(jugador.getRarezaJugador()));
+  dto.setPosicionNatural(jugador.getPosicion());
+
+
+
+  if (jugador.getEquipo() != null) {
+   EquipoDTO equipoDTO = new EquipoDTO(); // Este debe ser implementado
+   dto.setEquipo(equipoDTO.convertFromEntity(jugador.getEquipo()));
+  }
+
+  return dto;
+ }
+
+
 
 }

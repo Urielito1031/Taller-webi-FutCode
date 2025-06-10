@@ -52,6 +52,10 @@ h1, h2 {
     color: #00ffc3;
 }
 
+h4 {
+    text-align: center;
+}
+
 .contenedor-jugador {
     padding: 1rem;
     background-color: #23344f;

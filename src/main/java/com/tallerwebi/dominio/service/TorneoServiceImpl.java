@@ -36,31 +36,32 @@ public class TorneoServiceImpl implements TorneoService{
    public List<TorneoDTO> getAll() {
       List<Torneo> torneos = repository.findAll();
       if(torneos.isEmpty()){
-         System.out.println("No tiene torneos");
          return null;
       }
-      List<TorneoDTO> torneosDTO = new ArrayList<>();
-      for(Torneo torneo : torneos){
-         System.out.println("Torneos de la db: ");
-         System.out.println(torneo);
-      }
-
-
       return torneos.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
    }
+
+   @Override
+   public TorneoDTO getById(Long id){
+      Torneo torneoById = repository.getById(id);
+      if(torneoById == null){
+         return null;
+      }
+      return convertToDTO(torneoById);
+   }
+
    private TorneoDTO convertToDTO(Torneo torneo) {
       TorneoDTO dto = new TorneoDTO();
+      dto.setId(torneo.getId());
       dto.setNombre(torneo.getNombre());
       dto.setEstado(torneo.getEstado());
+      dto.setDescripcion(torneo.getDescripcion());
 
       FormatoTorneoDTO formatoDTO = new FormatoTorneoDTO();
       FormatoTorneo formato = torneo.getFormatoTorneo();
       formatoDTO.setTipo(formato.getTipo());
-      formatoDTO.setRondas(formato.getRondas());
-      formatoDTO.setEquiposPorGrupo(formato.getEquiposPorGrupo());
-      formatoDTO.setEquiposQueAvanzan(formato.getEquiposQueAvanzan());
       dto.setFormatoTorneo(formatoDTO);
 
       return dto;

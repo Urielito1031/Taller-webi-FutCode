@@ -12,19 +12,4 @@ import java.util.List;
 public class FormatoTorneoDTO {
 
    private TipoFormato tipo;
-
-   // Atributo para liga
-   private Integer rondas;
-
-   // Campos para Copa
-   private Integer equiposPorGrupo;
-   private Integer equiposQueAvanzan;
-   private List<String> fases;
-
-
-   public FormatoTorneoDTO() {
-      this.fases = List.of("Octavos de final","Cuartos de final", "Semifinal", "FINAL");
-   }
-
-
 }

@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -20,14 +21,6 @@ public class EquipoTorneo {
    @Column(name = "posicion", nullable = false)
    private Integer posicion;
 
-   @javax.validation.constraints.Size(max = 100)
-   @javax.validation.constraints.NotNull
-   @Column(name = "nombre", nullable = false, length = 100)
-   private String nombre;
-
-   @javax.validation.constraints.Size(max = 255)
-   @Column(name = "nombre_imagen")
-   private String nombreImagen;
 
    @javax.validation.constraints.NotNull
    @Column(name = "partidos_jugados", nullable = false)
@@ -61,5 +54,10 @@ public class EquipoTorneo {
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "torneo_id")
    private com.tallerwebi.dominio.model.entities.Torneo torneo;
+
+   @NotNull
+   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @JoinColumn(name = "equipo_id", nullable = false)
+   private Equipo equipo;
 
 }

@@ -1,4 +1,3 @@
-
 [
   {
     "id": 1,
@@ -6,7 +5,7 @@
     "apellido": "Messi",
     "rating": 96.5,
     "estadoFisico": 99.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "LEYENDA"
   },
   {
@@ -15,7 +14,7 @@
     "apellido": "Ronaldo",
     "rating": 98.2,
     "estadoFisico": 97.5,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "LEYENDA"
   },
   {
@@ -24,7 +23,7 @@
     "apellido": "Mbappé",
     "rating": 84.3,
     "estadoFisico": 98.7,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "EPICO"
   },
   {
@@ -33,7 +32,7 @@
     "apellido": "De Bruyne",
     "rating": 82.7,
     "estadoFisico": 96.4,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "EPICO",
     "imagen": "https://assets.goal.com/images/v3/blt5c0413b2c23cf6a0/Trent-Alexander-Arnold-Liverpool-2024.jpg"
   },
@@ -43,7 +42,7 @@
     "apellido": "van Dijk",
     "rating": 47.3,
     "estadoFisico": 95.8,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "RARO"
   },
   {
@@ -52,7 +51,7 @@
     "apellido": "Courtois",
     "rating": 49.1,
     "estadoFisico": 94.9,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "RARO"
   },
   {
@@ -61,7 +60,7 @@
     "apellido": "Lewandowski",
     "rating": 83.6,
     "estadoFisico": 98.2,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "EPICO"
   },
   {
@@ -70,7 +69,7 @@
     "apellido": "Haaland",
     "rating": 85.2,
     "estadoFisico": 98.8,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "EPICO"
   },
   {
@@ -79,7 +78,7 @@
     "apellido": "Jr",
     "rating": 80.4,
     "estadoFisico": 97.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "EPICO"
   },
   {
@@ -88,7 +87,7 @@
     "apellido": "Modrić",
     "rating": 48.7,
     "estadoFisico": 96.7,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "RARO"
   },
   {
@@ -97,7 +96,7 @@
     "apellido": "Salah",
     "rating": 46.2,
     "estadoFisico": 97.2,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "RARO"
   },
   {
@@ -106,7 +105,7 @@
     "apellido": "Mané",
     "rating": 45.8,
     "estadoFisico": 96.5,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "RARO"
   },
   {
@@ -115,7 +114,7 @@
     "apellido": "Carlos",
     "rating": 44.3,
     "estadoFisico": 95.9,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "RARO"
   },
   {
@@ -124,7 +123,7 @@
     "apellido": "Kimmich",
     "rating": 50.0,
     "estadoFisico": 96.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "RARO"
   },
   {
@@ -133,7 +132,7 @@
     "apellido": "Hernández",
     "rating": 28.3,
     "estadoFisico": 95.5,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -142,7 +141,7 @@
     "apellido": "Fernandes",
     "rating": 25.7,
     "estadoFisico": 96.1,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -151,7 +150,7 @@
     "apellido": "Jr",
     "rating": 29.1,
     "estadoFisico": 97.8,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -160,7 +159,7 @@
     "apellido": "ter Stegen",
     "rating": 22.4,
     "estadoFisico": 95.2,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -169,7 +168,7 @@
     "apellido": "Becker",
     "rating": 24.6,
     "estadoFisico": 95.7,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -178,7 +177,7 @@
     "apellido": "Moraes",
     "rating": 27.8,
     "estadoFisico": 95.4,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -187,7 +186,7 @@
     "apellido": "Rüdiger",
     "rating": 23.5,
     "estadoFisico": 95.1,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -196,7 +195,7 @@
     "apellido": "Marcos",
     "rating": 26.3,
     "estadoFisico": 95.6,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -205,7 +204,7 @@
     "apellido": "Cancelo",
     "rating": 21.9,
     "estadoFisico": 95.3,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -214,7 +213,7 @@
     "apellido": "Alexander-Arnold",
     "rating": 30.0,
     "estadoFisico": 95.0,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -223,7 +222,7 @@
     "apellido": "Robertson",
     "rating": 24.1,
     "estadoFisico": 94.8,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -232,7 +231,7 @@
     "apellido": "Hernández",
     "rating": 28.7,
     "estadoFisico": 94.7,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -241,7 +240,7 @@
     "apellido": "Hakimi",
     "rating": 19.2,
     "estadoFisico": 94.6,
-    "posicionNatural": ["DEFENSOR"],
+    "posicionNatural": "DEFENSOR",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -250,7 +249,7 @@
     "apellido": "Pogba",
     "rating": 26.8,
     "estadoFisico": 94.5,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -259,7 +258,7 @@
     "apellido": "Verratti",
     "rating": 25.3,
     "estadoFisico": 94.4,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -268,7 +267,7 @@
     "apellido": "Heung-min",
     "rating": 48.1,
     "estadoFisico": 97.5,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "RARO"
   },
   {
@@ -277,7 +276,7 @@
     "apellido": "Vlahović",
     "rating": 22.7,
     "estadoFisico": 94.3,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -286,7 +285,7 @@
     "apellido": "Martínez",
     "rating": 29.6,
     "estadoFisico": 94.2,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -295,7 +294,7 @@
     "apellido": "Chiesa",
     "rating": 27.4,
     "estadoFisico": 94.1,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -304,7 +303,7 @@
     "apellido": "Gnabry",
     "rating": 20.8,
     "estadoFisico": 94.0,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -313,7 +312,7 @@
     "apellido": "Havertz",
     "rating": 26.9,
     "estadoFisico": 93.9,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -322,7 +321,7 @@
     "apellido": "Nkunku",
     "rating": 24.5,
     "estadoFisico": 93.8,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -331,7 +330,7 @@
     "apellido": "González",
     "rating": 25.8,
     "estadoFisico": 93.7,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -340,7 +339,7 @@
     "apellido": "Paéz",
     "rating": 23.2,
     "estadoFisico": 93.6,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -349,7 +348,7 @@
     "apellido": "Bellingham",
     "rating": 28.9,
     "estadoFisico": 93.5,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -358,7 +357,7 @@
     "apellido": "Rice",
     "rating": 21.6,
     "estadoFisico": 93.4,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -367,7 +366,7 @@
     "apellido": "Mount",
     "rating": 27.2,
     "estadoFisico": 93.3,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -376,7 +375,7 @@
     "apellido": "Foden",
     "rating": 22.7,
     "estadoFisico": 93.2,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -385,7 +384,7 @@
     "apellido": "Silva",
     "rating": 49.3,
     "estadoFisico": 96.3,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "RARO"
   },
   {
@@ -394,7 +393,7 @@
     "apellido": "Leão",
     "rating": 25.8,
     "estadoFisico": 93.1,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -403,7 +402,7 @@
     "apellido": "Lloris",
     "rating": 19.4,
     "estadoFisico": 93.0,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -412,7 +411,7 @@
     "apellido": "Navas",
     "rating": 28.6,
     "estadoFisico": 92.9,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -421,7 +420,7 @@
     "apellido": "de Gea",
     "rating": 23.5,
     "estadoFisico": 92.8,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -430,7 +429,7 @@
     "apellido": "Maignan",
     "rating": 26.9,
     "estadoFisico": 92.7,
-    "posicionNatural": ["ARQUERO"],
+    "posicionNatural": "ARQUERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -439,7 +438,7 @@
     "apellido": "Džeko",
     "rating": 21.3,
     "estadoFisico": 92.6,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -448,7 +447,7 @@
     "apellido": "Depay",
     "rating": 27.7,
     "estadoFisico": 92.5,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -457,7 +456,7 @@
     "apellido": "Jesus",
     "rating": 24.2,
     "estadoFisico": 92.4,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -466,7 +465,7 @@
     "apellido": "Sterling",
     "rating": 28.8,
     "estadoFisico": 92.3,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -475,7 +474,7 @@
     "apellido": "Félix",
     "rating": 20.4,
     "estadoFisico": 92.2,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -484,7 +483,7 @@
     "apellido": "Garnacho",
     "rating": 29.1,
     "estadoFisico": 91.5,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -493,7 +492,7 @@
     "apellido": "Trincão",
     "rating": 22.6,
     "estadoFisico": 91.4,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -502,7 +501,7 @@
     "apellido": "Fati",
     "rating": 25.3,
     "estadoFisico": 91.3,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -511,7 +510,7 @@
     "apellido": "Goes",
     "rating": 21.7,
     "estadoFisico": 91.2,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -520,7 +519,7 @@
     "apellido": "Torres",
     "rating": 26.4,
     "estadoFisico": 91.1,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -529,7 +528,7 @@
     "apellido": "Ramos",
     "rating": 23.9,
     "estadoFisico": 91.0,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -538,7 +537,7 @@
     "apellido": "Núñez",
     "rating": 28.1,
     "estadoFisico": 92.1,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -547,7 +546,7 @@
     "apellido": "Haller",
     "rating": 19.8,
     "estadoFisico": 92.0,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -556,7 +555,7 @@
     "apellido": "Osimhen",
     "rating": 29.5,
     "estadoFisico": 91.9,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -565,7 +564,7 @@
     "apellido": "Tadić",
     "rating": 22.2,
     "estadoFisico": 91.8,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -574,7 +573,7 @@
     "apellido": "Paquetá",
     "rating": 26.7,
     "estadoFisico": 91.7,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -583,7 +582,7 @@
     "apellido": "Maddison",
     "rating": 21.4,
     "estadoFisico": 91.6,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -592,7 +591,7 @@
     "apellido": "Benzema",
     "rating": 95.6,
     "estadoFisico": 98.5,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "LEYENDA"
   },
   {
@@ -601,7 +600,7 @@
     "apellido": "Kane",
     "rating": 81.3,
     "estadoFisico": 98.0,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "EPICO"
   },
   {
@@ -610,7 +609,7 @@
     "apellido": "Griezmann",
     "rating": 46.9,
     "estadoFisico": 97.3,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "RARO"
   },
   {
@@ -619,7 +618,7 @@
     "apellido": "Lukaku",
     "rating": 43.7,
     "estadoFisico": 96.6,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "RARO"
   },
   {
@@ -628,7 +627,7 @@
     "apellido": "Dybala",
     "rating": 45.2,
     "estadoFisico": 96.2,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "RARO"
   },
   {
@@ -637,7 +636,7 @@
     "apellido": "Sancho",
     "rating": 23.8,
     "estadoFisico": 95.7,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -646,7 +645,7 @@
     "apellido": "Rashford",
     "rating": 27.1,
     "estadoFisico": 95.5,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -655,7 +654,7 @@
     "apellido": "Grealish",
     "rating": 22.5,
     "estadoFisico": 95.2,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -664,7 +663,7 @@
     "apellido": "Oyarzabal",
     "rating": 28.7,
     "estadoFisico": 94.9,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -673,7 +672,7 @@
     "apellido": "Zaha",
     "rating": 25.3,
     "estadoFisico": 94.6,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -682,7 +681,7 @@
     "apellido": "Calvert-Lewin",
     "rating": 18.9,
     "estadoFisico": 94.4,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -691,7 +690,7 @@
     "apellido": "Abraham",
     "rating": 26.4,
     "estadoFisico": 94.2,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -700,7 +699,7 @@
     "apellido": "Giroud",
     "rating": 24.6,
     "estadoFisico": 94.0,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -709,7 +708,7 @@
     "apellido": "Milik",
     "rating": 27.8,
     "estadoFisico": 93.8,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -718,7 +717,7 @@
     "apellido": "Haller",
     "rating": 20.2,
     "estadoFisico": 93.6,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -727,7 +726,7 @@
     "apellido": "Toney",
     "rating": 29.5,
     "estadoFisico": 93.4,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -736,7 +735,7 @@
     "apellido": "Schick",
     "rating": 23.1,
     "estadoFisico": 93.2,
-    "posicionNatural": ["DELANTERO"],
+    "posicionNatural": "DELANTERO",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -745,7 +744,7 @@
     "apellido": "Wirtz",
     "rating": 25.7,
     "estadoFisico": 93.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -754,7 +753,7 @@
     "apellido": "Zaniolo",
     "rating": 19.3,
     "estadoFisico": 92.8,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -763,7 +762,7 @@
     "apellido": "Aouar",
     "rating": 29.8,
     "estadoFisico": 92.6,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -772,7 +771,7 @@
     "apellido": "Milner",
     "rating": 26.4,
     "estadoFisico": 92.4,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -781,7 +780,7 @@
     "apellido": "Henderson",
     "rating": 21.6,
     "estadoFisico": 92.2,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -790,7 +789,7 @@
     "apellido": "Tielemans",
     "rating": 27.1,
     "estadoFisico": 92.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -799,7 +798,7 @@
     "apellido": "Sanches",
     "rating": 23.7,
     "estadoFisico": 91.8,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -808,16 +807,7 @@
     "apellido": "McKennie",
     "rating": 28.1,
     "estadoFisico": 91.2,
-    "posicionNatural": ["MEDIOCAMPISTA"],
-    "rarezaJugador": "NORMAL"
-  },
-  {
-    "id": 91,
-    "nombre": "Kalvin",
-    "apellido": "Phillips",
-    "rating": 26.9,
-    "estadoFisico": 91.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -826,7 +816,7 @@
     "apellido": "Phillips",
     "rating": 32.9,
     "estadoFisico": 91.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -835,7 +825,7 @@
     "apellido": "Rice",
     "rating": 32.7,
     "estadoFisico": 90.8,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -844,7 +834,7 @@
     "apellido": "Ndidi",
     "rating": 32.5,
     "estadoFisico": 90.6,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -853,7 +843,7 @@
     "apellido": "Busquets",
     "rating": 24.3,
     "estadoFisico": 90.4,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -862,7 +852,7 @@
     "apellido": "De Paul",
     "rating": 22.1,
     "estadoFisico": 90.2,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -871,7 +861,7 @@
     "apellido": "Torreira",
     "rating": 21.9,
     "estadoFisico": 90.0,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -880,7 +870,7 @@
     "apellido": "Paredes",
     "rating": 51.7,
     "estadoFisico": 59.8,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -889,7 +879,7 @@
     "apellido": "Guendouzi",
     "rating": 46.5,
     "estadoFisico": 89.6,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   },
   {
@@ -898,7 +888,7 @@
     "apellido": "Gravenberch",
     "rating": 23.3,
     "estadoFisico": 91.4,
-    "posicionNatural": ["MEDIOCAMPISTA"],
+    "posicionNatural": "MEDIOCAMPISTA",
     "rarezaJugador": "NORMAL"
   }
 ]

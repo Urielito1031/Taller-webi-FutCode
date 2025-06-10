@@ -58,8 +58,7 @@ public class JugadorDTO {
 
       jugador.setPais(dto.getPaisOrigen());
 
-      // Enum a String
-      jugador.setRarezaJugador(dto.getRarezaJugador().name());
+      jugador.setRarezaJugador(dto.getRarezaJugador());
 
       jugador.setPosicion(this.posicionNatural);
 

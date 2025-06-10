@@ -57,15 +57,17 @@ public class Jugador {
    private Double estadoFisico;
 
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "pais_id")
    private Pais pais;
 
    @javax.validation.constraints.NotNull
+   @Enumerated(EnumType.STRING)
    @Column(name = "rareza_jugador", nullable = false)
    private RarezaJugador rarezaJugador;
 
  @NotNull
+ @Enumerated(EnumType.STRING)
  @Column(name = "posicion", nullable = false)
  private PosicionEnum posicion;
 

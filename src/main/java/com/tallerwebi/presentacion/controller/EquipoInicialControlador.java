@@ -55,9 +55,6 @@ public class EquipoInicialControlador {
             ModelAndView mav = new ModelAndView("sorteoEquipo");
             mav.addObject("equipo", equipo);
             mav.addObject("nombreEquipo", equipo.getNombre());
-
-            equipo.setRatingEquipo(equipo.ratingEquipo(equipo.getJugadores()));
-            mav.addObject("ratingEquipo", equipo.getRatingEquipo());
             return mav;
         }
 

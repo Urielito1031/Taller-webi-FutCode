@@ -57,10 +57,39 @@ h4 {
 }
 
 .contenedor-jugador {
+    width: 180px;
+    height: 250px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
     padding: 1rem;
     background-color: #23344f;
     border-radius: 8px;
     margin: 10px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 10px rgba(0, 255, 180, 0.2);
+    position: relative;
+}
+
+.overlay{
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    height: 17%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.contenedor-jugador:hover .overlay {
+    height: 70%;
 }
 
 .contenedor-jugador h3 {
@@ -75,7 +104,7 @@ h4 {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .titulo-con-linea h4 {
@@ -94,19 +123,18 @@ button{
     background-color: #00ffc3;
     color: #001f2d;
     border: none;
-
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
     font-weight: bold;
     padding: 8px;
-    height: 60px;
-    width: 200px;
+    height: 45px;
+    width: 180px;
     font-size: 20px;
-    margin-top: 35px;
+    margin-top: 20px;
 }
 
 button:hover {
     background-color: #00cfa6dd;
-    box-shadow: #00cfa6dd 0px 0px 10px;
+    box-shadow: #00cfa6dd 0 0 10px;
 }
 
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Equipo nuevo</title>
-  <link rel="stylesheet" th:href="@{/css/equipoSorteadoStyle.css}"/>
+  <link rel="stylesheet" th:href="@{/css/equipoSorteadoStyle.css(v=${T(java.lang.System).currentTimeMillis()})}"/>
 </head>
 <body>
 
@@ -17,17 +17,19 @@
 
 <div id="contenedor-principal">
   <div id="subContenedor">
-<!--    <span th:text="${equipo.getRatingEquipo()}"></span>-->
     <ul class="container">
-      <li class="contenedor-jugador" th:each="jugador : ${equipo.jugadores}">
+      <li class="contenedor-jugador" th:each="jugador : ${equipo.jugadores}"
+          th:style="'background-image: url(' + ${jugador.imagen} + ');'">
+        <div class="overlay">
         <h3>Jugador</h3>
         <span th:text="${jugador.nombre} + ' ' + ${jugador.apellido}"></span>
-        <div class="titulo-con-linea"><h4>Posicion</h4><hr></div>
+        <div class="titulo-con-linea"><h4>Posición</h4><hr></div>
         <span th:text="${jugador.posicionNatural}"></span>
         <div class="titulo-con-linea"><h4>Rating</h4><hr></div>
         <span th:text="${jugador.rating}"></span>
         <div class="titulo-con-linea"><h4>Rareza</h4><hr></div>
         <span th:text="${jugador.rarezaJugador}"></span>
+        </div>
       </li>
     </ul>
   </div>

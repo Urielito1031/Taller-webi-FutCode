@@ -157,6 +157,7 @@ public class PlantillaServiceImpl implements PlantillaService {
                 jugadorDTO.setNumeroCamiseta(fe.getJugador().getNumeroCamiseta());
                 jugadorDTO.setRating(fe.getJugador().getRating());
                 jugadorDTO.setEstadoFisico(fe.getJugador().getEstadoFisico());
+                jugadorDTO.setEquipo(fe.getEquipo().convertToDTO());
                 dto.setJugador(jugadorDTO);
              }
              return dto;

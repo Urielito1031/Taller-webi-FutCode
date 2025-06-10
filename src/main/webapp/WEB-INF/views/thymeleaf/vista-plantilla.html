@@ -25,7 +25,7 @@
          <a th:each="esquema : ${esquemas}"
             th:href="@{/formacion-inicial(esquema=${esquema.getFormacionTexto()})}"
             th:class="'formation-btn ' + (${formacion.esquema} == ${esquema} ? 'active' : '')"
-            th:text="${esquema.getFormacionTexto()}">
+            th:text="${esquema.formacionTexto}">
          </a>
       </div>
       <div class="mt-3">
@@ -58,7 +58,7 @@
                <h6 th:text="${posicionJugador.jugador.nombre} + ' ' + ${posicionJugador.jugador.apellido}" class="player-name mb-1"></h6>
                <div class="player-details">
                   <small th:text="${posicionJugador.posicionEnCampo}" class="d-block"></small>
-                  <small th:text="${posicionJugador.jugador.getEquipo()?.nombre ?: 'Sin club'}" class="d-block"></small>
+                  <small th:text="${posicionJugador.jugador.equipo?.nombre ?: 'Sin club'}" class="d-block"></small>
                   <small th:text="'Estado: ' + ${posicionJugador.jugador.estadoFisico} + '%'" class="d-block"></small>
                </div>
             </div>

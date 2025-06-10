@@ -9,9 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Getter
 @Setter
@@ -95,7 +93,7 @@ public class Jugador {
 
 
   if (jugador.getEquipo() != null) {
-   EquipoDTO equipoDTO = new EquipoDTO(); // Este debe ser implementado
+   EquipoDTO equipoDTO = new EquipoDTO();
    dto.setEquipo(equipoDTO.convertFromEntity(jugador.getEquipo()));
   }
 

@@ -21,11 +21,11 @@ public class Equipo {
    @Column(name = "nombre", nullable = false, length = 100)
    private String nombre;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "club_id")
    private Club club;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "esquema_id")
    private Esquema esquema;
 

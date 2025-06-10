@@ -17,9 +17,8 @@ public class Sobre {
    private Integer id;
 
    @javax.validation.constraints.NotNull
-   @Lob
    @Column(name = "tipo_sobre", nullable = false)
-   private String tipoSobre;
+   private TipoSobre tipoSobre;
 
    @javax.validation.constraints.Size(max = 100)
    @javax.validation.constraints.NotNull

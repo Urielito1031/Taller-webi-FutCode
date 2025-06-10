@@ -62,18 +62,18 @@ public class Jugador {
    private Pais pais;
 
    @javax.validation.constraints.NotNull
-   @Lob
    @Column(name = "rareza_jugador", nullable = false)
-   private String rarezaJugador;
+   private RarezaJugador rarezaJugador;
 
  @NotNull
- @Lob
  @Column(name = "posicion", nullable = false)
  private PosicionEnum posicion;
 
- @ManyToOne(fetch = FetchType.LAZY)
+ @ManyToOne(fetch = FetchType.EAGER)
  @JoinColumn(name = "equipo_id")
  private Equipo equipo;
+
+
  public JugadorDTO convertToDTO(Jugador jugador) {
   JugadorDTO dto = new JugadorDTO();
   dto.setId(jugador.getId());
@@ -87,8 +87,7 @@ public class Jugador {
   dto.setLesionado(jugador.getLesionado());
   dto.setPaisOrigen(jugador.getPais());
 
-  // String a enum
-  dto.setRarezaJugador(RarezaJugador.valueOf(jugador.getRarezaJugador()));
+  dto.setRarezaJugador(jugador.getRarezaJugador());
   dto.setPosicionNatural(jugador.getPosicion());
 
 

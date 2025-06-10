@@ -43,7 +43,7 @@ public class SobreDTO {
         Sobre sobre = new Sobre();
 
         sobre.setTitulo(titulo);
-        sobre.setTipoSobre(tipoSobre.toString());
+        sobre.setTipoSobre(tipoSobre);
         sobre.setPrecio(precio);
         sobre.setDescripcion(descripcion);
         sobre.setImagenUrl(imagenUrl);

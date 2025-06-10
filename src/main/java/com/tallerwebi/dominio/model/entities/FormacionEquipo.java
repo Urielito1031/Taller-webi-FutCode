@@ -20,13 +20,13 @@ public class FormacionEquipo{
    private Long id;
 
    @NotNull
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "equipo_id", nullable = false)
    private Equipo equipo;
 
    @NotNull
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "jugador_id", nullable = false)
    private Jugador jugador;

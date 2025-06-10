@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,11 +15,11 @@ public class Esquema{
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
 
    @NotNull
-   @Lob
+   @Enumerated(EnumType.STRING)
    @Column(name = "esquema", nullable = false)
-   private String esquema;
+   private FormacionEsquema esquema;
 
 }

@@ -26,10 +26,7 @@ public class FormacionEquipoRepositoryImpl implements FormacionEquipoRepository 
    @Override
    public List<FormacionEquipo> findByEquipoId(Long equipoId){
       System.out.println("metodo findByEquipoId()");
-      String hql = "SELECT fe FROM FormacionEquipo fe " +
-        "JOIN FETCH fe.jugador j " +
-        "JOIN FETCH fe.equipo e " +
-        "WHERE e.id = :equipoId";
+      String hql = "SELECT fe FROM FormacionEquipo fe WHERE fe.equipo.id = :equipoId";
       Query<FormacionEquipo> query = getSession().createQuery(hql,FormacionEquipo.class);
       query.setParameter("equipoId",equipoId);
       try{

@@ -44,10 +44,12 @@ public class PlantillaServiceImpl implements PlantillaService {
       Long equipoId = 1L;
       List<FormacionEquipo> formaciones = formacionEquipoRepository.findByEquipoId(equipoId);
       if (!formaciones.isEmpty()) {
+         System.out.println("esquema no vacio xe"+ formaciones);
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
          formacion.setEsquema(detectarEsquema(formaciones));
       }
 
+         System.out.println("esquema vacio: "+ formacion.getAlineacion());
       return formacion;
    }
 

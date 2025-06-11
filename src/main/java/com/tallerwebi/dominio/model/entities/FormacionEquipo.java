@@ -36,4 +36,8 @@ public class FormacionEquipo{
    @Column(name = "posicion_en_campo", nullable = false)
    private PosicionEnum posicionEnCampo;
 
+   public String toString(){
+      return "FormacionEquipo{" + "id=" + id + '}';
+   }
+
 }

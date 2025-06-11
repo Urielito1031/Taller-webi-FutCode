@@ -30,6 +30,7 @@
       </div>
       <div class="mt-3">
          <form id="form" method="POST" th:action="@{/guardar-formacion}">
+            <input type="hidden" name="esquema" th:value="${formacion.esquema != null ? formacion.esquema.getFormacionTexto() : null}">
             <input type="hidden" name="equipoId" th:value="${formacion != null ? formacion.equipoId : 1}">
             <button type="submit" id="btn-save" class="btn btn-success">Guardar Formación</button>
          </form>

@@ -419,7 +419,10 @@ $(function () {
             $("#form input[name='equipoId']").remove();
 
             const equipoId = $("#field").data("equipo-id"); // Usamos data-equipo-id desde #field
-            console.log("EquipoId enviado: " + equipoId); // Depuración
+            console.log("EquipoId enviado: " + equipoId);
+
+
+
             $("<input>", {
                type: "hidden",
                name: "equipoId",

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "jugador")
 public class Jugador {
    @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @javax.validation.constraints.Size(max = 50)
@@ -64,41 +64,45 @@ public class Jugador {
    @Column(name = "rareza_jugador", nullable = false)
    private RarezaJugador rarezaJugador;
 
- @NotNull
- @Enumerated(EnumType.STRING)
- @Column(name = "posicion", nullable = false)
- private PosicionEnum posicion;
+   @NotNull
+   @Enumerated(EnumType.STRING)
+   @Column(name = "posicion", nullable = false)
+   private PosicionEnum posicion;
 
- @ManyToOne(fetch = FetchType.EAGER)
- @JoinColumn(name = "equipo_id")
- private Equipo equipo;
-
-
- public JugadorDTO convertToDTO(Jugador jugador) {
-  JugadorDTO dto = new JugadorDTO();
-  dto.setId(jugador.getId());
-  dto.setNombre(jugador.getNombre());
-  dto.setApellido(jugador.getApellido());
-  dto.setImagen(jugador.getImagen());
-  dto.setEdad(jugador.getEdad());
-  dto.setNumeroCamiseta(jugador.getNumeroCamiseta());
-  dto.setRating(jugador.getRating());
-  dto.setEstadoFisico(jugador.getEstadoFisico());
-  dto.setLesionado(jugador.getLesionado());
-  dto.setPaisOrigen(jugador.getPais());
-
-  dto.setRarezaJugador(jugador.getRarezaJugador());
-  dto.setPosicionNatural(jugador.getPosicion());
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "equipo_id")
+   private Equipo equipo;
 
 
+   public JugadorDTO convertToDTO(Jugador jugador) {
+      JugadorDTO dto = new JugadorDTO();
+      dto.setId(jugador.getId());
+      dto.setNombre(jugador.getNombre());
+      dto.setApellido(jugador.getApellido());
+      dto.setImagen(jugador.getImagen());
+      dto.setEdad(jugador.getEdad());
+      dto.setNumeroCamiseta(jugador.getNumeroCamiseta());
+      dto.setRating(jugador.getRating());
+      dto.setEstadoFisico(jugador.getEstadoFisico());
+      dto.setLesionado(jugador.getLesionado());
+      dto.setPaisOrigen(jugador.getPais());
 
-  if (jugador.getEquipo() != null) {
-   EquipoDTO equipoDTO = new EquipoDTO();
-   dto.setEquipo(equipoDTO.convertFromEntity(jugador.getEquipo()));
-  }
+      dto.setRarezaJugador(jugador.getRarezaJugador());
+      dto.setPosicionNatural(jugador.getPosicion());
 
-  return dto;
- }
+
+
+      if (jugador.getEquipo() != null) {
+         EquipoDTO equipoDTO = new EquipoDTO();
+         dto.setEquipo(equipoDTO.convertFromEntity(jugador.getEquipo()));
+      }
+
+      return dto;
+   }
+
+   public String toString(){
+      return "JugadorID: "+ this.id+ "\nNombre: "+ this.nombre;
+   }
 
 
 

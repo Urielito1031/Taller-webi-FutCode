@@ -29,20 +29,20 @@
          </a>
       </div>
       <div class="mt-3">
-
          <form id="form" method="POST" th:action="@{/guardar-formacion}">
-            <input type="hidden" id="esquema" name="esquema" th:value="${formacion.esquema.getFormacionTexto()}">
-<!--            cambios, agruege el atributo para guardar la formacion asociada al equipo-->
-            <input type="hidden" name="equipoId" th:value="${formacion.equipoId?:null}">
-            <button type="submit" id="btn-save"  class="btn btn-success">Guardar Formación</button>
+            <input type="hidden" name="esquema" th:value="${formacion.esquema != null ? formacion.esquema.getFormacionTexto() : null}">
+            <input type="hidden" name="equipoId" th:value="${formacion != null ? formacion.equipoId : 1}">
+            <button type="submit" id="btn-save" class="btn btn-success">Guardar Formación</button>
          </form>
       </div>
    </header>
+
    <!-- Área del campo -->
    <div class="field-area ratio ratio-16x9" id="field"
         th:style="'background: url(' + @{/img/cancha-futbol.jpg} + ') no-repeat center center; background-size: cover;'"
-        th:attr="data-esquema=${formacion.esquema.getFormacionTexto()},
-                 data-default-img=@{/img/jugadores/futbolista-default.png}">
+        th:attr="data-esquema=${formacion != null and formacion.esquema != null ? formacion.esquema.getFormacionTexto() : '4-3-3'},
+                  data-equipo-id=${formacion != null ? formacion.equipoId : 1},
+                  data-default-img=@{/img/jugadores/futbolista-default.png}">
    </div>
 
 
@@ -69,8 +69,6 @@
       </div>
    </div>
 </div>
-
-
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

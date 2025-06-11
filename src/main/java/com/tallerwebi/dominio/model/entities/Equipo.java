@@ -62,4 +62,7 @@ public class Equipo {
 
       return entity;
    }
+   public String toString(){
+      return "ID: " + this.id + "\n Nombre: " + this.nombre + " \nClub: " + this.club.getNombre();
+   }
 }

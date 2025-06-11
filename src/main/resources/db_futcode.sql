@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-06-2025 a las 21:33:04
+-- Tiempo de generación: 11-06-2025 a las 15:36:15
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -355,17 +355,6 @@ INSERT INTO `fase` (`id`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `formacion`
---
-
-CREATE TABLE `formacion` (
-  `id` int(11) NOT NULL,
-  `esquema` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `formacion_equipo`
 --
 
@@ -389,7 +378,7 @@ INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_ca
 (6, 1, 6, 'MEDIOCAMPISTA'),
 (7, 1, 7, 'MEDIOCAMPISTA'),
 (8, 1, 8, 'MEDIOCAMPISTA'),
-(9, 9, 9, 'DELANTERO'),
+(9, 1, 9, 'DELANTERO'),
 (10, 1, 10, 'DELANTERO'),
 (11, 1, 11, 'DELANTERO');
 
@@ -647,12 +636,6 @@ ALTER TABLE `evento_partido`
 -- Indices de la tabla `fase`
 --
 ALTER TABLE `fase`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `formacion`
---
-ALTER TABLE `formacion`
   ADD PRIMARY KEY (`id`);
 
 --

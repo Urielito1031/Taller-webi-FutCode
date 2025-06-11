@@ -63,20 +63,37 @@ public class PlantillaController {
 
    @PostMapping("/guardar-formacion")
    public String guardarFormacion(@Valid @ModelAttribute EsquemaDTO formacion, BindingResult result, Model model) {
-      System.out.println("Parámetros recibidos: {} "+ formacion);
+      if (formacion == null) {
+         System.out.println("Formacion no encontrada");
+         model.addAttribute("formacion", new EsquemaDTO());
+         model.addAttribute("error", "Formación no encontrada.");
+         return "vista-plantilla";
+      }
+      System.out.println("Parámetros recibidos: " + (formacion != null ? formacion.toString() : "null"));
 
       if (result.hasErrors()) {
-         System.out.println("Errores de validación: {} "+ result.getAllErrors());
+         System.out.println("Errores de validación: " + result.getAllErrors());
+         model.addAttribute("formacion", new EsquemaDTO());
          return prepararErrorRespuesta(model, result);
       }
 
       if (formacion.getAlineacion() == null || formacion.getAlineacion().size() != 11) {
+         model.addAttribute("formacion", new EsquemaDTO());
          model.addAttribute("error", "La formación debe contener exactamente 11 jugadores.");
+         return "vista-plantilla";
+      }
+
+      // Validación de equipoId
+      if (formacion.getEquipoId() == null || formacion.getEquipoId() == 0L) {
+         System.out.println("Error: equipoId es null o 0. Valor recibido: " + formacion.getEquipoId());
+         model.addAttribute("formacion", new EsquemaDTO());
+         model.addAttribute("error", "El ID del equipo no está definido. Contacta al administrador.");
          return "vista-plantilla";
       }
 
       Boolean guardadoExitoso = service.save(formacion);
       if (!guardadoExitoso) {
+         model.addAttribute("formacion", new EsquemaDTO());
          model.addAttribute("error", "Error al guardar la formación.");
          return "vista-plantilla";
       }
@@ -88,8 +105,7 @@ public class PlantillaController {
    }
 
    private String prepararErrorRespuesta(Model model, BindingResult result) {
-      EsquemaDTO formacion = service.initPlantillaBase();
-      model.addAttribute("formacion", formacion);
+      model.addAttribute("formacion", new EsquemaDTO());
       model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
       model.addAttribute("error", Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
       return "vista-plantilla";

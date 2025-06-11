@@ -22,26 +22,14 @@ public class FormacionEquipoRepositoryImpl implements FormacionEquipoRepository 
       this.sessionFactory = sessionFactory;
    }
 
-   //depurar en un try catch...
    @Override
    public List<FormacionEquipo> findByEquipoId(Long equipoId){
-      System.out.println("metodo findByEquipoId()");
       String hql = "SELECT fe FROM FormacionEquipo fe WHERE fe.equipo.id = :equipoId";
       Query<FormacionEquipo> query = getSession().createQuery(hql,FormacionEquipo.class);
       query.setParameter("equipoId",equipoId);
-      try{
-         List<FormacionEquipo> result = query.getResultList();
-         System.out.println("ACA EL RESULTADO: ." + query.getResultList());
-         return result;
-      }catch(Exception e){
-         System.out.println("Excepción al ejecutar query.getResultList(): " + e.getClass().getName() + " - " + e.getMessage());
-         e.printStackTrace();
-      for(StackTraceElement ste: e.getStackTrace()){
-         System.out.println("    at " + ste);
-      }
-      throw e; // Propagar para que se vea en los logs de la aplicación   }
-      }
+      return query.getResultList();
    }
+
    @Override
    public void deleteByEquipoId(Long equipoId){
       String hql = "DELETE FROM FormacionEquipo fe WHERE fe.equipo.id = :equipoId";
@@ -50,6 +38,7 @@ public class FormacionEquipoRepositoryImpl implements FormacionEquipoRepository 
       query.executeUpdate();
 
    }
+
 
    @Override
    public void save(FormacionEquipo formacionEquipo){

@@ -60,35 +60,38 @@ public class PlantillaController {
       model.addAttribute("esquemas", esquemas);
       return "vista-plantilla";
    }
+
    @PostMapping("/guardar-formacion")
-   public String guardarFormacion(@Valid @ModelAttribute EsquemaDTO formacionAGuardar,
-                                  BindingResult result, Model model, HttpServletRequest request) {
-      System.out.println("Parámetros recibidos:");
-      request.getParameterMap().forEach((key, value) -> System.out.println(key + ": " + Arrays.toString(value)));
-      System.out.println("Formación recibida: " + formacionAGuardar);
+   public String guardarFormacion(@Valid @ModelAttribute EsquemaDTO formacion, BindingResult result, Model model) {
+      System.out.println("Parámetros recibidos: {} "+ formacion);
 
       if (result.hasErrors()) {
-         System.out.println("tiene errores");
-         EsquemaDTO formacion = service.initPlantillaBase();
-         model.addAttribute("formacion", formacion);
-         List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
-         model.addAttribute("esquemas", esquemas);
-         model.addAttribute("error", Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
+         System.out.println("Errores de validación: {} "+ result.getAllErrors());
+         return prepararErrorRespuesta(model, result);
+      }
+
+      if (formacion.getAlineacion() == null || formacion.getAlineacion().size() != 11) {
+         model.addAttribute("error", "La formación debe contener exactamente 11 jugadores.");
          return "vista-plantilla";
       }
 
-      // Asignar posiciones y construir JugadorDTO desde jugadorId
-      FormacionEsquema esquema = formacionAGuardar.getEsquema();
-      List<PosicionEnum> posiciones = service.getPosicionesPorEsquema(esquema);
+      Boolean guardadoExitoso = service.save(formacion);
+      if (!guardadoExitoso) {
+         model.addAttribute("error", "Error al guardar la formación.");
+         return "vista-plantilla";
+      }
 
-
-
-      EsquemaDTO formacion = service.initPlantillaBase();
-      formacion.setEsquema(FormacionEsquema.fromString(formacionAGuardar.getEsquema().getFormacionTexto()));
-      model.addAttribute("formacion", formacion);
-      List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
-      model.addAttribute("esquemas", esquemas);
       model.addAttribute("message", "Formación guardada con éxito!");
+      model.addAttribute("formacion", service.initPlantillaBase());
+      model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
+      return "vista-plantilla";
+   }
+
+   private String prepararErrorRespuesta(Model model, BindingResult result) {
+      EsquemaDTO formacion = service.initPlantillaBase();
+      model.addAttribute("formacion", formacion);
+      model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
+      model.addAttribute("error", Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
       return "vista-plantilla";
    }
 }

@@ -441,7 +441,7 @@ $(function () {
                }).appendTo("#form");
             });
 
-            this.submit(); // Envía el formulario al servidor.
+            this.submit();
          });
       },
    };

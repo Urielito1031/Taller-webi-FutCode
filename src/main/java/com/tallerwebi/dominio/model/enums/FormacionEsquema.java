@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum FormacionEsquema {
    CUATRO_TRES_TRES(4, 3, 3),
    CUATRO_CUATRO_DOS(4, 4, 2),
@@ -7,6 +10,7 @@ public enum FormacionEsquema {
    CINCO_TRES_DOS(5, 3, 2),
    TRES_CUATRO_TRES(3, 4, 3);
 
+   // Getters
    private final int defensas;
    private final int mediocampistas;
    private final int delanteros;
@@ -22,23 +26,6 @@ public enum FormacionEsquema {
    // obtener la representación en texto (ej. "4-3-3"), util para el thymealeaf
    public String getFormacionTexto() {
       return defensas + "-" + mediocampistas + "-" + delanteros;
-   }
-
-   // Getters
-   public int getDefensas() {
-      return defensas;
-   }
-
-   public int getMediocampistas() {
-      return mediocampistas;
-   }
-
-   public int getDelanteros() {
-      return delanteros;
-   }
-
-   public int getTotalJugadores() {
-      return totalJugadores;
    }
 
    public static FormacionEsquema fromString(String formacionTexto) {

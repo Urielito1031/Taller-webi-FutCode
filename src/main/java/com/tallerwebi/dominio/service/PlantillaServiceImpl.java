@@ -31,12 +31,11 @@ public class PlantillaServiceImpl implements PlantillaService {
    public EsquemaDTO initPlantillaBase() {
       EsquemaDTO formacion = new EsquemaDTO();
       formacion.setId(1L);
-      formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES); // Esquema por defecto
+      formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
       formacion.setAlineacion(new ArrayList<>());
 
 
       Long equipoId = 1L;
-      //error de serializacion. ver findByEquipoId()
       List<FormacionEquipo> formaciones = formacionEquipoRepository.findByEquipoId(equipoId);
       if (!formaciones.isEmpty()) {
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
@@ -48,17 +47,10 @@ public class PlantillaServiceImpl implements PlantillaService {
 
    @Override
    public Boolean save(EsquemaDTO formacion) {
-      if (formacion == null || formacion.getEsquema() == null || formacion.getAlineacion() == null) {
-         System.out.println("Error: No se puede guardar una formación inválida.");
-         return false;
-      }
+      validateFormation(formacion);
 
-      if (!validarFormacion(formacion)) {
-         System.out.println("Error: La formación no es válida (debe tener exactamente 11 jugadores).");
-         return false;
-      }
 
-      Long equipoId = 1L;
+     // Long equipoId = serviceEquipo.getById(formacion.getEquipoId());
       formacionEquipoRepository.deleteByEquipoId(equipoId);
 
       for (PosicionJugadorDTO posicion : formacion.getAlineacion()) {
@@ -75,10 +67,16 @@ public class PlantillaServiceImpl implements PlantillaService {
       return true;
    }
 
-   @Override
-   public Boolean validarFormacion(EsquemaDTO formacion) {
-      return formacion.getAlineacion() != null && formacion.getAlineacion().size() == 11;
+   private void validateFormation(EsquemaDTO formacion){
+      if (formacion == null || formacion.getEsquema() == null || formacion.getAlineacion() == null) {
+         throw new IllegalArgumentException("Formación inválida: datos nulos.");
+      }
+      if (formacion.getAlineacion().size() != 11) {
+         throw new IllegalArgumentException("La formación debe tener exactamente 11 jugadores.");
+      }
    }
+
+
 
    @Override
    public void asignarPosicionesYJugadores(EsquemaDTO formacion) {
@@ -157,6 +155,7 @@ public class PlantillaServiceImpl implements PlantillaService {
                 jugadorDTO.setNumeroCamiseta(fe.getJugador().getNumeroCamiseta());
                 jugadorDTO.setRating(fe.getJugador().getRating());
                 jugadorDTO.setEstadoFisico(fe.getJugador().getEstadoFisico());
+                jugadorDTO.setEquipo(fe.getEquipo().convertToDTO());
                 dto.setJugador(jugadorDTO);
              }
              return dto;

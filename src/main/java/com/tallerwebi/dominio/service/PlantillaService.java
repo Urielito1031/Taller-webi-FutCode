@@ -9,7 +9,6 @@ import java.util.List;
 public interface PlantillaService {
    EsquemaDTO initPlantillaBase();
    Boolean save(EsquemaDTO formacion);
-   Boolean validarFormacion(EsquemaDTO formacion);
    void asignarPosicionesYJugadores(EsquemaDTO formacion);
    List<PosicionEnum> getPosicionesPorEsquema(FormacionEsquema esquema);
 

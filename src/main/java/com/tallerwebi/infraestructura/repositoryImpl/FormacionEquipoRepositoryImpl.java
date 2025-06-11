@@ -39,6 +39,7 @@ public class FormacionEquipoRepositoryImpl implements FormacionEquipoRepository 
 
    }
 
+
    @Override
    public void save(FormacionEquipo formacionEquipo){
       getSession().saveOrUpdate(formacionEquipo);

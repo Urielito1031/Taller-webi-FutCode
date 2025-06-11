@@ -16,6 +16,8 @@ public class EsquemaDTO{
    private FormacionEsquema esquema;
    @Size(min = 11, max = 11, message = "Debes tener exactamente 11 jugadores")
    private List<PosicionJugadorDTO> alineacion;
+   //importante pasarle el ID del equipo asociado
+   private Long equipoId;
 
    public EsquemaDTO(){
       this.alineacion = new ArrayList<>();
@@ -24,7 +26,7 @@ public class EsquemaDTO{
 
 
    public String toString(){
-      return "id: " + id + "\n esquema: " + esquema + "\n alineacion: " + alineacion;
+      return "id: " + id + "\nEquipoId: "+equipoId+ "\n esquema: " + esquema + "\n alineacion: " + alineacion;
    }
 
 }

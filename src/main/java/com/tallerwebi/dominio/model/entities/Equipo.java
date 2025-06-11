@@ -35,14 +35,12 @@ public class Equipo {
       dto.setId(this.id);
       dto.setNombre(this.nombre);
 
-      // Convertir el Club a ClubDTO manualmente
       if (this.club != null) {
          ClubDTO clubDTO = new ClubDTO();
          clubDTO.setId(this.club.getId());
          clubDTO.setNombre(this.club.getNombre());
-         clubDTO.setPais(this.club.getPais()); // Solo el pais como referencia, no recursivo
+         clubDTO.setPais(this.club.getPais());
          clubDTO.setImagen(this.club.getImagen());
-         // No convertimos estadio recursivamente por ahora
          dto.setClub(clubDTO);
       }
 
@@ -54,13 +52,11 @@ public class Equipo {
       entity.setId(dto.getId());
       entity.setNombre(dto.getNombre());
 
-      // Convertir ClubDTO a Club (simplificado)
       if (dto.getClub() != null) {
          Club club = new Club();
          club.setId(dto.getClub().getId());
          club.setNombre(dto.getClub().getNombre());
          club.setImagen(dto.getClub().getImagen());
-         // Asignar pais y estadio si están disponibles
          entity.setClub(club);
       }
 

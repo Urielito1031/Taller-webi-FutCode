@@ -32,6 +32,8 @@
 
          <form id="form" method="POST" th:action="@{/guardar-formacion}">
             <input type="hidden" id="esquema" name="esquema" th:value="${formacion.esquema.getFormacionTexto()}">
+<!--            cambios, agruege el atributo para guardar la formacion asociada al equipo-->
+            <input type="hidden" name="equipoId" th:value="${formacion.equipoId?:null}">
             <button type="submit" id="btn-save"  class="btn btn-success">Guardar Formación</button>
          </form>
       </div>

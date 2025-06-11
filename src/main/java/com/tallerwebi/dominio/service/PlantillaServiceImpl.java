@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.model.entities.FormacionEquipo;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
+import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.FormacionEquipoRepository;
 import com.tallerwebi.presentacion.dto.EsquemaDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -21,10 +22,13 @@ import java.util.stream.Collectors;
 public class PlantillaServiceImpl implements PlantillaService {
 
    private final FormacionEquipoRepository formacionEquipoRepository;
+   private final EquipoRepository equipoRepository;
+
 
    @Autowired
-   public PlantillaServiceImpl(FormacionEquipoRepository formacionEquipoRepository) {
+   public PlantillaServiceImpl(FormacionEquipoRepository formacionEquipoRepository,EquipoRepository equipoRepository) {
       this.formacionEquipoRepository = formacionEquipoRepository;
+      this.equipoRepository = equipoRepository;
    }
 
    @Override
@@ -33,6 +37,8 @@ public class PlantillaServiceImpl implements PlantillaService {
       formacion.setId(1L);
       formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
       formacion.setAlineacion(new ArrayList<>());
+      //a cambiar por el equipo del usuario real
+      formacion.setEquipoId(1L);
 
 
       Long equipoId = 1L;
@@ -50,7 +56,16 @@ public class PlantillaServiceImpl implements PlantillaService {
       validateFormation(formacion);
 
 
-     // Long equipoId = serviceEquipo.getById(formacion.getEquipoId());
+
+      Long equipoId = formacion.getEquipoId();
+      if( equipoId == null || equipoId == 0L){
+         System.out.println("El id de equipoID es null o 0");
+         return false;
+      }
+      if (!equipoExists(equipoId)) {
+         System.out.println("Equipo con ID {} no encontrado."+ equipoId);
+         return false;
+      }
       formacionEquipoRepository.deleteByEquipoId(equipoId);
 
       for (PosicionJugadorDTO posicion : formacion.getAlineacion()) {
@@ -67,8 +82,9 @@ public class PlantillaServiceImpl implements PlantillaService {
       return true;
    }
 
+
    private void validateFormation(EsquemaDTO formacion){
-      if (formacion == null || formacion.getEsquema() == null || formacion.getAlineacion() == null) {
+      if (formacion == null || formacion.getAlineacion() == null) {
          throw new IllegalArgumentException("Formación inválida: datos nulos.");
       }
       if (formacion.getAlineacion().size() != 11) {
@@ -77,6 +93,11 @@ public class PlantillaServiceImpl implements PlantillaService {
    }
 
 
+   //tenemos que llamar al repositorio de Equipo, solo para validar
+   private boolean equipoExists(Long equipoId){
+      return  equipoRepository.existsById(equipoId);
+
+   }
 
    @Override
    public void asignarPosicionesYJugadores(EsquemaDTO formacion) {

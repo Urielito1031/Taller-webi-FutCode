@@ -20,6 +20,10 @@ public class Usuario {
     @OneToMany
     private List<Sobre> sobres;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "equipo_id")
+    private Equipo equipo;
+
 //    @Transient
 //    private Equipo equipoAsignado;
 
@@ -62,6 +66,6 @@ public class Usuario {
     }
 
     public String toString() {
-        return "ID: " + id + " \nEmail: " + email + " \nRol: " + rol + " \nActivo: " + activo;
+        return "ID: " + id + " \nEquipo: " + equipo + " \nRol: " + rol + " \nActivo: " + activo;
     }
 }

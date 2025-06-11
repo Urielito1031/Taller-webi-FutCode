@@ -204,6 +204,8 @@ $(function () {
             console.error("Formación inválida:", formationText);
             return;
          }
+         const equipoId = $field.data("equipo-id");
+         console.log("EquipoId inicial desde data: " + equipoId);
 
          // Convierte el esquema en números (ej. "4-4-2" → 4 defensores, 4 mediocampistas, 2 delanteros).
          const { defenders, midfielders, forwards } = this.parseFormation(formationText);
@@ -342,8 +344,8 @@ $(function () {
                }
                const $markers = $("#field .position-marker.default-marker:not(.occupied)"); // Selecciona marcadores libres.
                const closest = this.findClosestMarker(event, $markers); // Encuentra el marcador más cercano.
-               // Si hay un marcador cercano (a menos de 50 píxeles), asigna el jugador.
-               if (closest.marker && closest.distance < 50) {
+               // Si hay un marcador cercano en pixeles, asigna el jugador.
+               if (closest.marker && closest.distance < 80) {
                   this.assignPlayer(closest.marker, ui.draggable);
                } else {
                   ui.draggable.draggable("option", "revert", true); // Regresa la tarjeta si no hay marcador cercano.
@@ -395,45 +397,46 @@ $(function () {
          console.log(`Campo limpiado. playersOnField: ${playersOnField}`);
       },
 
-       setupFieldFormation() {
+      setupFieldFormation() {
          $("#form").on("submit", function(event) {
-            event.preventDefault(); // Evita el envío inmediato para procesar datos.
+            event.preventDefault();
             const players = [];
-            // Itera sobre los marcadores ocupados para recolectar sus datos.
             $("#field .position-marker.occupied").each(function() {
                const $marker = $(this);
-               const role = $marker.attr("id").split("-")[1]; // Extrae el rol (ej. "arquero").
+               const role = $marker.attr("id").split("-")[1];
                players.push({
-                  id: $marker.data("player-id"), // ID del jugador.
-                  role: role.toUpperCase(), // Rol en mayúsculas (ej. "ARQUERO").
+                  id: $marker.data("player-id"),
+                  role: role.toUpperCase(),
                });
             });
 
-            // Valida que haya exactamente 11 jugadores.
             if (players.length !== MAX_PLAYERS_ON_FIELD) {
                alert("Debes tener 11 jugadores en el campo de juego para guardar la formación");
                return;
             }
 
-            // Elimina campos previos del formulario para evitar duplicados.
             $("#form input[name^='alineacion']").remove();
+            $("#form input[name='equipoId']").remove();
 
-            // Agrega campos ocultos al formulario por cada jugador.
+            const equipoId = $("#field").data("equipo-id"); // Usamos data-equipo-id desde #field
+            console.log("EquipoId enviado: " + equipoId); // Depuración
+            $("<input>", {
+               type: "hidden",
+               name: "equipoId",
+               value: equipoId
+            }).appendTo("#form");
+
             players.forEach((player, index) => {
                console.log(`Posición ${index}: ID = ${player.id}`);
-               // Valida que el ID no sea nulo.
                if (!player.id) {
-                  console.error(`ID de jugador es null en la posicion ${index}`);
-                  alert("Por favor, asigne un jugador valido en todas las posiciones.");
+                  alert("Por favor, asigne un jugador válido en todas las posiciones.");
                   return;
                }
-               // Campo para el ID del jugador.
                $("<input>", {
                   type: "hidden",
                   name: `alineacion[${index}].jugadorId`,
                   value: player.id,
                }).appendTo("#form");
-               // Campo para la posición en el campo.
                $("<input>", {
                   type: "hidden",
                   name: `alineacion[${index}].posicionEnCampo`,
@@ -443,7 +446,7 @@ $(function () {
 
             this.submit();
          });
-      },
+      }
    };
 
    PlayerInteraction.setupPlayerData();

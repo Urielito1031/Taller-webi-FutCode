@@ -13,4 +13,6 @@ public interface EquipoService{
    void update(EquipoDTO equipo);
     void delete(Long id);
 
+   //void assignEquipoToUsuario(Long usuarioId, Long equipoId);
+
 }

@@ -24,9 +24,11 @@ public class EsquemaDTO{
    }
 
 
-
-   public String toString(){
-      return "id: " + id + "\nEquipoId: "+equipoId+ "\n esquema: " + esquema + "\n alineacion: " + alineacion;
+   public String toString() {
+      return "id: " + id +
+        "\nEquipoId: " + equipoId +
+        "\n esquema: " + (esquema != null ? esquema : "Sin esquema") +
+        "\n alineacion: " + (alineacion != null ? alineacion.toString() : "Sin alineación");
    }
 
 }

@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ public class EquipoServiceImpl implements EquipoService{
     return equipos.stream().map(Equipo::convertToDTO).collect(Collectors.toList());
    }
 
+
    @Override
    public EquipoDTO getById(Long id){
       Equipo equipo = repository.getById(id);
@@ -67,4 +70,5 @@ public class EquipoServiceImpl implements EquipoService{
    public void delete(Long id){
 
    }
+
 }

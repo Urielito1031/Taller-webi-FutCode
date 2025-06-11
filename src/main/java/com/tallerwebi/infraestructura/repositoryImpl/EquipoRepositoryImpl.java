@@ -36,6 +36,13 @@ public class EquipoRepositoryImpl implements EquipoRepository{
        getSession().saveOrUpdate(Equipo.class);
    }
 
+
+   @Override
+   public Boolean existsById(Long equipoId){
+
+      return this.getById(equipoId) != null;
+   }
+
    private Session getSession() {
       return session.getCurrentSession();
    }

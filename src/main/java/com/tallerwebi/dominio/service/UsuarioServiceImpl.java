@@ -5,13 +5,10 @@ import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.SobreDTO;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,11 +29,36 @@ public class UsuarioServiceImpl implements  UsuarioService{
         if(usuario == null) {
             return false;
         }
+
         Sobre sobre = sobreDTO.fromEntity();
+
+        switch (sobre.getTipoSobre()){
+            case BRONCE:
+                sobre.setTitulo("Sobre de Bronce");
+                sobre.setPrecio(2500.0);
+                sobre.setImagenUrl("sobreFutCodeBronce.png");
+                break;
+            case PLATA:
+                sobre.setTitulo("Sobre de Plata");
+                sobre.setPrecio(5000.0);
+                sobre.setImagenUrl("sobreFutCodePlata.png");
+                break;
+            case ORO:
+                sobre.setTitulo("Sobre de Oro");
+                sobre.setPrecio(7500.0);
+                sobre.setImagenUrl("sobreFutCodeOro.png");
+                break;
+            case ESPECIAL:
+                sobre.setTitulo("Sobre de Especial");
+                sobre.setPrecio(10000.0);
+                sobre.setImagenUrl("sobreFutCodeEspecial.png");
+                break;
+                default:
+                    return false;
+        }
+
         sobre.setUsuario(usuario);
-        sobre.setPrecio(1.0);
-        sobre.setTitulo("aa");
-//        sobre.setTipoSobre(TipoSobre.BRONCE);
+
         Boolean agregado = usuario.getSobres().add(sobre);
 
         this.repositorioUsuario.actualizarUsuario(usuario);
@@ -49,10 +71,25 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return this.repositorioUsuario.buscarUsuarioPorId(id);
     }
 
+
     @Override
-    public List<SobreDTO> obtenerSobresDelUsuario(long l) {
-        return List.of();
+    public List<SobreDTO> obtenerSobresDelUsuario(Long id) {
+        List<Sobre> sobres = this.repositorioUsuario.obtenerSobresDelUsuario(id);
+        return sobres.stream().map(this::convertirEntidadADTO).collect(Collectors.toList());
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private Sobre convertirDTOAEntidad(SobreDTO sobreDTO) {
@@ -80,23 +117,6 @@ public class UsuarioServiceImpl implements  UsuarioService{
 //        }
 
         return sobreDTO;
-    }
-
-//    @Override
-    public List<SobreDTO> obtenerSobresDelUsuario(Long usuarioId) {
-        try {
-            // Obtener sobres desde el repositorio
-            List<Sobre> sobres = this.repositorioUsuario.obtenerSobresDelUsuario(usuarioId);
-
-            // Convertir entidades a DTOs
-            return sobres.stream()
-                    .map(this::convertirEntidadADTO)
-                    .collect(Collectors.toList());
-
-        } catch (Exception e) {
-            System.err.println("Error al obtener sobres del usuario en service: " + e.getMessage());
-            return new ArrayList<>();
-        }
     }
 
 }

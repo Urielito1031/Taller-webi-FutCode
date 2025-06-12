@@ -14,5 +14,5 @@ public interface UsuarioService{
 
     Usuario buscarUsuarioPorId(Long id);
 
-    List<SobreDTO> obtenerSobresDelUsuario(long l);
+    List<SobreDTO> obtenerSobresDelUsuario(Long id);
 }

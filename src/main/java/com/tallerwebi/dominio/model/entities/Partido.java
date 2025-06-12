@@ -15,7 +15,7 @@ import java.time.Instant;
 public class Partido {
    @Id
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
 
    @javax.validation.constraints.NotNull
    @ManyToOne(fetch = FetchType.LAZY, optional = false)

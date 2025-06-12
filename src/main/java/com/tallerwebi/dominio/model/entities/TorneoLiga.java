@@ -11,12 +11,13 @@ import javax.persistence.*;
 @Table(name = "torneo_liga")
 public class TorneoLiga{
    @Id
-   @Column(name = "id", nullable = false)
-   private Integer id;
+//   @Column(name = "id", nullable = false)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
    @MapsId
-   @OneToOne(fetch = FetchType.LAZY, optional = false)
-   @JoinColumn(name = "id", nullable = false)
+   @OneToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "torneo_id", nullable = false, unique = true)
    private Torneo torneo;
 
    @Column(name = "fechas")

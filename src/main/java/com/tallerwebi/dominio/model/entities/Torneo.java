@@ -32,6 +32,19 @@ public class Torneo {
    @Column(name = "estado", nullable = false)
    private EstadoTorneoEnum estado;
 
+   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+   @JoinColumn(name = "torneo_liga_id", unique = true, nullable = true)
+   private TorneoLiga torneoLiga;
+
+   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+   @JoinColumn(name = "torneo_copa_id", unique = true, nullable = true)
+   private TorneoCopa torneoCopa;
+
+
+
+
+
+
 
    public String toString(){
       return "id: "+id+",\n nombre: "+nombre+", \ndescripcion: "+descripcion+ "\nformato: "+formatoTorneo+", \nestado: "+estado;

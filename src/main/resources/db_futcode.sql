@@ -587,15 +587,6 @@ INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario_sobre`
---
-
-CREATE TABLE `usuario_sobre` (
-  `Usuario_id` bigint(20) NOT NULL,
-  `sobres_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
 -- Índices para tablas volcadas
 --
 
@@ -727,11 +718,7 @@ ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
---
--- Indices de la tabla `usuario_sobre`
---
-ALTER TABLE `usuario_sobre`
-  ADD UNIQUE KEY `UK_c9c9isw8x8tunow1dr5f7vhkf` (`sobres_id`);
+
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -899,12 +886,7 @@ ALTER TABLE `torneo_copa`
 ALTER TABLE `torneo_liga`
   ADD CONSTRAINT `torneo_liga_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`);
 
---
--- Filtros para la tabla `usuario_sobre`
---
-ALTER TABLE `usuario_sobre`
-  ADD CONSTRAINT `FKdkvw82ysebsc2gy2j6t1ug04l` FOREIGN KEY (`sobres_id`) REFERENCES `sobre` (`id`);
-COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

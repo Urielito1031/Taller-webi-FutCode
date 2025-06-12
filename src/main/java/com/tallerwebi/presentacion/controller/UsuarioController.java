@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
+import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,16 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioServiceImpl usuarioService;
+    private UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioServiceImpl usuarioService) {
+    public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
-//    @PostMapping("/agregarSobre")
-//    public String agregarSobre(@RequestParam("TipoDeSobre") TipoSobre tipoSobre, Usuario usuario){
-//        Long id = usuario.getId();
-//        usuarioService.agregarSobreAJugador(id, tipoSobre);
-//        return "redirect:/comprar-sobres";
-//    }
 }

@@ -25,7 +25,6 @@ public class ControladorLogin {
 
     private final TorneoService torneoService;
 
-
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin, TorneoService torneoService){
         this.servicioLogin = servicioLogin;

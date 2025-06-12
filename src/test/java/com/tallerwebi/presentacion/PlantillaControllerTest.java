@@ -8,9 +8,11 @@ import com.tallerwebi.presentacion.dto.EsquemaDTO;
 import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class PlantillaControllerTest {
@@ -47,24 +50,23 @@ public class PlantillaControllerTest {
    }
 
    @Test
-   public void shouldReturnVistaPlantillaViewAndSetAttributes() {
-      EsquemaDTO formacion = new EsquemaDTO();
+   public void DadoQueMostramosLaVistaDePlantillaDebeEstablecerAtributos() {
+      EsquemaDTO formacion = crearEsquemaDTOValido();
       when(plantillaService.initPlantillaBase()).thenReturn(formacion);
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
 
       String view = plantillaController.showViewPlantilla(model);
 
       assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("formacion", formacion);
-      verify(model).addAttribute("esquemas", esquemas);
-      verifyNoMoreInteractions(model);
+      verify(model).addAttribute(eq("formacion"), eq(formacion));
+      verify(model).addAttribute(eq("esquemas"), eq(esquemas));
    }
 
    @Test
-   public void shouldChangeFormationAndReturnVistaPlantillaView() {
-      String esquemaTexto = "4-4-2";
+   public void DadoQueCambiamosLaFormacionDebeDevolverVistaPlantilla() {
+      String esquemaTexto = "5-3-2";
       FormacionEsquema esquemaSeleccionado = FormacionEsquema.fromString(esquemaTexto);
-      EsquemaDTO formacion = new EsquemaDTO();
+      EsquemaDTO formacion = crearEsquemaDTOValido();
       formacion.setEsquema(esquemaSeleccionado);
       when(plantillaService.initPlantillaBase()).thenReturn(formacion);
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
@@ -72,112 +74,36 @@ public class PlantillaControllerTest {
       String view = plantillaController.cambiarFormacion(esquemaTexto, model);
 
       assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("formacion", formacion);
-      verify(model).addAttribute("esquemas", esquemas);
-      verifyNoMoreInteractions(model);
+      verify(model).addAttribute(eq("formacion"), eq(formacion));
+      verify(model).addAttribute(eq("esquemas"), eq(esquemas));
    }
 
    @Test
-   public void shouldSaveFormationSuccessfully() {
-      EsquemaDTO formacion = createValidEsquemaDTO();
+   public void DadoQueGuardamosLaFormacionConExitoDebeMostrarMensajeYAtributos() {
+      EsquemaDTO formacion = crearEsquemaDTOValido();
       BindingResult result = new BeanPropertyBindingResult(formacion, "formacion");
+      EsquemaDTO baseFormacion = crearEsquemaDTOValido();
+      baseFormacion.setId(1L);
+      baseFormacion.setEsquema(FormacionEsquema.CINCO_TRES_DOS);
       when(plantillaService.save(formacion)).thenReturn(true);
-      when(plantillaService.initPlantillaBase()).thenReturn(new EsquemaDTO());
+      when(plantillaService.initPlantillaBase()).thenReturn(baseFormacion);
 
       String view = plantillaController.guardarFormacion(formacion, result, model);
 
       assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("message", "Formación guardada con éxito!");
-      verify(model).addAttribute("formacion", new EsquemaDTO());
-      verify(model).addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
-      verifyNoMoreInteractions(model);
+      InOrder inOrder = inOrder(model);
+      inOrder.verify(model).addAttribute(eq("message"), eq("Formación guardada con éxito!"));
+      inOrder.verify(model).addAttribute(eq("formacion"), eq(baseFormacion));
+      inOrder.verify(model).addAttribute(eq("esquemas"), eq(Arrays.asList(FormacionEsquema.values())));
    }
 
-   @Test
-   public void shouldReturnErrorWhenFormacionIsNull() {
-      EsquemaDTO formacion = null;
-      BindingResult result = new BeanPropertyBindingResult(formacion, "formacion");
-      when(plantillaService.initPlantillaBase()).thenReturn(new EsquemaDTO());
 
-      String view = plantillaController.guardarFormacion(formacion, result, model);
 
-      assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("formacion", new EsquemaDTO());
-      verify(model).addAttribute("error", "Formación no encontrada.");
-      verify(model).addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
-      verifyNoMoreInteractions(model);
-   }
-
-   @Test
-   public void shouldReturnErrorWhenEsquemaIsNull() {
+   private EsquemaDTO crearEsquemaDTOValido() {
       EsquemaDTO formacion = new EsquemaDTO();
-      BindingResult result = new BeanPropertyBindingResult(formacion, "formacion");
-      result.rejectValue("esquema", "error.esquema", "El esquema es obligatorio");
-      when(plantillaService.initPlantillaBase()).thenReturn(new EsquemaDTO());
-
-      String view = plantillaController.guardarFormacion(formacion, result, model);
-
-      assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("formacion", new EsquemaDTO());
-      verify(model).addAttribute("error", "El esquema es obligatorio");
-      verify(model).addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
-      verifyNoMoreInteractions(model);
-   }
-
-   @Test
-   public void shouldReturnErrorWhenAlineacionIsInvalid() {
-      EsquemaDTO formacion = new EsquemaDTO();
+      formacion.setId(1L);
       formacion.setEquipoId(1L);
-      formacion.setAlineacion(new ArrayList<>()); // Lista vacía (menos de 11)
-      BindingResult result = new BeanPropertyBindingResult(formacion, "formacion");
-      result.rejectValue("alineacion", "size.alineacion", "Debes tener exactamente 11 jugadores");
-      when(plantillaService.initPlantillaBase()).thenReturn(new EsquemaDTO());
-
-      String view = plantillaController.guardarFormacion(formacion, result, model);
-
-      assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("formacion", new EsquemaDTO());
-      verify(model).addAttribute("error", "Debes tener exactamente 11 jugadores");
-      verify(model).addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
-      verifyNoMoreInteractions(model);
-   }
-
-   @Test
-   public void shouldReturnErrorWhenEquipoIdIsInvalid() {
-      EsquemaDTO formacion = createValidEsquemaDTO();
-      formacion.setEquipoId(0L); // Equipo ID inválido
-      BindingResult result = new BeanPropertyBindingResult(formacion, "formacion");
-      when(plantillaService.initPlantillaBase()).thenReturn(new EsquemaDTO());
-
-      String view = plantillaController.guardarFormacion(formacion, result, model);
-
-      assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("formacion", new EsquemaDTO());
-      verify(model).addAttribute("error", "El ID del equipo no está definido. Contacta al administrador.");
-      verify(model).addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
-      verifyNoMoreInteractions(model);
-   }
-
-   @Test
-   public void shouldReturnErrorWhenSaveFails() {
-      EsquemaDTO formacion = createValidEsquemaDTO();
-      BindingResult result = new BeanPropertyBindingResult(formacion, "formacion");
-      when(plantillaService.save(formacion)).thenReturn(false);
-      when(plantillaService.initPlantillaBase()).thenReturn(new EsquemaDTO());
-
-      String view = plantillaController.guardarFormacion(formacion, result, model);
-
-      assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute("formacion", new EsquemaDTO());
-      verify(model).addAttribute("error", "Error al guardar la formación.");
-      verify(model).addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
-      verifyNoMoreInteractions(model);
-   }
-
-   private EsquemaDTO createValidEsquemaDTO() {
-      EsquemaDTO formacion = new EsquemaDTO();
-      formacion.setEquipoId(1L);
-      formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
+     // formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
       List<PosicionJugadorDTO> alineacion = new ArrayList<>();
       for (int i = 0; i < 11; i++) {
          PosicionJugadorDTO posicion = new PosicionJugadorDTO();

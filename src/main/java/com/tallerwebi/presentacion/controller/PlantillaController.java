@@ -6,6 +6,8 @@ import com.tallerwebi.dominio.service.PlantillaService;
 import com.tallerwebi.presentacion.dto.EsquemaDTO;
 
 import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ public class PlantillaController {
    private final PlantillaService service;
 
 
+   @Autowired
    public PlantillaController(PlantillaService service) {
       this.service = service;
    }
@@ -54,7 +57,6 @@ public class PlantillaController {
       FormacionEsquema esquemaSeleccionado = FormacionEsquema.fromString(esquemaTexto);
       EsquemaDTO formacion = service.initPlantillaBase();
       formacion.setEsquema(esquemaSeleccionado);
-      System.out.println("Alineación en /formacion-inicial: " + formacion.getAlineacion());
       model.addAttribute("formacion", formacion);
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
@@ -69,7 +71,6 @@ public class PlantillaController {
          model.addAttribute("error", "Formación no encontrada.");
          return "vista-plantilla";
       }
-      System.out.println("Parámetros recibidos: " + (formacion != null ? formacion.toString() : "null"));
 
       if (result.hasErrors()) {
          System.out.println("Errores de validación: " + result.getAllErrors());

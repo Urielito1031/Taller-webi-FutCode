@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "jasmine": "^5.8.0",
+    "jasmine-core": "^5.8.0",
+    "jsdom": "^26.1.0",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-jasmine": "^5.1.0",
+    "karma-jquery": "^0.2.4"
+  },
+  "scripts": {
+    "test": "jasmine"
+  }
+}

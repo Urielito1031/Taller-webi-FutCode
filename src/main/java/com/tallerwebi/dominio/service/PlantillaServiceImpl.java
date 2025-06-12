@@ -186,16 +186,28 @@ public class PlantillaServiceImpl implements PlantillaService {
           .collect(Collectors.toList());
    }
    private FormacionEsquema detectarEsquema(List<FormacionEquipo> formaciones) {
-      long defensores = formaciones.stream().filter(fe -> fe.getPosicionEnCampo() == PosicionEnum.DEFENSOR).count();
-      long mediocampistas = formaciones.stream().filter(fe -> fe.getPosicionEnCampo() == PosicionEnum.MEDIOCAMPISTA).count();
-      long delanteros = formaciones.stream().filter(fe -> fe.getPosicionEnCampo() == PosicionEnum.DELANTERO).count();
-      long arqueros = formaciones.stream().filter(fe -> fe.getPosicionEnCampo() == PosicionEnum.ARQUERO).count();
+      if (formaciones == null || formaciones.isEmpty()) {
+         //evitar que se rompa algo :_)
+         return FormacionEsquema.CUATRO_TRES_TRES;
+      }
 
-      if (arqueros == 1 && defensores == 4 && mediocampistas == 3 && delanteros == 3) return FormacionEsquema.CUATRO_TRES_TRES;
-      if (arqueros == 1 && defensores == 4 && mediocampistas == 4 && delanteros == 2) return FormacionEsquema.CUATRO_CUATRO_DOS;
-      if (arqueros == 1 && defensores == 3 && mediocampistas == 5 && delanteros == 2) return FormacionEsquema.TRES_CINCO_DOS;
-      if (arqueros == 1 && defensores == 5 && mediocampistas == 3 && delanteros == 2) return FormacionEsquema.CINCO_TRES_DOS;
-      if (arqueros == 1 && defensores == 3 && mediocampistas == 4 && delanteros == 3) return FormacionEsquema.TRES_CUATRO_TRES;
+      long defensores = formaciones.stream().filter(
+        fe -> fe.getPosicionEnCampo() == PosicionEnum.DEFENSOR).count();
+
+      long mediocampistas = formaciones.stream().filter(
+        fe -> fe.getPosicionEnCampo() == PosicionEnum.MEDIOCAMPISTA).count();
+
+      long delanteros = formaciones.stream().filter(
+        fe -> fe.getPosicionEnCampo() == PosicionEnum.DELANTERO).count();
+
+      //comparar con los atributos correspondientes del enum, ya que usan
+      for (FormacionEsquema esquema : FormacionEsquema.values()) {
+         if (esquema.getDefensas() == defensores &&
+           esquema.getMediocampistas() == mediocampistas &&
+           esquema.getDelanteros() == delanteros) {
+            return esquema;
+         }
+      }
       return FormacionEsquema.CUATRO_TRES_TRES;
    }
 }

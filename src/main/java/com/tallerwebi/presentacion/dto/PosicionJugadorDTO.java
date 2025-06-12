@@ -24,7 +24,6 @@ public class PosicionJugadorDTO {
       this.jugador = jugador;
    }
 
-   //al guardar la formacion, esto da null, investigar
    public String toString() {
       return "JugadorID: " + this.getJugadorId() +
         "\nJugador: " + (jugador != null ? jugador.getNombre() : "Sin nombre") +

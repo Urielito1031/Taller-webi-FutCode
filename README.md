@@ -61,7 +61,7 @@ Una vez que tenemos la imagen generada, podemos instanciar un contenedor y ejecu
 docker run -p 8080:8080 tallerwebi
 ```
 
-### 9. Comandos básicod:
+### 9. Comandos básicos:
 ```shell
 # Crear una imagen con el nombre "tallerwebi".
 docker build -f DockerfileJetty -t tallerwebi .

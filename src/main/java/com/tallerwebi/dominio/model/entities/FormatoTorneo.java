@@ -19,6 +19,9 @@ public class FormatoTorneo {
    @Column(name = "tipo", nullable = false)
    private TipoFormato tipo;
 
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "fase_id")
+   private Fase fase;
 
 
    public String toString(){

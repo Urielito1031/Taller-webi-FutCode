@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class EventoPartido {
    @Id
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
 
    @javax.validation.constraints.NotNull
    @Lob

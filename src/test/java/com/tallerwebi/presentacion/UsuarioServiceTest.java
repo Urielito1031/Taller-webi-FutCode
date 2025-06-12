@@ -32,7 +32,7 @@ public class UsuarioServiceTest {
 
         Usuario usuario = new Usuario();
         usuario.setId(1L);
-        this.usuarioService.getJugadores().put(1L, usuario);
+//        this.usuarioService.getJugadores().put(1L, usuario);
     }
 
     @Test

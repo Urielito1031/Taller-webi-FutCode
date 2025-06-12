@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public class EquipoTorneo {
    @Id
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
 
    @javax.validation.constraints.NotNull
    @Column(name = "posicion", nullable = false)

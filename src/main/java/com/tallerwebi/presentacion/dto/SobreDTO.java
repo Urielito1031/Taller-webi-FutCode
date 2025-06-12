@@ -47,6 +47,7 @@ public class SobreDTO {
         sobre.setPrecio(precio);
         sobre.setDescripcion(descripcion);
         sobre.setImagenUrl(imagenUrl);
+        System.out.println(sobre);
         return sobre;
     }
 

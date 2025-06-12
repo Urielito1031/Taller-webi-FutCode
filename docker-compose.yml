@@ -24,14 +24,12 @@ services:
     depends_on:
       - mysql
     environment:
-      # Cambia según cómo hagas la conexión, por ejemplo:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_NAME: db_futcode
       DB_USER: root
       DB_PASSWORD: root
-    # Si tu app necesita conectarse a la base, usa el nombre "mysql" como host (el nombre del servicio)
-    # para que Docker resuelva la IP interna automáticamente
+
 
 volumes:
   mysql-data:

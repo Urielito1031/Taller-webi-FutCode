@@ -1,11 +1,16 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
+import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -46,14 +51,48 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
-        return getCurrentSession().createQuery("FROM Usuario u WHERE u.id = :id", Usuario.class)
+        System.out.println(id);
+        return sessionFactory.getCurrentSession().createQuery("FROM Usuario u WHERE u.id = :id", Usuario.class)
                 .setParameter("id", id)
                 .uniqueResult();
     }
+
+//    @Override
+//    public Usuario buscarUsuarioPorId(Long id) {
+//        return sessionFactory.getCurrentSession().get(Usuario.class, id);
+//    }
+
+
 
     //para evitar instanciar en cada metodo el Session session = sessionFactory.getCurrentSession();
     private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
+
+    public void actualizarUsuario(Usuario usuario) {
+        sessionFactory.getCurrentSession().save(usuario);
+    }
+
+
+    public List<Sobre> obtenerSobresDelUsuario(Long id){
+        try {
+            Usuario usuario = getCurrentSession().createQuery(
+                            "FROM Usuario u LEFT JOIN FETCH u.sobres WHERE u.id = :id",
+                            Usuario.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
+
+            if (usuario != null && usuario.getSobres() != null) {
+                List<Sobre> sobres = new ArrayList<>(usuario.getSobres());
+                return sobres;
+            }
+            return new ArrayList<>();
+
+        } catch (Exception e) {
+            System.err.println("Error al obtener sobres del usuario: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
 
 }

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 public class Pais {
    @Id
    @Column(name = "id", nullable = false)
-   private Integer id;
+   private Long id;
 
    @javax.validation.constraints.Size(max = 100)
    @javax.validation.constraints.NotNull

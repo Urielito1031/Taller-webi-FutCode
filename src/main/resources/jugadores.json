@@ -33,8 +33,7 @@
     "rating": 82.7,
     "estadoFisico": 96.4,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "EPICO",
-    "imagen": "https://assets.goal.com/images/v3/blt5c0413b2c23cf6a0/Trent-Alexander-Arnold-Liverpool-2024.jpg"
+    "rarezaJugador": "EPICO"
   },
   {
     "id": 5,
@@ -133,7 +132,8 @@
     "rating": 28.3,
     "estadoFisico": 95.5,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img-estaticos.atleticodemadrid.com/system/fotos/7886/destacado_600x600/RODRI.png?1534247622"
   },
   {
     "id": 16,
@@ -142,7 +142,8 @@
     "rating": 25.7,
     "estadoFisico": 96.1,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.manutd.com/AssetPicker/images/0/0/20/88/1333344/8-Bruno-Fernandes1719822565555.png"
   },
   {
     "id": 17,
@@ -151,7 +152,8 @@
     "rating": 29.1,
     "estadoFisico": 97.8,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.laliga.com/squad/2024/t186/p246333/1024x1024/p246333_t186_2024_1_003_000.png"
   },
   {
     "id": 18,
@@ -160,7 +162,8 @@
     "rating": 22.4,
     "estadoFisico": 95.2,
     "posicionNatural": "ARQUERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.fcbarcelona.com/photo-resources/2024/10/13/04c3b761-ccbd-498f-b988-b67ed1693906/01-Ter_Stegen-M.png?width=670&height=790"
   },
   {
     "id": 19,
@@ -169,7 +172,8 @@
     "rating": 24.6,
     "estadoFisico": 95.7,
     "posicionNatural": "ARQUERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250099867.webp"
   },
   {
     "id": 20,
@@ -178,7 +182,8 @@
     "rating": 27.8,
     "estadoFisico": 95.4,
     "posicionNatural": "ARQUERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://media.futbolfantasy.com/thumb/400x400/v202506010013/uploads/images/jugadores/ficha/2229.png"
   },
   {
     "id": 21,
@@ -187,7 +192,8 @@
     "rating": 23.5,
     "estadoFisico": 95.1,
     "posicionNatural": "DEFENSOR",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250028211.webp"
   },
   {
     "id": 22,
@@ -196,7 +202,8 @@
     "rating": 26.3,
     "estadoFisico": 95.6,
     "posicionNatural": "DEFENSOR",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.sorare.com/playerpicture/2525a7e8-cfd0-4921-bcc9-f1f162f91751/picture/squared-90979b1e8ac945fed8caf6d24e65d35e.png"
   },
   {
     "id": 23,
@@ -205,7 +212,8 @@
     "rating": 21.9,
     "estadoFisico": 95.3,
     "posicionNatural": "DEFENSOR",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://static-files.saudi-pro-league.pulselive.com/players/headshot/p121145.png"
   },
   {
     "id": 24,
@@ -214,7 +222,8 @@
     "rating": 30.0,
     "estadoFisico": 95.0,
     "posicionNatural": "DEFENSOR",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250076357.webp"
   },
   {
     "id": 25,
@@ -223,7 +232,8 @@
     "rating": 24.1,
     "estadoFisico": 94.8,
     "posicionNatural": "DEFENSOR",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://backend.liverpoolfc.com/sites/default/files/styles/xs/public/2024-06/andy-robertson-body-shot-202425.png?itok=GGyTJcJK"
   },
   {
     "id": 26,
@@ -232,7 +242,8 @@
     "rating": 28.7,
     "estadoFisico": 94.7,
     "posicionNatural": "DEFENSOR",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/12daf100-2931-4851-a437-a1707ec03a0c/TheoHernandez-Large.png"
   },
   {
     "id": 27,
@@ -241,7 +252,8 @@
     "rating": 19.2,
     "estadoFisico": 94.6,
     "posicionNatural": "DEFENSOR",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250088061.webp"
   },
   {
     "id": 28,
@@ -250,7 +262,8 @@
     "rating": 26.8,
     "estadoFisico": 94.5,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://i0.wp.com/metrodailyng.com/wp-content/uploads/2022/05/Paul-Pogba.png?fit=500%2C500&ssl=1"
   },
   {
     "id": 29,
@@ -259,7 +272,8 @@
     "rating": 25.3,
     "estadoFisico": 94.4,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://b.fssta.com/uploads/application/soccer/headshots/4065.png"
   },
   {
     "id": 30,
@@ -268,7 +282,8 @@
     "rating": 48.1,
     "estadoFisico": 97.5,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "RARO"
+    "rarezaJugador": "RARO",
+    "imagen": "https://www.tottenhamhotspur.com/media/ds3asinl/firstteam_profiles_heungminson_202425_1.png?anchor=center&mode=crop&quality=90&width=500"
   },
   {
     "id": 31,
@@ -277,7 +292,8 @@
     "rating": 22.7,
     "estadoFisico": 94.3,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://i.namu.wiki/i/QF-S5Eo5jYc5iYWL_x6YxMWZU7b4ecQyJKgvzU0l3Oh21JWE4lAKPtv4xWDuzUnFHMpQWVi_kGjrC3gA6ghqEA.webp"
   },
   {
     "id": 32,
@@ -286,7 +302,8 @@
     "rating": 29.6,
     "estadoFisico": 94.2,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250118281.webp"
   },
   {
     "id": 33,
@@ -295,7 +312,8 @@
     "rating": 27.4,
     "estadoFisico": 94.1,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-09/federico-chiesa-bodyshot-new-202425.png?itok=W8L7CBo6"
   },
   {
     "id": 34,
@@ -304,7 +322,8 @@
     "rating": 20.8,
     "estadoFisico": 94.0,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.bundesliga.com/player/dfl-obj-0027g6-dfl-clu-00000g-dfl-sea-0001k8.png"
   },
   {
     "id": 35,
@@ -313,7 +332,8 @@
     "rating": 26.9,
     "estadoFisico": 93.9,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250087938.webp "
   },
   {
     "id": 36,
@@ -322,7 +342,8 @@
     "rating": 24.5,
     "estadoFisico": 93.8,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/With%20LN/Nkunku/Mens_3333x5000_Avatar_Nkunku_SF_Home_24_25_RGB.png"
   },
   {
     "id": 37,
@@ -331,7 +352,8 @@
     "rating": 25.8,
     "estadoFisico": 93.7,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.laliga.com/squad/2024/t178/p490541/1024x1113/p490541_t178_2024_1_001_000.png"
   },
   {
     "id": 38,
@@ -340,7 +362,8 @@
     "rating": 23.2,
     "estadoFisico": 93.6,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.laliga.com/squad/2024/t178/p500046/2048x2225/p500046_t178_2024_1_001_000.png"
   },
   {
     "id": 39,
@@ -349,7 +372,8 @@
     "rating": 28.9,
     "estadoFisico": 93.5,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.laliga.com/squad/2024/t186/p244855/2048x2225/p244855_t186_2024_1_001_000.png"
   },
   {
     "id": 40,
@@ -358,7 +382,8 @@
     "rating": 21.6,
     "estadoFisico": 93.4,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250083732.webp"
   },
   {
     "id": 41,
@@ -367,7 +392,8 @@
     "rating": 27.2,
     "estadoFisico": 93.3,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://i.namu.wiki/i/QdbiVb5w-XJUx8D6hEOb7gLyWsPfN15WheHXI8O7lQRHzEI2VfFeGH_Ia9KnXmtU06tQQEP0P6s2v_gKfp7fmQ.webp"
   },
   {
     "id": 42,
@@ -376,7 +402,8 @@
     "rating": 22.7,
     "estadoFisico": 93.2,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250101534.webp"
   },
   {
     "id": 43,
@@ -385,7 +412,8 @@
     "rating": 49.3,
     "estadoFisico": 96.3,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "RARO"
+    "rarezaJugador": "RARO",
+    "imagen": "https://www.pngplay.com/wp-content/uploads/13/Bernardo-Silva-PNG-HD-Quality.png"
   },
   {
     "id": 44,
@@ -394,7 +422,8 @@
     "rating": 25.8,
     "estadoFisico": 93.1,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250089228.webp"
   },
   {
     "id": 45,
@@ -403,7 +432,8 @@
     "rating": 19.4,
     "estadoFisico": 93.0,
     "posicionNatural": "ARQUERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://tottenham24.pl/upload/squad/firstteam_profiles_202223_hugolloris.png"
   },
   {
     "id": 46,
@@ -412,7 +442,8 @@
     "rating": 28.6,
     "estadoFisico": 92.9,
     "posicionNatural": "ARQUERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.sorare.com/playerpicture/e04945d8-d2da-492d-ae7b-2fdb9ac40ac5/picture/squared-cf67e2f875d52cf6491dab38156c5e54.png"
   },
   {
     "id": 47,
@@ -421,7 +452,8 @@
     "rating": 23.5,
     "estadoFisico": 92.8,
     "posicionNatural": "ARQUERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://media.futbolfantasy.com/thumb/400x400/v202504060244/uploads/images/jugadores/ficha/1374.png"
   },
   {
     "id": 48,
@@ -430,7 +462,8 @@
     "rating": 26.9,
     "estadoFisico": 92.7,
     "posicionNatural": "ARQUERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250042780.webp"
   },
   {
     "id": 49,
@@ -439,7 +472,8 @@
     "rating": 21.3,
     "estadoFisico": 92.6,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.sorare.com/playerpicture/062943c2-f400-410e-b5d6-f58f1b0b3fad/picture/squared-d297ea80c13d63fe6d5ec8f2eda3a5be.png"
   },
   {
     "id": 50,
@@ -448,7 +482,8 @@
     "rating": 27.7,
     "estadoFisico": 92.5,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img-estaticos.atleticodemadrid.com/system/fotos/15047/destacado_600x600/FICHA_WEB_MEMPHIS.png?1674242301"
   },
   {
     "id": 51,
@@ -457,7 +492,8 @@
     "rating": 24.2,
     "estadoFisico": 92.4,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://i.namu.wiki/i/n0wy-5FNkCnEVfnSiO22Hd2XvdK2ELY79mryUQ5k6H_--bbQXiVfZ4F9DAtkNYBH3WlG6-KVsM6oSsCinshn5Q.webp"
   },
   {
     "id": 52,
@@ -466,7 +502,8 @@
     "rating": 28.8,
     "estadoFisico": 92.3,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/Sterling_raheem_profile_2024-25_avatar-removebg.png"
   },
   {
     "id": 53,
@@ -475,7 +512,8 @@
     "rating": 20.4,
     "estadoFisico": 92.2,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img-estaticos.atleticodemadrid.com/system/fotos/9648/destacado_600x600/BUSTO_0020_7_JOAO.png?1601656495"
   },
   {
     "id": 54,
@@ -484,7 +522,8 @@
     "rating": 29.1,
     "estadoFisico": 91.5,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.sorare.com/playerpicture/492c866b-6304-4276-ae8e-9cd7416a9fb4/picture/squared-aa22c94782e88e5045b011926849f5f8.png"
   },
   {
     "id": 55,
@@ -493,7 +532,8 @@
     "rating": 22.6,
     "estadoFisico": 91.4,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250112122.webp"
   },
   {
     "id": 56,
@@ -502,7 +542,8 @@
     "rating": 25.3,
     "estadoFisico": 91.3,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.fcbarcelona.com/photo-resources/2024/10/13/a21d9ed5-ab8a-4705-ae9a-a6bd14e9dbba/10-Ansu_Fati-M.png?width=670&height=790"
   },
   {
     "id": 57,
@@ -511,7 +552,8 @@
     "rating": 21.7,
     "estadoFisico": 91.2,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.laliga.com/squad/2024/t186/p440077/2048x2225/p440077_t186_2024_1_001_000.png"
   },
   {
     "id": 58,
@@ -520,7 +562,8 @@
     "rating": 26.4,
     "estadoFisico": 91.1,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.fcbarcelona.com/photo-resources/2024/10/13/1edefda1-8229-4232-ace9-2f35bf4d3000/07-Ferran_Torres-M.png?width=670&height=790"
   },
   {
     "id": 59,
@@ -529,7 +572,8 @@
     "rating": 23.9,
     "estadoFisico": 91.0,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250116654.webp"
   },
   {
     "id": 60,
@@ -538,7 +582,8 @@
     "rating": 28.1,
     "estadoFisico": 92.1,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/darwin-nunez-profile-body-shot-202425.webp?itok=uzKb0DTv"
   },
   {
     "id": 61,
@@ -547,7 +592,8 @@
     "rating": 19.8,
     "estadoFisico": 92.0,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.bundesliga.com/player/dfl-obj-0027ro-dfl-clu-000007-dfl-sea-0001k8.png"
   },
   {
     "id": 62,
@@ -556,7 +602,8 @@
     "rating": 29.5,
     "estadoFisico": 91.9,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://i.namu.wiki/i/lQTUfyqkT53_YJBUZS3-bCqBABmLlkDeXmm_Lm92pvxNTgFxeNMhIBdyHuR6MWlGJ03t1PMiPpZNp4FHOtkOFg.webp"
   },
   {
     "id": 63,
@@ -565,7 +612,8 @@
     "rating": 22.2,
     "estadoFisico": 91.8,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.sorare.com/playerpicture/94d5af28-d7a9-4b22-bacf-7120238c1a47/picture/squared-690163e914fda82349dc8c95a34bb468.png"
   },
   {
     "id": 64,
@@ -574,7 +622,8 @@
     "rating": 26.7,
     "estadoFisico": 91.7,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://cdn.whufc.com/sites/default/files/2024-08/paquetaprofile.png"
   },
   {
     "id": 65,
@@ -583,7 +632,8 @@
     "rating": 21.4,
     "estadoFisico": 91.6,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.tottenhamhotspur.com/media/xstpwh2h/firstteam_profiles_jamesmaddison_202425_1.png?anchor=center&mode=crop&quality=90&width=500"
   },
   {
     "id": 66,
@@ -592,7 +642,8 @@
     "rating": 95.6,
     "estadoFisico": 98.5,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "LEYENDA"
+    "rarezaJugador": "LEYENDA",
+    "imagen": "https://assets.sorare.com/player/9097ab4a-d503-4924-8186-5d09ab121faa/picture/squared-bb7d7ae8fa37b00193fe929f891e0dfd.png"
   },
   {
     "id": 67,
@@ -601,7 +652,8 @@
     "rating": 81.3,
     "estadoFisico": 98.0,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "EPICO"
+    "rarezaJugador": "EPICO",
+    "imagen": "https://assets.bundesliga.com/player/dfl-obj-j00zz3-dfl-clu-00000g-dfl-sea-0001k8.png"
   },
   {
     "id": 68,
@@ -610,7 +662,8 @@
     "rating": 46.9,
     "estadoFisico": 97.3,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "RARO"
+    "rarezaJugador": "RARO",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250019498.webp"
   },
   {
     "id": 69,
@@ -619,7 +672,8 @@
     "rating": 43.7,
     "estadoFisico": 96.6,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "RARO"
+    "rarezaJugador": "RARO",
+    "imagen": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2a0c257d-1e26-439e-8561-e67976a7a2e4/demiybf-545fb1f5-1709-4210-beb9-78af40b7fedf.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzJhMGMyNTdkLTFlMjYtNDM5ZS04NTYxLWU2Nzk3NmE3YTJlNFwvZGVtaXliZi01NDVmYjFmNS0xNzA5LTQyMTAtYmViOS03OGFmNDBiN2ZlZGYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.zTpzsVIcxWLZAtrlIcleZf3NMX3VxeioWwn4amgctv0"
   },
   {
     "id": 70,
@@ -628,7 +682,8 @@
     "rating": 45.2,
     "estadoFisico": 96.2,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "RARO"
+    "rarezaJugador": "RARO",
+    "imagen": "https://i.pinimg.com/originals/f8/9c/6e/f89c6eda995524505a23fe22edb3a104.png"
   },
   {
     "id": 71,
@@ -637,7 +692,8 @@
     "rating": 23.8,
     "estadoFisico": 95.7,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/With%20LN/Sancho/Mens_3333x5000_Avatar_Sancho_SF_Home_24_25_RGB.png"
   },
   {
     "id": 72,
@@ -646,7 +702,8 @@
     "rating": 27.1,
     "estadoFisico": 95.5,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250088246.webp"
   },
   {
     "id": 73,
@@ -655,7 +712,8 @@
     "rating": 22.5,
     "estadoFisico": 95.2,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://web.uat.mancity.com/meta/media/qdlbnbg2/jack-grealish.png"
   },
   {
     "id": 74,
@@ -664,7 +722,8 @@
     "rating": 28.7,
     "estadoFisico": 94.9,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://cdn.realsociedad.eus//Uploads/jugadores/_2_oyarzabal.png"
   },
   {
     "id": 75,
@@ -673,7 +732,8 @@
     "rating": 25.3,
     "estadoFisico": 94.6,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.playmakerstats.com/img/jogadores/87/408287_med__20170602084114_wilfried_zaha.png"
   },
   {
     "id": 76,
@@ -682,7 +742,8 @@
     "rating": 18.9,
     "estadoFisico": 94.4,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.thefa.com/-/media/www-thefa-com/images/england/men-senior/player-profiles/dominic-calvert-lewin/723-dcl.ashx"
   },
   {
     "id": 77,
@@ -691,7 +752,8 @@
     "rating": 26.4,
     "estadoFisico": 94.2,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250067629.webp"
   },
   {
     "id": 78,
@@ -700,7 +762,8 @@
     "rating": 24.6,
     "estadoFisico": 94.0,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250020851.webp"
   },
   {
     "id": 79,
@@ -709,7 +772,8 @@
     "rating": 27.8,
     "estadoFisico": 93.8,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://store.juventus.com/images/juventus/players/25.webp?v=1728556315"
   },
   {
     "id": 80,
@@ -718,7 +782,8 @@
     "rating": 20.2,
     "estadoFisico": 93.6,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.bundesliga.com/player/dfl-obj-0027ro-dfl-clu-000007-dfl-sea-0001k8.png"
   },
   {
     "id": 81,
@@ -727,7 +792,8 @@
     "rating": 29.5,
     "estadoFisico": 93.4,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250178523.webp"
   },
   {
     "id": 82,
@@ -736,7 +802,8 @@
     "rating": 23.1,
     "estadoFisico": 93.2,
     "posicionNatural": "DELANTERO",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.bundesliga.com/player/dfl-obj-002g6u-dfl-clu-00000b-dfl-sea-0001k8-body.png"
   },
   {
     "id": 83,
@@ -745,7 +812,8 @@
     "rating": 25.7,
     "estadoFisico": 93.0,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.bundesliga.com/player/dfl-obj-002gbk-dfl-clu-00000b-dfl-sea-0001k8.png"
   },
   {
     "id": 84,
@@ -754,7 +822,8 @@
     "rating": 19.3,
     "estadoFisico": 92.8,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250107324.webp"
   },
   {
     "id": 85,
@@ -763,7 +832,8 @@
     "rating": 29.8,
     "estadoFisico": 92.6,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://static-files.saudi-pro-league.pulselive.com/players/headshot/p231961.png"
   },
   {
     "id": 86,
@@ -772,7 +842,8 @@
     "rating": 26.4,
     "estadoFisico": 92.4,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.sorare.com/playerpicture/25f4f99f-be41-44f5-b597-37865ca679ca/picture/squared-49bf3fcc17f4e3648d65ab2fea534c27.png"
   },
   {
     "id": 87,
@@ -781,7 +852,8 @@
     "rating": 21.6,
     "estadoFisico": 92.2,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://media02.tr.beinsports.com/img/players/P1786.png"
   },
   {
     "id": 88,
@@ -790,7 +862,8 @@
     "rating": 27.1,
     "estadoFisico": 92.0,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250064006.webp"
   },
   {
     "id": 89,
@@ -799,7 +872,8 @@
     "rating": 23.7,
     "estadoFisico": 91.8,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.ligaportugal.pt/backoffice/assets/Corposanches_d929f48e18.png"
   },
   {
     "id": 90,
@@ -808,16 +882,18 @@
     "rating": 28.1,
     "estadoFisico": 91.2,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://store.juventus.com/images/juventus/players/16.webp?v=1728556315"
   },
   {
     "id": 91,
     "nombre": "Kalvin",
     "apellido": "Phillips",
-    "rating": 32.9,
+    "rating": 26.9,
     "estadoFisico": 91.0,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.mancity.com/meta/media/cfqhq11u/kalvin-philips.png"
   },
   {
     "id": 92,
@@ -826,7 +902,8 @@
     "rating": 32.7,
     "estadoFisico": 90.8,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://i.namu.wiki/i/xzfhYOM5m1PPb5Ho7zzWfC4zR7HkL2QT2Q_tyLKSD2JI8UEhi8SGhmJJ4xkuv2rRhbRmJ1EpGqGYtWxtcYAaIQ.webp"
   },
   {
     "id": 93,
@@ -835,7 +912,8 @@
     "rating": 32.5,
     "estadoFisico": 90.6,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.sportball.es/wp-content/uploads/2020/02/Plantilla-del-Leicester-City-2019-2020-Wilfred-Ndidi.png"
   },
   {
     "id": 94,
@@ -844,7 +922,8 @@
     "rating": 24.3,
     "estadoFisico": 90.4,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://media.futbolfantasy.com/thumb/400x400/v202505312348/uploads/images/jugadores/ficha/88.png"
   },
   {
     "id": 95,
@@ -853,7 +932,8 @@
     "rating": 22.1,
     "estadoFisico": 90.2,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250086037.webp"
   },
   {
     "id": 96,
@@ -862,7 +942,8 @@
     "rating": 21.9,
     "estadoFisico": 90.0,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://assets.sorare.com/playerpicture/13ad07e7-9c5a-4119-9671-59e6a7e3ad6b/picture/squared-d82e9ef03207b747ddcdf8d8bc3db8d7.png"
   },
   {
     "id": 97,
@@ -871,7 +952,8 @@
     "rating": 51.7,
     "estadoFisico": 59.8,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://media.asroma.com/prod/images/gm_preview/ab157c6a20b4-paredes.png"
   },
   {
     "id": 98,
@@ -880,7 +962,8 @@
     "rating": 46.5,
     "estadoFisico": 89.6,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://www.laziostylestore.com/images/lazio/players/84.webp?v=1737671000"
   },
   {
     "id": 99,
@@ -889,6 +972,7 @@
     "rating": 23.3,
     "estadoFisico": 91.4,
     "posicionNatural": "MEDIOCAMPISTA",
-    "rarezaJugador": "NORMAL"
+    "rarezaJugador": "NORMAL",
+    "imagen": "https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/ryan-gravenberch-profile-action-shot-202425.png?itok=QBDlSmYh"
   }
 ]

@@ -123,13 +123,12 @@ main{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
 }
 
 #contenedor-padre{
+    display: inline-block;
     justify-content: center;
     align-items: center;
-
 }
 
 .seccion-home {
@@ -141,7 +140,7 @@ main{
 
 #contenedor-contenedores{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin-bottom: 30px;
 }
@@ -150,6 +149,7 @@ main{
     width: 250px;
     padding: 15px 15px;
     height: 200px;
+    margin-right: 30px;
 }
 
 .sh1 .plantilla{
@@ -185,6 +185,7 @@ main{
     background-color: #00ffc3;
     border-radius: 12px;
     padding: 2px;
+    color: #0d1a2e;
 }
 
 #porcetaje{
@@ -317,6 +318,7 @@ main{
     visibility: visible;
     opacity: 1;
 }
+
 
 /*
 body {

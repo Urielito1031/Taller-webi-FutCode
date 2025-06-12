@@ -28,7 +28,7 @@ public class UsuarioServiceTest {
     @BeforeEach
     public void setUp() {
         this.repositorioUsuario = Mockito.mock(RepositorioUsuarioImpl.class);
-//        this.usuarioService = new UsuarioServiceImpl(repositorioUsuario);
+        this.usuarioService = new UsuarioServiceImpl(repositorioUsuario);
 
         Usuario usuario = new Usuario();
         usuario.setId(1L);

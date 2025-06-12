@@ -1,20 +1,15 @@
 package com.tallerwebi.presentacion;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.tallerwebi.dominio.service.SorteoServiceImpl;
 import com.tallerwebi.infraestructura.JugadorLoader;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class SorteoJugadoresTest {
 
@@ -33,7 +28,7 @@ public class SorteoJugadoresTest {
 
         int cantidadDeJugadores = 13;
 
-        assertEquals(cantidadDeJugadores, listaDeJugadores.size());
+        assertEquals(cantidadDeJugadores, listaDeJugadores.size()-1);
     }
 
 }

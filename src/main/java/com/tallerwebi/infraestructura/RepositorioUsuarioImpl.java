@@ -57,12 +57,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
-//    @Override
-//    public Usuario buscarUsuarioPorId(Long id) {
-//        return sessionFactory.getCurrentSession().get(Usuario.class, id);
-//    }
-
-
 
     //para evitar instanciar en cada metodo el Session session = sessionFactory.getCurrentSession();
     private Session getCurrentSession() {

@@ -43,7 +43,7 @@ public class ComprarSobreController {
     @GetMapping("/mis-sobres")
     public ModelAndView mostrarVistaMisSobres(){
         // A cambiar por el id de la session
-        List<SobreDTO> sobres = this.usuarioService.obtenerSobresDelUsuario(1002L);
+        List<SobreDTO> sobres = this.usuarioService.obtenerSobresDelUsuario(1L);
 
         ModelAndView mav = new ModelAndView("vista-mis-sobres");
         mav.addObject("sobres", sobres);

@@ -101,86 +101,75 @@ public class PlantillaServiceImpl implements PlantillaService {
 
    }
 
-   @Override
-   public void asignarPosicionesYJugadores(EsquemaDTO formacion) {
-      List<PosicionEnum> posiciones = getPosicionesPorEsquema(formacion.getEsquema());
-      List<PosicionJugadorDTO> alineacion = formacion.getAlineacion();
-      for (int i = 0; i < alineacion.size(); i++) {
-         PosicionJugadorDTO posicionJugador = alineacion.get(i);
-         posicionJugador.setPosicionEnCampo(posiciones.get(i));
-         Long jugadorId = posicionJugador.getJugadorId();
-         if (jugadorId == null) {
-            throw new IllegalArgumentException("ID de jugador es null para la posición " + i);
-         }
-         JugadorDTO jugador = new JugadorDTO();
-         jugador.setId(jugadorId);
-         posicionJugador.setJugador(jugador);
-      }
-   }
-
-   @Override
-   public List<PosicionEnum> getPosicionesPorEsquema(FormacionEsquema esquema) {
-      List<PosicionEnum> posiciones = new ArrayList<>();
-      switch (esquema) {
-         case CUATRO_TRES_TRES:
-            posiciones.addAll(Arrays.asList(
-                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
-                PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA,
-                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.DELANTERO,
-                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
-            break;
-         case CUATRO_CUATRO_DOS:
-            posiciones.addAll(Arrays.asList(
-                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
-                PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA,
-                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
-                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
-            break;
-         case TRES_CINCO_DOS:
-            posiciones.addAll(Arrays.asList(
-                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
-                PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
-                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
-                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
-            break;
-         case CINCO_TRES_DOS:
-            posiciones.addAll(Arrays.asList(
-                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
-                PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
-                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
-                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
-            break;
-         case TRES_CUATRO_TRES:
-            posiciones.addAll(Arrays.asList(
-                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
-                PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
-                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.DELANTERO,
-                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
-            break;
-         default:
-            break;
-      }
-      return posiciones;
-   }
+//   @Override
+//   public void asignarPosicionesYJugadores(EsquemaDTO formacion) {
+//      List<PosicionEnum> posiciones = getPosicionesPorEsquema(formacion.getEsquema());
+//      List<PosicionJugadorDTO> alineacion = formacion.getAlineacion();
+//      for (int i = 0; i < alineacion.size(); i++) {
+//         PosicionJugadorDTO posicionJugador = alineacion.get(i);
+//         posicionJugador.setPosicionEnCampo(posiciones.get(i));
+//         Long jugadorId = posicionJugador.getJugadorId();
+//         if (jugadorId == null) {
+//            throw new IllegalArgumentException("ID de jugador es null para la posición " + i);
+//         }
+//         JugadorDTO jugador = new JugadorDTO();
+//         jugador.setId(jugadorId);
+//         posicionJugador.setJugador(jugador);
+//      }
+//   }
+//
+//   @Override
+//   public List<PosicionEnum> getPosicionesPorEsquema(FormacionEsquema esquema) {
+//      List<PosicionEnum> posiciones = new ArrayList<>();
+//      switch (esquema) {
+//         case CUATRO_TRES_TRES:
+//            posiciones.addAll(Arrays.asList(
+//                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
+//                PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA,
+//                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.DELANTERO,
+//                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
+//            break;
+//         case CUATRO_CUATRO_DOS:
+//            posiciones.addAll(Arrays.asList(
+//                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
+//                PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA,
+//                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
+//                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
+//            break;
+//         case TRES_CINCO_DOS:
+//            posiciones.addAll(Arrays.asList(
+//                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
+//                PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
+//                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
+//                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
+//            break;
+//         case CINCO_TRES_DOS:
+//            posiciones.addAll(Arrays.asList(
+//                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
+//                PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
+//                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
+//                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
+//            break;
+//         case TRES_CUATRO_TRES:
+//            posiciones.addAll(Arrays.asList(
+//                PosicionEnum.ARQUERO, PosicionEnum.DEFENSOR, PosicionEnum.DEFENSOR,
+//                PosicionEnum.DEFENSOR, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA,
+//                PosicionEnum.MEDIOCAMPISTA, PosicionEnum.MEDIOCAMPISTA, PosicionEnum.DELANTERO,
+//                PosicionEnum.DELANTERO, PosicionEnum.DELANTERO));
+//            break;
+//         default:
+//            break;
+//      }
+//      return posiciones;
+//   }
 
    private List<PosicionJugadorDTO> convertFormacionesToAlineacion(List<FormacionEquipo> formaciones) {
       return formaciones.stream()
           .map(fe -> {
              PosicionJugadorDTO dto = new PosicionJugadorDTO();
-             dto.setJugadorId(fe.getJugador() != null ? fe.getJugador().getId() : null);
+             dto.setJugadorId(fe.getJugador().getId());
              dto.setPosicionEnCampo(fe.getPosicionEnCampo());
-             if (fe.getJugador() != null) {
-                JugadorDTO jugadorDTO = new JugadorDTO();
-                jugadorDTO.setId(fe.getJugador().getId());
-                jugadorDTO.setNombre(fe.getJugador().getNombre());
-                jugadorDTO.setApellido(fe.getJugador().getApellido());
-                jugadorDTO.setImagen(fe.getJugador().getImagen());
-                jugadorDTO.setNumeroCamiseta(fe.getJugador().getNumeroCamiseta());
-                jugadorDTO.setRating(fe.getJugador().getRating());
-                jugadorDTO.setEstadoFisico(fe.getJugador().getEstadoFisico());
-                jugadorDTO.setEquipo(fe.getEquipo().convertToDTO());
-                dto.setJugador(jugadorDTO);
-             }
+             dto.setJugador(fe.getJugador().convertToDTO());
              return dto;
           })
           .collect(Collectors.toList());

@@ -74,27 +74,27 @@ public class Jugador {
    private Equipo equipo;
 
 
-   public JugadorDTO convertToDTO(Jugador jugador) {
+   public JugadorDTO convertToDTO() {
       JugadorDTO dto = new JugadorDTO();
-      dto.setId(jugador.getId());
-      dto.setNombre(jugador.getNombre());
-      dto.setApellido(jugador.getApellido());
-      dto.setImagen(jugador.getImagen());
-      dto.setEdad(jugador.getEdad());
-      dto.setNumeroCamiseta(jugador.getNumeroCamiseta());
-      dto.setRating(jugador.getRating());
-      dto.setEstadoFisico(jugador.getEstadoFisico());
-      dto.setLesionado(jugador.getLesionado());
-      dto.setPaisOrigen(jugador.getPais());
+      dto.setId(this.getId());
+      dto.setNombre(this.getNombre());
+      dto.setApellido(this.getApellido());
+      dto.setImagen(this.getImagen());
+      dto.setEdad(this.getEdad());
+      dto.setNumeroCamiseta(this.getNumeroCamiseta());
+      dto.setRating(this.getRating());
+      dto.setEstadoFisico(this.getEstadoFisico());
+      dto.setLesionado(this.getLesionado());
+      dto.setPaisOrigen(this.getPais());
 
-      dto.setRarezaJugador(jugador.getRarezaJugador());
-      dto.setPosicionNatural(jugador.getPosicion());
+      dto.setRarezaJugador(this.getRarezaJugador());
+      dto.setPosicionNatural(this.getPosicion());
 
 
 
-      if (jugador.getEquipo() != null) {
+      if (this.getEquipo() != null) {
          EquipoDTO equipoDTO = new EquipoDTO();
-         dto.setEquipo(equipoDTO.convertFromEntity(jugador.getEquipo()));
+         dto.setEquipo(equipoDTO.convertFromEntity(this.getEquipo()));
       }
 
       return dto;

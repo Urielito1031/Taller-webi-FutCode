@@ -51,5 +51,4 @@ public class SorteoServiceImpl {
                 .limit(cantidad)
                 .collect(Collectors.toList());
     }
-
 }

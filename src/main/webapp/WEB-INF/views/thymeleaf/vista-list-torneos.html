@@ -1,59 +1,63 @@
 <div th:fragment="torneoList">
-  <main class="container py-5">
-    <header class="text-center mb-5">
-      <h1 class="display-4 fw-bold text-primary">
-        <i class="bi bi-trophy me-2"></i>Torneos
-      </h1>
-    </header>
+    <main class="contenedor-principal-torneos">
+        <header class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">
+                <i class="bi bi-trophy me-2"></i>Torneos
+            </h1>
+        </header>
 
-    <section class="row g-4">
-      <article th:each="torneo : ${torneos}" class="col-12 col-md-6 col-lg-4">
-        <div class="torneo-card card h-100 shadow-sm position-relative">
+        <div class="contenedores row">
+            <section class="contenedor-torneo col-12 col-md-6 col-lg-4 mb-4" th:each="torneo : ${torneos}">
+                    <div class="torneo-card card h-100 shadow-sm position-relative">
+                        <!-- Estado del torneo -->
+                        <th:block th:switch="${torneo.estado.name()}">
+                            <div th:case="'ABIERTO'" class="estado-badge position-absolute bg-success">
+                                <i class="bi bi-unlock"></i> Abierto
+                            </div>
+                            <div th:case="'EN_CURSO'" class="estado-badge position-absolute bg-warning">
+                                <i class="bi bi-clock-history"></i> En curso
+                            </div>
+                            <div th:case="*" class="estado-badge position-absolute bg-danger">
+                                <i class="bi bi-lock"></i> Cerrado
+                            </div>
+                        </th:block>
 
-          <!-- Estado del torneo -->
-          <th:block th:switch="${torneo.estado.name()}">
-            <div th:case="'ABIERTO'" class="estado-badge position-absolute bg-success">
-              <i class="bi bi-unlock"></i> Abierto
-            </div>
-            <div th:case="'EN_CURSO'" class="estado-badge position-absolute bg-warning">
-              <i class="bi bi-clock-history"></i> En curso
-            </div>
-            <div th:case="*" class="estado-badge position-absolute bg-danger">
-              <i class="bi bi-lock"></i> Cerrado
-            </div>
-          </th:block>
+                        <div class="card-body d-flex flex-column">
+                            <h2 class="h4 mb-3" th:text="${torneo.nombre}">
+                                Nombre del Torneo
+                            </h2>
+                            <p class="text-muted small mb-3 overflow-auto"
+                               style="max-height: 100px;"
+                               th:text="${torneo.descripcion}">>
+                                Descripción del torneo
+                            </p>
 
-          <div class="card-body d-flex flex-column">
-            <h2 class="h4 mb-3" th:text="${torneo.nombre}">Nombre del Torneo</h2>
-            <p class="text-muted small mb-3" th:text="${torneo.descripcion}">Descripción del torneo</p>
+                            <!-- Formato del torneo -->
+                            <th:block th:if="${torneo.formatoTorneo != null}">
+                                <div class="bg-light p-3 rounded mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h3 class="h6 mb-0">
+                                            <i class="bi bi-diagram-3 me-2"></i>
+                                            <span th:text="${torneo.formatoTorneo.tipo.name() == 'LIGA'} ? 'Liga' : 'Copa'">
+                                                Tipo
+                                            </span>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </th:block>
+                            <a th:if="${torneo.estado.name() == 'ABIERTO'}"
+                               th:href="@{/detalle-torneo/{id}(id=${torneo.id})}"
+                               class="btn btn-primary w-100 mt-3">
+                                Ver detalle
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
 
-            <!-- Formato del torneo -->
-            <th:block th:if="${torneo.formatoTorneo != null}">
-              <div class="bg-light p-3 rounded mb-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h3 class="h6 mb-0">
-                    <i class="bi bi-diagram-3 me-2"></i>
-                    <span th:text="${torneo.formatoTorneo.tipo.name() == 'LIGA'} ? 'Liga' : 'Copa'">Tipo</span>
-                  </h3>
-
-                </div>
-
-              </div>
-            </th:block>
- <a
-         th:if="${torneo.estado.name() == 'ABIERTO'}"
-         th:href="@{/detalle-torneo/{id}(id=${torneo.id})}"
-         class="btn btn-primary w-100 mt-3">Ver detalle<i class="bi bi-arrow-right ms-2"></i>
- </a>
-          </div>
+            </section>
         </div>
-      </article>
-    </section>
-
-
-    <div th:if="${torneos == null or #lists.isEmpty(torneos)}"
-         class="alert alert-info">
-      No hay torneos disponibles
-    </div>
-  </main>
+        <div th:if="${torneos == null or #lists.isEmpty(torneos)}" class="alert alert-info">
+            No hay torneos disponibles
+        </div>
+    </main>
 </div>

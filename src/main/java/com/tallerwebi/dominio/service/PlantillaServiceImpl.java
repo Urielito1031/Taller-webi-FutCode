@@ -8,7 +8,6 @@ import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.FormacionEquipoRepository;
 import com.tallerwebi.presentacion.dto.EsquemaDTO;
-import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,19 +36,16 @@ public class PlantillaServiceImpl implements PlantillaService {
       formacion.setId(1L);
       formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
       formacion.setAlineacion(new ArrayList<>());
-      //a cambiar por el equipo del usuario real
       formacion.setEquipoId(1L);
 
 
       Long equipoId = 1L;
       List<FormacionEquipo> formaciones = formacionEquipoRepository.findByEquipoId(equipoId);
       if (!formaciones.isEmpty()) {
-         System.out.println("esquema no vacio xe"+ formaciones);
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
          formacion.setEsquema(detectarEsquema(formaciones));
       }
 
-         System.out.println("esquema vacio: "+ formacion.getAlineacion());
       return formacion;
    }
 
@@ -80,7 +76,6 @@ public class PlantillaServiceImpl implements PlantillaService {
          formacionEquipoRepository.save(formacionEquipo);
       }
 
-      System.out.println("Formación guardada exitosamente para equipo ID: " + equipoId);
       return true;
    }
 
@@ -99,6 +94,44 @@ public class PlantillaServiceImpl implements PlantillaService {
    private boolean equipoExists(Long equipoId){
       return  equipoRepository.existsById(equipoId);
 
+   }
+
+   private List<PosicionJugadorDTO> convertFormacionesToAlineacion(
+     List<FormacionEquipo> formaciones) {
+      return formaciones.stream()
+          .map(fe -> {
+             PosicionJugadorDTO dto = new PosicionJugadorDTO();
+             dto.setJugadorId(fe.getJugador().getId());
+             dto.setPosicionEnCampo(fe.getPosicionEnCampo());
+             dto.setJugador(fe.getJugador().convertToDTO());
+             return dto;
+          })
+          .collect(Collectors.toList());
+   }
+   private FormacionEsquema detectarEsquema(List<FormacionEquipo> formaciones) {
+      if (formaciones == null || formaciones.isEmpty()) {
+         //evitar que se rompa algo :_)
+         return FormacionEsquema.CUATRO_TRES_TRES;
+      }
+
+      long defensores = formaciones.stream().filter(
+        fe -> fe.getPosicionEnCampo() == PosicionEnum.DEFENSOR).count();
+
+      long mediocampistas = formaciones.stream().filter(
+        fe -> fe.getPosicionEnCampo() == PosicionEnum.MEDIOCAMPISTA).count();
+
+      long delanteros = formaciones.stream().filter(
+        fe -> fe.getPosicionEnCampo() == PosicionEnum.DELANTERO).count();
+
+      //comparar con los atributos correspondientes del enum, ya que usan
+      for (FormacionEsquema esquema : FormacionEsquema.values()) {
+         if (esquema.getDefensas() == defensores &&
+           esquema.getMediocampistas() == mediocampistas &&
+           esquema.getDelanteros() == delanteros) {
+            return esquema;
+         }
+      }
+      return FormacionEsquema.CUATRO_TRES_TRES;
    }
 
 //   @Override
@@ -162,41 +195,4 @@ public class PlantillaServiceImpl implements PlantillaService {
 //      }
 //      return posiciones;
 //   }
-
-   private List<PosicionJugadorDTO> convertFormacionesToAlineacion(List<FormacionEquipo> formaciones) {
-      return formaciones.stream()
-          .map(fe -> {
-             PosicionJugadorDTO dto = new PosicionJugadorDTO();
-             dto.setJugadorId(fe.getJugador().getId());
-             dto.setPosicionEnCampo(fe.getPosicionEnCampo());
-             dto.setJugador(fe.getJugador().convertToDTO());
-             return dto;
-          })
-          .collect(Collectors.toList());
-   }
-   private FormacionEsquema detectarEsquema(List<FormacionEquipo> formaciones) {
-      if (formaciones == null || formaciones.isEmpty()) {
-         //evitar que se rompa algo :_)
-         return FormacionEsquema.CUATRO_TRES_TRES;
-      }
-
-      long defensores = formaciones.stream().filter(
-        fe -> fe.getPosicionEnCampo() == PosicionEnum.DEFENSOR).count();
-
-      long mediocampistas = formaciones.stream().filter(
-        fe -> fe.getPosicionEnCampo() == PosicionEnum.MEDIOCAMPISTA).count();
-
-      long delanteros = formaciones.stream().filter(
-        fe -> fe.getPosicionEnCampo() == PosicionEnum.DELANTERO).count();
-
-      //comparar con los atributos correspondientes del enum, ya que usan
-      for (FormacionEsquema esquema : FormacionEsquema.values()) {
-         if (esquema.getDefensas() == defensores &&
-           esquema.getMediocampistas() == mediocampistas &&
-           esquema.getDelanteros() == delanteros) {
-            return esquema;
-         }
-      }
-      return FormacionEsquema.CUATRO_TRES_TRES;
-   }
 }

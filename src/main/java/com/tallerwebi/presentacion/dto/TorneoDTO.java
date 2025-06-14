@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -32,6 +33,15 @@ public class TorneoDTO {
 
    }
 
+   @Override
+   public boolean equals(Object o){
+      if(o == null || getClass() != o.getClass()) return false;
+      TorneoDTO torneoDTO = (TorneoDTO) o;
+      return Objects.equals(id,torneoDTO.id) ;
+   }
 
-
-}
+   @Override
+   public int hashCode(){
+      return Objects.hash(id);
+   }
+     }

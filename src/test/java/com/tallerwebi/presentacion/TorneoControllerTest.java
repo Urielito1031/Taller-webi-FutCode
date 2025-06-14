@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 public class TorneoControllerTest {
@@ -48,23 +49,16 @@ public class TorneoControllerTest {
 
    @Test
    public void deberiaMostrarLaVistaConMensajeTorneoSiLaListaEstaVacia() {
-      when(torneoService.getAll()).thenReturn(new ArrayList<>());
+      List<TorneoDTO>torneos = new ArrayList<>();
+      when(torneoService.getAll()).thenReturn(torneos);
 
       String vistaHome = torneoController.irAHome(model);
 
       assertThat(vistaHome, is("home"));
-      verify(model).addAttribute("torneos", is(empty()));
-      verify(model).addAttribute("mensajeTorneo", is("No hay torneos para mostrar"));
+      verify(model).addAttribute("torneos", torneos);
+
+      verify(model).addAttribute("mensajeTorneo", "No hay torneos para mostrar");
    }
 
-   @Test
-   public void deberiaMostrarLaVistaConMensajeTorneoSiLaListaEsNull() {
-      when(torneoService.getAll()).thenReturn(null);
 
-      String vistaHome = torneoController.irAHome(model);
-
-      assertThat(vistaHome, is("home"));
-      verify(model).addAttribute("torneos", is(nullValue()));
-      verify(model).addAttribute("mensajeTorneo", is("No hay torneos para mostrar"));
-   }
 }

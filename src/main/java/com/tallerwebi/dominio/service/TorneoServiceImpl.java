@@ -28,16 +28,10 @@ public class TorneoServiceImpl implements TorneoService{
       this.repoFormatoTorneo = repoFormatoTorneo;
    }
 
-
-
-
-
    @Override
    public List<TorneoDTO> getAll() {
       List<Torneo> torneos = repository.findAll();
-      if(torneos == null || torneos.isEmpty()){
-         return new ArrayList<>();
-      }
+
       return torneos.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());

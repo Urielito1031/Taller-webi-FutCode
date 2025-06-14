@@ -92,58 +92,64 @@
           <a href="plantilla" class="plantilla">Ver mi plantilla</a>
         </div>
 
-        <div class="col-md-6">
-          <div class="seccion-home sh2">
-            <div class="card-header bg-primary text-white">
-              <i class="bi bi-heart-pulse"></i> Estado del Equipo
-            </div>
 
-            <div class="card-body">
-              <div id="titulo-informacion">
-                <h6 class="titulo-seccion">Stamina General</h6>
-                <div class="info-popup-container">
-                  <i class="info-popup">i</i>
-                  <span class="info-popup-texto"
-                  >El valor de la stamina general se calcula mediante el
-                      estado físico general de los jugadores de tu equipo.</span
-                  >
-                </div>
-              </div>
+<!--        COMENTADO PORQUE ESTA HARDCODEADO-->
+<!--        <div class="col-md-6">-->
+<!--          <div class="seccion-home sh2">-->
+<!--            <div class="card-header bg-primary text-white">-->
+<!--              <i class="bi bi-heart-pulse"></i> Estado del Equipo-->
+<!--            </div>-->
 
-              <div class="progress">
-                <div class="progress-bar" style="width: 78%">
-                  <span id="porcentaje">78%</span>
-                </div>
-              </div>
-              <hr />
-              <h6 class="titulo-seccion">Lesionados</h6>
-              <div class="sector-lesionados-scroll">
-                <div class="lesionado">
-                  Lionel Messi
-                  <span class="badge bg-danger">5 días</span>
-                </div>
-                <div class="lesionado">
-                  Cristiano Ronaldo
-                  <span class="badge bg-danger">2 días</span>
-                </div>
-                <div class="lesionado">
-                  Ronaldinho
-                  <span class="badge bg-danger">2 semanas</span>
-                </div>
-                <div class="lesionado">
-                  Neymar JR
-                  <span class="badge bg-danger">2 años</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+<!--            <div class="card-body">-->
+<!--              <div id="titulo-informacion">-->
+<!--                <h6 class="titulo-seccion">Stamina General</h6>-->
+<!--                <div class="info-popup-container">-->
+<!--                  <i class="info-popup">i</i>-->
+<!--                  <span class="info-popup-texto"-->
+<!--                  >El valor de la stamina general se calcula mediante el-->
+<!--                      estado físico general de los jugadores de tu equipo.</span-->
+<!--                  >-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <div class="progress">-->
+<!--                <div class="progress-bar" style="width: 78%">-->
+<!--                  <span id="porcentaje">78%</span>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <hr />-->
+<!--              <h6 class="titulo-seccion">Lesionados</h6>-->
+<!--              <div class="sector-lesionados-scroll">-->
+<!--                <div class="lesionado">-->
+<!--                  Lionel Messi-->
+<!--                  <span class="badge bg-danger">5 días</span>-->
+<!--                </div>-->
+<!--                <div class="lesionado">-->
+<!--                  Cristiano Ronaldo-->
+<!--                  <span class="badge bg-danger">2 días</span>-->
+<!--                </div>-->
+<!--                <div class="lesionado">-->
+<!--                  Ronaldinho-->
+<!--                  <span class="badge bg-danger">2 semanas</span>-->
+<!--                </div>-->
+<!--                <div class="lesionado">-->
+<!--                  Neymar JR-->
+<!--                  <span class="badge bg-danger">2 años</span>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
 
       <!-- fragmento de torneos -->
-        <div th:replace="~{vista-list-torneos :: torneoList}"></div>
 
-      </div>
+        <div th:if="${mensajeTorneo}" class="alert alert-info" role="alert"
+             th:text="${mensajeTorneo}">
+          </div>
+      <div th:replace="~{vista-list-torneos :: torneoList}"></div>
+
+
     </div>
   </div>
 </main>

@@ -21,6 +21,7 @@ public class TorneoRepositoryImpl implements TorneoRepository{
    }
 
 
+   //nota, nunca devuelve null, devuelve una lista vacia []
    @Override
    public List<Torneo> findAll() {
       return getSession().createQuery("from Torneo",Torneo.class).list();

@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class ServicioLoginImpl implements ServicioLogin {
 
-    private RepositorioUsuario repositorioUsuario;
+    private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
     public ServicioLoginImpl(RepositorioUsuario repositorioUsuario){

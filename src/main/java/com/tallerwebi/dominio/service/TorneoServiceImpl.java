@@ -35,8 +35,8 @@ public class TorneoServiceImpl implements TorneoService{
    @Override
    public List<TorneoDTO> getAll() {
       List<Torneo> torneos = repository.findAll();
-      if(torneos.isEmpty()){
-         return null;
+      if(torneos == null || torneos.isEmpty()){
+         return new ArrayList<>();
       }
       return torneos.stream()
             .map(this::convertToDTO)

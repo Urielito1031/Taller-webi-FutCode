@@ -1,7 +1,7 @@
 describe("FutCode", function() {
    let $field, $card, $marker;
 
-   beforeEach(function(done) {
+   beforeEach(function() {
       // Configura el DOM simulado para las pruebas
       $("body").append(`
          <div id="field" class="field-area ratio ratio-16x9 ui-droppable" data-esquema="4-3-3" data-equipo-id="1" data-default-img="/spring/img/jugadores/futbolista-default.png" style="position: relative; width: 800px; height: 450px;"></div>
@@ -29,7 +29,10 @@ describe("FutCode", function() {
       $field = $("#field");
       $card = $(".player-card");
       $marker = $('<div class="position-marker default-marker" id="marker-delantero-123456789" style="position: absolute; left: 70%; top: 70%; width: 50px; height: 50px;"></div>')
-         .append('<img class="marker-img" alt="Delantero" /><div class="marker-number"></div><div class="marker-rating"></div><div class="marker-name"></div>');
+         .append('<img class="marker-img" alt="Delantero" />' +
+            '<div class="marker-number"></div>' +
+            '<div class="marker-rating"></div>' +
+            '<div class="marker-name">(apellido + numeroCamiseta)</div>');
 
       window.FutCode.setPlayersOnField(0);
 
@@ -37,9 +40,7 @@ describe("FutCode", function() {
       window.FutCode.PlayerInteraction.setupDraggablePlayers();
       window.FutCode.PlayerInteraction.setupDroppableField();
 
-      setTimeout(function() {
-         done();
-      }, 0);
+
    });
 
    afterEach(function() {
@@ -69,6 +70,7 @@ describe("FutCode", function() {
       $field.append($marker);
       window.FutCode.PlayerInteraction.assignPlayer($marker, $card);
 
+      //previamente debe estar cargado el jugador para que no se rompa (cargado en beforeEach())
       expect($marker.hasClass("occupied")).toBe(true);
       expect($marker.data("occupied")).toBe(true);
       expect($marker.data("player-id")).toBe("9");

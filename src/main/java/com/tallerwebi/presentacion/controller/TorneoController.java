@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,13 +22,14 @@ public class TorneoController {
       this.service = service;
    }
 
-
-   @GetMapping("/torneos")
-   public String listarTorneos(Model model) {
+   @GetMapping(path = "/home")
+   public String irAHome(Model model) {
       List<TorneoDTO> torneos = service.getAll();
-      model.addAttribute("torneos", torneos);
-      model.addAttribute("tiposFormato", TipoFormato.values());
-      return "vista-list-torneos";
+      if(torneos.isEmpty()){
+         model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
+      }
+      model.addAttribute("torneos",torneos);
+      return "home";
    }
 
    @GetMapping("/detalle-torneo/{id}")

@@ -16,6 +16,9 @@ public class EquipoTorneoDTO {
     private int golesEnContra;
     private int puntos;
 
+    private TorneoDTO torneoDTO;
+    private EquipoDTO equipoDTO;
+
     public EquipoTorneoDTO(int posicion, String nombre,int partidosJugados, int partidosGanados, int partidosEmpatados, int partidosPerdidos, int golesAFavor, int golesEnContra, int puntos) {
         this.nombre = nombre;
         this.posicion = posicion;
@@ -29,8 +32,9 @@ public class EquipoTorneoDTO {
     }
 
     public EquipoTorneoDTO() {
-
     }
+
+
 
     public int getDg() {
         return golesAFavor - golesEnContra;

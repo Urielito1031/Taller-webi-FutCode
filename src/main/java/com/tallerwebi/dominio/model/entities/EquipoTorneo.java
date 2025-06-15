@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -59,5 +60,22 @@ public class EquipoTorneo {
    @ManyToOne(fetch = FetchType.LAZY, optional = false)
    @JoinColumn(name = "equipo_id", nullable = false)
    private Equipo equipo;
+
+
+   public EquipoTorneoDTO convertToDTO() {
+      EquipoTorneoDTO equipoTorneoDTO = new EquipoTorneoDTO();
+      equipoTorneoDTO.setId(this.id);
+      equipoTorneoDTO.setPosicion(this.posicion);
+      equipoTorneoDTO.setPartidosJugados(this.partidosJugados);
+      equipoTorneoDTO.setPartidosGanados(this.partidosGanados);
+      equipoTorneoDTO.setPartidosEmpatados(this.partidosEmpatados);
+      equipoTorneoDTO.setPartidosPerdidos(this.partidosPerdidos);
+      equipoTorneoDTO.setGolesAFavor(this.golesAFavor);
+      equipoTorneoDTO.setGolesEnContra(this.golesEnContra);
+      equipoTorneoDTO.setPuntos(this.puntos);
+      equipoTorneoDTO.setEquipoDTO(this.equipo.convertToDTO());
+      equipoTorneoDTO.setTorneoDTO(this.torneo.convertToDTO());
+      return equipoTorneoDTO;
+   }
 
 }

@@ -29,7 +29,8 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
       return getSession().createQuery(
         "FROM EquipoTorneo et " +
           "WHERE et.torneo.id = :torneoId",
-            EquipoTorneo.class).list();
+            EquipoTorneo.class
+      ).list();
    }
 
    private Session getSession(){

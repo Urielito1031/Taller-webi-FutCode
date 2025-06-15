@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.model.entities;
 
 import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
+import com.tallerwebi.presentacion.dto.FormatoTorneoDTO;
+import com.tallerwebi.presentacion.dto.TorneoDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,5 +50,20 @@ public class Torneo {
 
    public String toString(){
       return "id: "+id+",\n nombre: "+nombre+", \ndescripcion: "+descripcion+ "\nformato: "+formatoTorneo+", \nestado: "+estado;
+   }
+
+   public TorneoDTO convertToDTO() {
+      TorneoDTO dto = new TorneoDTO();
+      dto.setId(this.getId());
+      dto.setNombre(this.getNombre());
+      dto.setEstado(this.getEstado());
+      dto.setDescripcion(this.getDescripcion());
+
+      FormatoTorneoDTO formatoDTO = new FormatoTorneoDTO();
+      FormatoTorneo formato = this.getFormatoTorneo();
+      formatoDTO.setTipo(formato.getTipo());
+      dto.setFormatoTorneo(formatoDTO);
+
+      return dto;
    }
 }

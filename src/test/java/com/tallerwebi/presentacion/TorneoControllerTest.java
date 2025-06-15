@@ -49,16 +49,45 @@ public class TorneoControllerTest {
 
    @Test
    public void deberiaMostrarLaVistaConMensajeTorneoSiLaListaEstaVacia() {
-      List<TorneoDTO>torneos = new ArrayList<>();
-      when(torneoService.getAll()).thenReturn(torneos);
+      when(torneoService.getAll()).thenReturn(new ArrayList<>());
 
       String vistaHome = torneoController.irAHome(model);
 
       assertThat(vistaHome, is("home"));
-      verify(model).addAttribute("torneos", torneos);
+      verify(model).addAttribute("torneos", new ArrayList<>());
 
       verify(model).addAttribute("mensajeTorneo", "No hay torneos para mostrar");
    }
 
+   @Test
+   public void deberiaMostrarDetalleTorneoCuandoSeVerificaUnIdValido(){
+      Long idTorneo = 1L;
+
+      TorneoDTO torneo = new TorneoDTO();
+      torneo.setId(idTorneo);
+
+      when(torneoService.getById(idTorneo)).thenReturn(torneo);
+
+
+      String vistaDetalleTorneo = torneoController.unirseTorneo(idTorneo, model);
+      verify(torneoService).getById(idTorneo);
+
+      verify(model).addAttribute("torneo", torneo);
+
+      assertThat(vistaDetalleTorneo,is("detalle-torneo"));
+   }
+   @Test
+   public void deberiaRetornarNullSiElTorneoNoExisteAlVerDetalle() {
+      Long idInexistente = 99L;
+      when(torneoService.getById(idInexistente)).thenReturn(null);
+
+      String vistaDetalle = torneoController.unirseTorneo(idInexistente, model);
+
+      verify(torneoService).getById(idInexistente);
+
+      verify(model, never()).addAttribute(eq("torneo"), any(TorneoDTO.class));
+     assertThat(vistaDetalle, is("detalle-torneo"));
+
+   }
 
 }

@@ -4,8 +4,7 @@ import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Objects;
 
 @Getter

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
@@ -38,6 +37,7 @@ public class TorneoControllerTest {
    public void deberiaMostrarLaVistaConTorneosSiLaListaNoEsVacia() {
       List<TorneoDTO> torneos = new ArrayList<>();
       torneos.add(new TorneoDTO());
+
       when(torneoService.getAll()).thenReturn(torneos);
 
       String vistaHome = torneoController.irAHome(model);

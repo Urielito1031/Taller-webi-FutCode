@@ -1,10 +1,8 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.model.entities.FormatoTorneo;
 import com.tallerwebi.dominio.model.entities.Torneo;
 
 import com.tallerwebi.dominio.repository.TorneoRepository;
-import com.tallerwebi.presentacion.dto.FormatoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

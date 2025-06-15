@@ -52,6 +52,7 @@ public class Torneo {
       return "id: "+id+",\n nombre: "+nombre+", \ndescripcion: "+descripcion+ "\nformato: "+formatoTorneo+", \nestado: "+estado;
    }
 
+
    public TorneoDTO convertToDTO() {
       TorneoDTO dto = new TorneoDTO();
       dto.setId(this.getId());

@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
 
 
@@ -30,7 +29,7 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
         "FROM EquipoTorneo et " +
           "WHERE et.torneo.id = :torneoId",
             EquipoTorneo.class
-      ).list();
+      ).setParameter("torneoId", torneoId).list();
    }
 
    private Session getSession(){

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -45,5 +46,11 @@ public class HibernateTestConfig {
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.hbm2ddl.auto", "create");
         return properties;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        System.out.println("Creating BCryptPasswordEncoder bean");
+        return new BCryptPasswordEncoder();
     }
 }

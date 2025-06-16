@@ -23,11 +23,12 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public Usuario buscarUsuario(String email, String password) {
+    public Usuario buscarUsuario(String email) {
 
-       return getCurrentSession().createQuery("FROM Usuario u WHERE u.email = :email AND u.password = :password", Usuario.class)
-             .setParameter("email",email)
-             .setParameter("password",password).
+       return getCurrentSession().createQuery(
+         "FROM Usuario u " +
+           "        WHERE u.email = :email", Usuario.class)
+             .setParameter("email",email).
              uniqueResult();
     }
 

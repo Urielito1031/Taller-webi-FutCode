@@ -11,4 +11,5 @@ public interface PlantillaService {
    Boolean save(EsquemaDTO formacion);
 
 
+   EsquemaDTO cargarFormacionPorEquipoId(Long equipoId);
 }

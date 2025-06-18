@@ -12,13 +12,15 @@ import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PlantillaServiceImpl implements PlantillaService {
+
 
    private final FormacionEquipoRepository formacionEquipoRepository;
    private final EquipoRepository equipoRepository;
@@ -49,6 +51,7 @@ public class PlantillaServiceImpl implements PlantillaService {
       return formacion;
    }
 
+
    @Override
    public Boolean save(EsquemaDTO formacion) {
       validateFormation(formacion);
@@ -77,6 +80,23 @@ public class PlantillaServiceImpl implements PlantillaService {
       }
 
       return true;
+   }
+
+   @Override
+   public EsquemaDTO cargarFormacionPorEquipoId(Long equipoId){
+      EsquemaDTO formacion = new EsquemaDTO();
+      formacion.setId(1L); //cambiar
+      formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
+      formacion.setAlineacion(new ArrayList<>());
+      formacion.setEquipoId(equipoId);
+
+      List<FormacionEquipo> formaciones = formacionEquipoRepository.findByEquipoId(equipoId);
+      if (!formaciones.isEmpty()) {
+         formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
+         formacion.setEsquema(detectarEsquema(formaciones));
+      }
+
+      return formacion;
    }
 
 

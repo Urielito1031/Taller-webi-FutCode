@@ -1,6 +1,5 @@
 package com.tallerwebi.integracion;
 
-import com.tallerwebi.config.SecurityConfig;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import com.tallerwebi.dominio.model.entities.Usuario;

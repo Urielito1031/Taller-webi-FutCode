@@ -48,21 +48,21 @@
 
    <!-- Listado de jugadores -->
    <div class="player-list d-flex overflow-auto py-3">
-      <div th:each="posicionJugador, stat : ${formacion.alineacion}" class="player-item flex-shrink-0">
-         <div class="player-card" draggable="true" th:attr="data-player-id=${posicionJugador.jugador.id}">
+      <div th:each="jugador, stat : ${jugadores}" class="player-item flex-shrink-0">
+         <div class="player-card" draggable="true" th:attr="data-player-id=${jugador.id}">
             <div class="player-image">
-               <img th:src="@{'/img/jugadores/' + ${posicionJugador.jugador.imagen}}" alt="Imagen futbolista" class="card-img" />
+               <img th:src="@{'/img/jugadores/' + ${jugador.imagen}}" alt="Imagen futbolista" class="card-img" />
             </div>
             <div class="player-info p-3">
                <div class="player-header d-flex justify-content-between align-items-center mb-2">
-                  <span class="player-number" th:text="${posicionJugador.jugador.numeroCamiseta}"></span>
-                  <span class="player-rating" th:text="${posicionJugador.jugador.rating}"></span>
+                  <span class="player-number" th:text="${jugador.numeroCamiseta}"></span>
+                  <span class="player-rating" th:text="${jugador.rating}"></span>
                </div>
-               <h6 th:text="${posicionJugador.jugador.nombre} + ' ' + ${posicionJugador.jugador.apellido}" class="player-name mb-1"></h6>
+               <h6 th:text="${jugador.nombre} + ' ' + ${jugador.apellido}" class="player-name mb-1"></h6>
                <div class="player-details">
-                  <small th:text="${posicionJugador.posicionEnCampo}" class="d-block"></small>
-                  <small th:text="${posicionJugador.jugador.equipo?.nombre ?: 'Sin club'}" class="d-block"></small>
-                  <small th:text="'Estado: ' + ${posicionJugador.jugador.estadoFisico} + '%'" class="d-block"></small>
+                  <small th:text="${jugador.posicionNatural}" class="d-block"></small>
+                  <small th:text="${jugador.equipo?.nombre ?: 'Sin club'}" class="d-block"></small>
+                  <small th:text="'Estado: ' + ${jugador.estadoFisico} + '%'" class="d-block"></small>
                </div>
             </div>
          </div>

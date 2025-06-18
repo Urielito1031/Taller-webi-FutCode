@@ -37,6 +37,19 @@ public class EquipoDTO {
         return total/jugadores.size();
     }
 
+
+    @Override
+    public String toString() {
+        return "EquipoDTO{" +
+          "id=" + (id != null ? id : "null") +
+          ", nombre='" + (nombre != null ? nombre : "null") + '\'' +
+          ", club=" + (club != null ? club : "null") +
+          ", jugadores=" + (jugadores != null ? jugadores : "null") +
+          ", ratingEquipo=" + (ratingEquipo != null ? ratingEquipo : "null") +
+          ", formacionActual=" + (formacionActual != null ? formacionActual : "null") +
+                          '}';
+    }
+
 //todavia no tiene logica
     public Equipo convertToEntity(EquipoDTO equipo){
    return null;

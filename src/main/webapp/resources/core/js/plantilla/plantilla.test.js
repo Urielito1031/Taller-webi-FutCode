@@ -26,6 +26,12 @@ describe("FutCode", function() {
          </div>
       `);
 
+      //me pide inicializarlo por usar el metodo TeamFormation.initializeField(); pero no lo necesito
+      window.alineacionPersistida = [
+         { jugadorId: "1" }, { jugadorId: "2" }, { jugadorId: "3" }, { jugadorId: "4" }, { jugadorId: "5" },
+         { jugadorId: "6" }, { jugadorId: "7" }, { jugadorId: "8" }, { jugadorId: "9" }, { jugadorId: "10" },
+         { jugadorId: "11" },
+      ];
       $field = $("#field");
       $card = $(".player-card");
       $marker = $('<div class="position-marker default-marker" id="marker-delantero-123456789" style="position: absolute; left: 70%; top: 70%; width: 50px; height: 50px;"></div>')
@@ -122,10 +128,10 @@ describe("FutCode", function() {
    it("debe inicializar el campo con marcadores para una formación 4-3-3", function() {
 
       //simulamos 11 jugadores, validamos que la clase player-card se encuentre
-      for (let i = 1; i < 11; i++) {
+      for (let i = 1; i <= 11; i++) {
          $(".player-list").append(`
             <div class="player-item flex-shrink-0">
-               <div class="player-card" data-player-id="1">
+               <div class="player-card" data-player-id="${i}">
                  
                </div>
             </div>
@@ -140,6 +146,7 @@ describe("FutCode", function() {
       const marcadores = $field.find(".position-marker");
       expect(marcadores.length).toBe(11);
 
+      //este da error
       expect(marcadores.filter(".occupied").length).toBe(11);
 
       expect(window.FutCode.getPlayersOnField()).toBe(11);

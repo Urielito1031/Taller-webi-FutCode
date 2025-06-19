@@ -10,6 +10,7 @@
 <body th:style="'background: url(' + @{/img/plantilla-fondo.jpg} + ') no-repeat center center fixed; background-size: cover; min-height: 100vh;'">
 
 <div class="container main-container">
+   <!-- Mensajes de éxito o error -->
    <div th:if="${message}" class="alert alert-success mt-3" role="alert">
       <span th:text="${message}"></span>
    </div>
@@ -19,7 +20,7 @@
 
    <!-- Encabezado -->
    <header class="header text-center py-4">
-      <a th:href="@{/home}">VOLVER</a>
+      <a th:href="@{/home}" class="btn btn-secondary mb-2">VOLVER</a>
       <h1 class="header-title">¡FORMACIÓN DE TU EQUIPO!</h1>
       <div class="formation-buttons d-flex justify-content-center gap-2 mt-3">
          <a th:each="esquema : ${esquemas}"
@@ -38,45 +39,45 @@
    </header>
 
    <!-- Área del campo -->
-   <div class="field-area ratio ratio-16x9" id="field"
+   <div class="field-area ratio ratio-16x9 mb-4" id="field"
         th:style="'background: url(' + @{/img/cancha-futbol.jpg} + ') no-repeat center center; background-size: cover;'"
-        th:attr="data-esquema=${formacion.esquema.getFormacionTexto() },
-                  data-equipo-id=${ formacion.equipoId},
-
+        th:attr="data-esquema=${formacion.esquema.getFormacionTexto()},
+                  data-equipo-id=${formacion.equipoId},
                   data-default-img=@{/img/jugadores/futbolista-default.png}">
    </div>
 
-
-   <!-- Listado de jugadores -->
-   <div class="player-list d-flex overflow-auto py-3">
-      <div th:each="jugador, stat : ${jugadores}" class="player-item flex-shrink-0">
-         <div class="player-card" draggable="true" th:attr="data-player-id=${jugador.id}">
-            <div class="player-image">
-               <img th:src="@{'/img/jugadores/' + ${jugador.imagen}}" alt="Imagen futbolista" class="card-img" />
-            </div>
-            <div class="player-info p-3">
-               <div class="player-header d-flex justify-content-between align-items-center mb-2">
-                  <span class="player-number" th:text="${jugador.numeroCamiseta}"></span>
-                  <span class="player-rating" th:text="${jugador.rating}"></span>
+   <!-- Lista única de jugadores -->
+   <section class="player-section">
+      <h2 class="section-title">Plantilla del Equipo</h2>
+      <div class="player-list d-flex flex-wrap gap-3 py-3">
+         <div th:each="jugador : ${jugadores}" class="player-item">
+            <div class="player-card" draggable="true" th:attr="data-player-id=${jugador.id}">
+               <div class="player-image">
+                  <img th:src="@{'/img/jugadores/' + ${jugador.imagen}}" alt="Imagen futbolista" class="card-img" />
                </div>
-               <h6 th:text="${jugador.nombre} + ' ' + ${jugador.apellido}" class="player-name mb-1"></h6>
-               <div class="player-details">
-                  <small th:text="${jugador.posicionNatural}" class="d-block"></small>
-                  <small th:text="${jugador.equipo.nombre}" class="d-block"></small>
-                  <small th:text="'Estado: ' + ${jugador.estadoFisico} + '%'" class="d-block"></small>
+               <div class="player-info p-3">
+                  <div class="player-header d-flex justify-content-between align-items-center mb-2">
+                     <span class="player-number" th:text="${jugador.numeroCamiseta}"></span>
+                     <span class="player-rating" th:text="${jugador.rating}"></span>
+                  </div>
+                  <h6 th:text="${jugador.nombre} + ' ' + ${jugador.apellido}" class="player-name mb-1"></h6>
+                  <div class="player-details">
+                     <small th:text="${jugador.posicionNatural}" class="d-block"></small>
+                     <small th:text="${jugador.equipo?.nombre ?: 'Sin club'}" class="d-block"></small>
+                     <small th:text="'Estado: ' + ${jugador.estadoFisico} + '%'" class="d-block"></small>
+                  </div>
                </div>
             </div>
          </div>
       </div>
-   </div>
+   </section>
 </div>
 
 <!-- Scripts -->
 <script th:inline="javascript">
    const alineacionPersistida = [[${formacion.alineacion}]];
+   window.updateField = [[${updateField}]] || false;
 </script>
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script th:src="@{/js/plantilla/plantilla.js}"></script>

@@ -161,6 +161,27 @@
             const { defenders, midfielders, forwards } = this.parseFormation(formationText);
             const positions = PositionGenerator.getPositions(defenders, midfielders, forwards);
             this.placePlayers($field, positions);
+
+            // Cargar jugadores persistidos desde alineacionPersistida
+            if (alineacionPersistida && alineacionPersistida.length > 0) {
+               let cardIndex = 0;
+               const $cards = $(".player-card").not(".disabled-card");
+               alineacionPersistida.forEach((posicion, index) => {
+                  const playerId = posicion.jugadorId; // Usar jugadorId del DTO
+                  if (playerId) {
+                     const $card = $cards.filter(`[data-player-id="${playerId}"]`).first();
+                     if ($card.length && cardIndex < positions.goalkeeper.length + positions.defenders.length + positions.midfielders.length + positions.forwards.length) {
+                        const $marker = $field.find(".position-marker").eq(cardIndex);
+                        PlayerInteraction.assignPlayer($marker, $card);
+                        cardIndex++;
+                     }
+                  } else {
+                     console.warn(`Posición ${index} sin jugadorId válido en alineacionPersistida`);
+                  }
+               });
+            }
+            playersOnField = $field.find(".position-marker.occupied").length;
+            console.log(`Inicialización completa. playersOnField: ${playersOnField}`);
          },
          placePlayers($field, positions) {
             const $cards = $(".player-card").not(".disabled-card");
@@ -284,8 +305,17 @@
             return closest;
          },
          assignPlayer($marker, $card) {
-            const { imgSrc, number, rating, name, playerId } = $card.data();
+            const playerId = $card.data("player-id");
+            if (!playerId) {
+               console.error("No se puede asignar jugador: ID de jugador no encontrado.", $card);
+               return;
+            }
+            const imgSrc = $card.find(".card-img").attr("src") || DEFAULT_IMAGE_SRC;
+            const number = $card.find(".player-number").text() || "N/A";
+            const rating = $card.find(".player-rating").text() || "0";
+            const name = $card.find(".player-name").text() || "Jugador Desconocido";
             const lastName = name && typeof name === "string" ? name.split(" ").slice(-1)[0] : "Desconocido";
+
             $marker.find(".marker-number").text(number);
             $marker.find(".marker-rating").text(rating);
             $marker.find(".marker-name").text(`${lastName} ${number}`);
@@ -295,7 +325,7 @@
             playersOnField++;
             $card.addClass("disabled-card").draggable("disable");
             $marker.attr("title", "Doble clic para quitar");
-            console.log(`Jugador asignado. playersOnField: ${playersOnField}, imgSrc: ${imgSrc}`);
+            console.log(`Jugador asignado. playersOnField: ${playersOnField}, playerId: ${playerId}`);
          },
          setupClearFieldButton() {
             $("<button>", {

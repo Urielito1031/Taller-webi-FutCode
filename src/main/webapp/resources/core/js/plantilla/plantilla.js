@@ -34,6 +34,31 @@
          },
       };
 
+      // Utilidad para reiniciar tarjetas
+      const resetPlayerCards = () => {
+         const $cards = $(".player-card");
+         $cards.each(function() {
+            const $card = $(this);
+            $card.removeClass("disabled-card").css({
+               opacity: "1",
+               cursor: "grab",
+               pointerEvents: "auto",
+            });
+            $card.attr("title", "Arrastra al campo");
+            try {
+               $card.draggable("enable");
+            } catch (e) {
+               $card.draggable({
+                  revert: "invalid",
+                  helper: "clone",
+                  cursor: "grabbing",
+                  opacity: 0.8,
+                  zIndex: 100,
+               });
+            }
+         });
+      };
+
       // Genera posiciones para los marcadores en el campo
       const PositionGenerator = {
          getPositions(defenders, midfielders, forwards) {
@@ -115,6 +140,7 @@
             $marker.find(".marker-rating").text("");
             $marker.find(".marker-name").text("");
             $marker.removeClass("occupied").data("occupied", false);
+            $marker.find(".marker-img").removeClass("occupied");
             const playerId = $marker.data("player-id");
             const $card = this.findPlayerCard(playerId);
             this.resetPlayerCard($card);
@@ -126,23 +152,24 @@
             return playerId ? $(`.player-card[data-player-id="${playerId}"]`) : $();
          },
          resetPlayerCard($card) {
-            if (!$card.length) return;
-            $card.removeClass("disabled-card").css({
-               opacity: "1",
-               cursor: "grab",
-               pointerEvents: "auto",
-            });
-            $card.attr("title", "Arrastra al campo");
-            try {
-               $card.draggable("enable");
-            } catch (e) {
-               $card.draggable({
-                  revert: "invalid",
-                  helper: "clone",
-                  cursor: "grabbing",
-                  opacity: 0.8,
-                  zIndex: 100,
+            if ($card.length) {
+               $card.removeClass("disabled-card").css({
+                  opacity: "1",
+                  cursor: "grab",
+                  pointerEvents: "auto",
                });
+               $card.attr("title", "Arrastra al campo");
+               try {
+                  $card.draggable("enable");
+               } catch (e) {
+                  $card.draggable({
+                     revert: "invalid",
+                     helper: "clone",
+                     cursor: "grabbing",
+                     opacity: 0.8,
+                     zIndex: 100,
+                  });
+               }
             }
          },
       };
@@ -158,28 +185,93 @@
             }
             const equipoId = $field.data("equipo-id");
             console.log("EquipoId inicial desde data: " + equipoId);
+
+            resetPlayerCards();
             const { defenders, midfielders, forwards } = this.parseFormation(formationText);
             const positions = PositionGenerator.getPositions(defenders, midfielders, forwards);
-            this.placePlayers($field, positions);
 
-            // Cargar jugadores persistidos desde alineacionPersistida
+            // Priorizar alineación persistida si existe
             if (alineacionPersistida && alineacionPersistida.length > 0) {
+               console.log("Alineación persistida:", alineacionPersistida);
+               $field.find(".position-marker").remove();
                let cardIndex = 0;
                const $cards = $(".player-card").not(".disabled-card");
-               alineacionPersistida.forEach((posicion, index) => {
-                  const playerId = posicion.jugadorId; // Usar jugadorId del DTO
-                  if (playerId) {
-                     const $card = $cards.filter(`[data-player-id="${playerId}"]`).first();
-                     if ($card.length && cardIndex < positions.goalkeeper.length + positions.defenders.length + positions.midfielders.length + positions.forwards.length) {
-                        const $marker = $field.find(".position-marker").eq(cardIndex);
+               const totalMarkers = MAX_PLAYERS_ON_FIELD;
+
+               // Asignar arquero
+               if (cardIndex < totalMarkers && positions.goalkeeper.length > 0) {
+                  const player = alineacionPersistida[cardIndex];
+                  if (player && player.jugadorId) {
+                     const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+                     if ($card.length) {
+                        const $marker = MarkerFactory.create({ role: "Arquero", position: positions.goalkeeper[0] });
+                        $field.append($marker);
                         PlayerInteraction.assignPlayer($marker, $card);
                         cardIndex++;
+                     } else {
+                        console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
                      }
-                  } else {
-                     console.warn(`Posición ${index} sin jugadorId válido en alineacionPersistida`);
+                  }
+               }
+
+               // Asignar defensores
+               positions.defenders.forEach((position) => {
+                  if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
+                     const player = alineacionPersistida[cardIndex];
+                     if (player && player.jugadorId) {
+                        const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+                        if ($card.length) {
+                           const $marker = MarkerFactory.create({ role: "Defensor", position });
+                           $field.append($marker);
+                           PlayerInteraction.assignPlayer($marker, $card);
+                           cardIndex++;
+                        } else {
+                           console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
+                        }
+                     }
                   }
                });
+
+               // Asignar mediocampistas
+               positions.midfielders.forEach((position) => {
+                  if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
+                     const player = alineacionPersistida[cardIndex];
+                     if (player && player.jugadorId) {
+                        const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+                        if ($card.length) {
+                           const $marker = MarkerFactory.create({ role: "Mediocampista", position });
+                           $field.append($marker);
+                           PlayerInteraction.assignPlayer($marker, $card);
+                           cardIndex++;
+                        } else {
+                           console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
+                        }
+                     }
+                  }
+               });
+
+               // Asignar delanteros
+               positions.forwards.forEach((position) => {
+                  if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
+                     const player = alineacionPersistida[cardIndex];
+                     if (player && player.jugadorId) {
+                        const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+                        if ($card.length) {
+                           const $marker = MarkerFactory.create({ role: "Delantero", position });
+                           $field.append($marker);
+                           PlayerInteraction.assignPlayer($marker, $card);
+                           cardIndex++;
+                        } else {
+                           console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
+                        }
+                     }
+                  }
+               });
+            } else {
+               // Solo usar placePlayers si no hay alineación persistida
+               this.placePlayers($field, positions);
             }
+
             playersOnField = $field.find(".position-marker.occupied").length;
             console.log(`Inicialización completa. playersOnField: ${playersOnField}`);
          },
@@ -192,6 +284,7 @@
             }
             $field.find(".position-marker").remove();
             let cardIndex = 0;
+            console.log("Asignando jugadores iniciales:", $cards.map((i, el) => $(el).data("player-id")).get());
             this.placeGoalkeeper($field, positions.goalkeeper[0], $cards.eq(cardIndex++));
             cardIndex = this.placeRolePlayers($field, positions.defenders, "Defensor", $cards, cardIndex);
             cardIndex = this.placeRolePlayers($field, positions.midfielders, "Mediocampista", $cards, cardIndex);
@@ -280,7 +373,6 @@
                accept: ".player-card",
                tolerance: "touch",
                drop: (event, ui) => {
-
                   const $markers = $("#field .position-marker.default-marker:not(.occupied)");
                   const closest = this.findClosestMarker(event, $markers);
                   if (closest.marker && closest.distance < 80) {
@@ -336,6 +428,7 @@
          },
          clearField() {
             $(".position-marker.occupied").each((_, marker) => MarkerFactory.removePlayerFromMarker($(marker)));
+            resetPlayerCards();
             playersOnField = 0;
             console.log(`Campo limpiado. playersOnField: ${playersOnField}`);
          },
@@ -381,6 +474,8 @@
                      value: player.role,
                   }).appendTo("#form");
                });
+               // Reiniciar tras guardar y enviar
+               resetPlayerCards();
                this.submit();
             });
          },
@@ -388,6 +483,9 @@
 
       // Inicialización
       function init() {
+         resetPlayerCards();
+         playersOnField = 0;
+         console.log(`Campo limpiado. playersOnField: ${playersOnField}`);
          PlayerInteraction.setupPlayerData();
          PlayerInteraction.setupDraggablePlayers();
          TeamFormation.initializeField();

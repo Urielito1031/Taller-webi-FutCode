@@ -48,18 +48,17 @@ public class PlantillaController {
 
    @GetMapping("/plantilla")
    public String showViewPlantilla(Model model) {
-      EsquemaDTO formacion = service.initPlantillaBase();
+      Long equipoId = 1L; // Este ID debería ser dinámico, posiblemente pasado como parámetro o desde la sesión del usuario
+      EsquemaDTO formacion = service.getFormacionPorEquipoId(equipoId);
 
-      //agregado para mostrar los jugadores totales del mismo equipo
-      List<JugadorDTO> jugadores  = jugadorService.getAllByEquipoId(formacion.getEquipoId());
+      System.out.println("Formación obtenida: " + formacion);
+      List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
-      System.out.println("Jugadores obtenidos: " + jugadores.size() + "\n idEquipo: " );
-
-
+      model.addAttribute("formacion", formacion);
 
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
-      model.addAttribute("formacion", formacion);
+
       return "vista-plantilla";
    }
 
@@ -76,7 +75,6 @@ public class PlantillaController {
       //agregado para mostrar los jugadores totales del mismo equipo
       List<JugadorDTO> jugadores  = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
-      System.out.println("Jugadores obtenidos: " + jugadores.size() + "\n idEquipo: " );
 
 
       return "vista-plantilla";
@@ -84,15 +82,9 @@ public class PlantillaController {
 
    @PostMapping("/guardar-formacion")
    public String guardarFormacion(@Valid @ModelAttribute EsquemaDTO formacion, BindingResult result, Model model) {
-      if (formacion == null) {
-         model.addAttribute("formacion", service.initPlantillaBase());
-         model.addAttribute("error", "Formación no encontrada.");
-         model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
-         return "vista-plantilla";
-      }
+
 
       if (result.hasErrors()) {
-         model.addAttribute("formacion", formacion);
          model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
          List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
          model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
@@ -110,7 +102,6 @@ public class PlantillaController {
 
       Boolean guardadoExitoso = service.save(formacion);
       if (!guardadoExitoso) {
-         model.addAttribute("formacion", formacion);
          model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
          List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
          model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
@@ -119,8 +110,10 @@ public class PlantillaController {
       }
 
       // Cargar la formación guardada usando el equipoId de la formación
-      EsquemaDTO formacionGuardada = service.cargarFormacionPorEquipoId(formacion.getEquipoId());
-      model.addAttribute("formacion", formacionGuardada != null ? formacionGuardada : service.initPlantillaBase());
+
+      EsquemaDTO formacionGuardada = service.getFormacionPorEquipoId(formacion.getEquipoId());
+      //esto se guarda bien con estos datos, pero no se muestra en la vista
+      model.addAttribute("formacion", formacionGuardada);
 
       // Cargar la lista de jugadores del equipo
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());

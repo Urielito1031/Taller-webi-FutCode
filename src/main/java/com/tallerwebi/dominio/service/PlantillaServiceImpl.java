@@ -36,8 +36,7 @@ public class PlantillaServiceImpl implements PlantillaService {
    public EsquemaDTO initPlantillaBase() {
       EsquemaDTO formacion = new EsquemaDTO();
       formacion.setId(1L);
-      formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
-      formacion.setAlineacion(new ArrayList<>());
+
       formacion.setEquipoId(1L);
 
 
@@ -46,7 +45,10 @@ public class PlantillaServiceImpl implements PlantillaService {
       if (!formaciones.isEmpty()) {
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
          formacion.setEsquema(detectarEsquema(formaciones));
+         System.out.println("Formación cargada para el equipo con ID: " + equipoId);
+         System.out.println("Esquema en tabla formacion_equipo: " + formacion);
       }
+
 
       return formacion;
    }
@@ -83,17 +85,19 @@ public class PlantillaServiceImpl implements PlantillaService {
    }
 
    @Override
-   public EsquemaDTO cargarFormacionPorEquipoId(Long equipoId){
+   public EsquemaDTO getFormacionPorEquipoId(Long equipoId) {
       EsquemaDTO formacion = new EsquemaDTO();
-      formacion.setId(1L); //cambiar
-      formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
-      formacion.setAlineacion(new ArrayList<>());
+
       formacion.setEquipoId(equipoId);
 
       List<FormacionEquipo> formaciones = formacionEquipoRepository.findByEquipoId(equipoId);
       if (!formaciones.isEmpty()) {
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
          formacion.setEsquema(detectarEsquema(formaciones));
+      } else {
+         formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
+         formacion.setAlineacion(new ArrayList<>());
+         System.out.println("No se encontraron formaciones para equipoId " + equipoId + ". Usando valores por defecto.");
       }
 
       return formacion;
@@ -119,20 +123,11 @@ public class PlantillaServiceImpl implements PlantillaService {
    private List<PosicionJugadorDTO> convertFormacionesToAlineacion(
      List<FormacionEquipo> formaciones) {
       return formaciones.stream()
-          .map(fe -> {
-             PosicionJugadorDTO dto = new PosicionJugadorDTO();
-             dto.setJugadorId(fe.getJugador().getId());
-             dto.setPosicionEnCampo(fe.getPosicionEnCampo());
-             dto.setJugador(fe.getJugador().convertToDTO());
-             return dto;
-          })
+          .map(PosicionJugadorDTO::convertToDTO)
           .collect(Collectors.toList());
    }
    private FormacionEsquema detectarEsquema(List<FormacionEquipo> formaciones) {
-      if (formaciones == null || formaciones.isEmpty()) {
-         //evitar que se rompa algo :_)
-         return FormacionEsquema.CUATRO_TRES_TRES;
-      }
+
 
       long defensores = formaciones.stream().filter(
         fe -> fe.getPosicionEnCampo() == PosicionEnum.DEFENSOR).count();
@@ -148,9 +143,11 @@ public class PlantillaServiceImpl implements PlantillaService {
          if (esquema.getDefensas() == defensores &&
            esquema.getMediocampistas() == mediocampistas &&
            esquema.getDelanteros() == delanteros) {
+            System.out.println("Esquema detectado: " + esquema);
             return esquema;
          }
       }
+      System.out.println("automaticamente se asigna el esquema CUATRO_TRES_TRES");
       return FormacionEsquema.CUATRO_TRES_TRES;
    }
 

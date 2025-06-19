@@ -30,8 +30,8 @@
       </div>
       <div class="mt-3">
          <form id="form" method="POST" th:action="@{/guardar-formacion}">
-            <input type="hidden" name="esquema" th:value="${formacion.esquema != null ? formacion.esquema.getFormacionTexto() : null}">
-            <input type="hidden" name="equipoId" th:value="${formacion != null ? formacion.equipoId : 1}">
+            <input type="hidden" name="esquema" th:value="${formacion.esquema.getFormacionTexto()}">
+            <input type="hidden" name="equipoId" th:value="${formacion.equipoId}">
             <button type="submit" id="btn-save" class="btn btn-success">Guardar Formación</button>
          </form>
       </div>
@@ -40,8 +40,9 @@
    <!-- Área del campo -->
    <div class="field-area ratio ratio-16x9" id="field"
         th:style="'background: url(' + @{/img/cancha-futbol.jpg} + ') no-repeat center center; background-size: cover;'"
-        th:attr="data-esquema=${formacion != null and formacion.esquema != null ? formacion.esquema.getFormacionTexto() : '4-3-3'},
-                  data-equipo-id=${formacion != null ? formacion.equipoId : 1},
+        th:attr="data-esquema=${formacion.esquema.getFormacionTexto() },
+                  data-equipo-id=${ formacion.equipoId},
+
                   data-default-img=@{/img/jugadores/futbolista-default.png}">
    </div>
 
@@ -61,7 +62,7 @@
                <h6 th:text="${jugador.nombre} + ' ' + ${jugador.apellido}" class="player-name mb-1"></h6>
                <div class="player-details">
                   <small th:text="${jugador.posicionNatural}" class="d-block"></small>
-                  <small th:text="${jugador.equipo?.nombre ?: 'Sin club'}" class="d-block"></small>
+                  <small th:text="${jugador.equipo.nombre}" class="d-block"></small>
                   <small th:text="'Estado: ' + ${jugador.estadoFisico} + '%'" class="d-block"></small>
                </div>
             </div>
@@ -71,6 +72,11 @@
 </div>
 
 <!-- Scripts -->
+<script th:inline="javascript">
+   const alineacionPersistida = [[${formacion.alineacion}]];
+</script>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script th:src="@{/js/plantilla/plantilla.js}"></script>

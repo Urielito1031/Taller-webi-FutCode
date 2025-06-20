@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.*;
+import com.tallerwebi.dominio.repository.SobreRepository;
 import com.tallerwebi.dominio.service.SobreService;
 import com.tallerwebi.infraestructura.JugadorLoader;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -15,11 +16,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class SobreServiceImpl implements SobreService {
-   private final JugadorLoader jugadorLoader;
+   private final SobreRepository sobreRepository;
 
    @Autowired
-   public SobreServiceImpl(JugadorLoader jugadorLoader){
-       this.jugadorLoader = jugadorLoader;
+   public SobreServiceImpl(SobreRepository sobreRepository) {
+        this.sobreRepository = sobreRepository;
    }
 
    @Override
@@ -34,12 +35,15 @@ public class SobreServiceImpl implements SobreService {
         return sobres;
     }
 
-    public List<JugadorDTO> obtenerJugadoresRandomPorRareza(RarezaJugador rareza, int cantidad) {
-        return this.jugadorLoader.cargarJugadoresDesdeJSON().stream()
-                .filter(j -> j.getRarezaJugador().equals(rareza))
-                .limit(cantidad)
-                .collect(Collectors.toList());
-    }
+   public List<JugadorDTO> obtenerJugadoresRandomPorRareza(RarezaJugador rareza, int cantidad) {
+       List<JugadorDTO> jugadoresDTO = new ArrayList<>();
+
+       for(Jugador jugador : this.sobreRepository.getJugadoresPorRareza(rareza, cantidad)){
+           jugadoresDTO.add(jugador.convertToDTO());
+       }
+
+       return jugadoresDTO;
+   }
 
     @Override
     public SobreDTO crearSobre(TipoSobre tipo) {

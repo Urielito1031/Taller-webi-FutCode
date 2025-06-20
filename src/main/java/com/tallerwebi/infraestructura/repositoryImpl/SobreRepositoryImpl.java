@@ -7,6 +7,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class SobreRepositoryImpl implements SobreRepository {
@@ -17,12 +20,15 @@ public class SobreRepositoryImpl implements SobreRepository {
     }
 
     @Override
-    public Jugador getJugadorPorRareza(RarezaJugador rareza) {
-        String hql = "FROM Jugador WHERE rarezaJugador = :rareza ORDER BY RANDOM()";
-        Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("rareza", rareza);
-        query.setMaxResults(1);
-        return (Jugador) query.getSingleResult();
+    public List<Jugador> getJugadoresPorRareza(RarezaJugador rareza, int cantidad) {
+        String hql = "FROM Jugador WHERE rarezaJugador = :rareza";
+        List<Jugador> jugadores = sessionFactory.getCurrentSession()
+                .createQuery(hql, Jugador.class)
+                .setParameter("rareza", rareza)
+                .list();
+
+        Collections.shuffle(jugadores);
+        return jugadores.stream().limit(cantidad).collect(Collectors.toList());
     }
 
 

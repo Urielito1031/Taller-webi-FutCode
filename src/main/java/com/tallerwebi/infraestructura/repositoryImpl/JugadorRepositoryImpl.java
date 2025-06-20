@@ -48,4 +48,6 @@ public class JugadorRepositoryImpl implements JugadorRepository{
    private Session getSession(){
       return sessionFactory.getCurrentSession();
    }
+
+
 }

@@ -89,5 +89,12 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
     }
 
+//    public Long getMonedas(Long id){
+//        return (Long) getCurrentSession().
+//                createQuery("SELECT monedas FROM Usuario  WHERE id = :id")
+//                .setParameter("id", id)
+//                .uniqueResult();
+//    }
+
 
 }

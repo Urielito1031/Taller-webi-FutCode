@@ -32,6 +32,7 @@ public class ComprarSobreController {
         List<SobreDTO> sobres = this.sobreService.obtenerSobresDTO();
         ModelAndView mav = new ModelAndView("vista-comprar-sobres");
         mav.addObject("sobres", sobres);
+        mav.addObject("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(1L).size());
         return mav;
     }
 
@@ -42,7 +43,7 @@ public class ComprarSobreController {
 
         ModelAndView mav = new ModelAndView("vista-mis-sobres");
         mav.addObject("sobres", sobres);
-
+        mav.addObject("cantidadSobres", sobres.size());
         return mav;
     }
 

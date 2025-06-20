@@ -1,10 +1,12 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.SobreDTO;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -21,14 +23,14 @@ public class UsuarioServiceImpl implements  UsuarioService{
         this.repositorioUsuario = repositorioUsuario;
     }
 
+    @SneakyThrows
     @Override
     public Boolean agregarSobreAJugador(Long idUsuario, SobreDTO sobreDTO) {
         Usuario usuario = this.buscarUsuarioPorId(idUsuario);
 
-        // agregar exception
-        if(usuario == null) {
-            return false;
-        }
+        if(usuario == null)
+            throw new UsuarioNoEncontrado("El usuario con ID " + idUsuario + " no fue encontrado.");
+
 
         Sobre sobre = sobreDTO.fromEntity();
 

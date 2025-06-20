@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-06-2025 a las 04:08:49
+-- Tiempo de generación: 20-06-2025 a las 03:55:40
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -370,17 +370,17 @@ CREATE TABLE `formacion_equipo` (
 --
 
 INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_campo`) VALUES
-(1, 1, 5, 'ARQUERO'),
-(2, 1, 4, 'DEFENSOR'),
-(3, 1, 3, 'DEFENSOR'),
-(4, 1, 10, 'DEFENSOR'),
-(5, 1, 1, 'MEDIOCAMPISTA'),
-(6, 1, 6, 'MEDIOCAMPISTA'),
-(7, 1, 7, 'MEDIOCAMPISTA'),
-(8, 1, 8, 'MEDIOCAMPISTA'),
-(9, 1, 2, 'DELANTERO'),
-(10, 1, 11, 'DELANTERO'),
-(11, 1, 9, 'DELANTERO');
+(1034, 1, 16, 'ARQUERO'),
+(1035, 1, 5, 'DEFENSOR'),
+(1036, 1, 15, 'DEFENSOR'),
+(1037, 1, 4, 'DEFENSOR'),
+(1038, 1, 90, 'DEFENSOR'),
+(1039, 1, 19, 'DEFENSOR'),
+(1040, 1, 118, 'MEDIOCAMPISTA'),
+(1041, 1, 13, 'MEDIOCAMPISTA'),
+(1042, 1, 20, 'MEDIOCAMPISTA'),
+(1043, 1, 18, 'DELANTERO'),
+(1044, 1, 21, 'DELANTERO');
 
 -- --------------------------------------------------------
 
@@ -440,16 +440,16 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (9, 'Lionel', 'Messi', 'lionel_messi.png', 36, 10, 94.0, 0, 89.00, 1, 'LEYENDA', 'DELANTERO', 1),
 (10, 'Julián', 'Álvarez', 'julian_alvarez.png', 24, 9, 86.0, 0, 88.00, 1, 'RARO', 'DELANTERO', 1),
 (11, 'Lautaro', 'Martínez', 'lautaro_martinez.png', 26, 21, 88.0, 0, 90.00, 1, 'RARO', 'DELANTERO', 1),
-(12, 'Cristiano', 'Ronaldo', NULL, 40, 7, 98.2, 0, 97.50, 11, 'LEYENDA', 'DELANTERO', 1),
-(13, 'Kylian', 'Mbappé', NULL, 26, 10, 84.3, 0, 98.70, 4, 'EPICO', 'DELANTERO', 1),
-(14, 'Kevin', 'De Bruyne', NULL, 33, 17, 82.7, 0, 96.40, 14, 'EPICO', 'MEDIOCAMPISTA', 1),
-(15, 'Virgil', 'van Dijk', NULL, 33, 4, 47.3, 0, 95.80, 12, 'RARO', 'DEFENSOR', 1),
-(16, 'Thibaut', 'Courtois', NULL, 33, 1, 49.1, 0, 94.90, 14, 'RARO', 'ARQUERO', 1),
-(17, 'Robert', 'Lewandowski', NULL, 36, 9, 83.6, 0, 98.20, 3, 'EPICO', 'DELANTERO', 1),
-(18, 'Erling', 'Haaland', NULL, 24, 9, 85.2, 0, 98.80, 5, 'EPICO', 'DELANTERO', 1),
-(19, 'Neymar', 'Jr', NULL, 33, 11, 80.4, 0, 97.00, 2, 'EPICO', 'MEDIOCAMPISTA', 1),
-(20, 'Luka', 'Modrić', NULL, 39, 10, 48.7, 0, 96.70, 3, 'RARO', 'MEDIOCAMPISTA', 1),
-(21, 'Mohamed', 'Salah', NULL, 32, 11, 46.2, 0, 97.20, 7, 'RARO', 'DELANTERO', 1),
+(12, 'Cristiano', 'Ronaldo', 'cristiano_ronaldo.png', 40, 7, 98.2, 0, 97.50, 11, 'LEYENDA', 'DELANTERO', 1),
+(13, 'Kylian', 'Mbappé', 'mbappe.png', 26, 10, 84.3, 0, 98.70, 4, 'EPICO', 'DELANTERO', 1),
+(14, 'Kevin', 'De Bruyne', 'de_bruyne.png', 33, 17, 82.7, 0, 96.40, 14, 'EPICO', 'MEDIOCAMPISTA', 1),
+(15, 'Virgil', 'van Dijk', 'van_dijk.png', 33, 4, 47.3, 0, 95.80, 12, 'RARO', 'DEFENSOR', 1),
+(16, 'Thibaut', 'Courtois', 'courtois.png', 33, 1, 49.1, 0, 94.90, 14, 'RARO', 'ARQUERO', 1),
+(17, 'Robert', 'Lewandowski', 'lewandoswski.png', 36, 9, 83.6, 0, 98.20, 3, 'EPICO', 'DELANTERO', 1),
+(18, 'Erling', 'Haaland', 'haaland.png', 24, 9, 85.2, 0, 98.80, 5, 'EPICO', 'DELANTERO', 1),
+(19, 'Neymar', 'Jr', 'neymar.png', 33, 11, 80.4, 0, 97.00, 2, 'EPICO', 'MEDIOCAMPISTA', 1),
+(20, 'Luka', 'Modrić', 'modric.png', 39, 10, 48.7, 0, 96.70, 3, 'RARO', 'MEDIOCAMPISTA', 1),
+(21, 'Mohamed', 'Salah', 'salah.png', 32, 11, 46.2, 0, 97.20, 7, 'RARO', 'DELANTERO', 1),
 (22, 'Sadio', 'Mané', NULL, 33, 10, 45.8, 0, 96.50, 2, 'RARO', 'DELANTERO', 2),
 (23, 'Casemiro', 'Carlos', NULL, 32, 5, 44.3, 0, 95.90, 2, 'RARO', 'MEDIOCAMPISTA', 3),
 (24, 'Joshua', 'Kimmich', NULL, 30, 6, 50.0, 0, 96.00, 5, 'RARO', 'MEDIOCAMPISTA', 4),
@@ -498,7 +498,7 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (87, 'Harry', 'Kane', 'https://assets.bundesliga.com/player/dfl-obj-j00zz3-dfl-clu-00000g-dfl-sea-0001k8.png', 31, 10, 81.3, 0, 98.00, 7, 'EPICO', 'DELANTERO', 8),
 (88, 'Antoine', 'Griezmann', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250019498.webp', 33, 7, 46.9, 0, 97.30, 3, 'RARO', 'MEDIOCAMPISTA', 9),
 (89, 'Romelu', 'Lukaku', 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2a0c257d-1e26-439e-8561-e67976a7a2e4/demiybf-545fb1f5-1709-4210-beb9-78af40b7fedf.png', 31, 9, 43.7, 0, 96.60, 6, 'RARO', 'DELANTERO', 10),
-(90, 'Paulo', 'Dybala', 'https://i.pinimg.com/originals/f8/9c/6e/f89c6eda995524505a23fe22edb3a104.png', 30, 21, 45.2, 0, 96.20, 1, 'RARO', 'MEDIOCAMPISTA', 1),
+(90, 'Paulo', 'Dybala', 'dybala.png', 30, 21, 45.2, 0, 96.20, 1, 'RARO', 'MEDIOCAMPISTA', 1),
 (91, 'Jadon', 'Sancho', 'https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/With%20LN/Sancho/Mens_3333x5000_Avatar_Sancho_SF_Home_24_25_RGB.png', 24, 25, 23.8, 0, 95.70, 7, 'NORMAL', 'DELANTERO', 2),
 (92, 'Marcus', 'Rashford', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250088246.webp', 26, 10, 27.1, 0, 95.50, 7, 'NORMAL', 'DELANTERO', 3),
 (93, 'Jack', 'Grealish', 'https://web.uat.mancity.com/meta/media/qdlbnbg2/jack-grealish.png', 28, 7, 22.5, 0, 95.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 4),
@@ -526,7 +526,7 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (115, 'Sergio', 'Busquets', 'https://media.futbolfantasy.com/thumb/400x400/v202505312348/uploads/images/jugadores/ficha/88.png', 36, 5, 24.3, 0, 90.40, 3, 'NORMAL', 'MEDIOCAMPISTA', 3),
 (116, 'Rodrigo', 'De Paul', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250086037.webp', 30, 7, 22.1, 0, 90.20, 1, 'NORMAL', 'MEDIOCAMPISTA', 4),
 (117, 'Lucas', 'Torreira', 'https://assets.sorare.com/playerpicture/13ad07e7-9c5a-4119-9671-59e6a7e3ad6b/picture/squared-d82e9ef03207b747ddcdf8d8bc3db8d7.png', 29, 14, 21.9, 0, 90.00, 9, 'NORMAL', 'MEDIOCAMPISTA', 5),
-(118, 'Leandro', 'Paredes', 'https://media.asroma.com/prod/images/gm_preview/ab157c6a20b4-paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 1),
+(118, 'Leandro', 'Paredes', 'paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 1),
 (119, 'Matteo', 'Guendouzi', 'https://www.laziostylestore.com/images/lazio/players/84.webp?v=1737671000', 27, 16, 46.5, 0, 89.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 7),
 (120, 'Ryan', 'Gravenberch', 'https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/ryan-gravenberch-profile-action-shot-202425.png?itok=QBDlSmYh', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 8);
 
@@ -864,7 +864,7 @@ ALTER TABLE `fase`
 -- AUTO_INCREMENT de la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=474;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1045;
 
 --
 -- AUTO_INCREMENT de la tabla `formato_torneo`

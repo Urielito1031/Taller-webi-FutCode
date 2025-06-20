@@ -50,7 +50,6 @@ describe("FutCode", function() {
    });
 
    afterEach(function() {
-      // Limpia el DOM después de cada prueba
       $("#field").remove();
       $(".player-list").remove();
       $("#form").remove();

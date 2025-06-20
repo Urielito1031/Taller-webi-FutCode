@@ -37,4 +37,13 @@ public class ClubDTO {
       return entity;
    }
 
+   public ClubDTO convertFromEntity(Club club){
+      ClubDTO dto = new ClubDTO();
+      dto.setId(club.getId());
+      dto.setNombre(club.getNombre());
+      dto.setPais(club.getPais());
+      dto.setEstadio(club.getEstadio());
+      dto.setImagen(club.getImagen());
+      return dto;
+   }
 }

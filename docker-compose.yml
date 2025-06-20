@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   mysql:
@@ -29,6 +29,20 @@ services:
       DB_NAME: db_futcode
       DB_USER: root
       DB_PASSWORD: root
+
+# Para levantar un contenedor en phpMyAdmin y poder visualizar las tablas
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin:latest # Usa la imagen oficial de phpMyAdmin
+      container_name: phpmyadmin-futcode
+      ports:
+        - "8081:80" # Mapea el puerto 8081 de tu host al puerto 80 del contenedor phpMyAdmin
+      environment:
+        PMA_HOST: mysql-futcode # ¡IMPORTANTE! phpMyAdmin se conecta al servicio 'mysql-futcode' dentro de la red Docker
+        PMA_PORT: 3306 # El puerto interno de MySQL
+        MYSQL_ROOT_PASSWORD: root # La misma contraseña root que usas para MySQL
+      depends_on:
+        - mysql # Asegura que MySQL esté levantado antes que phpMyAdmin
+
 
 
 volumes:

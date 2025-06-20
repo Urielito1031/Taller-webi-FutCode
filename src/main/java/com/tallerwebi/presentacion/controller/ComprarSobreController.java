@@ -18,8 +18,8 @@ import java.util.List;
 @RequestMapping("/jugador")
 public class ComprarSobreController {
 
-    private SobreService sobreService;
-    private UsuarioService usuarioService;
+    private final SobreService sobreService;
+    private final UsuarioService usuarioService;
 
     @Autowired
     public ComprarSobreController(UsuarioService usuarioService, SobreService sobreService) {

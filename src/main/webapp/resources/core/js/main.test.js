@@ -10,4 +10,12 @@ describe("Main", function() {
   it("debe devoler 4 cuando envio 2 y 2", function() {
     expect(multiplicar(2, 2)).toBe(4);
   });
+
+
+  it("Debe devolver 5 cuando divido 10 sobre 2", function(){
+    expect(dividir(10,2)).toBe(5);
+  })
+  it("Debe devolver 0 cuando divido 10 sobre 0", function(){
+    expect(dividir(10,0)).toBe(0);
+  })
 });

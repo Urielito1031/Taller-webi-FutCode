@@ -3,266 +3,9 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <title>Detalle torneo</title>
+   <title>Detalle del Torneo</title>
    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
-   <style>
-       body {
-           background-color: #0d1b2a;
-           color: #ffffff;
-           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-           margin: 0;
-           min-height: 100vh;
-           background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
-       }
-
-       .container {
-           max-width: 1200px;
-           margin: 0 auto;
-           padding: 20px;
-       }
-
-       .header-section {
-           text-align: center;
-           margin-bottom: 40px;
-           padding: 30px 0;
-       }
-
-       .page-title {
-           font-size: 2.5rem;
-           font-weight: bold;
-           color: #00ffc3;
-           margin-bottom: 10px;
-           text-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
-       }
-
-       .subtitle {
-           color: #a6cfff;
-           font-size: 1.1rem;
-           opacity: 0.8;
-       }
-
-       .torneo-card {
-           background: linear-gradient(145deg, #1e2a3c, #2e3d4f);
-           border-radius: 20px;
-           padding: 40px;
-           box-shadow:
-                   0 0 30px rgba(0, 255, 195, 0.1),
-                   inset 0 1px 0 rgba(255, 255, 255, 0.1);
-           border: 1px solid rgba(0, 255, 195, 0.2);
-           position: relative;
-           overflow: hidden;
-       }
-
-       .torneo-card::before {
-           content: '';
-           position: absolute;
-           top: 0;
-           left: 0;
-           right: 0;
-           height: 3px;
-           background: linear-gradient(90deg, #00ffc3, #a6cfff, #00ffc3);
-           border-radius: 20px 20px 0 0;
-       }
-
-       .torneo-header {
-           display: flex;
-           align-items: center;
-           justify-content: space-between;
-           margin-bottom: 30px;
-           flex-wrap: wrap;
-           gap: 20px;
-       }
-
-       .torneo-name {
-           font-size: 2.2rem;
-           font-weight: bold;
-           color: #00ffc3;
-           margin: 0;
-           text-shadow: 0 0 10px rgba(0, 255, 195, 0.5);
-       }
-
-       .estado-badge {
-           padding: 8px 20px;
-           border-radius: 25px;
-           font-weight: bold;
-           font-size: 0.9rem;
-           text-transform: uppercase;
-           letter-spacing: 1px;
-           display: inline-flex;
-           align-items: center;
-           gap: 8px;
-       }
-
-       .estado-abierto {
-           background: linear-gradient(45deg, #00ffc3, #00e6b3);
-           color: #0d1b2a;
-       }
-
-       .estado-cerrado {
-           background: linear-gradient(45deg, #ff6b6b, #ff5252);
-           color: #ffffff;
-       }
-
-       .estado-en-curso {
-           background: linear-gradient(45deg, #ffd93d, #ffb347);
-           color: #0d1b2a;
-       }
-
-       .torneo-info {
-           display: grid;
-           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-           gap: 30px;
-           margin-bottom: 40px;
-       }
-
-       .info-section {
-           background: rgba(46, 61, 79, 0.3);
-           padding: 25px;
-           border-radius: 15px;
-           border: 1px solid rgba(0, 255, 195, 0.1);
-       }
-
-       .info-title {
-           color: #00ffc3;
-           font-size: 1.1rem;
-           font-weight: bold;
-           margin-bottom: 15px;
-           display: flex;
-           align-items: center;
-           gap: 10px;
-       }
-
-       .info-content {
-           color: #ffffff;
-           font-size: 1rem;
-           line-height: 1.6;
-       }
-
-       .description-text {
-           color: #a6cfff;
-           font-style: italic;
-       }
-
-       .action-section {
-           text-align: center;
-           margin-top: 40px;
-       }
-
-       .btn-join {
-           background: linear-gradient(45deg, #00ffc3, #00e6b3);
-           color: #0d1b2a;
-           border: none;
-           padding: 15px 40px;
-           font-size: 1.2rem;
-           font-weight: bold;
-           border-radius: 50px;
-           text-decoration: none;
-           display: inline-flex;
-           align-items: center;
-           gap: 10px;
-           transition: all 0.3s ease;
-           box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
-           text-transform: uppercase;
-           letter-spacing: 1px;
-       }
-
-       .btn-join:hover {
-           transform: translateY(-2px);
-           box-shadow: 0 6px 25px rgba(0, 255, 195, 0.5);
-           color: #0d1b2a;
-           text-decoration: none;
-       }
-
-       .btn-disabled {
-           background: linear-gradient(45deg, #6c757d, #5a6268);
-           color: #ffffff;
-           cursor: not-allowed;
-       }
-
-       .btn-disabled:hover {
-           transform: none;
-           box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-       }
-
-       .decorative-icon {
-           font-size: 1.5rem;
-           opacity: 0.7;
-       }
-
-       .back-link {
-           display: inline-flex;
-           align-items: center;
-           gap: 8px;
-           color: #a6cfff;
-           text-decoration: none;
-           font-weight: 500;
-           margin-bottom: 20px;
-           transition: color 0.3s ease;
-       }
-
-       .back-link:hover {
-           color: #00ffc3;
-           text-decoration: none;
-       }
-
-       .floating-particles {
-           position: fixed;
-           top: 0;
-           left: 0;
-           width: 100%;
-           height: 100%;
-           pointer-events: none;
-           z-index: -1;
-       }
-
-       .particle {
-           position: absolute;
-           width: 4px;
-           height: 4px;
-           background: rgba(0, 255, 195, 0.3);
-           border-radius: 50%;
-           animation: float 6s ease-in-out infinite;
-       }
-
-       @keyframes float {
-           0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
-           50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-       }
-
-       .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-       .particle:nth-child(2) { left: 20%; animation-delay: 2s; }
-       .particle:nth-child(3) { left: 30%; animation-delay: 4s; }
-       .particle:nth-child(4) { left: 70%; animation-delay: 1s; }
-       .particle:nth-child(5) { left: 80%; animation-delay: 3s; }
-       .particle:nth-child(6) { left: 90%; animation-delay: 5s; }
-
-       @media (max-width: 768px) {
-           .container {
-               padding: 15px;
-           }
-
-           .torneo-card {
-               padding: 25px;
-           }
-
-           .page-title {
-               font-size: 2rem;
-           }
-
-           .torneo-name {
-               font-size: 1.8rem;
-           }
-
-           .torneo-header {
-               flex-direction: column;
-               text-align: center;
-           }
-
-           .torneo-info {
-               grid-template-columns: 1fr;
-           }
-       }
-   </style>
+   <link rel="stylesheet" th:href="@{/css/detalle-torneo.css}">
 </head>
 <body>
 <div class="floating-particles">
@@ -275,59 +18,101 @@
 </div>
 
 <div class="container">
-   <a th:href="@{/home}" class="back-link">
-      <i class="bi bi-arrow-left"></i>
-      Volver al menú principal
-   </a>
+   <nav class="back-nav">
+      <a th:href="@{/home}" class="back-link">
+         <i class="bi bi-arrow-left"></i>
+         Volver al menú principal
+      </a>
+   </nav>
 
-   <div class="header-section">
+   <header class="main-header">
       <h1 class="page-title">Detalle del Torneo</h1>
       <p class="subtitle">Información completa y opciones de participación</p>
-   </div>
+   </header>
 
-   <div class="torneo-card" th:object="${torneo}">
+   <main class="torneo-card" th:object="${torneo}">
       <div class="torneo-header">
          <h2 class="torneo-name" th:text="*{nombre}">Nombre del Torneo</h2>
          <div class="estado-badge"
               th:classappend="${torneo.estado.name() == 'ABIERTO'} ? 'estado-abierto' :
-                                    (${torneo.estado.name() == 'CERRADO'} ? 'estado-cerrado' : 'estado-en-curso')">
+                                          (${torneo.estado.name() == 'CERRADO'} ? 'estado-cerrado' : 'estado-en-curso')">
             <i class="bi"
                th:classappend="${torneo.estado.name() == 'ABIERTO'} ? 'bi-door-open' :
-                                      (${torneo.estado.name() == 'CERRADO'} ? 'bi-door-closed' : 'bi-play-circle')"></i>
+                                            (${torneo.estado.name() == 'CERRADO'} ? 'bi-door-closed' : 'bi-play-circle')"></i>
             <span th:text="*{estado}">Estado</span>
          </div>
       </div>
 
       <div class="torneo-info">
-         <div class="info-section">
-            <div class="info-title">
+         <section class="info-section">
+            <h3 class="info-title">
                <i class="bi bi-info-circle decorative-icon"></i>
                Descripción
-            </div>
+            </h3>
             <div class="info-content">
                <p class="description-text" th:text="*{descripcion} ?: 'Este torneo no tiene descripción disponible. ¡Prepárate para una experiencia emocionante!'">
                   Descripción del torneo
                </p>
             </div>
-         </div>
+         </section>
 
-         <div class="info-section">
-            <div class="info-title">
+         <section class="info-section">
+            <h3 class="info-title">
                <i class="bi bi-calendar-event decorative-icon"></i>
-               Información del Torneo
-            </div>
+               Información General
+            </h3>
             <div class="info-content">
-               <p><strong>ID:</strong> <span th:text="*{id}">1</span></p>
-               <p><strong>Estado:</strong> <span th:text="*{estado}">Abierto</span></p>
-
+               <p><strong>ID del Torneo:</strong> <span th:text="*{id}">1</span></p>
+               <p><strong>Estado Actual:</strong> <span th:text="*{estado}">Abierto</span></p>
             </div>
-         </div>
-
-
+         </section>
       </div>
 
+      <section class="info-section" th:if="${not #lists.isEmpty(torneoEquipos)}">
+         <h3 class="info-title">
+            <i class="bi bi-people decorative-icon"></i>
+            Equipos Participantes (<span th:text="${torneoEquipos.size()}">0</span>)
+         </h3>
+         <div class="table-container">
+            <table class="equipos-table">
+               <thead>
+               <tr>
+                  <th>Pos</th>
+                  <th>Nombre</th>
+                  <th>PJ</th>
+                  <th>PG</th>
+                  <th>PE</th>
+                  <th>PP</th>
+                  <th>GF</th>
+                  <th>GC</th>
+                  <th>Pts</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="equipo : ${torneoEquipos}">
+                  <td th:text="${equipo.posicion}">1</td>
+                  <td th:text="${equipo.equipo.nombre}">Equipo 1</td>
+                  <td th:text="${equipo.partidosJugados}">0</td>
+                  <td th:text="${equipo.partidosGanados}">0</td>
+                  <td th:text="${equipo.partidosEmpatados}">0</td>
+                  <td th:text="${equipo.partidosPerdidos}">0</td>
+                  <td th:text="${equipo.golesAFavor}">0</td>
+                  <td th:text="${equipo.golesEnContra}">0</td>
+                  <td th:text="${equipo.puntos}">0</td>
+               </tr>
+               </tbody>
+            </table>
+         </div>
+      </section>
+
+      <section class="info-section" th:unless="${not #lists.isEmpty(torneoEquipos)}">
+         <div class="no-equipos">
+            <i class="bi bi-trophy" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i>
+            No hay equipos registrados en este torneo aún.
+         </div>
+      </section>
+
       <div class="action-section">
-         <!-- Botón para unirse si el torneo está abierto -->
          <th:block th:if="${torneo.estado.name() == 'ABIERTO'}">
             <a th:href="@{/detalle-torneo/{id}(id=${torneo.id})}" class="btn-join">
                <i class="bi bi-trophy"></i>
@@ -336,7 +121,6 @@
             </a>
          </th:block>
 
-         <!-- Botón deshabilitado si el torneo no está abierto -->
          <th:block th:unless="${torneo.estado.name() == 'ABIERTO'}">
             <div class="btn-join btn-disabled">
                <i class="bi bi-lock"></i>
@@ -344,7 +128,7 @@
             </div>
          </th:block>
       </div>
-   </div>
+   </main>
 </div>
 </body>
 </html>

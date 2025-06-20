@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
 @Repository
-@Transactional
 public class TorneoRepositoryImpl implements TorneoRepository{
 
    private final SessionFactory sessionFactory;
@@ -21,6 +20,7 @@ public class TorneoRepositoryImpl implements TorneoRepository{
    }
 
 
+   //nota, nunca devuelve null, devuelve una lista vacia []
    @Override
    public List<Torneo> findAll() {
       return getSession().createQuery("from Torneo",Torneo.class).list();

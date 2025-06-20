@@ -12,14 +12,10 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,13 +36,11 @@ public class PlantillaControllerTest {
    @Mock
    private Model model;
 
-   @Mock
-   private HttpServletRequest request;
+
 
    @BeforeEach
    public void setUp() {
       MockitoAnnotations.openMocks(this);
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
    }
 
    @Test

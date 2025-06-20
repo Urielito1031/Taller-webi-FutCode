@@ -1,14 +1,14 @@
 package com.tallerwebi.presentacion.controller;
 
-import com.tallerwebi.dominio.model.enums.TipoFormato;
+import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
+import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -16,27 +16,33 @@ import java.util.List;
 public class TorneoController {
 
 
-   private final TorneoService service;
+   private final TorneoService torneoService;
+   private final EquipoTorneoService equipoTorneoService;
 
    @Autowired
-   public TorneoController(TorneoService service) {
-      this.service = service;
+   public TorneoController(TorneoService torneoService,EquipoTorneoService equipoTorneoService) {
+      this.torneoService = torneoService;
+      this.equipoTorneoService = equipoTorneoService;
    }
 
-
-   @GetMapping("/torneos")
-   public String listarTorneos(Model model) {
-      List<TorneoDTO> torneos = service.getAll();
-      model.addAttribute("torneos", torneos);
-      model.addAttribute("tiposFormato", TipoFormato.values());
-      return "vista-list-torneos";
+   @GetMapping(path = "/home")
+   public String irAHome(Model model) {
+      List<TorneoDTO> torneos = torneoService.getAll();
+      if(torneos.isEmpty()){
+         model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
+      }
+      model.addAttribute("torneos",torneos);
+      return "home";
    }
-
    @GetMapping("/detalle-torneo/{id}")
-   public String unirseTorneo(@PathVariable Long id,Model model) {
-      TorneoDTO torneo = service.getById(id);
+   public String detalleTorneo(@PathVariable Long id, Model model) {
+      TorneoDTO torneo = torneoService.getById(id);
+      System.out.println("Detalle torneo: " + torneo);
+      List<EquipoTorneoDTO> torneoEquipos = equipoTorneoService.getAllByTorneoId(id);
       model.addAttribute("torneo", torneo);
-
+      model.addAttribute("torneoEquipos", torneoEquipos);
       return "detalle-torneo";
    }
+
+
 }

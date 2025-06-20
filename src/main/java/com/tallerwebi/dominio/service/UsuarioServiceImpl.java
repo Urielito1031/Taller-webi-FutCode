@@ -84,14 +84,6 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
 
 
-
-
-
-
-
-
-
-
     private Sobre convertirDTOAEntidad(SobreDTO sobreDTO) {
         Sobre sobre = new Sobre();
         sobre.setTipoSobre(sobreDTO.getTipoSobre());
@@ -110,6 +102,7 @@ public class UsuarioServiceImpl implements  UsuarioService{
         sobreDTO.setTipoSobre(sobre.getTipoSobre());
         sobreDTO.setTitulo(sobre.getTitulo());
         sobreDTO.setPrecio(sobre.getPrecio());
+        sobreDTO.setImagenUrl(sobre.getImagenUrl());
 
         // Si tienes jugadores en el sobre, también convertirlos
 //        if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {

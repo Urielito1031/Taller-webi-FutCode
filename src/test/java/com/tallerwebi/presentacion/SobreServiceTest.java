@@ -45,11 +45,11 @@ public class SobreServiceTest {
 
         Mockito.when(jugadorLoader.cargarJugadoresDesdeJSON()).thenReturn(jugadoresMock);
 
-//        List<JugadorDTO> resultado = sobreService.obtenerJugadoresRandomPorRareza(RarezaJugador.NORMAL, 5);
-//
-//        assertThat(resultado.get(0).getRarezaJugador(), equalTo(RarezaJugador.NORMAL));
-//        assertThat(resultado.get(4).getRarezaJugador(), equalTo(RarezaJugador.NORMAL));
-//        assertThat(resultado, hasSize(5));
+        List<JugadorDTO> resultado = sobreService.obtenerJugadoresRandomPorRareza(RarezaJugador.NORMAL, 5);
+
+        assertThat(resultado.get(0).getRarezaJugador(), equalTo(RarezaJugador.NORMAL));
+        assertThat(resultado.get(4).getRarezaJugador(), equalTo(RarezaJugador.NORMAL));
+        assertThat(resultado, hasSize(5));
     }
 
     @Test

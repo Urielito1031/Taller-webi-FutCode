@@ -110,10 +110,11 @@
          },
       };
 
+      let markerIdCount = 0;
       // Crea y gestiona marcadores en el campo
       const MarkerFactory = {
          create({ role, position, isDefault = true }) {
-            const markerId = `marker-${role.toLowerCase()}-${Date.now()}`;
+            const markerId = `marker-${role.toLowerCase()}-${++markerIdCount}`;
             const $marker = $(`
                <div id="${markerId}" class="position-marker ${isDefault ? "default-marker" : ""}" style="left: ${position.x}%; top: ${position.y}%;">
                   <div class="marker-card">
@@ -374,8 +375,10 @@
                tolerance: "touch",
                drop: (event, ui) => {
                   const $markers = $("#field .position-marker.default-marker:not(.occupied)");
+
+
                   const closest = this.findClosestMarker(event, $markers);
-                  if (closest.marker && closest.distance < 80) {
+                  if (closest.marker && closest.distance < 300) {
                      this.assignPlayer(closest.marker, ui.draggable);
                   } else {
                      ui.draggable.draggable("option", "revert", true);
@@ -421,6 +424,7 @@
          },
          setupClearFieldButton() {
             $("<button>", {
+               id: "clear-field-btn",
                text: "Limpiar Campo",
                class: "btn btn-danger mt-3",
                click: () => confirm("¿Quitar todos los jugadores?") && this.clearField(),
@@ -481,6 +485,14 @@
          },
       };
 
+      //implementación de la función para forzar la asignación de marcadores en las pruebas end to end
+      window.ForzarAsignacionDeMarcadores = function(playerId, markerId) {
+         const $card = $(`.player-card[data-player-id="${playerId}"]`);
+         const $marker = $(`#${markerId}`);
+         if ($card.length && $marker.length && !$marker.hasClass("occupied")) {
+            PlayerInteraction.assignPlayer($marker, $card);
+         }
+      };
       // Inicialización
       function init() {
          resetPlayerCards();
@@ -492,8 +504,10 @@
          PlayerInteraction.setupDroppableField();
          PlayerInteraction.setupClearFieldButton();
          PlayerInteraction.setupFieldFormation();
+
          $(".player-card").attr("title", "Arrastra al campo");
       }
+
 
       // Interfaz pública para pruebas
       return {
@@ -509,7 +523,12 @@
          setPlayersOnField: (value) => { playersOnField = value; },
          init
       };
+
+
+
+
    })();
+
 
    // Ejecuta la inicialización
    FutCode.init();

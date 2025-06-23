@@ -1,6 +1,5 @@
 package com.tallerwebi.presentacion.controller;
 
-
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.dominio.service.SobreService;
 import com.tallerwebi.dominio.service.UsuarioService;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -34,6 +32,7 @@ public class ComprarSobreController {
         List<SobreDTO> sobres = this.sobreService.obtenerSobresDTO();
         ModelAndView mav = new ModelAndView("vista-comprar-sobres");
         mav.addObject("sobres", sobres);
+        mav.addObject("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(1L).size());
         return mav;
     }
 
@@ -44,7 +43,7 @@ public class ComprarSobreController {
 
         ModelAndView mav = new ModelAndView("vista-mis-sobres");
         mav.addObject("sobres", sobres);
-
+        mav.addObject("cantidadSobres", sobres.size());
         return mav;
     }
 

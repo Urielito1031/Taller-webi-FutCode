@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FutCode</title>
-    <link th:href="@{/css/estilos-comprar-sobres.css}" rel="stylesheet">
+    <link th:href="@{/css/estilos-mis-sobres.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/spring/jugador/comprar-sobres">
                             <i class="bi bi-gift-fill"></i> Sobres
-                            <span class="badge bg-warning ms-1">3</span>
+                            <span class="badge bg-warning ms-1" th:text="${cantidadSobres}"></span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -63,12 +63,13 @@
 <main>
     <div class="fondo"></div>
     <section>
+        <h2>MIS SOBRES</h2>
         <div class="sobres">
             <article th:each="sobre : ${sobres}" class="d-flex flex-column">
                 <h3 th:text="${sobre.titulo}">Titulo</h3>
-<!--                <img th:src="${sobre.imagenUrl}" alt="Imagen del sobre" class="imagen-sobre">-->
-                <h3 th:text="${sobre.precio}">Precio</h3>
-                <h3 th:text="${sobre.tipoSobre}">Tipo</h3>
+                <img th:src="@{'/img/' + ${sobre.imagenUrl}}" alt="Imagen del sobre" class="imagen-sobre">
+<!--                <h3 th:text="${sobre.precio}">Precio</h3>-->
+<!--                <h3 th:text="${sobre.tipoSobre}">Tipo</h3>-->
             </article>
         </div>
     </section>

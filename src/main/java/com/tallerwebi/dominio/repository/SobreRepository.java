@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface SobreRepository {
-    Jugador getJugadorPorRareza(RarezaJugador rareza);
+    List<Jugador> getJugadoresPorRareza(RarezaJugador rareza, int cantidad);
 }

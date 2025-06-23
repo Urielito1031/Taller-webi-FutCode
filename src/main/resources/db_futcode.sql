@@ -17,27 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Base de datos: `db_futcode`
---
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `club`
---
-
-CREATE TABLE `club` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `pais_id` int(11) DEFAULT NULL,
-  `estadio_id` int(11) DEFAULT NULL,
-  `imagen` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `club`
---
 
 INSERT INTO `club` (`id`, `nombre`, `pais_id`, `estadio_id`, `imagen`) VALUES
 (1, 'River Plate', 1, 1, 'https://upload.wikimedia.org/wikipedia/en/3/3f/Club_Atl%C3%A9tico_River_Plate_logo.svg'),
@@ -64,22 +45,6 @@ INSERT INTO `club` (`id`, `nombre`, `pais_id`, `estadio_id`, `imagen`) VALUES
 (22, 'New York City FC', 13, 23, 'https://upload.wikimedia.org/wikipedia/en/2/2d/New_York_City_FC.svg'),
 (23, 'Rangers FC', 14, 24, 'https://upload.wikimedia.org/wikipedia/en/0/0c/Rangers_FC.svg');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `equipo`
---
-
-CREATE TABLE `equipo` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `club_id` int(11) DEFAULT NULL,
-  `esquema_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `equipo`
---
 
 INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
 (1, 'River Plate Titulares', 1, 1),
@@ -113,29 +78,6 @@ INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
 (29, 'Celtic Reservas', 19, 3),
 (30, 'PSV Academy', 22, 2);
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `equipo_torneo`
---
-
-CREATE TABLE `equipo_torneo` (
-  `id` int(11) NOT NULL,
-  `equipo_id` int(11) NOT NULL,
-  `posicion` int(11) NOT NULL,
-  `partidos_jugados` int(11) NOT NULL DEFAULT 0,
-  `partidos_ganados` int(11) NOT NULL DEFAULT 0,
-  `partidos_empatados` int(11) NOT NULL DEFAULT 0,
-  `partidos_perdidos` int(11) NOT NULL DEFAULT 0,
-  `goles_a_favor` int(11) NOT NULL DEFAULT 0,
-  `goles_en_contra` int(11) NOT NULL DEFAULT 0,
-  `puntos` int(11) NOT NULL DEFAULT 0,
-  `torneo_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `equipo_torneo`
---
 
 INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, `partidos_ganados`, `partidos_empatados`, `partidos_perdidos`, `goles_a_favor`, `goles_en_contra`, `puntos`, `torneo_id`) VALUES
 (1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1),
@@ -251,18 +193,6 @@ INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, 
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `esquema`
---
-
-CREATE TABLE `esquema` (
-  `id` int(11) NOT NULL,
-  `esquema` enum('CUATRO_TRES_TRES','CUATRO_CUATRO_DOS','TRES_CINCO_DOS','CINCO_TRES_DOS','TRES_CUATRO_TRES') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `esquema`
---
 
 INSERT INTO `esquema` (`id`, `esquema`) VALUES
 (1, 'CUATRO_TRES_TRES'),
@@ -276,14 +206,6 @@ INSERT INTO `esquema` (`id`, `esquema`) VALUES
 --
 -- Estructura de tabla para la tabla `estadio`
 --
-
-CREATE TABLE `estadio` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `capacidad` int(11) DEFAULT NULL,
-  `ubicacion` varchar(255) DEFAULT NULL,
-  `imagen_url` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `estadio`
@@ -316,34 +238,6 @@ INSERT INTO `estadio` (`id`, `nombre`, `capacidad`, `ubicacion`, `imagen_url`) V
 (24, 'Ibrox Stadium', 50817, 'Glasgow, Escocia', 'https://example.com/ibrox.jpg'),
 (25, 'Jan Breydel Stadium', 29062, 'Brugge, Bélgica', 'https://example.com/breydel.jpg');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `evento_partido`
---
-
-CREATE TABLE `evento_partido` (
-  `id` int(11) NOT NULL,
-  `tipo_evento_partido` enum('TARJETA_AMARILLA','TARJETA_ROJA','LESION','EXPULSION','GOL') NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `minuto_de_partido` int(11) NOT NULL,
-  `partido_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `fase`
---
-
-CREATE TABLE `fase` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `fase`
---
 
 INSERT INTO `fase` (`id`, `nombre`) VALUES
 (1, 'Fase de grupos'),
@@ -354,20 +248,6 @@ INSERT INTO `fase` (`id`, `nombre`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `formacion_equipo`
---
-
-CREATE TABLE `formacion_equipo` (
-  `id` int(11) NOT NULL,
-  `equipo_id` int(11) NOT NULL,
-  `jugador_id` int(11) NOT NULL,
-  `posicion_en_campo` enum('ARQUERO','DEFENSOR','MEDIOCAMPISTA','DELANTERO') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `formacion_equipo`
---
 
 INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_campo`) VALUES
 (1034, 1, 16, 'ARQUERO'),
@@ -384,49 +264,10 @@ INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_ca
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `formato_torneo`
---
-
-CREATE TABLE `formato_torneo` (
-  `id` int(11) NOT NULL,
-  `tipo` enum('LIGA','COPA') NOT NULL,
-  `fase_id` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `formato_torneo`
---
-
 INSERT INTO `formato_torneo` (`id`, `tipo`, `fase_id`) VALUES
 (1, 'COPA', NULL),
 (2, 'LIGA', NULL);
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `jugador`
---
-
-CREATE TABLE `jugador` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `apellido` varchar(50) NOT NULL,
-  `imagen` varchar(255) DEFAULT NULL,
-  `edad` int(11) NOT NULL,
-  `numero_camiseta` int(11) NOT NULL,
-  `rating` decimal(4,1) NOT NULL,
-  `lesionado` tinyint(1) NOT NULL DEFAULT 0,
-  `estado_fisico` decimal(5,2) NOT NULL,
-  `pais_id` int(11) DEFAULT NULL,
-  `rareza_jugador` enum('NORMAL','RARO','EPICO','LEYENDA') NOT NULL,
-  `posicion` enum('ARQUERO','DEFENSOR','MEDIOCAMPISTA','DELANTERO') NOT NULL,
-  `equipo_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `jugador`
---
 
 INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_camiseta`, `rating`, `lesionado`, `estado_fisico`, `pais_id`, `rareza_jugador`, `posicion`, `equipo_id`) VALUES
 (1, 'Emiliano', 'Martínez', 'emiliano_martinez.png', 31, 1, 88.0, 0, 95.00, 1, 'RARO', 'ARQUERO', 1),
@@ -530,22 +371,6 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (119, 'Matteo', 'Guendouzi', 'https://www.laziostylestore.com/images/lazio/players/84.webp?v=1737671000', 27, 16, 46.5, 0, 89.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 7),
 (120, 'Ryan', 'Gravenberch', 'https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/ryan-gravenberch-profile-action-shot-202425.png?itok=QBDlSmYh', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 8);
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pais`
---
-
-CREATE TABLE `pais` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `codigo_iso` varchar(2) NOT NULL,
-  `bandera_url` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `pais`
---
 
 INSERT INTO `pais` (`id`, `nombre`, `codigo_iso`, `bandera_url`) VALUES
 (1, 'Argentina', 'AR', 'https://flagcdn.com/ar.svg'),
@@ -565,38 +390,6 @@ INSERT INTO `pais` (`id`, `nombre`, `codigo_iso`, `bandera_url`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `partido`
---
-
-CREATE TABLE `partido` (
-  `id` int(11) NOT NULL,
-  `equipo_local_id` int(11) NOT NULL,
-  `equipo_visitante_id` int(11) NOT NULL,
-  `fecha_encuentro` datetime NOT NULL,
-  `estado_partido` enum('SIN_JUGAR','EN_JUEGO','FINALIZADO') NOT NULL,
-  `torneo_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sobre`
---
-
-CREATE TABLE `sobre` (
-  `id` int(11) NOT NULL,
-  `tipo_sobre` enum('ORO','PLATA','BRONCE','ESPECIAL') NOT NULL,
-  `titulo` varchar(100) NOT NULL,
-  `precio` decimal(10,2) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `imagen_url` varchar(255) DEFAULT NULL,
-  `usuario_id` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `sobre`
---
 
 INSERT INTO `sobre` (`id`, `tipo_sobre`, `titulo`, `precio`, `descripcion`, `imagen_url`, `usuario_id`) VALUES
 (1, 'BRONCE', 'aa', 1.00, NULL, NULL, 1),
@@ -612,23 +405,6 @@ INSERT INTO `sobre` (`id`, `tipo_sobre`, `titulo`, `precio`, `descripcion`, `ima
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `torneo`
---
-
-CREATE TABLE `torneo` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `formato_torneo_id` int(11) DEFAULT NULL,
-  `estado` enum('ABIERTO','EN_CURSO','FINALIZADO') NOT NULL,
-  `torneo_copa_id` bigint(20) DEFAULT NULL,
-  `torneo_liga_id` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `torneo`
---
 
 INSERT INTO `torneo` (`id`, `nombre`, `descripcion`, `formato_torneo_id`, `estado`, `torneo_copa_id`, `torneo_liga_id`) VALUES
 (1, 'Copa Mundial 2025', 'Torneo eliminatorio con 16 equipos', 1, 'ABIERTO', NULL, NULL),
@@ -639,347 +415,11 @@ INSERT INTO `torneo` (`id`, `nombre`, `descripcion`, `formato_torneo_id`, `estad
 (6, 'Copa Sudamericana 2025', 'Competencia internacional de clubes sudamericanos, con equipos argentinos buscando gloria continental.', 1, 'FINALIZADO', NULL, NULL),
 (7, 'Liga Interior Argentina 2025', 'Torneo de fútbol para equipos del interior de Argentina, promoviendo el talento fuera de las grandes ciudades.', 2, 'ABIERTO', NULL, NULL);
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `torneo_copa`
---
-
-CREATE TABLE `torneo_copa` (
-  `id` int(11) NOT NULL,
-  `id_fase` int(11) NOT NULL,
-  `torneo_id` bigint(20) NOT NULL,
-  `fase_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `torneo_liga`
---
-
-CREATE TABLE `torneo_liga` (
-  `id` int(11) NOT NULL,
-  `fechas` int(11) DEFAULT 0,
-  `torneo_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuario`
---
-
-CREATE TABLE `usuario` (
-  `id` int(11) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `rol` varchar(50) NOT NULL,
-  `activo` tinyint(1) NOT NULL DEFAULT 0,
-  `equipo_id` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `usuario`
---
 
 INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`, `equipo_id`) VALUES
 (1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1);
 
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `club`
---
-ALTER TABLE `club`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pais_id` (`pais_id`),
-  ADD KEY `estadio_id` (`estadio_id`);
-
---
--- Indices de la tabla `equipo`
---
-ALTER TABLE `equipo`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `club_id` (`club_id`),
-  ADD KEY `fk_equipo_esquema` (`esquema_id`);
-
---
--- Indices de la tabla `equipo_torneo`
---
-ALTER TABLE `equipo_torneo`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uk_equipo_torneo` (`equipo_id`,`torneo_id`),
-  ADD KEY `torneo_id` (`torneo_id`);
-
---
--- Indices de la tabla `esquema`
---
-ALTER TABLE `esquema`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `estadio`
---
-ALTER TABLE `estadio`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nombre` (`nombre`);
-
---
--- Indices de la tabla `evento_partido`
---
-ALTER TABLE `evento_partido`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `partido_id` (`partido_id`);
-
---
--- Indices de la tabla `fase`
---
-ALTER TABLE `fase`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `formacion_equipo`
---
-ALTER TABLE `formacion_equipo`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `equipo_id` (`equipo_id`,`jugador_id`),
-  ADD KEY `jugador_id` (`jugador_id`);
-
---
--- Indices de la tabla `formato_torneo`
---
-ALTER TABLE `formato_torneo`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `jugador`
---
-ALTER TABLE `jugador`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pais_id` (`pais_id`),
-  ADD KEY `fk_equipo_id` (`equipo_id`);
-
---
--- Indices de la tabla `pais`
---
-ALTER TABLE `pais`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nombre` (`nombre`),
-  ADD UNIQUE KEY `codigo_iso` (`codigo_iso`);
-
---
--- Indices de la tabla `partido`
---
-ALTER TABLE `partido`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `equipo_local_id` (`equipo_local_id`),
-  ADD KEY `equipo_visitante_id` (`equipo_visitante_id`),
-  ADD KEY `torneo_id` (`torneo_id`);
-
---
--- Indices de la tabla `sobre`
---
-ALTER TABLE `sobre`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `torneo`
---
-ALTER TABLE `torneo`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UK_n0a32rfinot2bm27o52v22lvt` (`torneo_copa_id`),
-  ADD UNIQUE KEY `UK_ncjx5dmyf938gtehdokndj5ty` (`torneo_liga_id`),
-  ADD KEY `formato_torneo_id` (`formato_torneo_id`);
-
---
--- Indices de la tabla `torneo_copa`
---
-ALTER TABLE `torneo_copa`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_fase` (`id_fase`);
-
---
--- Indices de la tabla `torneo_liga`
---
-ALTER TABLE `torneo_liga`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `club`
---
-ALTER TABLE `club`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
-
---
--- AUTO_INCREMENT de la tabla `equipo`
---
-ALTER TABLE `equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
-
---
--- AUTO_INCREMENT de la tabla `equipo_torneo`
---
-ALTER TABLE `equipo_torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
-
---
--- AUTO_INCREMENT de la tabla `esquema`
---
-ALTER TABLE `esquema`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `estadio`
---
-ALTER TABLE `estadio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT de la tabla `evento_partido`
---
-ALTER TABLE `evento_partido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `fase`
---
-ALTER TABLE `fase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `formacion_equipo`
---
-ALTER TABLE `formacion_equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1045;
-
---
--- AUTO_INCREMENT de la tabla `formato_torneo`
---
-ALTER TABLE `formato_torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de la tabla `jugador`
---
-ALTER TABLE `jugador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
-
---
--- AUTO_INCREMENT de la tabla `pais`
---
-ALTER TABLE `pais`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
-
---
--- AUTO_INCREMENT de la tabla `partido`
---
-ALTER TABLE `partido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `sobre`
---
-ALTER TABLE `sobre`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT de la tabla `torneo`
---
-ALTER TABLE `torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT de la tabla `usuario`
---
-ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `club`
---
-ALTER TABLE `club`
-  ADD CONSTRAINT `club_ibfk_1` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `club_ibfk_2` FOREIGN KEY (`estadio_id`) REFERENCES `estadio` (`id`) ON DELETE SET NULL;
-
---
--- Filtros para la tabla `equipo`
---
-ALTER TABLE `equipo`
-  ADD CONSTRAINT `equipo_ibfk_1` FOREIGN KEY (`club_id`) REFERENCES `club` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `fk_equipo_esquema` FOREIGN KEY (`esquema_id`) REFERENCES `esquema` (`id`);
-
---
--- Filtros para la tabla `equipo_torneo`
---
-ALTER TABLE `equipo_torneo`
-  ADD CONSTRAINT `equipo_torneo_ibfk_1` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_equipotorneo_equipo` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`);
-
---
--- Filtros para la tabla `evento_partido`
---
-ALTER TABLE `evento_partido`
-  ADD CONSTRAINT `evento_partido_ibfk_1` FOREIGN KEY (`partido_id`) REFERENCES `partido` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `formacion_equipo`
---
-ALTER TABLE `formacion_equipo`
-  ADD CONSTRAINT `formacion_equipo_ibfk_1` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `formacion_equipo_ibfk_2` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `jugador`
---
-ALTER TABLE `jugador`
-  ADD CONSTRAINT `fk_equipo_id` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`),
-  ADD CONSTRAINT `jugador_ibfk_2` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`) ON DELETE SET NULL;
-
---
--- Filtros para la tabla `partido`
---
-ALTER TABLE `partido`
-  ADD CONSTRAINT `partido_ibfk_1` FOREIGN KEY (`equipo_local_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `partido_ibfk_2` FOREIGN KEY (`equipo_visitante_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `partido_ibfk_3` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `torneo`
---
-ALTER TABLE `torneo`
-  ADD CONSTRAINT `torneo_ibfk_1` FOREIGN KEY (`formato_torneo_id`) REFERENCES `formato_torneo` (`id`) ON DELETE SET NULL;
-
---
--- Filtros para la tabla `torneo_copa`
---
-ALTER TABLE `torneo_copa`
-  ADD CONSTRAINT `torneo_copa_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`),
-  ADD CONSTRAINT `torneo_copa_ibfk_2` FOREIGN KEY (`id_fase`) REFERENCES `fase` (`id`);
-
---
--- Filtros para la tabla `torneo_liga`
---
-ALTER TABLE `torneo_liga`
-  ADD CONSTRAINT `torneo_liga_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`);
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

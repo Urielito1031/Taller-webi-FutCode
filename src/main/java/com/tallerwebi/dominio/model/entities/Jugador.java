@@ -73,6 +73,15 @@ public class Jugador {
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
 
+   public Jugador(String nombre, RarezaJugador rarezaJugador) {
+      this.nombre = nombre;
+      this.rarezaJugador = rarezaJugador;
+   }
+
+   public Jugador() {
+
+   }
+
 
    public JugadorDTO convertToDTO() {
       JugadorDTO dto = new JugadorDTO();

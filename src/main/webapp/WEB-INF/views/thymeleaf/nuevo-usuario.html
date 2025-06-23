@@ -6,6 +6,7 @@
 
   <title>Nuevo Usuario</title>
 
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
   <!-- custom style -->
   <link rel="stylesheet" th:href="@{/css/sesionUsuario.css}"/>
 
@@ -23,20 +24,31 @@
   <h1>Bienvenido a FUTCODE</h1>
 
   <div class="container">
-    <div id="loginbox" class="formbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+    <div id="loginbox" class="formbox  col-md-offset-3 col-sm-offset-2">
       <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
-        <h3 class="form-signin-heading">Nuevo Usuario</h3>
-        <hr class="colorgraph"><br>
+        <h3 class="form-signin-heading mb-3">Nuevo Usuario</h3>
+        <hr class="colorgraph mb-4">
 
-        <label for="email" class="sr-only">Email</label>
-        <input th:field="*{email}" id="email" class="form-control" required/>
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" th:field="*{email}" id="email"
+                 class="form-control"
+                 th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+          <div class="invalid-feedback" th:errors="*{email}">Error en el email</div>
+        </div>
 
-        <label for="password" class="sr-only">Contraseña</label>
-        <input th:field="*{password}" type="password" id="password" class="form-control" required/>
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" th:field="*{password}" id="password"
+                 class="form-control"
+                 th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+          <div class="invalid-feedback" th:errors="*{password}">Error en la contraseña</div>
+        </div>
 
-        <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" Type="Submit">Registrarme</button>
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-        </p>
+        <!-- Mensaje global de error (como usuario duplicado) -->
+        <div th:if="${error != null}" class="alert alert-danger" th:text="'Error: ' + ${error}"></div>
+
+        <button id="btn-registrarme" class="btn btn-primary w-100">Registrarme</button>
       </form>
       <p class="link">¿Ya tenés cuenta? <a th:href="@{/login}">Iniciar sesión</a></p>
     </div>

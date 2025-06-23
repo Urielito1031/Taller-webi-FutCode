@@ -75,7 +75,6 @@ public class SpringWebConfig implements WebMvcConfigurer {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
-        System.out.println("Creating BCryptPasswordEncoder bean");
         return new BCryptPasswordEncoder();
     }
 

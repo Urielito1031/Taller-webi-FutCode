@@ -1,5 +1,6 @@
 package com.tallerwebi.punta_a_punta.vistas;
 
+import com.microsoft.playwright.Dialog;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
@@ -12,13 +13,9 @@ public class VistaPlantilla extends VistaWeb{
    }
 
    public void hacerClickLimpiarCampo() {
-      page.onceDialog(dialog -> {
-         System.out.println("Diálogo detectado: " + dialog.message());
-         dialog.accept();
-      });
+      page.onceDialog(Dialog::accept);
 
       darClickEnElElemento("#clear-field-btn");
-      System.out.println("Limpiando el campo...");
 
       page.waitForFunction("() => document.querySelectorAll('.position-marker.occupied').length === 0");
    }
@@ -53,7 +50,6 @@ public class VistaPlantilla extends VistaWeb{
          Locator marcadoresLibres = page.locator(".position-marker.default-marker:not(.occupied)");
          String markerId = marcadoresLibres.first().getAttribute("id");
 
-         System.out.println("Asignando jugador " + playerId + " a marcador " + markerId);
          this.arrastrarYSoltarJugador(playerId, markerId);
 
          page.waitForFunction(

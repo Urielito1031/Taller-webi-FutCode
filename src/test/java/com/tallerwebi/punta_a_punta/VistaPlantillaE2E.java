@@ -59,7 +59,6 @@ public class VistaPlantillaE2E{
       vistaPlantilla.hacerClickGuardarFormacion();
       String texto = vistaPlantilla.obtenerMensajeDeExito().trim();
 
-      System.out.println("Texto de éxito: " + texto);
 
       assertThat("Formación guardada con éxito!", equalToIgnoringCase(texto));
 

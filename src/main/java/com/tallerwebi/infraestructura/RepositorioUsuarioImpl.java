@@ -52,7 +52,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
-        System.out.println(id);
         return sessionFactory.getCurrentSession().createQuery("FROM Usuario u WHERE u.id = :id", Usuario.class)
                 .setParameter("id", id)
                 .uniqueResult();
@@ -84,7 +83,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
             return new ArrayList<>();
 
         } catch (Exception e) {
-            System.err.println("Error al obtener sobres del usuario: " + e.getMessage());
             return new ArrayList<>();
         }
     }

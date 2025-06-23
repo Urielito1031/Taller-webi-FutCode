@@ -37,7 +37,6 @@ public class TorneoController {
    @GetMapping("/detalle-torneo/{id}")
    public String detalleTorneo(@PathVariable Long id, Model model) {
       TorneoDTO torneo = torneoService.getById(id);
-      System.out.println("Detalle torneo: " + torneo);
       List<EquipoTorneoDTO> torneoEquipos = equipoTorneoService.getAllByTorneoId(id);
       model.addAttribute("torneo", torneo);
       model.addAttribute("torneoEquipos", torneoEquipos);

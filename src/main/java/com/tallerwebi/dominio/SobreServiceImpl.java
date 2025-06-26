@@ -57,6 +57,12 @@ public class SobreServiceImpl implements SobreService {
             case PLATA:
                 sobre.getJugadores().addAll(this.obtenerJugadoresRandomPorRareza(RarezaJugador.RARO, 5));
                 break;
+            case ORO:
+                sobre.getJugadores().addAll(this.obtenerJugadoresRandomPorRareza(RarezaJugador.EPICO, 5));
+                break;
+            case ESPECIAL:
+                sobre.getJugadores().addAll(this.obtenerJugadoresRandomPorRareza(RarezaJugador.LEYENDA, 5));
+                break;
         }
 
         return sobre;

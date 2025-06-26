@@ -73,6 +73,11 @@ public class Jugador {
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
 
+   @ManyToOne (fetch = FetchType.EAGER)
+   @JoinColumn (name = "sobre_id")
+   private Sobre sobre;
+
+
    public Jugador(String nombre, RarezaJugador rarezaJugador) {
       this.nombre = nombre;
       this.rarezaJugador = rarezaJugador;

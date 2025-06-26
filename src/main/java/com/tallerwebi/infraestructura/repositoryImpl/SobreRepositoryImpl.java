@@ -6,7 +6,6 @@ import com.tallerwebi.dominio.repository.SobreRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
+import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
@@ -34,6 +36,9 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
         Sobre sobre = sobreDTO.fromEntity();
 
+        if (sobre.getTipoSobre() == null)
+            throw new TipoDeSobreDesconocido();
+
         switch (sobre.getTipoSobre()){
             case BRONCE:
                 sobre.setTitulo("Sobre de Bronce");
@@ -55,11 +60,15 @@ public class UsuarioServiceImpl implements  UsuarioService{
                 sobre.setPrecio(10000.0);
                 sobre.setImagenUrl("sobreFutCodeEspecial.png");
                 break;
-                default:
-                    return false;
         }
 
         sobre.setUsuario(usuario);
+
+        if(usuario.getMonedas() < sobre.getPrecio()){
+            throw new MonedasInsuficientes();
+        }
+
+        usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);
 
@@ -106,10 +115,10 @@ public class UsuarioServiceImpl implements  UsuarioService{
         sobreDTO.setPrecio(sobre.getPrecio());
         sobreDTO.setImagenUrl(sobre.getImagenUrl());
 
-        // Si tienes jugadores en el sobre, también convertirlos
-//        if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {
-//            // sobreDTO.setJugadores(convertirJugadoresEntidad(sobre.getJugadores()));
-//        }
+//         Si tienes jugadores en el sobre, también convertirlos
+        if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {
+            // sobreDTO.setJugadores(convertirJugadoresEntidad(sobre.getJugadores()));
+        }
 
         return sobreDTO;
     }

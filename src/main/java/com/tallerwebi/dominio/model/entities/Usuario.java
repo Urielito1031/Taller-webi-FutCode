@@ -20,7 +20,7 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo;
-    private Long monedas;
+    private Double monedas;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Sobre> sobres = new ArrayList<>();
 

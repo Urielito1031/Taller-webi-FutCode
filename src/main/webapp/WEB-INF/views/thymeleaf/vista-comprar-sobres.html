@@ -29,18 +29,21 @@
                <li class="nav-item">
                   <a class="nav-link" href="/spring/torneo/1/tabla-general"><i class="bi bi-trophy-fill"></i> Torneos</a>
                </li>
+
+
                <li class="nav-item">
-                  <a class="nav-link" href="spring/comprar-sobres">
-                     <i class="bi bi-gift-fill"></i> Sobres
-                     <span class="badge bg-warning ms-1" th:text="${cantidadSobres}"></span>
+                  <a class="nav-link" href="/spring/jugador/comprar-sobres">
+                     <i class="bi bi-gift-fill"></i> Mercado
                   </a>
                </li>
+
                <li class="nav-item">
-                  <a class="nav-link" href="/mensajes">
-                     <i class="bi bi-chat-dots-fill"></i> Mensajes
-                     <span class="badge bg-danger ms-1">2</span>
+                  <a class="nav-link" href="#">
+                     <i class="bi bi-coin"></i> Monedas
+                     <p th:text="${monedas}"></p>
                   </a>
                </li>
+
                <li class="nav-item dropdown">
                   <div class="dropdown">
                      <button class="dropdown-toggle">
@@ -49,6 +52,12 @@
                      </button>
                      <div class="dropdown-menu">
                         <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>
+                        <a class="nav-link" href="/spring/jugador/mis-sobres">
+                           <i class="bi bi-gift-fill"></i> Mis Sobres
+                           <span class="badge bg-warning ms-1" th:text="${cantidadSobres}"></span>
+                        </a>
+
+
                         <hr>
                         <a th:href="@{/login}" class="danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
                      </div>

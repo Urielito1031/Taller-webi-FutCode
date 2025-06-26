@@ -4,138 +4,46 @@
     <meta charset="UTF-8">
     <title>Jugadores del Sobre</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        body {
-            background: url('img/estadio.png') no-repeat center center fixed;
-            background-size: cover;
-            font-family: sans-serif;
-        }
-
-        .contenedor {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 2em;
-        }
-        .jugadores{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
-        h2 {
-            color: gold;
-            margin-bottom: 1em;
-        }
-        .player-card {
-            width: 200px;
-            background: #1c2a44;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid #2a3b52;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .player-image {
-            height: 180px;
-            position: relative;
-            background: #0d1a2e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 2px solid #2a3b52;
-        }
-
-        .card-img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            padding: 12px;
-        }
-
-        .player-info {
-            padding: 15px;
-            background: #17233a;
-        }
-        .player-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .player-number {
-            width: 30px;
-            height: 30px;
-            background: #1e3a8a;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            color: #e0e7ff;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .player-rating {
-            background: #f1c40f;
-            color: #1a2e4e;
-            padding: 3px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .player-name {
-            color: #e0e7ff;
-            font-size: 1.1rem;
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-weight: 500;
-        }
-
-        .player-details {
-            color: #a3bffa;
-            font-size: 0.85rem;
-            line-height: 1.3;
-        }
-
-    </style>
+    <link rel="stylesheet" th:href="@{/css/equipoSorteadoStyle.css(v=${T(java.lang.System).currentTimeMillis()})}"/>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
-<div class="contenedor">
-    <h2 th:text="'Sobre ' + ${sobre.tipoSobre}"></h2>
-    <div class="jugadores">
-        <div class="jugador" th:each="jugador : ${sobre.jugadores}">
-            <!--<img th:src="@{/img/jugadores/{img}(img=${jugador.imagen})}" alt="Jugador">
-            <h4 th:text="${jugador.nombre}"></h4>
-            <p th:text="${jugador.posicionNatural}"></p>
-            <p class="valoracion" th:text="'Valoración: ' + ${jugador.rating}"></p>-->
-            <div class="player-card" draggable="true"
-                 th:attr="data-player-id=${jugador.id}">
-                <div class="player-image">
-                    <img th:src="@{'/img/jugadores/' + ${jugador.imagen}}" alt="Imagen futbolista" class="card-img" />
-                </div>
-                <div class="player-info p-3">
-                    <div class="player-header d-flex justify-content-between align-items-center mb-2">
-                        <span class="player-number" th:text="${jugador.id}"></span>
-                        <span class="player-rating" th:text="${jugador.rating}"></span>
+
+    <h1 class="text-center">JUGADORES OBTENIDOS</h1>
+    <h4 class="text-center" th:text="'Sobre ' + ${sobre.tipoSobre}"></h4>
+
+    <div id="contenedor-principal">
+        <div id="subContenedor">
+            <ul class="container">
+                <li class="contenedor-jugador" th:each="jugador : ${sobre.jugadores}" th:style="'background-image: url(' + ${jugador.imagen} + ');'">
+                    <div class="overlay">
+                        <h3>Jugador</h3>
+                        <span th:text="${jugador.nombre} + ' ' + ${jugador.apellido}"></span>
+
+                        <div class="titulo-con-linea">
+                            <h4>Posición</h4>
+                            <hr>
+                        </div>
+                        <span th:text="${jugador.posicionNatural}"></span>
+
+                        <div class="titulo-con-linea">
+                            <h4>Rating</h4>
+                            <hr>
+                        </div>
+                        <span th:text="${jugador.rating}"></span>
+
+                        <div class="titulo-con-linea">
+                            <h4>Rareza</h4>
+                            <hr>
+                        </div>
+                        <span th:text="${jugador.rarezaJugador}"></span>
                     </div>
-                    <h6 th:text="${jugador.nombre} + ' ' + ${jugador.apellido}" class="player-name mb-1"></h6>
-                    <div class="player-details">
-                        <small th:text="${jugador.posicionNatural}" class="d-block"></small>
-                        <small th:text="${jugador.clubActual?.nombre ?: 'Sin club'}" class="d-block"></small>
-                        <small th:text="'Estado: ' + ${jugador.estadoFisico} + '%'" class="d-block"></small>
-                    </div>
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
     </div>
-</div>
+
+
+
 </body>
 </html>

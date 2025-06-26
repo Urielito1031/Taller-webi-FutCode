@@ -41,8 +41,9 @@ public class JugadorRepositoryImpl implements JugadorRepository{
    }
 
    @Override
-   public void save(Jugador jugador){
+   public Jugador save(Jugador jugador){
 
+      return jugador;
    }
 
    private Session getSession(){

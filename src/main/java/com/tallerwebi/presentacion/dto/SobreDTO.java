@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @Getter
 public class SobreDTO {
+    private Long id;
     private TipoSobre tipoSobre;
     private List<JugadorDTO> jugadores;
 

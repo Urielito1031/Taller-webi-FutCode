@@ -1,14 +1,12 @@
 (function($) {
-   // Módulo principal encapsulado
+   // FutCode encapsulado
    const FutCode = (function() {
-      // Constantes
       const DEFAULT_IMAGE_SRC = $("#field").data("default-img");
       const MAX_PLAYERS_ON_FIELD = 11;
 
-      // Estado interno
       let playersOnField = 0;
 
-      // Configuración del campo
+      // configuración del campo
       const CONFIG = {
          POSITION_RANGES: {
             MIN_Y: 15,

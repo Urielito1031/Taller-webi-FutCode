@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.Jugador;
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
+import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.dominio.repository.JugadorRepository;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,4 +45,19 @@ public class JugadorServiceImpl implements JugadorService{
    }
       return null;
    }
+
+//   public Jugador crearJugador(String imagen, String nombre, String apellido, Double rating, RarezaJugador rarezaJugador,
+//           PosicionEnum posicionNatural){
+//         Jugador jugador = new Jugador();
+//         jugador.setImagen(imagen);
+//         jugador.setNombre(nombre);
+//         jugador.setApellido(apellido);
+//         jugador.setRating(rating);
+//         jugador.setRarezaJugador(rarezaJugador);
+//         jugador.setPosicion(posicionNatural);
+//      return repository.save(jugador);
+//   }
+
+
+
 }

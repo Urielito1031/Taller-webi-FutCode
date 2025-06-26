@@ -1,14 +1,18 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
+import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
+import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
-import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
+import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +38,9 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
         Sobre sobre = sobreDTO.fromEntity();
 
+        if (sobre.getTipoSobre() == null)
+            throw new TipoDeSobreDesconocido();
+
         switch (sobre.getTipoSobre()){
             case BRONCE:
                 sobre.setTitulo("Sobre de Bronce");
@@ -55,11 +62,15 @@ public class UsuarioServiceImpl implements  UsuarioService{
                 sobre.setPrecio(10000.0);
                 sobre.setImagenUrl("sobreFutCodeEspecial.png");
                 break;
-                default:
-                    return false;
         }
 
         sobre.setUsuario(usuario);
+
+        if(usuario.getMonedas() < sobre.getPrecio()){
+            throw new MonedasInsuficientes();
+        }
+
+        usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);
 
@@ -80,7 +91,10 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return sobres.stream().map(this::convertirEntidadADTO).collect(Collectors.toList());
     }
 
-
+    @Override
+    public void borrarSobreAUsuario(Long idUsuario, Long idSobre){
+        this.repositorioUsuario.borrarSobreAUsuario(idUsuario, idSobre);
+    }
 
 
 
@@ -99,19 +113,45 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return sobre;
     }
 
-    private SobreDTO convertirEntidadADTO(Sobre sobre) {
+    public SobreDTO convertirEntidadADTO(Sobre sobre) {
+
         SobreDTO sobreDTO = new SobreDTO();
+        sobreDTO.setId(sobre.getId());
         sobreDTO.setTipoSobre(sobre.getTipoSobre());
         sobreDTO.setTitulo(sobre.getTitulo());
         sobreDTO.setPrecio(sobre.getPrecio());
         sobreDTO.setImagenUrl(sobre.getImagenUrl());
 
-        // Si tienes jugadores en el sobre, también convertirlos
-//        if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {
-//            // sobreDTO.setJugadores(convertirJugadoresEntidad(sobre.getJugadores()));
-//        }
+//      convertir jugadores del sobre JugadorDTO tambien
+        if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {
+             sobreDTO.setJugadores(convertirJugadoresEntidad(sobre.getJugadores()));
+        }
 
         return sobreDTO;
+    }
+
+    public JugadorDTO convertirJugadorEntidadADTO(Jugador jugador) {
+        JugadorDTO jugadorDTO = new JugadorDTO();
+        jugadorDTO.setId(jugador.getId());
+        jugadorDTO.setNombre(jugador.getNombre());
+        jugadorDTO.setApellido(jugador.getApellido());
+        jugadorDTO.setImagen(jugador.getImagen());
+        jugadorDTO.setRating(jugador.getRating());
+        jugadorDTO.setPosicionNatural(jugador.getPosicion());
+        jugadorDTO.setRarezaJugador(jugador.getRarezaJugador());
+        return jugadorDTO;
+    }
+
+    @Override
+    public List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores) {
+        List<JugadorDTO> jugadoresDTO = new ArrayList<>();
+
+        for (Jugador jugador : jugadores) {
+            JugadorDTO jugadorDTO = convertirJugadorEntidadADTO(jugador);
+            jugadoresDTO.add(jugadorDTO);
+        }
+
+        return jugadoresDTO;
     }
 
 }

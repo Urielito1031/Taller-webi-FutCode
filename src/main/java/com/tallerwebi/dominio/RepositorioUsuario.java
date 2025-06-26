@@ -12,5 +12,6 @@ public interface RepositorioUsuario {
     void modificar(Usuario usuario);
     Usuario buscarUsuarioPorId(Long id);
 
+    void borrarSobreAUsuario(Long idUsuario, Long idSobre);
 }
 

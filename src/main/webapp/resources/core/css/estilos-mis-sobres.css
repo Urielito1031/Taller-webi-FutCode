@@ -94,7 +94,18 @@ main section {
     }
 }
 
-.sobres article button {
+.sobres article form{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sobres article form button {
     background: none;
     border: none;
     outline: none;
@@ -109,7 +120,7 @@ main section {
     gap: 10px;
 }
 
-.sobres article  h3{
+.sobres article form button h3{
     color: var(--verdeAgua);
     font-size: 1.3rem;
     width: 100%;
@@ -117,7 +128,7 @@ main section {
     font-family: "Orbitron", sans-serif;
 }
 
-.sobres article  img {
+.sobres article form button img {
     height: 70%;
     width: auto;
     object-fit: contain;

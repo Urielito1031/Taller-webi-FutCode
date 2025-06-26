@@ -10,5 +10,5 @@ public interface JugadorRepository{
 
    List<Jugador>getAllByEquipoId(Long equipoId);
    Jugador getById(Long id);
-   void save(Jugador jugador);
+   Jugador save(Jugador jugador);
 }

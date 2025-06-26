@@ -43,7 +43,7 @@ public class Sobre {
    @JoinColumn (name = "usuario_id")
    private Usuario usuario;
 
-
-   //private List<Jugador> jugadores;
+   @OneToMany(mappedBy = "sobre", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+   private List<Jugador> jugadores;
 
 }

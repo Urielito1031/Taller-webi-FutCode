@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y wget && \
     tar -xzvf jetty-distribution-${JETTY_VERSION}.tar.gz -C $JETTY_HOME --strip-components=1 && \
     rm jetty-distribution-${JETTY_VERSION}.tar.gz
 
-# Copia el archivo WAR al directorio webapps de Jetty
-COPY target/tallerwebi-base-1.0-SNAPSHOT.war $JETTY_HOME/webapps/
+# Copia el archivo WAR al directorio webapps de Jetty con nombre ROOT.war
+COPY target/tallerwebi-base-1.0-SNAPSHOT.war $JETTY_HOME/webapps/ROOT.war
 
 # Expone el puerto en el que Jetty corre (por defecto 8080)
 EXPOSE 8080

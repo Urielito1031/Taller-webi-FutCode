@@ -40,7 +40,6 @@ public class SobreDTO {
     }
 
     public Sobre fromEntity(){
-        System.out.println("llego aca" );
         Sobre sobre = new Sobre();
 
         sobre.setTitulo(titulo);

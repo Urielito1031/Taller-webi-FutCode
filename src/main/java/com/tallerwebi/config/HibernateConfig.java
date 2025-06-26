@@ -18,32 +18,20 @@ public class HibernateConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/db_futcode4?useSSL=false&serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("");
+
+        String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+        String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
+        String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
+        // Local: "", Docker: "root"
+        String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
+
+        dataSource.setUrl("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+        dataSource.setUsername(dbUser);
+        dataSource.setPassword(dbPassword);
+
         return dataSource;
     }
-
-//        @Bean
-//        public DataSource dataSource() {
-//            DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//
-//            String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
-//            String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
-//            String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
-//            String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
-//            // Local: "", Docker: "root"
-//            String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
-//
-//            dataSource.setUrl("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
-//            dataSource.setUsername(dbUser);
-//            dataSource.setPassword(dbPassword);
-//
-//            return dataSource;
-//        }
-
-
     @Bean
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();

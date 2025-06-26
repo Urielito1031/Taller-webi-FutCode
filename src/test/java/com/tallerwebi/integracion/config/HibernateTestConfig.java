@@ -50,7 +50,6 @@ public class HibernateTestConfig {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
-        System.out.println("Creating BCryptPasswordEncoder bean");
         return new BCryptPasswordEncoder();
     }
 }

@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
+import com.tallerwebi.dominio.service.JugadorService;
 import com.tallerwebi.dominio.service.PlantillaService;
 import com.tallerwebi.presentacion.controller.PlantillaController;
 import com.tallerwebi.presentacion.dto.EsquemaDTO;
@@ -30,13 +31,14 @@ public class PlantillaControllerTest {
    @Mock
    private PlantillaService plantillaService;
 
+   @Mock
+   private JugadorService jugadorService;
+
    @InjectMocks
    private PlantillaController plantillaController;
 
    @Mock
    private Model model;
-
-
 
    @BeforeEach
    public void setUp() {
@@ -46,15 +48,19 @@ public class PlantillaControllerTest {
    @Test
    public void DadoQueMostramosLaVistaDePlantillaDebeEstablecerAtributos() {
       EsquemaDTO formacion = crearEsquemaDTOValido();
-      when(plantillaService.initPlantillaBase()).thenReturn(formacion);
-      List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
 
+      when(plantillaService.getFormacionPorEquipoId(1L)).thenReturn(formacion);
+      when(jugadorService.getAllByEquipoId(1L)).thenReturn(new ArrayList<>());
+
+      List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       String view = plantillaController.showViewPlantilla(model);
 
       assertThat(view, is("vista-plantilla"));
+      verify(model).addAttribute(eq("jugadores"), any());
       verify(model).addAttribute(eq("formacion"), eq(formacion));
       verify(model).addAttribute(eq("esquemas"), eq(esquemas));
    }
+
 
    @Test
    public void DadoQueCambiamosLaFormacionDebeDevolverVistaPlantilla() {
@@ -63,11 +69,15 @@ public class PlantillaControllerTest {
       EsquemaDTO formacion = crearEsquemaDTOValido();
       formacion.setEsquema(esquemaSeleccionado);
       when(plantillaService.initPlantillaBase()).thenReturn(formacion);
+
+      when(jugadorService.getAllByEquipoId(formacion.getEquipoId())).thenReturn(new ArrayList<>());
+
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
 
       String view = plantillaController.cambiarFormacion(esquemaTexto, model);
 
       assertThat(view, is("vista-plantilla"));
+      verify(model).addAttribute(eq("jugadores"), any()); // ✅ Verificado
       verify(model).addAttribute(eq("formacion"), eq(formacion));
       verify(model).addAttribute(eq("esquemas"), eq(esquemas));
    }
@@ -80,24 +90,26 @@ public class PlantillaControllerTest {
       baseFormacion.setId(1L);
       baseFormacion.setEsquema(FormacionEsquema.CINCO_TRES_DOS);
       when(plantillaService.save(formacion)).thenReturn(true);
-      when(plantillaService.initPlantillaBase()).thenReturn(baseFormacion);
+
+      when(plantillaService.getFormacionPorEquipoId(formacion.getEquipoId())).thenReturn(baseFormacion);
+
+      when(jugadorService.getAllByEquipoId(formacion.getEquipoId())).thenReturn(new ArrayList<>());
 
       String view = plantillaController.guardarFormacion(formacion, result, model);
 
       assertThat(view, is("vista-plantilla"));
       InOrder inOrder = inOrder(model);
-      inOrder.verify(model).addAttribute(eq("message"), eq("Formación guardada con éxito!"));
       inOrder.verify(model).addAttribute(eq("formacion"), eq(baseFormacion));
+      inOrder.verify(model).addAttribute(eq("jugadores"), any());
       inOrder.verify(model).addAttribute(eq("esquemas"), eq(Arrays.asList(FormacionEsquema.values())));
+      inOrder.verify(model).addAttribute(eq("message"), eq("Formación guardada con éxito!"));
    }
-
-
 
    private EsquemaDTO crearEsquemaDTOValido() {
       EsquemaDTO formacion = new EsquemaDTO();
       formacion.setId(1L);
       formacion.setEquipoId(1L);
-     // formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
+
       List<PosicionJugadorDTO> alineacion = new ArrayList<>();
       for (int i = 0; i < 11; i++) {
          PosicionJugadorDTO posicion = new PosicionJugadorDTO();

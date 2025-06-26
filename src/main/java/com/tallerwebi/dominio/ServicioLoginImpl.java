@@ -38,6 +38,7 @@ public class ServicioLoginImpl implements ServicioLogin {
             throw new UsuarioExistente();
         }
 
+
         String hashedPassword = passwordEncoder.encode(usuario.getPassword());
         usuario.setPassword(hashedPassword);
         usuario.setRol("USER");

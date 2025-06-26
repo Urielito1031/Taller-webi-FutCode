@@ -45,8 +45,6 @@ public class PlantillaServiceImpl implements PlantillaService {
       if (!formaciones.isEmpty()) {
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
          formacion.setEsquema(detectarEsquema(formaciones));
-         System.out.println("Formación cargada para el equipo con ID: " + equipoId);
-         System.out.println("Esquema en tabla formacion_equipo: " + formacion);
       }
 
 
@@ -62,11 +60,9 @@ public class PlantillaServiceImpl implements PlantillaService {
 
       Long equipoId = formacion.getEquipoId();
       if( equipoId == null || equipoId == 0L){
-         System.out.println("El id de equipoID es null o 0");
          return false;
       }
       if (!equipoExists(equipoId)) {
-         System.out.println("Equipo con ID {} no encontrado."+ equipoId);
          return false;
       }
       formacionEquipoRepository.deleteByEquipoId(equipoId);
@@ -97,7 +93,7 @@ public class PlantillaServiceImpl implements PlantillaService {
       } else {
          formacion.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
          formacion.setAlineacion(new ArrayList<>());
-         System.out.println("No se encontraron formaciones para equipoId " + equipoId + ". Usando valores por defecto.");
+
       }
 
       return formacion;
@@ -143,11 +139,9 @@ public class PlantillaServiceImpl implements PlantillaService {
          if (esquema.getDefensas() == defensores &&
            esquema.getMediocampistas() == mediocampistas &&
            esquema.getDelanteros() == delanteros) {
-            System.out.println("Esquema detectado: " + esquema);
             return esquema;
          }
       }
-      System.out.println("automaticamente se asigna el esquema CUATRO_TRES_TRES");
       return FormacionEsquema.CUATRO_TRES_TRES;
    }
 

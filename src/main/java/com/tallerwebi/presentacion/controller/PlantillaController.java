@@ -51,7 +51,6 @@ public class PlantillaController {
       Long equipoId = 1L; // Este ID debería ser dinámico, posiblemente pasado como parámetro o desde la sesión del usuario
       EsquemaDTO formacion = service.getFormacionPorEquipoId(equipoId);
 
-      System.out.println("Formación obtenida: " + formacion);
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
       model.addAttribute("formacion", formacion);

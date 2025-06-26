@@ -17,7 +17,7 @@ public class VistaPlantilla extends VistaWeb{
 
       darClickEnElElemento("#clear-field-btn");
 
-      page.waitForFunction("() => document.querySelectorAll('.position-marker.occupied').length === 0");
+      page.waitForFunction("() => document.querySelectorAll('.position-marker.occupied').length === 0",5000);
    }
 
 
@@ -40,7 +40,10 @@ public class VistaPlantilla extends VistaWeb{
       page.waitForFunction(
         "sel => document.querySelector(sel)?.classList.contains('occupied')",
         "#" + markerId
-      );
+        );
+      page.waitForTimeout(1000);
+
+
    }
 
    public void arrastrarJugadoresASusMarcadores(String[] jugadorIds) {
@@ -56,7 +59,11 @@ public class VistaPlantilla extends VistaWeb{
            "count => document.querySelectorAll('.position-marker.occupied').length === count",
            i + 1
          );
+         page.waitForTimeout(1000);
+
+
       }
+
    }
 
 

@@ -34,7 +34,7 @@ describe("FutCode", function() {
       ];
       $field = $("#field");
       $card = $(".player-card");
-      $marker = $('<div class="position-marker default-marker" id="marker-delantero-123456789" style="position: absolute; left: 70%; top: 70%; width: 50px; height: 50px;"></div>')
+      $marker = $('<div class="position-marker default-marker" id="marker-delantero-6" style="position: absolute; left: 70%; top: 70%; width: 50px; height: 50px;"></div>')
          .append('<img class="marker-img" alt="Delantero" />' +
             '<div class="marker-number"></div>' +
             '<div class="marker-rating"></div>' +

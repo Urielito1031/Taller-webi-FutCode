@@ -530,11 +530,9 @@
    })();
 
 
-   // Ejecuta la inicialización
    FutCode.init();
 
-   // Expone FutCode globalmente solo para pruebas
-   if (typeof window !== 'undefined' && typeof window.jasmine !== 'undefined') {
+   // necesito exponer FutCode globalmente solo para pruebas
       window.FutCode = FutCode;
-   }
+
 })(jQuery);

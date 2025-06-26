@@ -6,16 +6,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/equipoSorteadoStyle.css(v=${T(java.lang.System).currentTimeMillis()})}"/>
     <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
-
     <h1 class="text-center">JUGADORES OBTENIDOS</h1>
     <h4 class="text-center" th:text="'Sobre ' + ${sobre.tipoSobre}"></h4>
 
     <div id="contenedor-principal">
         <div id="subContenedor">
             <ul class="container">
-                <li class="contenedor-jugador" th:each="jugador : ${sobre.jugadores}" th:style="'background-image: url(' + ${jugador.imagen} + ');'">
+                <li class="contenedor-jugador animate__animated animate__backInLeft" th:each="jugador : ${sobre.jugadores}" th:style="'background-image: url(' + ${jugador.imagen} + ');'">
                     <div class="overlay">
                         <h3>Jugador</h3>
                         <span th:text="${jugador.nombre} + ' ' + ${jugador.apellido}"></span>
@@ -43,7 +43,6 @@
         </div>
     </div>
 
-
-
+    <a href="/spring/jugador/mis-sobres">Volver</a>
 </body>
 </html>

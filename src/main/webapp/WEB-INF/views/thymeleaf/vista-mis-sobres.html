@@ -71,28 +71,23 @@
 
 <main>
     <div class="fondo"></div>
+
     <section>
         <h2>MIS SOBRES</h2>
         <div class="sobres">
-            <article th:each="sobre : ${sobres}" class="d-flex flex-column">
-                <h3 th:text="${sobre.titulo}">Titulo</h3>
-                <img th:src="@{'/img/' + ${sobre.imagenUrl}}" alt="Imagen del sobre" class="imagen-sobre">
+            <article th:each="sobre : ${sobres}" >
+                <form th:action="@{/sobre}" method="post">
+                    <button type="submit">
+                        <h3 th:text="${sobre.titulo}">Titulo</h3>
+                        <img th:src="@{/img/{nombre}(nombre=${sobre.imagenUrl})}" alt="Imagen del sobre" class="imagen-sobre">
 
+                        <input type="hidden" name="tipoDeSobre" th:value="${sobre.tipoSobre}">
+                        <input type="hidden" name="idSobre" th:value="${sobre.id}">
+
+                    </button>
+                </form>
             </article>
         </div>
-    </section>
-
-    <section>
-        <article th:each="sobre : ${sobres}" >
-            <form th:action="@{/sobre}" method="post">
-                <button type="submit">
-                    <h3 th:text="${sobre.titulo}">Titulo</h3>
-                    <img th:src="@{/img/{nombre}(nombre=${sobre.imagenUrl})}" alt="Imagen del sobre" class="imagen-sobre">
-
-                    <input type="hidden" name="tipoDeSobre" th:value="${sobre.tipoSobre}">
-                </button>
-            </form>
-        </article>
     </section>
 
 </main>

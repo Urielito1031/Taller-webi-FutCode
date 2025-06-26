@@ -86,6 +86,9 @@
                </button>
             </form>
          </article>
+         <div th:if="${mensajeError}" class="alert alert-danger">
+            <p th:text="${mensajeError}"></p>
+         </div>
       </div>
       <aside>
          <h3 id="titulo-descripcion">Sobre de Oro</h3>

@@ -8,7 +8,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,12 +86,16 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
     }
 
-//    public Long getMonedas(Long id){
-//        return (Long) getCurrentSession().
-//                createQuery("SELECT monedas FROM Usuario  WHERE id = :id")
-//                .setParameter("id", id)
-//                .uniqueResult();
-//    }
+    @Override
+    public void borrarSobreAUsuario(Long idUsuario, Long idSobre) {
+        getCurrentSession()
+                .createQuery("DELETE FROM Sobre AS s WHERE s.usuario.id = :idUsuario AND s.id = :idSobre")
+                .setParameter("idUsuario", idUsuario)
+                .setParameter("idSobre", idSobre)
+                .executeUpdate();
+    }
+
+
 
 
 }

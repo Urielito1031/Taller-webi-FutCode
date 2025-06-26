@@ -1,5 +1,8 @@
 package com.tallerwebi.presentacion.controller;
 
+import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
+import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
+import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.dominio.service.SobreService;
@@ -7,6 +10,7 @@ import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +24,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/jugador")
 public class ComprarSobreController {
-
     private final SobreService sobreService;
     private final UsuarioService usuarioService;
 
@@ -54,27 +57,23 @@ public class ComprarSobreController {
         mav.addObject("cantidadSobres", sobres.size());
 
         Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
-
         mav.addObject("monedas", usuario.getMonedas());
         return mav;
     }
 
     @PostMapping("/agregarSobre")
-    public String crearSobre(@RequestParam("tipoDeSobre")TipoSobre tipo, HttpServletRequest request){
+    public String crearSobre(@RequestParam("tipoDeSobre")TipoSobre tipo, HttpServletRequest request, Model model){
         SobreDTO sobreObtenido = this.sobreService.crearSobre(tipo);
 
         Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
 
-        String returnText = "No se pudo crear el sobre";
-
-        if(sobreObtenido != null){
-            // A cambiar por ID de la session
-            Boolean agregado = this.usuarioService.agregarSobreAJugador(id, sobreObtenido);
-            if(agregado){
-//              returnText = "Sobre creado con exito";
-                return "redirect:/jugador/mis-sobres";
-            }
+        try{
+            this.usuarioService.agregarSobreAJugador(id, sobreObtenido);
+        }catch(MonedasInsuficientes ex){
+            model.addAttribute("mensajeError", ex.getMessage());
+            return "vista-comprar-sobres";
         }
+
         return "redirect:/jugador/mis-sobres";
     }
 

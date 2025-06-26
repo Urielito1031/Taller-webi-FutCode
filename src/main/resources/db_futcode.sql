@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-06-2025 a las 03:55:40
+-- Tiempo de generación: 26-06-2025 a las 23:40:04
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -17,8 +17,27 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Base de datos: `db_futcode`
+--
 
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `club`
+--
+
+CREATE TABLE `club` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `pais_id` int(11) DEFAULT NULL,
+  `estadio_id` int(11) DEFAULT NULL,
+  `imagen` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `club`
+--
 
 INSERT INTO `club` (`id`, `nombre`, `pais_id`, `estadio_id`, `imagen`) VALUES
 (1, 'River Plate', 1, 1, 'https://upload.wikimedia.org/wikipedia/en/3/3f/Club_Atl%C3%A9tico_River_Plate_logo.svg'),
@@ -45,6 +64,22 @@ INSERT INTO `club` (`id`, `nombre`, `pais_id`, `estadio_id`, `imagen`) VALUES
 (22, 'New York City FC', 13, 23, 'https://upload.wikimedia.org/wikipedia/en/2/2d/New_York_City_FC.svg'),
 (23, 'Rangers FC', 14, 24, 'https://upload.wikimedia.org/wikipedia/en/0/0c/Rangers_FC.svg');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `equipo`
+--
+
+CREATE TABLE `equipo` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `club_id` int(11) DEFAULT NULL,
+  `esquema_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `equipo`
+--
 
 INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
 (1, 'River Plate Titulares', 1, 1),
@@ -78,6 +113,29 @@ INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
 (29, 'Celtic Reservas', 19, 3),
 (30, 'PSV Academy', 22, 2);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `equipo_torneo`
+--
+
+CREATE TABLE `equipo_torneo` (
+  `id` int(11) NOT NULL,
+  `equipo_id` int(11) NOT NULL,
+  `posicion` int(11) NOT NULL,
+  `partidos_jugados` int(11) NOT NULL DEFAULT 0,
+  `partidos_ganados` int(11) NOT NULL DEFAULT 0,
+  `partidos_empatados` int(11) NOT NULL DEFAULT 0,
+  `partidos_perdidos` int(11) NOT NULL DEFAULT 0,
+  `goles_a_favor` int(11) NOT NULL DEFAULT 0,
+  `goles_en_contra` int(11) NOT NULL DEFAULT 0,
+  `puntos` int(11) NOT NULL DEFAULT 0,
+  `torneo_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `equipo_torneo`
+--
 
 INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, `partidos_ganados`, `partidos_empatados`, `partidos_perdidos`, `goles_a_favor`, `goles_en_contra`, `puntos`, `torneo_id`) VALUES
 (1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1),
@@ -193,6 +251,18 @@ INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, 
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `esquema`
+--
+
+CREATE TABLE `esquema` (
+  `id` int(11) NOT NULL,
+  `esquema` enum('CUATRO_TRES_TRES','CUATRO_CUATRO_DOS','TRES_CINCO_DOS','CINCO_TRES_DOS','TRES_CUATRO_TRES') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `esquema`
+--
 
 INSERT INTO `esquema` (`id`, `esquema`) VALUES
 (1, 'CUATRO_TRES_TRES'),
@@ -206,6 +276,14 @@ INSERT INTO `esquema` (`id`, `esquema`) VALUES
 --
 -- Estructura de tabla para la tabla `estadio`
 --
+
+CREATE TABLE `estadio` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `capacidad` int(11) DEFAULT NULL,
+  `ubicacion` varchar(255) DEFAULT NULL,
+  `imagen_url` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `estadio`
@@ -238,6 +316,34 @@ INSERT INTO `estadio` (`id`, `nombre`, `capacidad`, `ubicacion`, `imagen_url`) V
 (24, 'Ibrox Stadium', 50817, 'Glasgow, Escocia', 'https://example.com/ibrox.jpg'),
 (25, 'Jan Breydel Stadium', 29062, 'Brugge, Bélgica', 'https://example.com/breydel.jpg');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `evento_partido`
+--
+
+CREATE TABLE `evento_partido` (
+  `id` int(11) NOT NULL,
+  `tipo_evento_partido` enum('TARJETA_AMARILLA','TARJETA_ROJA','LESION','EXPULSION','GOL') NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `minuto_de_partido` int(11) NOT NULL,
+  `partido_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `fase`
+--
+
+CREATE TABLE `fase` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `fase`
+--
 
 INSERT INTO `fase` (`id`, `nombre`) VALUES
 (1, 'Fase de grupos'),
@@ -248,129 +354,199 @@ INSERT INTO `fase` (`id`, `nombre`) VALUES
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `formacion_equipo`
+--
+
+CREATE TABLE `formacion_equipo` (
+  `id` int(11) NOT NULL,
+  `equipo_id` int(11) NOT NULL,
+  `jugador_id` int(11) NOT NULL,
+  `posicion_en_campo` enum('ARQUERO','DEFENSOR','MEDIOCAMPISTA','DELANTERO') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `formacion_equipo`
+--
 
 INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_campo`) VALUES
-(1034, 1, 16, 'ARQUERO'),
-(1035, 1, 5, 'DEFENSOR'),
-(1036, 1, 15, 'DEFENSOR'),
-(1037, 1, 4, 'DEFENSOR'),
-(1038, 1, 90, 'DEFENSOR'),
-(1039, 1, 19, 'DEFENSOR'),
-(1040, 1, 118, 'MEDIOCAMPISTA'),
-(1041, 1, 13, 'MEDIOCAMPISTA'),
-(1042, 1, 20, 'MEDIOCAMPISTA'),
-(1043, 1, 18, 'DELANTERO'),
-(1044, 1, 21, 'DELANTERO');
+(1527, 1, 16, 'ARQUERO'),
+(1528, 1, 2, 'DEFENSOR'),
+(1529, 1, 3, 'DEFENSOR'),
+(1530, 1, 4, 'DEFENSOR'),
+(1531, 1, 5, 'DEFENSOR'),
+(1532, 1, 6, 'DEFENSOR'),
+(1533, 1, 10, 'MEDIOCAMPISTA'),
+(1534, 1, 118, 'MEDIOCAMPISTA'),
+(1535, 1, 20, 'MEDIOCAMPISTA'),
+(1536, 1, 21, 'DELANTERO'),
+(1537, 1, 17, 'DELANTERO');
 
 -- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `formato_torneo`
+--
+
+CREATE TABLE `formato_torneo` (
+  `id` int(11) NOT NULL,
+  `tipo` enum('LIGA','COPA') NOT NULL,
+  `fase_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `formato_torneo`
+--
 
 INSERT INTO `formato_torneo` (`id`, `tipo`, `fase_id`) VALUES
 (1, 'COPA', NULL),
 (2, 'LIGA', NULL);
 
+-- --------------------------------------------------------
 
-INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_camiseta`, `rating`, `lesionado`, `estado_fisico`, `pais_id`, `rareza_jugador`, `posicion`, `equipo_id`) VALUES
-(1, 'Emiliano', 'Martínez', 'emiliano_martinez.png', 31, 1, 88.0, 0, 95.00, 1, 'RARO', 'ARQUERO', 1),
-(2, 'Cristian', 'Romero', 'cristian_romero.png', 26, 23, 87.0, 0, 90.00, 1, 'RARO', 'DEFENSOR', 1),
-(3, 'Nicolás', 'Otamendi', 'nicolas_otamendi.png', 36, 3, 85.0, 0, 88.00, 1, 'RARO', 'DEFENSOR', 1),
-(4, 'Marcos', 'Acuña', 'marcos_acuna.png', 32, 8, 84.0, 0, 87.00, 1, 'RARO', 'DEFENSOR', 1),
-(5, 'Gonzalo', 'Montiel', 'gonzalo_montiel.png', 27, 4, 83.0, 0, 89.00, 1, 'RARO', 'DEFENSOR', 1),
-(6, 'Rodrigo', 'De Paul', 'rodrigo_depaul.png', 29, 16, 86.0, 0, 91.00, 1, 'RARO', 'MEDIOCAMPISTA', 1),
-(7, 'Alexis', 'Mac Allister', 'alexis_macallister.png', 25, 5, 85.0, 0, 90.00, 1, 'RARO', 'MEDIOCAMPISTA', 1),
-(8, 'Enzo', 'Fernández', 'enzo_fernandez.png', 23, 24, 87.0, 0, 92.00, 1, 'RARO', 'MEDIOCAMPISTA', 1),
-(9, 'Lionel', 'Messi', 'lionel_messi.png', 36, 10, 94.0, 0, 89.00, 1, 'LEYENDA', 'DELANTERO', 1),
-(10, 'Julián', 'Álvarez', 'julian_alvarez.png', 24, 9, 86.0, 0, 88.00, 1, 'RARO', 'DELANTERO', 1),
-(11, 'Lautaro', 'Martínez', 'lautaro_martinez.png', 26, 21, 88.0, 0, 90.00, 1, 'RARO', 'DELANTERO', 1),
-(12, 'Cristiano', 'Ronaldo', 'cristiano_ronaldo.png', 40, 7, 98.2, 0, 97.50, 11, 'LEYENDA', 'DELANTERO', 1),
-(13, 'Kylian', 'Mbappé', 'mbappe.png', 26, 10, 84.3, 0, 98.70, 4, 'EPICO', 'DELANTERO', 1),
-(14, 'Kevin', 'De Bruyne', 'de_bruyne.png', 33, 17, 82.7, 0, 96.40, 14, 'EPICO', 'MEDIOCAMPISTA', 1),
-(15, 'Virgil', 'van Dijk', 'van_dijk.png', 33, 4, 47.3, 0, 95.80, 12, 'RARO', 'DEFENSOR', 1),
-(16, 'Thibaut', 'Courtois', 'courtois.png', 33, 1, 49.1, 0, 94.90, 14, 'RARO', 'ARQUERO', 1),
-(17, 'Robert', 'Lewandowski', 'lewandoswski.png', 36, 9, 83.6, 0, 98.20, 3, 'EPICO', 'DELANTERO', 1),
-(18, 'Erling', 'Haaland', 'haaland.png', 24, 9, 85.2, 0, 98.80, 5, 'EPICO', 'DELANTERO', 1),
-(19, 'Neymar', 'Jr', 'neymar.png', 33, 11, 80.4, 0, 97.00, 2, 'EPICO', 'MEDIOCAMPISTA', 1),
-(20, 'Luka', 'Modrić', 'modric.png', 39, 10, 48.7, 0, 96.70, 3, 'RARO', 'MEDIOCAMPISTA', 1),
-(21, 'Mohamed', 'Salah', 'salah.png', 32, 11, 46.2, 0, 97.20, 7, 'RARO', 'DELANTERO', 1),
-(22, 'Sadio', 'Mané', NULL, 33, 10, 45.8, 0, 96.50, 2, 'RARO', 'DELANTERO', 2),
-(23, 'Casemiro', 'Carlos', NULL, 32, 5, 44.3, 0, 95.90, 2, 'RARO', 'MEDIOCAMPISTA', 3),
-(24, 'Joshua', 'Kimmich', NULL, 30, 6, 50.0, 0, 96.00, 5, 'RARO', 'MEDIOCAMPISTA', 4),
-(25, 'Vinícius', 'Jr', 'https://assets.laliga.com/squad/2024/t186/p246333/1024x1024/p246333_t186_2024_1_003_000.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 5),
-(26, 'Bruno', 'Fernandes', 'https://assets.manutd.com/AssetPicker/images/0/0/20/88/1333344/8-Bruno-Fernandes1719822565555.png', 30, 8, 25.7, 0, 96.10, 7, 'NORMAL', 'MEDIOCAMPISTA', 6),
-(27, 'Vinícius', 'Jr', 'https://assets.laliga.com/squad/2024/t186/p246333/1024x1024/p246333_t186_2024_1_003_000.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 5),
-(28, 'Marc-André', 'ter Stegen', 'https://www.fcbarcelona.com/photo-resources/2024/10/13/04c3b761-ccbd-498f-b988-b67ed1693906/01-Ter_Stegen-M.png?width=670&height=790', 33, 1, 22.4, 0, 95.20, 3, 'NORMAL', 'ARQUERO', 6),
-(29, 'Alisson', 'Becker', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250099867.webp', 32, 1, 24.6, 0, 95.70, 2, 'NORMAL', 'ARQUERO', 7),
-(30, 'Ederson', 'Moraes', 'https://media.futbolfantasy.com/thumb/400x400/v202506010013/uploads/images/jugadores/ficha/2229.png', 31, 31, 27.8, 0, 95.40, 2, 'NORMAL', 'ARQUERO', 8),
-(31, 'Antonio', 'Rüdiger', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250028211.webp', 31, 2, 23.5, 0, 95.10, 12, 'NORMAL', 'DEFENSOR', 9),
-(32, 'Marquinhos', 'Marcos', 'https://assets.sorare.com/playerpicture/2525a7e8-cfd0-4921-bcc9-f1f162f91751/picture/squared-90979b1e8ac945fed8caf6d24e65d35e.png', 30, 5, 26.3, 0, 95.60, 2, 'NORMAL', 'DEFENSOR', 10),
-(33, 'João', 'Cancelo', 'https://static-files.saudi-pro-league.pulselive.com/players/headshot/p121145.png', 30, 3, 21.9, 0, 95.30, 11, 'NORMAL', 'DEFENSOR', 2),
-(34, 'Trent', 'Alexander-Arnold', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250076357.webp', 26, 66, 30.0, 0, 95.00, 7, 'NORMAL', 'DEFENSOR', 3),
-(35, 'Andrew', 'Robertson', 'https://backend.liverpoolfc.com/sites/default/files/styles/xs/public/2024-06/andy-robertson-body-shot-202425.png?itok=GGyTJcJK', 30, 26, 24.1, 0, 94.80, 7, 'NORMAL', 'DEFENSOR', 4),
-(36, 'Theo', 'Hernández', 'https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/12daf100-2931-4851-a437-a1707ec03a0c/TheoHernandez-Large.png', 28, 19, 28.7, 0, 94.70, 6, 'NORMAL', 'DEFENSOR', 5),
-(37, 'Achraf', 'Hakimi', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250088061.webp', 26, 2, 19.2, 0, 94.60, 2, 'NORMAL', 'DEFENSOR', 6),
-(38, 'Paul', 'Pogba', 'https://i0.wp.com/metrodailyng.com/wp-content/uploads/2022/05/Paul-Pogba.png?fit=500%2C500&ssl=1', 31, 6, 26.8, 0, 94.50, 4, 'NORMAL', 'MEDIOCAMPISTA', 7),
-(39, 'Marco', 'Verratti', 'https://b.fssta.com/uploads/application/soccer/headshots/4065.png', 32, 8, 25.3, 0, 94.40, 6, 'NORMAL', 'MEDIOCAMPISTA', 8),
-(40, 'Son', 'Heung-min', 'https://www.tottenhamhotspur.com/media/ds3asinl/firstteam_profiles_heungminson_202425_1.png?anchor=center&mode=crop&quality=90&width=500', 32, 7, 48.1, 0, 97.50, 13, 'RARO', 'DELANTERO', 9),
-(41, 'Dusan', 'Vlahović', 'https://i.namu.wiki/i/QF-S5Eo5jYc5iYWL_x6YxMWZU7b4ecQyJKgvzU0l3Oh21JWE4lAKPtv4xWDuzUnFHMpQWVi_kGjrC3gA6ghqEA.webp', 24, 9, 22.7, 0, 94.30, 6, 'NORMAL', 'DELANTERO', 10),
-(42, 'Phil', 'Foden', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250101534.webp', 24, 47, 22.7, 0, 93.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 2),
-(43, 'Bernardo', 'Silva', 'https://www.pngplay.com/wp-content/uploads/13/Bernardo-Silva-PNG-HD-Quality.png', 30, 20, 49.3, 0, 96.30, 11, 'RARO', 'MEDIOCAMPISTA', 3),
-(44, 'Rafael', 'Leão', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250089228.webp', 25, 17, 25.8, 0, 93.10, 11, 'NORMAL', 'DELANTERO', 4),
-(45, 'Hugo', 'Lloris', 'https://tottenham24.pl/upload/squad/firstteam_profiles_202223_hugolloris.png', 38, 1, 19.4, 0, 93.00, 4, 'NORMAL', 'ARQUERO', 5),
-(46, 'Keylor', 'Navas', 'https://assets.sorare.com/playerpicture/e04945d8-d2da-492d-ae7b-2fdb9ac40ac5/picture/squared-cf67e2f875d52cf6491dab38156c5e54.png', 37, 1, 28.6, 0, 92.90, 10, 'NORMAL', 'ARQUERO', 6),
-(47, 'David', 'de Gea', 'https://media.futbolfantasy.com/thumb/400x400/v202504060244/uploads/images/jugadores/ficha/1374.png', 34, 1, 23.5, 0, 92.80, 3, 'NORMAL', 'ARQUERO', 7),
-(48, 'Mike', 'Maignan', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250042780.webp', 29, 16, 26.9, 0, 92.70, 4, 'NORMAL', 'ARQUERO', 8),
-(49, 'Edin', 'Džeko', 'https://assets.sorare.com/playerpicture/062943c2-f400-410e-b5d6-f58f1b0b3fad/picture/squared-d297ea80c13d63fe6d5ec8f2eda3a5be.png', 38, 9, 21.3, 0, 92.60, 6, 'NORMAL', 'DELANTERO', 9),
-(50, 'Memphis', 'Depay', 'https://img-estaticos.atleticodemadrid.com/system/fotos/15047/destacado_600x600/FICHA_WEB_MEMPHIS.png?1674242301', 30, 9, 27.7, 0, 92.50, 12, 'NORMAL', 'DELANTERO', 10),
-(51, 'Gabriel', 'Jesus', 'https://i.namu.wiki/i/n0wy-5FNkCnEVfnSiO22Hd2XvdK2ELY79mryUQ5k6H_--bbQXiVfZ4F9DAtkNYBH3WlG6-KVsM6oSsCinshn5Q.webp', 27, 9, 24.2, 0, 92.40, 2, 'NORMAL', 'DELANTERO', 2),
-(52, 'Raheem', 'Sterling', 'https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/Sterling_raheem_profile_2024-25_avatar-removebg.png', 29, 7, 28.8, 0, 92.30, 7, 'NORMAL', 'DELANTERO', 3),
-(53, 'João', 'Félix', 'https://img-estaticos.atleticodemadrid.com/system/fotos/9648/destacado_600x600/BUSTO_0020_7_JOAO.png?1601656495', 25, 11, 20.4, 0, 92.20, 11, 'NORMAL', 'MEDIOCAMPISTA', 4),
-(54, 'Alejandro', 'Garnacho', 'https://assets.sorare.com/playerpicture/492c866b-6304-4276-ae8e-9cd7416a9fb4/picture/squared-aa22c94782e88e5045b011926849f5f8.png', 21, 17, 29.1, 0, 91.50, 1, 'NORMAL', 'DELANTERO', 5),
-(55, 'Francisco', 'Trincão', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250112122.webp', 24, 21, 22.6, 0, 91.40, 11, 'NORMAL', 'DELANTERO', 6),
-(56, 'Ansu', 'Fati', 'https://www.fcbarcelona.com/photo-resources/2024/10/13/a21d9ed5-ab8a-4705-ae9a-a6bd14e9dbba/10-Ansu_Fati-M.png?width=670&height=790', 22, 10, 25.3, 0, 91.30, 3, 'NORMAL', 'DELANTERO', 7),
-(57, 'Rodrygo', 'Goes', 'https://assets.laliga.com/squad/2024/t186/p440077/2048x2225/p440077_t186_2024_1_001_000.png', 23, 11, 21.7, 0, 91.20, 2, 'NORMAL', 'DELANTERO', 8),
-(58, 'Ferran', 'Torres', 'https://www.fcbarcelona.com/photo-resources/2024/10/13/1edefda1-8229-4232-ace9-2f35bf4d3000/07-Ferran_Torres-M.png?width=670&height=790', 24, 7, 26.4, 0, 91.10, 3, 'NORMAL', 'DELANTERO', 9),
-(59, 'Gonçalo', 'Ramos', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250116654.webp', 23, 9, 23.9, 0, 91.00, 11, 'NORMAL', 'DELANTERO', 10),
-(60, 'Darwin', 'Núñez', 'https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/darwin-nunez-profile-body-shot-202425.webp?itok=uzKb0DTv', 25, 19, 28.1, 0, 92.10, 9, 'NORMAL', 'DELANTERO', 11),
-(81, 'Sebastien', 'Haller', 'https://assets.bundesliga.com/player/dfl-obj-0027ro-dfl-clu-000007-dfl-sea-0001k8.png', 30, 9, 19.8, 0, 92.00, 12, 'NORMAL', 'DELANTERO', 2),
-(82, 'Victor', 'Osimhen', 'https://i.namu.wiki/i/lQTUfyqkT53_YJBUZS3-bCqBABmLlkDeXmm_Lm92pvxNTgFxeNMhIBdyHuR6MWlGJ03t1PMiPpZNp4FHOtkOFg.webp', 26, 9, 29.5, 0, 91.90, 8, 'NORMAL', 'DELANTERO', 3),
-(83, 'Dušan', 'Tadić', 'https://assets.sorare.com/playerpicture/94d5af28-d7a9-4b22-bacf-7120238c1a47/picture/squared-690163e914fda82349dc8c95a34bb468.png', 35, 10, 22.2, 0, 91.80, 13, 'NORMAL', 'MEDIOCAMPISTA', 4),
-(84, 'Lucas', 'Paquetá', 'https://cdn.whufc.com/sites/default/files/2024-08/paquetaprofile.png', 27, 11, 26.7, 0, 91.70, 2, 'NORMAL', 'MEDIOCAMPISTA', 5),
-(85, 'James', 'Maddison', 'https://www.tottenhamhotspur.com/media/xstpwh2h/firstteam_profiles_jamesmaddison_202425_1.png?anchor=center&mode=crop&quality=90&width=500', 28, 10, 21.4, 0, 91.60, 7, 'NORMAL', 'MEDIOCAMPISTA', 6),
-(86, 'Karim', 'Benzema', 'https://assets.sorare.com/player/9097ab4a-d503-4924-8186-5d09ab121faa/picture/squared-bb7d7ae8fa37b00193fe929f891e0dfd.png', 37, 9, 95.6, 0, 98.50, 3, 'LEYENDA', 'DELANTERO', 7),
-(87, 'Harry', 'Kane', 'https://assets.bundesliga.com/player/dfl-obj-j00zz3-dfl-clu-00000g-dfl-sea-0001k8.png', 31, 10, 81.3, 0, 98.00, 7, 'EPICO', 'DELANTERO', 8),
-(88, 'Antoine', 'Griezmann', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250019498.webp', 33, 7, 46.9, 0, 97.30, 3, 'RARO', 'MEDIOCAMPISTA', 9),
-(89, 'Romelu', 'Lukaku', 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2a0c257d-1e26-439e-8561-e67976a7a2e4/demiybf-545fb1f5-1709-4210-beb9-78af40b7fedf.png', 31, 9, 43.7, 0, 96.60, 6, 'RARO', 'DELANTERO', 10),
-(90, 'Paulo', 'Dybala', 'dybala.png', 30, 21, 45.2, 0, 96.20, 1, 'RARO', 'MEDIOCAMPISTA', 1),
-(91, 'Jadon', 'Sancho', 'https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/With%20LN/Sancho/Mens_3333x5000_Avatar_Sancho_SF_Home_24_25_RGB.png', 24, 25, 23.8, 0, 95.70, 7, 'NORMAL', 'DELANTERO', 2),
-(92, 'Marcus', 'Rashford', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250088246.webp', 26, 10, 27.1, 0, 95.50, 7, 'NORMAL', 'DELANTERO', 3),
-(93, 'Jack', 'Grealish', 'https://web.uat.mancity.com/meta/media/qdlbnbg2/jack-grealish.png', 28, 7, 22.5, 0, 95.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 4),
-(94, 'Mikel', 'Oyarzabal', 'https://cdn.realsociedad.eus//Uploads/jugadores/_2_oyarzabal.png', 27, 10, 28.7, 0, 94.90, 3, 'NORMAL', 'DELANTERO', 5),
-(95, 'Wilfried', 'Zaha', 'https://www.playmakerstats.com/img/jogadores/87/408287_med__20170602084114_wilfried_zaha.png', 31, 11, 25.3, 0, 94.60, 13, 'NORMAL', 'DELANTERO', 6),
-(96, 'Dominic', 'Calvert-Lewin', 'https://www.thefa.com/-/media/www-thefa-com/images/england/men-senior/player-profiles/dominic-calvert-lewin/723-dcl.ashx', 27, 9, 18.9, 0, 94.40, 7, 'NORMAL', 'DELANTERO', 7),
-(97, 'Tammy', 'Abraham', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250067629.webp', 26, 9, 26.4, 0, 94.20, 7, 'NORMAL', 'DELANTERO', 8),
-(98, 'Olivier', 'Giroud', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250020851.webp', 37, 9, 24.6, 0, 94.00, 4, 'NORMAL', 'DELANTERO', 9),
-(99, 'Arkadiusz', 'Milik', 'https://store.juventus.com/images/juventus/players/25.webp?v=1728556315', 30, 99, 27.8, 0, 93.80, 6, 'NORMAL', 'DELANTERO', 10),
-(100, 'Sebastian', 'Haller', 'https://assets.bundesliga.com/player/dfl-obj-0027ro-dfl-clu-000007-dfl-sea-0001k8.png', 29, 22, 20.2, 0, 93.60, 12, 'NORMAL', 'DELANTERO', 11),
-(101, 'Ivan', 'Toney', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250178523.webp', 28, 17, 29.5, 0, 93.40, 7, 'NORMAL', 'DELANTERO', 2),
-(102, 'Patrik', 'Schick', 'https://assets.bundesliga.com/player/dfl-obj-002g6u-dfl-clu-00000b-dfl-sea-0001k8-body.png', 28, 14, 23.1, 0, 93.20, 5, 'NORMAL', 'DELANTERO', 3),
-(103, 'Florian', 'Wirtz', 'https://assets.bundesliga.com/player/dfl-obj-002gbk-dfl-clu-00000b-dfl-sea-0001k8.png', 21, 10, 25.7, 0, 93.00, 5, 'NORMAL', 'MEDIOCAMPISTA', 4),
-(104, 'Nicolò', 'Zaniolo', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250107324.webp', 24, 22, 19.3, 0, 92.80, 6, 'NORMAL', 'MEDIOCAMPISTA', 5),
-(105, 'Houssem', 'Aouar', 'https://static-files.saudi-pro-league.pulselive.com/players/headshot/p231961.png', 26, 8, 29.8, 0, 92.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 6),
-(106, 'James', 'Milner', 'https://assets.sorare.com/playerpicture/25f4f99f-be41-44f5-b597-37865ca679ca/picture/squared-49bf3fcc17f4e3648d65ab2fea534c27.png', 38, 7, 26.4, 0, 92.40, 7, 'NORMAL', 'MEDIOCAMPISTA', 7),
-(107, 'Jordan', 'Henderson', 'https://media02.tr.beinsports.com/img/players/P1786.png', 34, 8, 21.6, 0, 92.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 8),
-(108, 'Youri', 'Tielemans', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250064006.webp', 27, 9, 27.1, 0, 92.00, 14, 'NORMAL', 'MEDIOCAMPISTA', 9),
-(109, 'Renato', 'Sanches', 'https://www.ligaportugal.pt/backoffice/assets/Corposanches_d929f48e18.png', 26, 18, 23.7, 0, 91.80, 11, 'NORMAL', 'MEDIOCAMPISTA', 10),
-(110, 'Weston', 'McKennie', 'https://store.juventus.com/images/juventus/players/16.webp?v=1728556315', 25, 16, 28.1, 0, 91.20, 13, 'NORMAL', 'MEDIOCAMPISTA', 11),
-(111, 'Kalvin', 'Phillips', 'https://www.mancity.com/meta/media/cfqhq11u/kalvin-philips.png', 28, 15, 26.9, 0, 91.00, 7, 'NORMAL', 'MEDIOCAMPISTA', 12),
-(112, 'Declan', 'Rice', 'https://i.namu.wiki/i/xzfhYOM5m1PPb5Ho7zzWfC4zR7HkL2QT2Q_tyLKSD2JI8UEhi8SGhmJJ4xkuv2rRhbRmJ1EpGqGYtWxtcYAaIQ.webp', 25, 6, 32.7, 0, 90.80, 7, 'NORMAL', 'MEDIOCAMPISTA', 13),
-(113, 'Wilfred', 'Ndidi', 'https://www.sportball.es/wp-content/uploads/2020/02/Plantilla-del-Leicester-City-2019-2020-Wilfred-Ndidi.png', 27, 25, 32.5, 0, 90.60, 14, 'NORMAL', 'MEDIOCAMPISTA', 14),
-(114, 'Wilfred', 'Ndidi', 'https://www.sportball.es/wp-content/uploads/2020/02/Plantilla-del-Leicester-City-2019-2020-Wilfred-Ndidi.png', 27, 25, 32.5, 0, 90.60, 14, 'NORMAL', 'MEDIOCAMPISTA', 2),
-(115, 'Sergio', 'Busquets', 'https://media.futbolfantasy.com/thumb/400x400/v202505312348/uploads/images/jugadores/ficha/88.png', 36, 5, 24.3, 0, 90.40, 3, 'NORMAL', 'MEDIOCAMPISTA', 3),
-(116, 'Rodrigo', 'De Paul', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250086037.webp', 30, 7, 22.1, 0, 90.20, 1, 'NORMAL', 'MEDIOCAMPISTA', 4),
-(117, 'Lucas', 'Torreira', 'https://assets.sorare.com/playerpicture/13ad07e7-9c5a-4119-9671-59e6a7e3ad6b/picture/squared-d82e9ef03207b747ddcdf8d8bc3db8d7.png', 29, 14, 21.9, 0, 90.00, 9, 'NORMAL', 'MEDIOCAMPISTA', 5),
-(118, 'Leandro', 'Paredes', 'paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 1),
-(119, 'Matteo', 'Guendouzi', 'https://www.laziostylestore.com/images/lazio/players/84.webp?v=1737671000', 27, 16, 46.5, 0, 89.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 7),
-(120, 'Ryan', 'Gravenberch', 'https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/ryan-gravenberch-profile-action-shot-202425.png?itok=QBDlSmYh', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 8);
+--
+-- Estructura de tabla para la tabla `jugador`
+--
 
+CREATE TABLE `jugador` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `apellido` varchar(50) NOT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
+  `edad` int(11) NOT NULL,
+  `numero_camiseta` int(11) NOT NULL,
+  `rating` decimal(4,1) NOT NULL,
+  `lesionado` tinyint(1) NOT NULL DEFAULT 0,
+  `estado_fisico` decimal(5,2) NOT NULL,
+  `pais_id` int(11) DEFAULT NULL,
+  `rareza_jugador` enum('NORMAL','RARO','EPICO','LEYENDA') NOT NULL,
+  `posicion` enum('ARQUERO','DEFENSOR','MEDIOCAMPISTA','DELANTERO') NOT NULL,
+  `equipo_id` int(11) DEFAULT NULL,
+  `sobre_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `jugador`
+--
+
+INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_camiseta`, `rating`, `lesionado`, `estado_fisico`, `pais_id`, `rareza_jugador`, `posicion`, `equipo_id`, `sobre_id`) VALUES
+(1, 'Emiliano', 'Martínez', 'emiliano_martinez.png', 31, 1, 88.0, 0, 95.00, 1, 'RARO', 'ARQUERO', 1, NULL),
+(2, 'Cristian', 'Romero', 'cristian_romero.png', 26, 23, 87.0, 0, 90.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
+(3, 'Nicolás', 'Otamendi', 'nicolas_otamendi.png', 36, 3, 85.0, 0, 88.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
+(4, 'Marcos', 'Acuña', 'marcos_acuna.png', 32, 8, 84.0, 0, 87.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
+(5, 'Gonzalo', 'Montiel', 'gonzalo_montiel.png', 27, 4, 83.0, 0, 89.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
+(6, 'Rodrigo', 'De Paul', 'rodrigo_depaul.png', 29, 16, 86.0, 0, 91.00, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(7, 'Alexis', 'Mac Allister', 'alexis_macallister.png', 25, 5, 85.0, 0, 90.00, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(8, 'Enzo', 'Fernández', 'enzo_fernandez.png', 23, 24, 87.0, 0, 92.00, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(9, 'Lionel', 'Messi', 'lionel_messi.png', 36, 10, 94.0, 0, 89.00, 1, 'LEYENDA', 'DELANTERO', 1, NULL),
+(10, 'Julián', 'Álvarez', 'julian_alvarez.png', 24, 9, 86.0, 0, 88.00, 1, 'RARO', 'DELANTERO', 1, NULL),
+(11, 'Lautaro', 'Martínez', 'lautaro_martinez.png', 26, 21, 88.0, 0, 90.00, 1, 'RARO', 'DELANTERO', 1, NULL),
+(12, 'Cristiano', 'Ronaldo', 'cristiano_ronaldo.png', 40, 7, 98.2, 0, 97.50, 11, 'LEYENDA', 'DELANTERO', 1, NULL),
+(13, 'Kylian', 'Mbappé', 'mbappe.png', 26, 10, 84.3, 0, 98.70, 4, 'EPICO', 'DELANTERO', 1, NULL),
+(14, 'Kevin', 'De Bruyne', 'de_bruyne.png', 33, 17, 82.7, 0, 96.40, 14, 'EPICO', 'MEDIOCAMPISTA', 1, NULL),
+(15, 'Virgil', 'van Dijk', 'van_dijk.png', 33, 4, 47.3, 0, 95.80, 12, 'RARO', 'DEFENSOR', 1, NULL),
+(16, 'Thibaut', 'Courtois', 'courtois.png', 33, 1, 49.1, 0, 94.90, 14, 'RARO', 'ARQUERO', 1, NULL),
+(17, 'Robert', 'Lewandowski', 'lewandoswski.png', 36, 9, 83.6, 0, 98.20, 3, 'EPICO', 'DELANTERO', 1, NULL),
+(18, 'Erling', 'Haaland', 'haaland.png', 24, 9, 85.2, 0, 98.80, 5, 'EPICO', 'DELANTERO', 1, NULL),
+(19, 'Neymar', 'Jr', 'neymar.png', 33, 11, 80.4, 0, 97.00, 2, 'EPICO', 'MEDIOCAMPISTA', 1, NULL),
+(20, 'Luka', 'Modrić', 'modric.png', 39, 10, 48.7, 0, 96.70, 3, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(21, 'Mohamed', 'Salah', 'salah.png', 32, 11, 46.2, 0, 97.20, 7, 'RARO', 'DELANTERO', 1, NULL),
+(22, 'Sadio', 'Mané', NULL, 33, 10, 45.8, 0, 96.50, 2, 'RARO', 'DELANTERO', 2, NULL),
+(23, 'Casemiro', 'Carlos', NULL, 32, 5, 44.3, 0, 95.90, 2, 'RARO', 'MEDIOCAMPISTA', 3, NULL),
+(24, 'Joshua', 'Kimmich', NULL, 30, 6, 50.0, 0, 96.00, 5, 'RARO', 'MEDIOCAMPISTA', 4, NULL),
+(25, 'Vinícius', 'Jr', 'https://assets.laliga.com/squad/2024/t186/p246333/1024x1024/p246333_t186_2024_1_003_000.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 5, NULL),
+(26, 'Bruno', 'Fernandes', 'https://assets.manutd.com/AssetPicker/images/0/0/20/88/1333344/8-Bruno-Fernandes1719822565555.png', 30, 8, 25.7, 0, 96.10, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
+(27, 'Vinícius', 'Jr', 'https://assets.laliga.com/squad/2024/t186/p246333/1024x1024/p246333_t186_2024_1_003_000.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 5, NULL),
+(28, 'Marc-André', 'ter Stegen', 'https://www.fcbarcelona.com/photo-resources/2024/10/13/04c3b761-ccbd-498f-b988-b67ed1693906/01-Ter_Stegen-M.png?width=670&height=790', 33, 1, 22.4, 0, 95.20, 3, 'NORMAL', 'ARQUERO', 6, NULL),
+(29, 'Alisson', 'Becker', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250099867.webp', 32, 1, 24.6, 0, 95.70, 2, 'NORMAL', 'ARQUERO', 7, NULL),
+(30, 'Ederson', 'Moraes', 'https://media.futbolfantasy.com/thumb/400x400/v202506010013/uploads/images/jugadores/ficha/2229.png', 31, 31, 27.8, 0, 95.40, 2, 'NORMAL', 'ARQUERO', 8, NULL),
+(31, 'Antonio', 'Rüdiger', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250028211.webp', 31, 2, 23.5, 0, 95.10, 12, 'NORMAL', 'DEFENSOR', 9, NULL),
+(32, 'Marquinhos', 'Marcos', 'https://assets.sorare.com/playerpicture/2525a7e8-cfd0-4921-bcc9-f1f162f91751/picture/squared-90979b1e8ac945fed8caf6d24e65d35e.png', 30, 5, 26.3, 0, 95.60, 2, 'NORMAL', 'DEFENSOR', 10, NULL),
+(33, 'João', 'Cancelo', 'https://static-files.saudi-pro-league.pulselive.com/players/headshot/p121145.png', 30, 3, 21.9, 0, 95.30, 11, 'NORMAL', 'DEFENSOR', 2, NULL),
+(34, 'Trent', 'Alexander-Arnold', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250076357.webp', 26, 66, 30.0, 0, 95.00, 7, 'NORMAL', 'DEFENSOR', 3, NULL),
+(35, 'Andrew', 'Robertson', 'https://backend.liverpoolfc.com/sites/default/files/styles/xs/public/2024-06/andy-robertson-body-shot-202425.png?itok=GGyTJcJK', 30, 26, 24.1, 0, 94.80, 7, 'NORMAL', 'DEFENSOR', 4, NULL),
+(36, 'Theo', 'Hernández', 'https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/12daf100-2931-4851-a437-a1707ec03a0c/TheoHernandez-Large.png', 28, 19, 28.7, 0, 94.70, 6, 'NORMAL', 'DEFENSOR', 5, NULL),
+(37, 'Achraf', 'Hakimi', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250088061.webp', 26, 2, 19.2, 0, 94.60, 2, 'NORMAL', 'DEFENSOR', 6, NULL),
+(38, 'Paul', 'Pogba', 'https://i0.wp.com/metrodailyng.com/wp-content/uploads/2022/05/Paul-Pogba.png?fit=500%2C500&ssl=1', 31, 6, 26.8, 0, 94.50, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
+(39, 'Marco', 'Verratti', 'https://b.fssta.com/uploads/application/soccer/headshots/4065.png', 32, 8, 25.3, 0, 94.40, 6, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL),
+(40, 'Son', 'Heung-min', 'https://www.tottenhamhotspur.com/media/ds3asinl/firstteam_profiles_heungminson_202425_1.png?anchor=center&mode=crop&quality=90&width=500', 32, 7, 48.1, 0, 97.50, 13, 'RARO', 'DELANTERO', 9, NULL),
+(41, 'Dusan', 'Vlahović', 'https://i.namu.wiki/i/QF-S5Eo5jYc5iYWL_x6YxMWZU7b4ecQyJKgvzU0l3Oh21JWE4lAKPtv4xWDuzUnFHMpQWVi_kGjrC3gA6ghqEA.webp', 24, 9, 22.7, 0, 94.30, 6, 'NORMAL', 'DELANTERO', 10, NULL),
+(42, 'Phil', 'Foden', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250101534.webp', 24, 47, 22.7, 0, 93.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 2, NULL),
+(43, 'Bernardo', 'Silva', 'https://www.pngplay.com/wp-content/uploads/13/Bernardo-Silva-PNG-HD-Quality.png', 30, 20, 49.3, 0, 96.30, 11, 'RARO', 'MEDIOCAMPISTA', 3, NULL),
+(44, 'Rafael', 'Leão', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250089228.webp', 25, 17, 25.8, 0, 93.10, 11, 'NORMAL', 'DELANTERO', 4, NULL),
+(45, 'Hugo', 'Lloris', 'https://tottenham24.pl/upload/squad/firstteam_profiles_202223_hugolloris.png', 38, 1, 19.4, 0, 93.00, 4, 'NORMAL', 'ARQUERO', 5, NULL),
+(46, 'Keylor', 'Navas', 'https://assets.sorare.com/playerpicture/e04945d8-d2da-492d-ae7b-2fdb9ac40ac5/picture/squared-cf67e2f875d52cf6491dab38156c5e54.png', 37, 1, 28.6, 0, 92.90, 10, 'NORMAL', 'ARQUERO', 6, NULL),
+(47, 'David', 'de Gea', 'https://media.futbolfantasy.com/thumb/400x400/v202504060244/uploads/images/jugadores/ficha/1374.png', 34, 1, 23.5, 0, 92.80, 3, 'NORMAL', 'ARQUERO', 7, NULL),
+(48, 'Mike', 'Maignan', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250042780.webp', 29, 16, 26.9, 0, 92.70, 4, 'NORMAL', 'ARQUERO', 8, NULL),
+(49, 'Edin', 'Džeko', 'https://assets.sorare.com/playerpicture/062943c2-f400-410e-b5d6-f58f1b0b3fad/picture/squared-d297ea80c13d63fe6d5ec8f2eda3a5be.png', 38, 9, 21.3, 0, 92.60, 6, 'NORMAL', 'DELANTERO', 9, NULL),
+(50, 'Memphis', 'Depay', 'https://img-estaticos.atleticodemadrid.com/system/fotos/15047/destacado_600x600/FICHA_WEB_MEMPHIS.png?1674242301', 30, 9, 27.7, 0, 92.50, 12, 'NORMAL', 'DELANTERO', 10, NULL),
+(51, 'Gabriel', 'Jesus', 'https://i.namu.wiki/i/n0wy-5FNkCnEVfnSiO22Hd2XvdK2ELY79mryUQ5k6H_--bbQXiVfZ4F9DAtkNYBH3WlG6-KVsM6oSsCinshn5Q.webp', 27, 9, 24.2, 0, 92.40, 2, 'NORMAL', 'DELANTERO', 2, NULL),
+(52, 'Raheem', 'Sterling', 'https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/Sterling_raheem_profile_2024-25_avatar-removebg.png', 29, 7, 28.8, 0, 92.30, 7, 'NORMAL', 'DELANTERO', 3, NULL),
+(53, 'João', 'Félix', 'https://img-estaticos.atleticodemadrid.com/system/fotos/9648/destacado_600x600/BUSTO_0020_7_JOAO.png?1601656495', 25, 11, 20.4, 0, 92.20, 11, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(54, 'Alejandro', 'Garnacho', 'https://assets.sorare.com/playerpicture/492c866b-6304-4276-ae8e-9cd7416a9fb4/picture/squared-aa22c94782e88e5045b011926849f5f8.png', 21, 17, 29.1, 0, 91.50, 1, 'NORMAL', 'DELANTERO', 5, NULL),
+(55, 'Francisco', 'Trincão', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250112122.webp', 24, 21, 22.6, 0, 91.40, 11, 'NORMAL', 'DELANTERO', 6, NULL),
+(56, 'Ansu', 'Fati', 'https://www.fcbarcelona.com/photo-resources/2024/10/13/a21d9ed5-ab8a-4705-ae9a-a6bd14e9dbba/10-Ansu_Fati-M.png?width=670&height=790', 22, 10, 25.3, 0, 91.30, 3, 'NORMAL', 'DELANTERO', 7, NULL),
+(57, 'Rodrygo', 'Goes', 'https://assets.laliga.com/squad/2024/t186/p440077/2048x2225/p440077_t186_2024_1_001_000.png', 23, 11, 21.7, 0, 91.20, 2, 'NORMAL', 'DELANTERO', 8, NULL),
+(58, 'Ferran', 'Torres', 'https://www.fcbarcelona.com/photo-resources/2024/10/13/1edefda1-8229-4232-ace9-2f35bf4d3000/07-Ferran_Torres-M.png?width=670&height=790', 24, 7, 26.4, 0, 91.10, 3, 'NORMAL', 'DELANTERO', 9, NULL),
+(59, 'Gonçalo', 'Ramos', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250116654.webp', 23, 9, 23.9, 0, 91.00, 11, 'NORMAL', 'DELANTERO', 10, NULL),
+(60, 'Darwin', 'Núñez', 'https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/darwin-nunez-profile-body-shot-202425.webp?itok=uzKb0DTv', 25, 19, 28.1, 0, 92.10, 9, 'NORMAL', 'DELANTERO', 11, NULL),
+(81, 'Sebastien', 'Haller', 'https://assets.bundesliga.com/player/dfl-obj-0027ro-dfl-clu-000007-dfl-sea-0001k8.png', 30, 9, 19.8, 0, 92.00, 12, 'NORMAL', 'DELANTERO', 2, NULL),
+(82, 'Victor', 'Osimhen', 'https://i.namu.wiki/i/lQTUfyqkT53_YJBUZS3-bCqBABmLlkDeXmm_Lm92pvxNTgFxeNMhIBdyHuR6MWlGJ03t1PMiPpZNp4FHOtkOFg.webp', 26, 9, 29.5, 0, 91.90, 8, 'NORMAL', 'DELANTERO', 3, NULL),
+(83, 'Dušan', 'Tadić', 'https://assets.sorare.com/playerpicture/94d5af28-d7a9-4b22-bacf-7120238c1a47/picture/squared-690163e914fda82349dc8c95a34bb468.png', 35, 10, 22.2, 0, 91.80, 13, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(84, 'Lucas', 'Paquetá', 'https://cdn.whufc.com/sites/default/files/2024-08/paquetaprofile.png', 27, 11, 26.7, 0, 91.70, 2, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
+(85, 'James', 'Maddison', 'https://www.tottenhamhotspur.com/media/xstpwh2h/firstteam_profiles_jamesmaddison_202425_1.png?anchor=center&mode=crop&quality=90&width=500', 28, 10, 21.4, 0, 91.60, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
+(86, 'Karim', 'Benzema', 'https://assets.sorare.com/player/9097ab4a-d503-4924-8186-5d09ab121faa/picture/squared-bb7d7ae8fa37b00193fe929f891e0dfd.png', 37, 9, 95.6, 0, 98.50, 3, 'LEYENDA', 'DELANTERO', 7, NULL),
+(87, 'Harry', 'Kane', 'https://assets.bundesliga.com/player/dfl-obj-j00zz3-dfl-clu-00000g-dfl-sea-0001k8.png', 31, 10, 81.3, 0, 98.00, 7, 'EPICO', 'DELANTERO', 8, NULL),
+(88, 'Antoine', 'Griezmann', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250019498.webp', 33, 7, 46.9, 0, 97.30, 3, 'RARO', 'MEDIOCAMPISTA', 9, NULL),
+(89, 'Romelu', 'Lukaku', 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2a0c257d-1e26-439e-8561-e67976a7a2e4/demiybf-545fb1f5-1709-4210-beb9-78af40b7fedf.png', 31, 9, 43.7, 0, 96.60, 6, 'RARO', 'DELANTERO', 10, NULL),
+(90, 'Paulo', 'Dybala', 'dybala.png', 30, 21, 45.2, 0, 96.20, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(91, 'Jadon', 'Sancho', 'https://img.chelseafc.com/image/upload/f_auto,h_860,q_50/editorial/people/first-team/2024-25/With%20LN/Sancho/Mens_3333x5000_Avatar_Sancho_SF_Home_24_25_RGB.png', 24, 25, 23.8, 0, 95.70, 7, 'NORMAL', 'DELANTERO', 2, NULL),
+(92, 'Marcus', 'Rashford', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250088246.webp', 26, 10, 27.1, 0, 95.50, 7, 'NORMAL', 'DELANTERO', 3, NULL),
+(93, 'Jack', 'Grealish', 'https://web.uat.mancity.com/meta/media/qdlbnbg2/jack-grealish.png', 28, 7, 22.5, 0, 95.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(94, 'Mikel', 'Oyarzabal', 'https://cdn.realsociedad.eus//Uploads/jugadores/_2_oyarzabal.png', 27, 10, 28.7, 0, 94.90, 3, 'NORMAL', 'DELANTERO', 5, NULL),
+(95, 'Wilfried', 'Zaha', 'https://www.playmakerstats.com/img/jogadores/87/408287_med__20170602084114_wilfried_zaha.png', 31, 11, 25.3, 0, 94.60, 13, 'NORMAL', 'DELANTERO', 6, NULL),
+(96, 'Dominic', 'Calvert-Lewin', 'https://www.thefa.com/-/media/www-thefa-com/images/england/men-senior/player-profiles/dominic-calvert-lewin/723-dcl.ashx', 27, 9, 18.9, 0, 94.40, 7, 'NORMAL', 'DELANTERO', 7, NULL),
+(97, 'Tammy', 'Abraham', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250067629.webp', 26, 9, 26.4, 0, 94.20, 7, 'NORMAL', 'DELANTERO', 8, NULL),
+(98, 'Olivier', 'Giroud', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250020851.webp', 37, 9, 24.6, 0, 94.00, 4, 'NORMAL', 'DELANTERO', 9, NULL),
+(99, 'Arkadiusz', 'Milik', 'https://store.juventus.com/images/juventus/players/25.webp?v=1728556315', 30, 99, 27.8, 0, 93.80, 6, 'NORMAL', 'DELANTERO', 10, NULL),
+(100, 'Sebastian', 'Haller', 'https://assets.bundesliga.com/player/dfl-obj-0027ro-dfl-clu-000007-dfl-sea-0001k8.png', 29, 22, 20.2, 0, 93.60, 12, 'NORMAL', 'DELANTERO', 11, NULL),
+(101, 'Ivan', 'Toney', 'https://img.uefa.com/imgml/TP/players/3/2024/cutoff/250178523.webp', 28, 17, 29.5, 0, 93.40, 7, 'NORMAL', 'DELANTERO', 2, NULL),
+(102, 'Patrik', 'Schick', 'https://assets.bundesliga.com/player/dfl-obj-002g6u-dfl-clu-00000b-dfl-sea-0001k8-body.png', 28, 14, 23.1, 0, 93.20, 5, 'NORMAL', 'DELANTERO', 3, NULL),
+(103, 'Florian', 'Wirtz', 'https://assets.bundesliga.com/player/dfl-obj-002gbk-dfl-clu-00000b-dfl-sea-0001k8.png', 21, 10, 25.7, 0, 93.00, 5, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(104, 'Nicolò', 'Zaniolo', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250107324.webp', 24, 22, 19.3, 0, 92.80, 6, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
+(105, 'Houssem', 'Aouar', 'https://static-files.saudi-pro-league.pulselive.com/players/headshot/p231961.png', 26, 8, 29.8, 0, 92.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
+(106, 'James', 'Milner', 'https://assets.sorare.com/playerpicture/25f4f99f-be41-44f5-b597-37865ca679ca/picture/squared-49bf3fcc17f4e3648d65ab2fea534c27.png', 38, 7, 26.4, 0, 92.40, 7, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
+(107, 'Jordan', 'Henderson', 'https://media02.tr.beinsports.com/img/players/P1786.png', 34, 8, 21.6, 0, 92.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL),
+(108, 'Youri', 'Tielemans', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250064006.webp', 27, 9, 27.1, 0, 92.00, 14, 'NORMAL', 'MEDIOCAMPISTA', 9, NULL),
+(109, 'Renato', 'Sanches', 'https://www.ligaportugal.pt/backoffice/assets/Corposanches_d929f48e18.png', 26, 18, 23.7, 0, 91.80, 11, 'NORMAL', 'MEDIOCAMPISTA', 10, NULL),
+(110, 'Weston', 'McKennie', 'https://store.juventus.com/images/juventus/players/16.webp?v=1728556315', 25, 16, 28.1, 0, 91.20, 13, 'NORMAL', 'MEDIOCAMPISTA', 11, NULL),
+(111, 'Kalvin', 'Phillips', 'https://www.mancity.com/meta/media/cfqhq11u/kalvin-philips.png', 28, 15, 26.9, 0, 91.00, 7, 'NORMAL', 'MEDIOCAMPISTA', 12, NULL),
+(112, 'Declan', 'Rice', 'https://i.namu.wiki/i/xzfhYOM5m1PPb5Ho7zzWfC4zR7HkL2QT2Q_tyLKSD2JI8UEhi8SGhmJJ4xkuv2rRhbRmJ1EpGqGYtWxtcYAaIQ.webp', 25, 6, 32.7, 0, 90.80, 7, 'NORMAL', 'MEDIOCAMPISTA', 13, NULL),
+(113, 'Wilfred', 'Ndidi', 'https://www.sportball.es/wp-content/uploads/2020/02/Plantilla-del-Leicester-City-2019-2020-Wilfred-Ndidi.png', 27, 25, 32.5, 0, 90.60, 14, 'NORMAL', 'MEDIOCAMPISTA', 14, NULL),
+(114, 'Wilfred', 'Ndidi', 'https://www.sportball.es/wp-content/uploads/2020/02/Plantilla-del-Leicester-City-2019-2020-Wilfred-Ndidi.png', 27, 25, 32.5, 0, 90.60, 14, 'NORMAL', 'MEDIOCAMPISTA', 2, NULL),
+(115, 'Sergio', 'Busquets', 'https://media.futbolfantasy.com/thumb/400x400/v202505312348/uploads/images/jugadores/ficha/88.png', 36, 5, 24.3, 0, 90.40, 3, 'NORMAL', 'MEDIOCAMPISTA', 3, NULL),
+(116, 'Rodrigo', 'De Paul', 'https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250086037.webp', 30, 7, 22.1, 0, 90.20, 1, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(117, 'Lucas', 'Torreira', 'https://assets.sorare.com/playerpicture/13ad07e7-9c5a-4119-9671-59e6a7e3ad6b/picture/squared-d82e9ef03207b747ddcdf8d8bc3db8d7.png', 29, 14, 21.9, 0, 90.00, 9, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
+(118, 'Leandro', 'Paredes', 'paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 1, NULL),
+(119, 'Matteo', 'Guendouzi', 'https://www.laziostylestore.com/images/lazio/players/84.webp?v=1737671000', 27, 16, 46.5, 0, 89.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
+(120, 'Ryan', 'Gravenberch', 'https://backend.liverpoolfc.com/sites/default/files/styles/lg/public/2024-06/ryan-gravenberch-profile-action-shot-202425.png?itok=QBDlSmYh', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pais`
+--
+
+CREATE TABLE `pais` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `codigo_iso` varchar(2) NOT NULL,
+  `bandera_url` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pais`
+--
 
 INSERT INTO `pais` (`id`, `nombre`, `codigo_iso`, `bandera_url`) VALUES
 (1, 'Argentina', 'AR', 'https://flagcdn.com/ar.svg'),
@@ -390,6 +566,38 @@ INSERT INTO `pais` (`id`, `nombre`, `codigo_iso`, `bandera_url`) VALUES
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `partido`
+--
+
+CREATE TABLE `partido` (
+  `id` int(11) NOT NULL,
+  `equipo_local_id` int(11) NOT NULL,
+  `equipo_visitante_id` int(11) NOT NULL,
+  `fecha_encuentro` datetime NOT NULL,
+  `estado_partido` enum('SIN_JUGAR','EN_JUEGO','FINALIZADO') NOT NULL,
+  `torneo_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sobre`
+--
+
+CREATE TABLE `sobre` (
+  `id` int(11) NOT NULL,
+  `tipo_sobre` enum('ORO','PLATA','BRONCE','ESPECIAL') NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `imagen_url` varchar(255) DEFAULT NULL,
+  `usuario_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `sobre`
+--
 
 INSERT INTO `sobre` (`id`, `tipo_sobre`, `titulo`, `precio`, `descripcion`, `imagen_url`, `usuario_id`) VALUES
 (1, 'BRONCE', 'aa', 1.00, NULL, NULL, 1),
@@ -405,6 +613,23 @@ INSERT INTO `sobre` (`id`, `tipo_sobre`, `titulo`, `precio`, `descripcion`, `ima
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `torneo`
+--
+
+CREATE TABLE `torneo` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `formato_torneo_id` int(11) DEFAULT NULL,
+  `estado` enum('ABIERTO','EN_CURSO','FINALIZADO') NOT NULL,
+  `torneo_copa_id` bigint(20) DEFAULT NULL,
+  `torneo_liga_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `torneo`
+--
 
 INSERT INTO `torneo` (`id`, `nombre`, `descripcion`, `formato_torneo_id`, `estado`, `torneo_copa_id`, `torneo_liga_id`) VALUES
 (1, 'Copa Mundial 2025', 'Torneo eliminatorio con 16 equipos', 1, 'ABIERTO', NULL, NULL),
@@ -415,11 +640,350 @@ INSERT INTO `torneo` (`id`, `nombre`, `descripcion`, `formato_torneo_id`, `estad
 (6, 'Copa Sudamericana 2025', 'Competencia internacional de clubes sudamericanos, con equipos argentinos buscando gloria continental.', 1, 'FINALIZADO', NULL, NULL),
 (7, 'Liga Interior Argentina 2025', 'Torneo de fútbol para equipos del interior de Argentina, promoviendo el talento fuera de las grandes ciudades.', 2, 'ABIERTO', NULL, NULL);
 
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `torneo_copa`
+--
 
-INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`, `equipo_id`) VALUES
-(1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1);
+CREATE TABLE `torneo_copa` (
+  `id` int(11) NOT NULL,
+  `id_fase` int(11) NOT NULL,
+  `torneo_id` bigint(20) NOT NULL,
+  `fase_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `torneo_liga`
+--
+
+CREATE TABLE `torneo_liga` (
+  `id` int(11) NOT NULL,
+  `fechas` int(11) DEFAULT 0,
+  `torneo_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id` int(11) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `rol` varchar(50) NOT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 0,
+  `equipo_id` bigint(20) DEFAULT NULL,
+  `monedas` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`, `equipo_id`, `monedas`) VALUES
+(1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1, NULL),
+(4, 'urielestebanyurquina@gmail.com', '$2a$10$yXWLYL6XZvYS99xh2v9atun9rD/AhsilknimfnvrzYj90FD0S5CsK', 'USER', 1, NULL, NULL),
+(5, 'ejemplo@gmail.com', '$2a$10$7UXQl8PGShG6xVhinhMmu.GHL80RA8ZGNUKh48X.DUnF00x4Sxu4.', 'USER', 1, NULL, NULL);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `club`
+--
+ALTER TABLE `club`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pais_id` (`pais_id`),
+  ADD KEY `estadio_id` (`estadio_id`);
+
+--
+-- Indices de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `club_id` (`club_id`),
+  ADD KEY `fk_equipo_esquema` (`esquema_id`);
+
+--
+-- Indices de la tabla `equipo_torneo`
+--
+ALTER TABLE `equipo_torneo`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_equipo_torneo` (`equipo_id`,`torneo_id`),
+  ADD KEY `torneo_id` (`torneo_id`);
+
+--
+-- Indices de la tabla `esquema`
+--
+ALTER TABLE `esquema`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `estadio`
+--
+ALTER TABLE `estadio`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`);
+
+--
+-- Indices de la tabla `evento_partido`
+--
+ALTER TABLE `evento_partido`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `partido_id` (`partido_id`);
+
+--
+-- Indices de la tabla `fase`
+--
+ALTER TABLE `fase`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `formacion_equipo`
+--
+ALTER TABLE `formacion_equipo`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `equipo_id` (`equipo_id`,`jugador_id`),
+  ADD KEY `jugador_id` (`jugador_id`);
+
+--
+-- Indices de la tabla `formato_torneo`
+--
+ALTER TABLE `formato_torneo`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `jugador`
+--
+ALTER TABLE `jugador`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pais_id` (`pais_id`),
+  ADD KEY `fk_equipo_id` (`equipo_id`);
+
+--
+-- Indices de la tabla `pais`
+--
+ALTER TABLE `pais`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`),
+  ADD UNIQUE KEY `codigo_iso` (`codigo_iso`);
+
+--
+-- Indices de la tabla `partido`
+--
+ALTER TABLE `partido`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `equipo_local_id` (`equipo_local_id`),
+  ADD KEY `equipo_visitante_id` (`equipo_visitante_id`),
+  ADD KEY `torneo_id` (`torneo_id`);
+
+--
+-- Indices de la tabla `sobre`
+--
+ALTER TABLE `sobre`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `torneo`
+--
+ALTER TABLE `torneo`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK_n0a32rfinot2bm27o52v22lvt` (`torneo_copa_id`),
+  ADD UNIQUE KEY `UK_ncjx5dmyf938gtehdokndj5ty` (`torneo_liga_id`),
+  ADD KEY `formato_torneo_id` (`formato_torneo_id`);
+
+--
+-- Indices de la tabla `torneo_copa`
+--
+ALTER TABLE `torneo_copa`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_fase` (`id_fase`);
+
+--
+-- Indices de la tabla `torneo_liga`
+--
+ALTER TABLE `torneo_liga`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `club`
+--
+ALTER TABLE `club`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+
+--
+-- AUTO_INCREMENT de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+
+--
+-- AUTO_INCREMENT de la tabla `equipo_torneo`
+--
+ALTER TABLE `equipo_torneo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+
+--
+-- AUTO_INCREMENT de la tabla `esquema`
+--
+ALTER TABLE `esquema`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `estadio`
+--
+ALTER TABLE `estadio`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT de la tabla `evento_partido`
+--
+ALTER TABLE `evento_partido`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `fase`
+--
+ALTER TABLE `fase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `formacion_equipo`
+--
+ALTER TABLE `formacion_equipo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1538;
+
+--
+-- AUTO_INCREMENT de la tabla `formato_torneo`
+--
+ALTER TABLE `formato_torneo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `jugador`
+--
+ALTER TABLE `jugador`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+
+--
+-- AUTO_INCREMENT de la tabla `pais`
+--
+ALTER TABLE `pais`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT de la tabla `partido`
+--
+ALTER TABLE `partido`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `sobre`
+--
+ALTER TABLE `sobre`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `torneo`
+--
+ALTER TABLE `torneo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `club`
+--
+ALTER TABLE `club`
+  ADD CONSTRAINT `club_ibfk_1` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `club_ibfk_2` FOREIGN KEY (`estadio_id`) REFERENCES `estadio` (`id`) ON DELETE SET NULL;
+
+--
+-- Filtros para la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  ADD CONSTRAINT `equipo_ibfk_1` FOREIGN KEY (`club_id`) REFERENCES `club` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_equipo_esquema` FOREIGN KEY (`esquema_id`) REFERENCES `esquema` (`id`);
+
+--
+-- Filtros para la tabla `equipo_torneo`
+--
+ALTER TABLE `equipo_torneo`
+  ADD CONSTRAINT `equipo_torneo_ibfk_1` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_equipotorneo_equipo` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`);
+
+--
+-- Filtros para la tabla `evento_partido`
+--
+ALTER TABLE `evento_partido`
+  ADD CONSTRAINT `evento_partido_ibfk_1` FOREIGN KEY (`partido_id`) REFERENCES `partido` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `formacion_equipo`
+--
+ALTER TABLE `formacion_equipo`
+  ADD CONSTRAINT `formacion_equipo_ibfk_1` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `formacion_equipo_ibfk_2` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `jugador`
+--
+ALTER TABLE `jugador`
+  ADD CONSTRAINT `fk_equipo_id` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`),
+  ADD CONSTRAINT `jugador_ibfk_2` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`) ON DELETE SET NULL;
+
+--
+-- Filtros para la tabla `partido`
+--
+ALTER TABLE `partido`
+  ADD CONSTRAINT `partido_ibfk_1` FOREIGN KEY (`equipo_local_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `partido_ibfk_2` FOREIGN KEY (`equipo_visitante_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `partido_ibfk_3` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `torneo`
+--
+ALTER TABLE `torneo`
+  ADD CONSTRAINT `torneo_ibfk_1` FOREIGN KEY (`formato_torneo_id`) REFERENCES `formato_torneo` (`id`) ON DELETE SET NULL;
+
+--
+-- Filtros para la tabla `torneo_copa`
+--
+ALTER TABLE `torneo_copa`
+  ADD CONSTRAINT `torneo_copa_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`),
+  ADD CONSTRAINT `torneo_copa_ibfk_2` FOREIGN KEY (`id_fase`) REFERENCES `fase` (`id`);
+
+--
+-- Filtros para la tabla `torneo_liga`
+--
+ALTER TABLE `torneo_liga`
+  ADD CONSTRAINT `torneo_liga_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

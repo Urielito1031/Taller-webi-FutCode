@@ -76,7 +76,7 @@
 <!-- Scripts -->
 <script th:inline="javascript">
 
-   const alineacionPersistida = [[${formacion.alineacion}]];
+   let alineacionPersistida = [[${formacion.alineacion}]];
    window.updateField = [[${updateField}]] || false;
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

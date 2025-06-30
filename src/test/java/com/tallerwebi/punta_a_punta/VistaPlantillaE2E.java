@@ -63,7 +63,7 @@ public class VistaPlantillaE2E{
       assertThat("Formación guardada con éxito!", equalToIgnoringCase(texto));
 
       String url = vistaPlantilla.obtenerURLActual();
-      assertThat(url, containsStringIgnoringCase("/spring/guardar-formacion"));
+      assertThat(url, containsStringIgnoringCase("/guardar-formacion"));
    }
 
 }

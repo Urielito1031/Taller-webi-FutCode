@@ -29,6 +29,4 @@ public class SobreRepositoryImpl implements SobreRepository {
         Collections.shuffle(jugadores);
         return jugadores.stream().limit(cantidad).collect(Collectors.toList());
     }
-
-
 }

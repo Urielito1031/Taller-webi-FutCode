@@ -32,7 +32,6 @@ public class SorteoServiceImpl {
 
         // mezclamos la lista
         Collections.shuffle(jugadoresDisponibles);
-
         // nuevo equipo
         List<JugadorDTO> nuevoEquipo = new ArrayList<>();
 
@@ -45,7 +44,8 @@ public class SorteoServiceImpl {
         return nuevoEquipo;
     }
 
-    private List<JugadorDTO> seleccionarJugadores(List<JugadorDTO> futurosJugadores, PosicionEnum posicion, int cantidad){
+    private List<JugadorDTO> seleccionarJugadores(List<JugadorDTO> futurosJugadores,
+                                                  PosicionEnum posicion, int cantidad){
         return futurosJugadores.stream()
                 .filter(j -> j.getPosicionNatural().equals(posicion))
                 .limit(cantidad)

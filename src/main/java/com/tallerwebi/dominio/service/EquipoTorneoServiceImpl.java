@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.EquipoTorneo;
+import com.tallerwebi.dominio.model.entities.Torneo;
+import com.tallerwebi.dominio.model.enums.TipoFormato;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
 import com.tallerwebi.dominio.repository.TorneoRepository;
@@ -16,6 +18,9 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class EquipoTorneoServiceImpl implements EquipoTorneoService {
+
+   public static final int CAPACIDAD_MAXIMA_TORNEO_LIGA = 20;
+   public static final int CAPACIDAD_MAXIMA_TORNEO_COPA = 32;
 
    private final EquipoTorneoRepository repository;
 
@@ -41,28 +46,51 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
 
    @Override
    public void unirseTorneo(Long torneoId,Long equipoId){
-      if(torneoYEquipoEsValido(torneoId, equipoId)){
+      if(!torneoYEquipoEsValido(torneoId, equipoId)){
          throw new IllegalArgumentException("El torneo o equipo asociado no pueden ser nulos o no existen");
       }
-      //validar cantidad de equipos en torneo, si es copa, pueden ser 30, si es liga, pueden ser 20
+
+
+      //validar que el torneo no tenga el equipo a unir
+      if(!validarEquipoNoUnidoATorneo(torneoId, equipoId)){
+         throw new IllegalArgumentException("El equipo ya se encuentra unido al torneo");
+      };
+
+      Torneo torneo = torneoRepository.getById(torneoId);
+
+      verificarFormatoTorneoParaValidarCapacidadMaxima(torneoId,torneo);
+
 
       repository.unirEquipoATorneo(equipoId, torneoId);
 
    }
 
+   private boolean validarEquipoNoUnidoATorneo(Long torneoId,Long equipoId){
+      List<EquipoTorneo> equiposTorneo = repository.getAllByTorneoId(torneoId);
+      return equiposTorneo.stream()
+        .noneMatch(equipoTorneo ->
+          equipoTorneo.getEquipo().getId().equals(equipoId));
+   }
+
+   private void verificarFormatoTorneoParaValidarCapacidadMaxima(Long torneoId,Torneo torneo){
+      if(torneo.getFormatoTorneo().getTipo().equals(TipoFormato.LIGA)){
+         if(repository.getAllByTorneoId(torneoId).size() >= CAPACIDAD_MAXIMA_TORNEO_LIGA){
+            throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
+         }
+
+      }
+      if(torneo.getFormatoTorneo().getTipo().equals(TipoFormato.COPA)){
+         if(repository.getAllByTorneoId(torneoId).size() >= CAPACIDAD_MAXIMA_TORNEO_COPA){
+            throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
+         }
+      }
+   }
+
    private boolean torneoYEquipoEsValido(Long torneoId,Long equipoId){
-      if(torneoId == null || equipoId == null){
-         return true;
-      }
 
-      if(!torneoRepository.existsById(torneoId)){
-         throw new IllegalArgumentException("El torneo no existe");
-      }
-
-      if(!equipoRepository.existsById(equipoId)){
-         throw new IllegalArgumentException("El equipo no existe");
-      }
-
-      return false;
+      return torneoId != null &&
+             equipoId != null &&
+             torneoRepository.existsById(torneoId) &&
+             equipoRepository.existsById(equipoId);
    }
 }

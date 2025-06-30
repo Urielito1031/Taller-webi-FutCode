@@ -77,7 +77,7 @@ public class PlantillaControllerTest {
       String view = plantillaController.cambiarFormacion(esquemaTexto, model);
 
       assertThat(view, is("vista-plantilla"));
-      verify(model).addAttribute(eq("jugadores"), any()); // ✅ Verificado
+      verify(model).addAttribute(eq("jugadores"), any());
       verify(model).addAttribute(eq("formacion"), eq(formacion));
       verify(model).addAttribute(eq("esquemas"), eq(esquemas));
    }

@@ -37,6 +37,11 @@ public class TorneoRepositoryImpl implements TorneoRepository{
       return getSession().get(Torneo.class,id);
    }
 
+   @Override
+   public boolean existsById(Long torneoId){
+      return this.getById(torneoId) != null;
+   }
+
    private Session getSession() {
       return sessionFactory.getCurrentSession();
    }

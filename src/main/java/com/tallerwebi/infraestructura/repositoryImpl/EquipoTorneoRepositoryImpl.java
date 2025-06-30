@@ -33,13 +33,12 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
    }
 
    @Override
-   public Boolean unirEquipoATorneo(Long torneoId,Long equipoId){
+   public void unirEquipoATorneo(Long torneoId,Long equipoId){
       String query = "INSERT INTO EquipoTorneo (torneo_id, equipo_id) " +
               "VALUES (:torneoId, :equipoId)";
-
-      return getSession().createNativeQuery(query)
+      getSession().createNativeQuery(query)
         .setParameter("torneoId", torneoId)
-        .setParameter("equipoId", equipoId).executeUpdate() > 0;
+        .setParameter("equipoId", equipoId);
    }
 
    private Session getSession(){

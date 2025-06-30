@@ -9,4 +9,5 @@ public interface TorneoRepository {
    void save(Torneo torneo);
    Torneo getById(Long id);
 
+   boolean existsById(Long torneoId);
 }

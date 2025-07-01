@@ -2,9 +2,11 @@ package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.model.entities.Jugador;
+import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.service.EquipoService;
 import com.tallerwebi.dominio.service.JugadorService;
 import com.tallerwebi.dominio.service.SorteoServiceImpl;
+import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.infraestructura.JugadorLoader;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -23,9 +25,13 @@ import java.util.List;
 public class EquipoInicialControlador {
 
         private final JugadorService jugadorService;
+        private final UsuarioService usuarioService;
+        private final EquipoService equipoService;
 
-        public EquipoInicialControlador(JugadorService jugadorService) {
+        public EquipoInicialControlador(JugadorService jugadorService, UsuarioService usuarioService, EquipoService equipoService) {
             this.jugadorService = jugadorService;
+            this.usuarioService = usuarioService;
+            this.equipoService = equipoService;
         }
 
         @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.GET)
@@ -68,6 +74,21 @@ public class EquipoInicialControlador {
             equipo.setJugadores(jugadoresDto);
 
             session.setAttribute("equipo", equipo);
+
+            Long usuarioId = (Long) session.getAttribute("usuarioId");
+            Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
+
+            Equipo equipoEntity = new Equipo();
+            equipoEntity.setNombre(equipo.getNombre());
+            equipoEntity.setUsuario(usuario);
+            equipoEntity.setJugadores(jugadores);
+
+            for (Jugador jugador : jugadores) {
+                jugador.setEquipo(equipoEntity); // ← esto es clave para que persista la relación
+            }
+
+
+            this.equipoService.saveEntity(equipoEntity);
 
             ModelAndView mav = new ModelAndView("sorteoEquipo");
             mav.addObject("equipo", equipo);

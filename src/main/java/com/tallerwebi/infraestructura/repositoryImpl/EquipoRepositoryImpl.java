@@ -32,7 +32,7 @@ public class EquipoRepositoryImpl implements EquipoRepository{
 
    @Override
    public void save(Equipo equipo){
-       getSession().saveOrUpdate(Equipo.class);
+       getSession().saveOrUpdate(equipo);
    }
 
 

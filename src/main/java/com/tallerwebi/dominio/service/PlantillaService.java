@@ -7,7 +7,7 @@ import com.tallerwebi.presentacion.dto.EsquemaDTO;
 import java.util.List;
 
 public interface PlantillaService {
-   EsquemaDTO initPlantillaBase();
+   EsquemaDTO initPlantillaBase(Long idEquipo);
    Boolean save(EsquemaDTO formacion);
 
 

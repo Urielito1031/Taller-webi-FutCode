@@ -33,20 +33,15 @@ public class PlantillaServiceImpl implements PlantillaService {
    }
 
    @Override
-   public EsquemaDTO initPlantillaBase() {
+   public EsquemaDTO initPlantillaBase(Long equipoId) {
       EsquemaDTO formacion = new EsquemaDTO();
-      formacion.setId(1L);
+      formacion.setEquipoId(equipoId);
 
-      formacion.setEquipoId(1L);
-
-
-      Long equipoId = 1L;
       List<FormacionEquipo> formaciones = formacionEquipoRepository.findByEquipoId(equipoId);
       if (!formaciones.isEmpty()) {
          formacion.setAlineacion(convertFormacionesToAlineacion(formaciones));
          formacion.setEsquema(detectarEsquema(formaciones));
       }
-
 
       return formacion;
    }

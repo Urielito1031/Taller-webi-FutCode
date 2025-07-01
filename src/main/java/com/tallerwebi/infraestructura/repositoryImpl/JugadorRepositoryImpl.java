@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura.repositoryImpl;
 
 import com.tallerwebi.dominio.model.entities.Jugador;
+import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.dominio.repository.JugadorRepository;
 import org.hibernate.Session;
@@ -8,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,17 +33,17 @@ public class JugadorRepositoryImpl implements JugadorRepository{
    }
 
    @Override
-   public List<Jugador> sortearJugadoresIniciales(RarezaJugador rarezaJugador, int cantidad) {
-      String hql = "FROM Jugador WHERE rarezaJugador = :rareza_Jugador";
+   public List<Jugador> sortearJugadoresIniciales(RarezaJugador rarezaJugador, PosicionEnum posicion, int cantidad) {
+      String hql = "FROM Jugador WHERE rarezaJugador = :rareza_Jugador AND posicion = :posicion";
 
       List<Jugador> jugadores = sessionFactory.getCurrentSession()
               .createQuery(hql, Jugador.class)
               .setParameter("rareza_Jugador", rarezaJugador)
+              .setParameter("posicion", posicion)
               .list();
 
-      return jugadores.stream()
-              .limit(cantidad)
-              .collect(Collectors.toList());
+      Collections.shuffle(jugadores);
+      return jugadores.stream().limit(cantidad).collect(Collectors.toList());
    }
 
    @Override

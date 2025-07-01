@@ -68,7 +68,7 @@ import javax.validation.Valid;
             request.getSession().setAttribute("ROL", usuarioRegistrado.getRol());
             request.getSession().setAttribute("USUARIO_ID", usuarioRegistrado.getId());
 
-            return new ModelAndView("redirect:/sorteoEquipoInicial");
+            return new ModelAndView("redirect:/nuevo-equipo");
 
          } catch (UsuarioExistente e) {
             model.put("error", "El usuario ya existe");

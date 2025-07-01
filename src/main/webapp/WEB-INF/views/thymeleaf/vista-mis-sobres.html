@@ -32,7 +32,7 @@
 
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/spring/jugador/comprar-sobres">
+                        <a class="nav-link" th:href="@{/jugador/comprar-sobres}">
                             <i class="bi bi-gift-fill"></i> Mercado
                         </a>
                     </li>
@@ -52,7 +52,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>
-                                <a class="nav-link" href="/spring/jugador/mis-sobres">
+                                <a class="nav-link" th:href="@{/jugador/mis-sobres}">
                                     <i class="bi bi-gift-fill"></i> Mis Sobres
                                     <span class="badge bg-warning ms-1" th:text="${cantidadSobres}"></span>
                                 </a>

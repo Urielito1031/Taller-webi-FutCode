@@ -1,8 +1,13 @@
 package com.tallerwebi.presentacion.controller;
 
+import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Jugador;
+import com.tallerwebi.dominio.service.EquipoService;
+import com.tallerwebi.dominio.service.JugadorService;
 import com.tallerwebi.dominio.service.SorteoServiceImpl;
 import com.tallerwebi.infraestructura.JugadorLoader;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
+import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class EquipoInicialControlador {
 
-        private final SorteoServiceImpl sorteoService;
+        private final JugadorService jugadorService;
 
-        public EquipoInicialControlador() {
-            JugadorLoader jugadorLoader = new JugadorLoader();
-            this.sorteoService = new SorteoServiceImpl(jugadorLoader);
+        public EquipoInicialControlador(JugadorService jugadorService) {
+            this.jugadorService = jugadorService;
         }
 
         @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.GET)
@@ -48,7 +53,19 @@ public class EquipoInicialControlador {
                 return new ModelAndView("redirect:/nuevo-equipo");
             }
 
-            equipo.setJugadores(this.sorteoService.sortearEquipoInicial());
+            List<Jugador> jugadores = this.jugadorService.sortearJugadoresIniciales(14);
+
+            List<JugadorDTO> jugadoresDto = new ArrayList<>();
+
+            for(Jugador jugador : jugadores){
+                jugadoresDto.add(jugador.convertToDTO());
+            }
+
+            for(JugadorDTO jugadorDTO : jugadoresDto){
+                jugadorDTO.setEquipo(equipo);
+            }
+
+            equipo.setJugadores(jugadoresDto);
 
             session.setAttribute("equipo", equipo);
 

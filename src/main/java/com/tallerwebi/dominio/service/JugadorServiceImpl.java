@@ -1,7 +1,6 @@
 package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.Jugador;
-import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.dominio.repository.JugadorRepository;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -44,6 +43,11 @@ public class JugadorServiceImpl implements JugadorService{
         .collect(Collectors.toList());
    }
       return null;
+   }
+
+   @Override
+   public List<Jugador> sortearJugadoresIniciales(int cantidad) {
+      return this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, cantidad);
    }
 
 //   public Jugador crearJugador(String imagen, String nombre, String apellido, Double rating, RarezaJugador rarezaJugador,

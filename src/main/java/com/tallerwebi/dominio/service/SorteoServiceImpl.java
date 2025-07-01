@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.infraestructura.JugadorLoader;
@@ -12,38 +13,43 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SorteoServiceImpl {
+public class SorteoServiceImpl implements SorteoService {
 
-    private final JugadorLoader jugadorLoader;
 
-    public SorteoServiceImpl(JugadorLoader jugadorLoader) {
-        this.jugadorLoader = jugadorLoader;
+
+    public SorteoServiceImpl() {
+
     }
 
-    public List<JugadorDTO> sortearEquipoInicial(){
-
-        // traemos los jugadores del JSON como objetos
-        List<JugadorDTO> todosLosJugadores = this.jugadorLoader.cargarJugadoresDesdeJSON();
-
-        // seleccionamos solo a los jugadores de rareza NORMAL
-        List<JugadorDTO> jugadoresDisponibles = todosLosJugadores.stream()
-                .filter(j -> j.getRarezaJugador().equals(RarezaJugador.NORMAL))
-                .collect(Collectors.toList());
-
-        // mezclamos la lista
-        Collections.shuffle(jugadoresDisponibles);
-
-        // nuevo equipo
-        List<JugadorDTO> nuevoEquipo = new ArrayList<>();
-
-        // agregamos mediante el metodo de seleccion de jugador al nuevo equipo
-        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.ARQUERO, 2));
-        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.DEFENSOR, 5));
-        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.MEDIOCAMPISTA, 3));
-        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.DELANTERO, 4));
-
-        return nuevoEquipo;
+    @Override
+    public List<Jugador> sortearEquipoInicial() {
+        return List.of();
     }
+
+//    public List<JugadorDTO> sortearEquipoInicial(){
+//
+//        // traemos los jugadores del JSON como objetos
+//        List<JugadorDTO> todosLosJugadores = this.jugadorLoader.cargarJugadoresDesdeJSON();
+//
+//        // seleccionamos solo a los jugadores de rareza NORMAL
+//        List<JugadorDTO> jugadoresDisponibles = todosLosJugadores.stream()
+//                .filter(j -> j.getRarezaJugador().equals(RarezaJugador.NORMAL))
+//                .collect(Collectors.toList());
+//
+//        // mezclamos la lista
+//        Collections.shuffle(jugadoresDisponibles);
+//
+//        // nuevo equipo
+//        List<JugadorDTO> nuevoEquipo = new ArrayList<>();
+//
+//        // agregamos mediante el metodo de seleccion de jugador al nuevo equipo
+//        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.ARQUERO, 2));
+//        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.DEFENSOR, 5));
+//        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.MEDIOCAMPISTA, 3));
+//        nuevoEquipo.addAll(seleccionarJugadores(jugadoresDisponibles, PosicionEnum.DELANTERO, 4));
+//
+//        return nuevoEquipo;
+//    }
 
     private List<JugadorDTO> seleccionarJugadores(List<JugadorDTO> futurosJugadores, PosicionEnum posicion, int cantidad){
         return futurosJugadores.stream()
@@ -51,4 +57,6 @@ public class SorteoServiceImpl {
                 .limit(cantidad)
                 .collect(Collectors.toList());
     }
+
+
 }

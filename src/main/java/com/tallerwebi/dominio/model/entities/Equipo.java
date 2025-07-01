@@ -14,6 +14,7 @@ import javax.persistence.*;
 public class Equipo {
    @Id
    @Column(name = "id", nullable = false)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @javax.validation.constraints.Size(max = 100)

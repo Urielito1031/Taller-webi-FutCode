@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
@@ -22,6 +23,7 @@ public class EquipoServiceImpl implements EquipoService{
    public EquipoServiceImpl(EquipoRepository repository) {
       this.repository = repository;
    }
+
    @Override
    public void save(EquipoDTO dto){
       if(!isValid(dto)){
@@ -31,8 +33,6 @@ public class EquipoServiceImpl implements EquipoService{
 
       repository.save(entity);
    }
-
-
 
    private boolean isValid(EquipoDTO equipo){
       return !equipo.getNombre().trim().isEmpty();
@@ -71,6 +71,11 @@ public class EquipoServiceImpl implements EquipoService{
    @Override
    public void delete(Long id){
 
+   }
+
+   @Override
+   public Equipo sortearEquipoInicial() {
+      return null;
    }
 
 }

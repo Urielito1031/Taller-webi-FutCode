@@ -21,4 +21,6 @@ public interface UsuarioService{
     void borrarSobreAUsuario(Long idUsuario, Long idSobre);
 
     List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores);
+
+    void actualizarUsuario(Usuario usuario);
 }

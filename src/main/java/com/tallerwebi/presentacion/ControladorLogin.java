@@ -55,22 +55,28 @@ import javax.validation.Valid;
       }
 
       @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-      public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario,BindingResult result) {
+      public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario,BindingResult result, HttpServletRequest request) {
          ModelMap model = new ModelMap();
 
          if(result.hasErrors()) {
             return new ModelAndView("nuevo-usuario", model);
          }
-         try{
-            servicioLogin.registrar(usuario);
-         } catch (UsuarioExistente e){
+         try {
+            Usuario usuarioRegistrado = servicioLogin.registrar(usuario);
+
+            // Guardar datos en la sesión
+            request.getSession().setAttribute("ROL", usuarioRegistrado.getRol());
+            request.getSession().setAttribute("USUARIO_ID", usuarioRegistrado.getId());
+
+            return new ModelAndView("redirect:/sorteoEquipoInicial");
+
+         } catch (UsuarioExistente e) {
             model.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", model);
-         } catch (Exception e){
+         } catch (Exception e) {
             model.put("error", "Error al registrar el nuevo usuario");
             return new ModelAndView("nuevo-usuario", model);
          }
-         return new ModelAndView("redirect:/nuevo-equipo");
       }
 
       @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)

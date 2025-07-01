@@ -15,8 +15,8 @@ import java.util.List;
 @Table(name = "equipo")
 public class Equipo {
    @Id
-   @Column(name = "id", nullable = false)
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id", nullable = false)
    private Long id;
 
    @javax.validation.constraints.Size(max = 100)

@@ -10,6 +10,8 @@ import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import lombok.SneakyThrows;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hsqldb.DatabaseManager.getSession;
+
 @Service
 public class UsuarioServiceImpl implements  UsuarioService{
 
     private RepositorioUsuarioImpl repositorioUsuario;
+    private final SessionFactory sessionFactory;
+
 
     @Autowired
-    public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
+    public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario, SessionFactory sessionFactory) {
         this.repositorioUsuario = repositorioUsuario;
+        this.sessionFactory = sessionFactory;
     }
 
     @SneakyThrows
@@ -152,6 +159,15 @@ public class UsuarioServiceImpl implements  UsuarioService{
         }
 
         return jugadoresDTO;
+    }
+
+    @Override
+    public void actualizarUsuario(Usuario usuario) {
+        getSession().update(usuario);
+    }
+
+    private Session getSession() {
+        return sessionFactory.getCurrentSession();
     }
 
 }

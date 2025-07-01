@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -42,6 +45,18 @@ public class TorneoController {
       model.addAttribute("torneoEquipos", torneoEquipos);
       return "detalle-torneo";
    }
+   @PostMapping("/torneo/{id}/unirse")
+   public String unirseATorneo(@PathVariable("id") Long torneoId, RedirectAttributes redirectAttributes) {
+      try {
+         equipoTorneoService.unirseTorneo(torneoId, 1L); // después lo cambiás por el ID real del equipo del usuario
+         redirectAttributes.addFlashAttribute("mensajeTorneo", "¡Te uniste al torneo con éxito!");
+      } catch (IllegalArgumentException e) {
+         redirectAttributes.addFlashAttribute("errorUnirse", e.getMessage());
+      }
+      return "redirect:/detalle-torneo/" + torneoId;
+   }
+
+
 
 
 }

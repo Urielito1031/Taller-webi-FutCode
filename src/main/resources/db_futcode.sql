@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-06-2025 a las 23:40:04
+-- Tiempo de generación: 01-07-2025 a las 03:16:38
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -82,7 +82,7 @@ CREATE TABLE `equipo` (
 --
 
 INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
-(1, 'River Plate Titulares', 1, 1),
+(1, 'River Plate', 1, 1),
 (2, 'Flamengo Juveniles', 2, 2),
 (3, 'Barcelona B', 3, 3),
 (4, 'Bayern Múnich Sub-20', 4, 4),
@@ -122,7 +122,7 @@ INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
 CREATE TABLE `equipo_torneo` (
   `id` int(11) NOT NULL,
   `equipo_id` int(11) NOT NULL,
-  `posicion` int(11) NOT NULL,
+  `posicion` int(11) NOT NULL DEFAULT 0,
   `partidos_jugados` int(11) NOT NULL DEFAULT 0,
   `partidos_ganados` int(11) NOT NULL DEFAULT 0,
   `partidos_empatados` int(11) NOT NULL DEFAULT 0,
@@ -130,7 +130,7 @@ CREATE TABLE `equipo_torneo` (
   `goles_a_favor` int(11) NOT NULL DEFAULT 0,
   `goles_en_contra` int(11) NOT NULL DEFAULT 0,
   `puntos` int(11) NOT NULL DEFAULT 0,
-  `torneo_id` int(11) DEFAULT NULL
+  `torneo_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -138,7 +138,6 @@ CREATE TABLE `equipo_torneo` (
 --
 
 INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, `partidos_ganados`, `partidos_empatados`, `partidos_perdidos`, `goles_a_favor`, `goles_en_contra`, `puntos`, `torneo_id`) VALUES
-(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1),
@@ -247,7 +246,8 @@ INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, 
 (107, 17, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (108, 18, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (109, 19, 0, 0, 0, 0, 0, 0, 0, 0, 7),
-(110, 20, 0, 0, 0, 0, 0, 0, 0, 0, 7);
+(110, 20, 0, 0, 0, 0, 0, 0, 0, 0, 7),
+(112, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -838,7 +838,7 @@ ALTER TABLE `equipo`
 -- AUTO_INCREMENT de la tabla `equipo_torneo`
 --
 ALTER TABLE `equipo_torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT de la tabla `esquema`

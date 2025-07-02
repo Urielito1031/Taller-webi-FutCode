@@ -22,7 +22,7 @@ public interface UsuarioService{
 
     List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores);
 
-    void actualizarUsuario(Usuario usuario);
-
-    void actualizar(Usuario usuario);
+//    void actualizarUsuario(Usuario usuario);
+//
+//    void actualizar(Usuario usuario);
 }

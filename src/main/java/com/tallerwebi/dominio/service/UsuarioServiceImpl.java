@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
 public class UsuarioServiceImpl implements  UsuarioService{
 
     private RepositorioUsuarioImpl repositorioUsuario;
-    private final SessionFactory sessionFactory;
+    //private final SessionFactory sessionFactory;
 
 
     @Autowired
-    public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario, SessionFactory sessionFactory) {
+    public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
         this.repositorioUsuario = repositorioUsuario;
-        this.sessionFactory = sessionFactory;
+
     }
 
     @SneakyThrows
@@ -159,19 +159,19 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return jugadoresDTO;
     }
 
-    @Override
-    public void actualizarUsuario(Usuario usuario) {
-        getSession().update(usuario);
-    }
-
-    @Override
-    public void actualizar(Usuario usuario) {
-        repositorioUsuario.actualizar(usuario);
-    }
-
-
-    private Session getSession() {
-        return sessionFactory.getCurrentSession();
-    }
+//    @Override
+//    public void actualizarUsuario(Usuario usuario) {
+//        getSession().update(usuario);
+//    }
+//
+//    @Override
+//    public void actualizar(Usuario usuario) {
+//        repositorioUsuario.actualizar(usuario);
+//    }
+//
+//
+//    private Session getSession() {
+//        return sessionFactory.getCurrentSession();
+//    }
 
 }

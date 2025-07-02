@@ -92,7 +92,7 @@ public class EquipoInicialControlador {
             this.equipoService.saveEntity(equipoEntity);
 
             usuario.setEquipo(equipoEntity);
-            usuarioService.actualizar(usuario);
+//            usuarioService.actualizar(usuario);
 
             ModelAndView mav = new ModelAndView("sorteoEquipo");
             mav.addObject("equipo", equipo);

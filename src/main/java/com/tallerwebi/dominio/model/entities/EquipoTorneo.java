@@ -19,28 +19,28 @@ public class EquipoTorneo {
    private Long id;
 
    @Column(name = "posicion")
-   private Integer posicion;
+   private Integer posicion = 0;
 
    @Column(name = "partidos_jugados")
-   private Integer partidosJugados;
+   private Integer partidosJugados = 0;
 
    @Column(name = "partidos_ganados")
-   private Integer partidosGanados;
+   private Integer partidosGanados= 0;
 
    @Column(name = "partidos_empatados")
-   private Integer partidosEmpatados;
+   private Integer partidosEmpatados= 0;
 
    @Column(name = "partidos_perdidos")
-   private Integer partidosPerdidos;
+   private Integer partidosPerdidos= 0;
 
    @Column(name = "goles_a_favor")
-   private Integer golesAFavor;
+   private Integer golesAFavor= 0;
 
    @Column(name = "goles_en_contra")
-   private Integer golesEnContra;
+   private Integer golesEnContra= 0;
 
    @Column(name = "puntos")
-   private Integer puntos;
+   private Integer puntos= 0;
 
    @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)

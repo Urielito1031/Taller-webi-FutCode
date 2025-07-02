@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion.dto;
 
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Esquema;
+import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,15 +22,15 @@ public class EquipoDTO {
    private Double ratingEquipo;
    private Long usuarioId;
    private EsquemaDTO formacionActual;
-   public EquipoDTO() {}
 
 
-   public EquipoDTO(String nombre, ClubDTO club) {
-      this.nombre = nombre;
-      this.club = club;
+
+   public EquipoDTO() {
       this.jugadores = new ArrayList<>();
       this.formacionActual = new EsquemaDTO();
+      this.formacionActual.setEsquema(FormacionEsquema.CUATRO_CUATRO_DOS);
    }
+
 
    public Double ratingEquipo(List<JugadorDTO> jugadores){
       double total = 0;
@@ -64,6 +66,12 @@ public class EquipoDTO {
          equipo.setClub(dto.getClub().convertToEntity(dto.getClub()));
       }
 
+      if (dto.getFormacionActual() != null) {
+         Esquema esquema = new Esquema();
+         esquema.setEsquema(dto.getFormacionActual().getEsquema());
+         equipo.setEsquema(esquema);
+      }
+
       return equipo;
    }
    public EquipoDTO convertFromEntity(Equipo equipo) {
@@ -78,6 +86,11 @@ public class EquipoDTO {
          dto.setClub(new ClubDTO().convertFromEntity(equipo.getClub()));
       }
 
+      if (equipo.getEsquema() != null) {
+         EsquemaDTO esquemaDTO = new EsquemaDTO();
+         esquemaDTO.setEsquema(equipo.getEsquema().getEsquema());
+         dto.setFormacionActual(esquemaDTO);
+      }
 
       return dto;
    }

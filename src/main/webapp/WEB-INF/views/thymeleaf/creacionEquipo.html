@@ -26,8 +26,7 @@
                     <label for="equipoNombre" class="sr-only">Nombre</label>
                     <input th:field="*{nombre}" id="equipoNombre" type="text" class="form-control"/>
 
-                    <div th:if="${#fields.hasErrors('nombre')}" class="alert alert-danger" th:errors="*{nombre}">Nombre inválido</div>
-
+                    <div th:if="${errors}" class="alert alert-danger" th:each="error : ${errors}" th:text="${error.defaultMessage}"></div>
                     <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" type="submit">Siguiente</button>
                 </form>
             </div>

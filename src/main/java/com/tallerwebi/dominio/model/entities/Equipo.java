@@ -44,12 +44,14 @@ public class Equipo {
       dto.setId(this.id);
       dto.setNombre(this.nombre);
 
+
       if (this.club != null) {
          ClubDTO clubDTO = new ClubDTO();
          clubDTO.setId(this.club.getId());
          clubDTO.setNombre(this.club.getNombre());
          clubDTO.setPais(this.club.getPais());
          clubDTO.setImagen(this.club.getImagen());
+
          dto.setClub(clubDTO);
       }
 

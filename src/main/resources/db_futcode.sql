@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-07-2025 a las 01:39:29
+-- Tiempo de generación: 02-07-2025 a las 17:00:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -74,7 +74,7 @@ CREATE TABLE `equipo` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `club_id` int(11) DEFAULT NULL,
-  `esquema_id` int(11) DEFAULT NULL,
+  `esquema_id` int(11) NOT NULL DEFAULT 1,
   `usuario_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -112,7 +112,8 @@ INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`, `usuario_id`) VAL
 (27, 'Ajax Reservas', 17, 2, NULL),
 (28, 'Anderlecht B', 20, 2, NULL),
 (29, 'Celtic Reservas', 19, 3, NULL),
-(30, 'PSV Academy', 22, 2, NULL);
+(30, 'PSV Academy', 22, 2, NULL),
+(76, 'equipoNuevooo', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -123,7 +124,7 @@ INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`, `usuario_id`) VAL
 CREATE TABLE `equipo_torneo` (
   `id` int(11) NOT NULL,
   `equipo_id` int(11) NOT NULL,
-  `posicion` int(11) NOT NULL,
+  `posicion` int(11) NOT NULL DEFAULT 0,
   `partidos_jugados` int(11) NOT NULL DEFAULT 0,
   `partidos_ganados` int(11) NOT NULL DEFAULT 0,
   `partidos_empatados` int(11) NOT NULL DEFAULT 0,
@@ -139,7 +140,6 @@ CREATE TABLE `equipo_torneo` (
 --
 
 INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, `partidos_ganados`, `partidos_empatados`, `partidos_perdidos`, `goles_a_favor`, `goles_en_contra`, `puntos`, `torneo_id`) VALUES
-(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1),
@@ -169,7 +169,6 @@ INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, 
 (28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (29, 29, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (30, 30, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-(31, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2),
 (32, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2),
 (33, 3, 0, 0, 0, 0, 0, 0, 0, 0, 2),
 (34, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2),
@@ -229,7 +228,6 @@ INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, 
 (88, 28, 0, 0, 0, 0, 0, 0, 0, 0, 4),
 (89, 29, 0, 0, 0, 0, 0, 0, 0, 0, 4),
 (90, 30, 0, 0, 0, 0, 0, 0, 0, 0, 4),
-(91, 1, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (92, 2, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (93, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (94, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7),
@@ -371,17 +369,17 @@ CREATE TABLE `formacion_equipo` (
 --
 
 INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_campo`) VALUES
-(1527, 1, 16, 'ARQUERO'),
-(1528, 1, 2, 'DEFENSOR'),
-(1529, 1, 3, 'DEFENSOR'),
-(1530, 1, 4, 'DEFENSOR'),
-(1531, 1, 5, 'DEFENSOR'),
-(1532, 1, 6, 'DEFENSOR'),
-(1533, 1, 10, 'MEDIOCAMPISTA'),
-(1534, 1, 118, 'MEDIOCAMPISTA'),
-(1535, 1, 20, 'MEDIOCAMPISTA'),
-(1536, 1, 21, 'DELANTERO'),
-(1537, 1, 17, 'DELANTERO');
+(1538, 1, 16, 'ARQUERO'),
+(1539, 1, 2, 'DEFENSOR'),
+(1540, 1, 3, 'DEFENSOR'),
+(1541, 1, 4, 'DEFENSOR'),
+(1542, 1, 5, 'DEFENSOR'),
+(1543, 1, 6, 'DEFENSOR'),
+(1544, 1, 10, 'MEDIOCAMPISTA'),
+(1545, 1, 68, 'MEDIOCAMPISTA'),
+(1546, 1, 20, 'MEDIOCAMPISTA'),
+(1547, 1, 21, 'DELANTERO'),
+(1548, 1, 17, 'DELANTERO');
 
 -- --------------------------------------------------------
 
@@ -451,21 +449,21 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (18, 'Neymar', 'Jr', 'https://tomaszfutcode.free.nf/jugadoresFutcode/neymarJr.png', 33, 11, 80.4, 0, 97.00, 2, 'EPICO', 'MEDIOCAMPISTA', 1, NULL),
 (19, 'Luka', 'Modrić', 'https://tomaszfutcode.free.nf/jugadoresFutcode/modric.png', 39, 10, 48.7, 0, 96.70, 3, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
 (20, 'Mohamed', 'Salah', 'https://tomaszfutcode.free.nf/jugadoresFutcode/salah.png', 32, 11, 46.2, 0, 97.20, 7, 'RARO', 'DELANTERO', 1, NULL),
-(21, 'Sadio', 'Mané', 'https://tomaszfutcode.free.nf/jugadoresFutcode/mane.png', 33, 10, 45.8, 0, 96.50, 2, 'RARO', 'DELANTERO', 2, NULL),
+(21, 'Sadio', 'Mané', 'https://tomaszfutcode.free.nf/jugadoresFutcode/mane.png', 33, 10, 45.8, 0, 96.50, 2, 'RARO', 'DELANTERO', 1, NULL),
 (22, 'Casemiro', 'Carlos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/casemiro.png', 32, 5, 44.3, 0, 95.90, 2, 'RARO', 'MEDIOCAMPISTA', 3, NULL),
 (23, 'Joshua', 'Kimmich', 'https://tomaszfutcode.free.nf/jugadoresFutcode/kimmich.png', 30, 6, 50.0, 0, 96.00, 5, 'RARO', 'MEDIOCAMPISTA', 4, NULL),
-(24, 'Vinícius', 'Jr', 'https://tomaszfutcode.free.nf/jugadoresFutcode/17_Vinícius_Jr.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 5, NULL),
+(24, 'Vinícius', 'Jr', 'https://tomaszfutcode.free.nf/jugadoresFutcode/17_Vinícius_Jr.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 76, NULL),
 (25, 'Bruno', 'Fernandes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/16_Bruno_Fernandes.png', 30, 8, 25.7, 0, 96.10, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
-(26, 'Marc-André', 'ter Stegen', 'https://tomaszfutcode.free.nf/jugadoresFutcode/18_Marc-André_ter_Stegen.png', 33, 1, 22.4, 0, 95.20, 3, 'NORMAL', 'ARQUERO', 6, NULL),
-(27, 'Alisson', 'Becker', 'https://tomaszfutcode.free.nf/jugadoresFutcode/19_Alisson_Becker.webp', 32, 1, 24.6, 0, 95.70, 2, 'NORMAL', 'ARQUERO', 7, NULL),
+(26, 'Marc-André', 'ter Stegen', 'https://tomaszfutcode.free.nf/jugadoresFutcode/18_Marc-André_ter_Stegen.png', 33, 1, 22.4, 0, 95.20, 3, 'NORMAL', 'ARQUERO', 76, NULL),
+(27, 'Alisson', 'Becker', 'https://tomaszfutcode.free.nf/jugadoresFutcode/19_Alisson_Becker.webp', 32, 1, 24.6, 0, 95.70, 2, 'NORMAL', 'ARQUERO', 76, NULL),
 (28, 'Ederson', 'Moraes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/20_Ederson_Moraes.png', 31, 31, 27.8, 0, 95.40, 2, 'NORMAL', 'ARQUERO', 8, NULL),
 (29, 'Antonio', 'Rüdiger', 'https://tomaszfutcode.free.nf/jugadoresFutcode/21_Antonio_Rüdiger.webp', 31, 2, 23.5, 0, 95.10, 12, 'NORMAL', 'DEFENSOR', 9, NULL),
-(30, 'Marquinhos', 'Marcos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/22_Marquinhos_Marcos.png', 30, 5, 26.3, 0, 95.60, 2, 'NORMAL', 'DEFENSOR', 10, NULL),
-(31, 'João', 'Cancelo', 'https://tomaszfutcode.free.nf/jugadoresFutcode/23_João_Cancelo.png', 30, 3, 21.9, 0, 95.30, 11, 'NORMAL', 'DEFENSOR', 2, NULL),
-(32, 'Trent', 'Alexander-Arnold', 'https://tomaszfutcode.free.nf/jugadoresFutcode/24_Trent_Alexander-Arnold.webp', 26, 66, 30.0, 0, 95.00, 7, 'NORMAL', 'DEFENSOR', 3, NULL),
-(33, 'Andrew', 'Robertson', 'https://tomaszfutcode.free.nf/jugadoresFutcode/25_Andrew_Robertson.png', 30, 26, 24.1, 0, 94.80, 7, 'NORMAL', 'DEFENSOR', 4, NULL),
+(30, 'Marquinhos', 'Marcos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/22_Marquinhos_Marcos.png', 30, 5, 26.3, 0, 95.60, 2, 'NORMAL', 'DEFENSOR', 76, NULL),
+(31, 'João', 'Cancelo', 'https://tomaszfutcode.free.nf/jugadoresFutcode/23_João_Cancelo.png', 30, 3, 21.9, 0, 95.30, 11, 'NORMAL', 'DEFENSOR', 76, NULL),
+(32, 'Trent', 'Alexander-Arnold', 'https://tomaszfutcode.free.nf/jugadoresFutcode/24_Trent_Alexander-Arnold.webp', 26, 66, 30.0, 0, 95.00, 7, 'NORMAL', 'DEFENSOR', 76, NULL),
+(33, 'Andrew', 'Robertson', 'https://tomaszfutcode.free.nf/jugadoresFutcode/25_Andrew_Robertson.png', 30, 26, 24.1, 0, 94.80, 7, 'NORMAL', 'DEFENSOR', 76, NULL),
 (34, 'Theo', 'Hernández', 'https://tomaszfutcode.free.nf/jugadoresFutcode/26_Theo_Hernández.png', 28, 19, 28.7, 0, 94.70, 6, 'NORMAL', 'DEFENSOR', 5, NULL),
-(35, 'Achraf', 'Hakimi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/27_Achraf_Hakimi.webp', 26, 2, 19.2, 0, 94.60, 2, 'NORMAL', 'DEFENSOR', 6, NULL),
+(35, 'Achraf', 'Hakimi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/27_Achraf_Hakimi.webp', 26, 2, 19.2, 0, 94.60, 2, 'NORMAL', 'DEFENSOR', 76, NULL),
 (36, 'Paul', 'Pogba', 'https://tomaszfutcode.free.nf/jugadoresFutcode/28_Paul_Pogba.png', 31, 6, 26.8, 0, 94.50, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
 (37, 'Marco', 'Verratti', 'https://tomaszfutcode.free.nf/jugadoresFutcode/29_Marco_Verratti.png', 32, 8, 25.3, 0, 94.40, 6, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL),
 (38, 'Son', 'Heung-min', 'https://tomaszfutcode.free.nf/jugadoresFutcode/30_Son_Heung-min.png', 32, 7, 48.1, 0, 97.50, 13, 'RARO', 'DELANTERO', 9, NULL),
@@ -490,7 +488,7 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (57, 'Gonçalo', 'Ramos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/59_Gonçalo_Ramos.webp', 23, 9, 23.9, 0, 91.00, 11, 'NORMAL', 'DELANTERO', 10, NULL),
 (58, 'Darwin', 'Núñez', 'https://tomaszfutcode.free.nf/jugadoresFutcode/60_Darwin_Núñez.webp', 25, 19, 28.1, 0, 92.10, 9, 'NORMAL', 'DELANTERO', 11, NULL),
 (59, 'Sebastien', 'Haller', 'https://tomaszfutcode.free.nf/jugadoresFutcode/61_Sebastien_Haller.png', 30, 9, 19.8, 0, 92.00, 12, 'NORMAL', 'DELANTERO', 2, NULL),
-(60, 'Victor', 'Osimhen', 'https://tomaszfutcode.free.nf/jugadoresFutcode/62_Victor_Osimhen.webp', 26, 9, 29.5, 0, 91.90, 8, 'NORMAL', 'DELANTERO', 3, NULL),
+(60, 'Victor', 'Osimhen', 'https://tomaszfutcode.free.nf/jugadoresFutcode/62_Victor_Osimhen.webp', 26, 9, 29.5, 0, 91.90, 8, 'NORMAL', 'DELANTERO', 76, NULL),
 (61, 'Dušan', 'Tadić', 'https://tomaszfutcode.free.nf/jugadoresFutcode/63_Dušan_Tadić.png', 35, 10, 22.2, 0, 91.80, 13, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
 (62, 'Lucas', 'Paquetá', 'https://tomaszfutcode.free.nf/jugadoresFutcode/64_Lucas_Paquetá.png', 27, 11, 26.7, 0, 91.70, 2, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
 (63, 'James', 'Maddison', 'https://tomaszfutcode.free.nf/jugadoresFutcode/65_James_Maddison.png', 28, 10, 21.4, 0, 91.60, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
@@ -501,13 +499,13 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (68, 'Paulo', 'Dybala', 'https://tomaszfutcode.free.nf/jugadoresFutcode/70_Paulo_Dybala.png', 30, 21, 45.2, 0, 96.20, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
 (69, 'Jadon', 'Sancho', 'https://tomaszfutcode.free.nf/jugadoresFutcode/71_Jadon_Sancho.png', 24, 25, 23.8, 0, 95.70, 7, 'NORMAL', 'DELANTERO', 2, NULL),
 (70, 'Marcus', 'Rashford', 'https://tomaszfutcode.free.nf/jugadoresFutcode/72_Marcus_Rashford.webp', 26, 10, 27.1, 0, 95.50, 7, 'NORMAL', 'DELANTERO', 3, NULL),
-(71, 'Jack', 'Grealish', 'https://tomaszfutcode.free.nf/jugadoresFutcode/73_Jack_Grealish.png', 28, 7, 22.5, 0, 95.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(71, 'Jack', 'Grealish', 'https://tomaszfutcode.free.nf/jugadoresFutcode/73_Jack_Grealish.png', 28, 7, 22.5, 0, 95.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 76, NULL),
 (72, 'Mikel', 'Oyarzabal', 'https://tomaszfutcode.free.nf/jugadoresFutcode/74_Mikel_Oyarzabal.png', 27, 10, 28.7, 0, 94.90, 3, 'NORMAL', 'DELANTERO', 5, NULL),
 (73, 'Wilfried', 'Zaha', 'https://tomaszfutcode.free.nf/jugadoresFutcode/75_Wilfried_Zaha.png', 31, 11, 25.3, 0, 94.60, 13, 'NORMAL', 'DELANTERO', 6, NULL),
 (74, 'Dominic', 'Calvert-Lewin', 'https://tomaszfutcode.free.nf/jugadoresFutcode/calvert.png', 27, 9, 18.9, 0, 94.40, 7, 'NORMAL', 'DELANTERO', 7, NULL),
 (75, 'Tammy', 'Abraham', 'https://tomaszfutcode.free.nf/jugadoresFutcode/77_Tammy_Abraham.webp', 26, 9, 26.4, 0, 94.20, 7, 'NORMAL', 'DELANTERO', 8, NULL),
-(76, 'Olivier', 'Giroud', 'https://tomaszfutcode.free.nf/jugadoresFutcode/78_Olivier_Giroud.webp', 37, 9, 24.6, 0, 94.00, 4, 'NORMAL', 'DELANTERO', 9, NULL),
-(77, 'Arkadiusz', 'Milik', 'https://tomaszfutcode.free.nf/jugadoresFutcode/79_Arkadiusz_Milik.webp', 30, 99, 27.8, 0, 93.80, 6, 'NORMAL', 'DELANTERO', 10, NULL),
+(76, 'Olivier', 'Giroud', 'https://tomaszfutcode.free.nf/jugadoresFutcode/78_Olivier_Giroud.webp', 37, 9, 24.6, 0, 94.00, 4, 'NORMAL', 'DELANTERO', 76, NULL),
+(77, 'Arkadiusz', 'Milik', 'https://tomaszfutcode.free.nf/jugadoresFutcode/79_Arkadiusz_Milik.webp', 30, 99, 27.8, 0, 93.80, 6, 'NORMAL', 'DELANTERO', 76, NULL),
 (78, 'Sebastian', 'Haller', 'https://tomaszfutcode.free.nf/jugadoresFutcode/80_Sebastian_Haller.png', 29, 22, 20.2, 0, 93.60, 12, 'NORMAL', 'DELANTERO', 11, NULL),
 (79, 'Ivan', 'Toney', 'https://tomaszfutcode.free.nf/jugadoresFutcode/81_Ivan_Toney.webp', 28, 17, 29.5, 0, 93.40, 7, 'NORMAL', 'DELANTERO', 2, NULL),
 (80, 'Patrik', 'Schick', 'https://tomaszfutcode.free.nf/jugadoresFutcode/82_Patrik_Schick.png', 28, 14, 23.1, 0, 93.20, 5, 'NORMAL', 'DELANTERO', 3, NULL),
@@ -525,9 +523,9 @@ INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_cam
 (92, 'Sergio', 'Busquets', 'https://tomaszfutcode.free.nf/jugadoresFutcode/94_Sergio_Busquets.png', 36, 5, 24.3, 0, 90.40, 3, 'NORMAL', 'MEDIOCAMPISTA', 3, NULL),
 (93, 'Rodrigo', 'De Paul', 'https://tomaszfutcode.free.nf/jugadoresFutcode/95_Rodrigo_De_Paul.webp', 30, 7, 22.1, 0, 90.20, 1, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
 (94, 'Lucas', 'Torreira', 'https://tomaszfutcode.free.nf/jugadoresFutcode/96_Lucas_Torreira.png', 29, 14, 21.9, 0, 90.00, 9, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
-(95, 'Leandro', 'Paredes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/97_Leandro_Paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 1, NULL),
+(95, 'Leandro', 'Paredes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/97_Leandro_Paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 76, NULL),
 (96, 'Matteo', 'Guendouzi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/98_Matteo_Guendouzi.webp', 27, 16, 46.5, 0, 89.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
-(97, 'Ryan', 'Gravenberch', 'https://tomaszfutcode.free.nf/jugadoresFutcode/99_Ryan_Gravenberch.png', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL);
+(97, 'Ryan', 'Gravenberch', 'https://tomaszfutcode.free.nf/jugadoresFutcode/99_Ryan_Gravenberch.png', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 76, NULL);
 
 -- --------------------------------------------------------
 
@@ -684,9 +682,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`, `equipo_id`, `monedas`) VALUES
-(1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1, NULL),
-(4, 'urielestebanyurquina@gmail.com', '$2a$10$yXWLYL6XZvYS99xh2v9atun9rD/AhsilknimfnvrzYj90FD0S5CsK', 'USER', 1, NULL, NULL),
-(5, 'ejemplo@gmail.com', '$2a$10$7UXQl8PGShG6xVhinhMmu.GHL80RA8ZGNUKh48X.DUnF00x4Sxu4.', 'USER', 1, NULL, NULL);
+(1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -830,13 +826,13 @@ ALTER TABLE `club`
 -- AUTO_INCREMENT de la tabla `equipo`
 --
 ALTER TABLE `equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo_torneo`
 --
 ALTER TABLE `equipo_torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT de la tabla `esquema`
@@ -866,7 +862,7 @@ ALTER TABLE `fase`
 -- AUTO_INCREMENT de la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1538;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1549;
 
 --
 -- AUTO_INCREMENT de la tabla `formato_torneo`
@@ -908,7 +904,7 @@ ALTER TABLE `torneo`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Restricciones para tablas volcadas
@@ -945,7 +941,8 @@ ALTER TABLE `evento_partido`
 -- Filtros para la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  ADD CONSTRAINT `FK1mi0g4v6h0cgspm60xwh1lhcy` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK1mi0g4v6h0cgspm60xwh1lhcy` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK7i67ejgicdvtoavo5ekifakuw` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `jugador`

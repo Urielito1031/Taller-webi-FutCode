@@ -54,15 +54,16 @@ public class PlantillaController {
    @GetMapping("/plantilla")
    public String showViewPlantilla(Model model, HttpServletRequest request) {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
-      System.out.println("EL USUARIO ID EN SESSION ES: " +usuarioId);
       Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
-      System.out.println("EL USUARIO EN SESSION ES: " + usuario.getEmail());
-      Long equipoId = usuario.getEquipo().getId();
-      System.out.println("EL EQUIPO ID EN SESSION ES: " + equipoId);
-      EsquemaDTO formacion = service.getFormacionPorEquipoId(equipoId);
+      System.out.println("EL USUARIO EN SESSION ES: " +usuario);
+      EsquemaDTO formacion = service.getFormacionPorEquipoId(1L);
 
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
+      System.out.println("Los jugadores del equipo son: " );
+      for (JugadorDTO jugador : jugadores) {
+         System.out.println("Jugador: " + jugador.getId());
+      }
       model.addAttribute("formacion", formacion);
 
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());

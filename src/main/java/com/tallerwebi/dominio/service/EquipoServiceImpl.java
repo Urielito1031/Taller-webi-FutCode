@@ -3,12 +3,15 @@ package com.tallerwebi.dominio.service;
 import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.hsqldb.DatabaseManager.getSession;
 
 @Service
 @Transactional
@@ -36,8 +39,12 @@ public class EquipoServiceImpl implements EquipoService{
       if (equipo.getNombre() == null || equipo.getNombre().isEmpty()) {
          throw new IllegalArgumentException("El nombre no puede ser vacío");
       }
-      repository.save(equipo);
+      repository.saveAndFlush(equipo);
+
    }
+
+
+
 
 
    private boolean isValid(EquipoDTO equipo){

@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hsqldb.DatabaseManager.getSession;
-
 @Service
 public class UsuarioServiceImpl implements  UsuarioService{
 
@@ -165,6 +163,12 @@ public class UsuarioServiceImpl implements  UsuarioService{
     public void actualizarUsuario(Usuario usuario) {
         getSession().update(usuario);
     }
+
+    @Override
+    public void actualizar(Usuario usuario) {
+        repositorioUsuario.actualizar(usuario);
+    }
+
 
     private Session getSession() {
         return sessionFactory.getCurrentSession();

@@ -95,7 +95,8 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .executeUpdate();
     }
 
-
-
-
+    @Override
+    public void actualizar(Usuario usuario) {
+        getCurrentSession().update(usuario);
+    }
 }

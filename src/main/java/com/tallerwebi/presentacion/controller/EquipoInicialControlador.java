@@ -62,7 +62,6 @@ public class EquipoInicialControlador {
             List<Jugador> jugadores = this.jugadorService.sortearJugadoresIniciales(14);
 
             List<JugadorDTO> jugadoresDto = new ArrayList<>();
-
             for (Jugador jugador : jugadores) {
                 JugadorDTO jugadorDTO = jugador.convertToDTO();
                 jugadorDTO.setEquipo(equipo);
@@ -81,27 +80,23 @@ public class EquipoInicialControlador {
                 throw new IllegalStateException("No se encontró el Usuario con ID: " + usuarioId);
             }
 
-            Equipo equipoEntity = new Equipo();
-            equipoEntity.setNombre(equipo.getNombre());
-            equipoEntity.setUsuario(usuario);
-            equipoEntity.setJugadores(jugadores);
+                Equipo equipoEntity = new Equipo();
+                equipoEntity.setNombre(equipo.getNombre());
+                equipoEntity.setUsuario(usuario);
 
             for (Jugador jugador : jugadores) {
-                jugador.setEquipo(equipoEntity); // ← esto es clave para que persista la relación
+                jugador.setEquipo(equipoEntity); // <-- esto es clave para que persista la relación
             }
+            equipoEntity.setJugadores(jugadores);
 
             this.equipoService.saveEntity(equipoEntity);
 
             usuario.setEquipo(equipoEntity);
-            this.usuarioService.actualizarUsuario(usuario);
+            usuarioService.actualizar(usuario);
 
             ModelAndView mav = new ModelAndView("sorteoEquipo");
             mav.addObject("equipo", equipo);
             mav.addObject("nombreEquipo", equipo.getNombre());
             return mav;
         }
-
-
-
-
     }

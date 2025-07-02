@@ -80,9 +80,15 @@ import javax.validation.Valid;
          return new ModelAndView("nuevo-usuario", model);
       }
 
+   @RequestMapping("/logout")
+   public ModelAndView logout(HttpServletRequest request) {
+      request.getSession().invalidate();
+      return new ModelAndView("redirect:/login");
+   }
 
 
-      @RequestMapping(path = "/", method = RequestMethod.GET)
+
+   @RequestMapping(path = "/", method = RequestMethod.GET)
       public ModelAndView inicio() {
          return new ModelAndView("redirect:/login");
       }

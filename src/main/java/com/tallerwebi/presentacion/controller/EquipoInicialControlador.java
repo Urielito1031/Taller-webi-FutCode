@@ -59,16 +59,15 @@ public class EquipoInicialControlador {
                 return new ModelAndView("redirect:/nuevo-equipo");
             }
 
-            List<Jugador> jugadores = this.jugadorService.sortearJugadoresIniciales(14);
+            this.jugadorService.cargarJugadoresAlEquipo(equipo);
 
-            List<JugadorDTO> jugadoresDto = new ArrayList<>();
-            for (Jugador jugador : jugadores) {
-                JugadorDTO jugadorDTO = jugador.convertToDTO();
-                jugadorDTO.setEquipo(equipo);
-                jugadoresDto.add(jugadorDTO);
-            }
+//            List<JugadorDTO> jugadoresDto = new ArrayList<>();
+//            for (Jugador jugador : jugadores) {
+//                JugadorDTO jugadorDTO = jugador.convertToDTO();
+//                jugadoresDto.add(jugadorDTO);
+//            }
 
-            equipo.setJugadores(jugadoresDto);
+//            equipo.setJugadores(jugadoresDto);
             session.setAttribute("equipo", equipo);
 
             Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
@@ -80,18 +79,18 @@ public class EquipoInicialControlador {
                 throw new IllegalStateException("No se encontró el Usuario con ID: " + usuarioId);
             }
 
-                Equipo equipoEntity = new Equipo();
-                equipoEntity.setNombre(equipo.getNombre());
-                equipoEntity.setUsuario(usuario);
+//            Equipo equipoEntity = new Equipo();
+//            equipoEntity.setNombre(equipo.getNombre());
+//            equipoEntity.setUsuario(usuario);
 
-            for (Jugador jugador : jugadores) {
-                jugador.setEquipo(equipoEntity); // <-- esto es clave para que persista la relación
-            }
-            equipoEntity.setJugadores(jugadores);
+            equipo.setUsuarioId(usuario.getId());
+            this.equipoService.saveBoth(equipo, usuario);
 
-            this.equipoService.saveEntity(equipoEntity);
+//            equipoEntity.setJugadores(jugadores);
+//
+//            this.equipoService.saveEntity(equipoEntity);
 
-            usuario.setEquipo(equipoEntity);
+            //usuario.setEquipo(equipo.convertToEntity(equipo));
 //            usuarioService.actualizar(usuario);
 
             ModelAndView mav = new ModelAndView("sorteoEquipo");

@@ -35,7 +35,8 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Sobre> sobres = new ArrayList<>();
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "equipo_id")
     private Equipo equipo;
 
 

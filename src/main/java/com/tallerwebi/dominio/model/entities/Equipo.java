@@ -61,6 +61,10 @@ public class Equipo {
       entity.setId(dto.getId());
       entity.setNombre(dto.getNombre());
 
+      Usuario usuario = new Usuario();
+      usuario.setId(dto.getUsuarioId());
+      entity.setUsuario(usuario);
+
       if (dto.getClub() != null) {
          Club club = new Club();
          club.setId(dto.getClub().getId());

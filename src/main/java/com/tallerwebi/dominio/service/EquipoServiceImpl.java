@@ -1,9 +1,9 @@
 package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +11,17 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hsqldb.DatabaseManager.getSession;
-
 @Service
 @Transactional
 public class EquipoServiceImpl implements EquipoService{
 
    private final EquipoRepository repository;
+   private UsuarioService usuarioService;
 
    @Autowired
-   public EquipoServiceImpl(EquipoRepository repository) {
+   public EquipoServiceImpl(EquipoRepository repository, UsuarioService usuarioService) {
       this.repository = repository;
+      this.usuarioService = usuarioService;
    }
 
    @Override
@@ -35,12 +35,18 @@ public class EquipoServiceImpl implements EquipoService{
    }
 
    @Override
-   public void saveEntity(Equipo equipo) {
-      if (equipo.getNombre() == null || equipo.getNombre().isEmpty()) {
-         throw new IllegalArgumentException("El nombre no puede ser vacío");
+   public void saveBoth(EquipoDTO equipo, Usuario usuario) {
+      if(!isValid(equipo)){
+         throw new IllegalArgumentException("El nombre no puede ser vacio");
       }
-      repository.saveAndFlush(equipo);
+      Equipo entity = Equipo.convertToEntity(equipo);
+      entity.setUsuario(usuario);
+      repository.save(entity);
 
+
+
+      usuario.setEquipo(entity);
+      usuarioService.actualizar(usuario);
    }
 
 

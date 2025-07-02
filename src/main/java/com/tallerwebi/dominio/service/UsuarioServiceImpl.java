@@ -10,8 +10,6 @@ import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import lombok.SneakyThrows;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class UsuarioServiceImpl implements  UsuarioService{
 
-    private RepositorioUsuarioImpl repositorioUsuario;
-    //private final SessionFactory sessionFactory;
-
+    private final RepositorioUsuarioImpl repositorioUsuario;
+//    private final SessionFactory sessionFactory;
+//
 
     @Autowired
     public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
         this.repositorioUsuario = repositorioUsuario;
-
+//        this.sessionFactory = sessionFactory;
     }
 
     @SneakyThrows
@@ -164,12 +162,12 @@ public class UsuarioServiceImpl implements  UsuarioService{
 //        getSession().update(usuario);
 //    }
 //
-//    @Override
-//    public void actualizar(Usuario usuario) {
-//        repositorioUsuario.actualizar(usuario);
-//    }
-//
-//
+@Override
+public void actualizar(Usuario usuario) {
+        repositorioUsuario.actualizar(usuario);
+    }
+
+
 //    private Session getSession() {
 //        return sessionFactory.getCurrentSession();
 //    }

@@ -78,7 +78,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
           .addPathPatterns("/**")
-          .excludePathPatterns("/login", "/validar-login", "/nuevo-usuario", "/registrarme", "/css/**", "/js/**", "/img/**"); // excepciones
+          .excludePathPatterns("/login", "/validar-login", "/nuevo-usuario", "/nuevo-equipo","/registrarme", "/css/**", "/js/**", "/img/**"); // excepciones
     }
 
     @Bean

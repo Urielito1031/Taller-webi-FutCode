@@ -19,14 +19,16 @@
 
         <div class="container">
             <div id="loginbox" class="formbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-                <form action="#" th:action="@{/nuevo-equipo}" th:object="${equipo}" method="post">
+                <form th:action="@{/nuevo-equipo}" th:object="${equipo}" method="post">
                     <h3 class="form-signin-heading">Nuevo Equipo</h3>
                     <hr class="colorgraph"><br>
 
                     <label for="equipoNombre" class="sr-only">Nombre</label>
-                    <input th:field="*{nombre}" id="equipoNombre" type="text" class="form-control" required/>
+                    <input th:field="*{nombre}" id="equipoNombre" type="text" class="form-control"/>
 
-                    <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" Type="Submit">Siguiente</button>
+                    <div th:if="${#fields.hasErrors('nombre')}" class="alert alert-danger" th:errors="*{nombre}">Nombre inválido</div>
+
+                    <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" type="submit">Siguiente</button>
                 </form>
             </div>
         </div>

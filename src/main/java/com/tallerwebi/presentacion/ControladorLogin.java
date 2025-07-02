@@ -54,24 +54,30 @@ import javax.validation.Valid;
          return new ModelAndView("login", model);
       }
 
-      @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-      public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario,BindingResult result) {
-         ModelMap model = new ModelMap();
+   @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
+   public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult result) {
+      ModelMap model = new ModelMap();
+      System.out.println("Intentando registrar usuario: " + usuario.getEmail());
 
-         if(result.hasErrors()) {
-            return new ModelAndView("nuevo-usuario", model);
-         }
-         try{
-            servicioLogin.registrar(usuario);
-         } catch (UsuarioExistente e){
-            model.put("error", "El usuario ya existe");
-            return new ModelAndView("nuevo-usuario", model);
-         } catch (Exception e){
-            model.put("error", "Error al registrar el nuevo usuario");
-            return new ModelAndView("nuevo-usuario", model);
-         }
-         return new ModelAndView("redirect:/nuevo-equipo");
+      if (result.hasErrors()) {
+         System.out.println("Errores de validación encontrados: " + result.getAllErrors());
+         return new ModelAndView("nuevo-usuario", model);
       }
+      try {
+         System.out.println("Llamando a servicioLogin.registrar");
+         servicioLogin.registrar(usuario);
+         System.out.println("Registro exitoso, redirigiendo a /nuevo-equipo");
+      } catch (UsuarioExistente e) {
+         System.out.println("Excepción UsuarioExistente: " + e.getMessage());
+         model.put("error", "El usuario ya existe");
+         return new ModelAndView("nuevo-usuario", model);
+      } catch (Exception e) {
+         System.out.println("Excepción general: " + e.getMessage());
+         model.put("error", "Error al registrar el nuevo usuario");
+         return new ModelAndView("nuevo-usuario", model);
+      }
+      return new ModelAndView("redirect:/nuevo-equipo");
+   }
 
       @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
       public ModelAndView nuevoUsuario() {

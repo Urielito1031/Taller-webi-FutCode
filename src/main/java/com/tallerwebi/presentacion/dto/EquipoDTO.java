@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.model.entities.Equipo;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class EquipoDTO {
    private Long id;
+   @NotBlank(message = "El nombre del equipo no puede estar vacío")
    private String nombre;
    private ClubDTO club;
    private List<JugadorDTO> jugadores;

@@ -31,14 +31,6 @@ public class EquipoServiceImpl implements EquipoService{
       repository.save(entity);
    }
 
-   @Override
-   public void saveEntity(Equipo equipo) {
-      if (equipo.getNombre() == null || equipo.getNombre().isEmpty()) {
-         throw new IllegalArgumentException("El nombre no puede ser vacío");
-      }
-      repository.save(equipo);
-   }
-
 
    private boolean isValid(EquipoDTO equipo){
       return !equipo.getNombre().trim().isEmpty();

@@ -10,12 +10,14 @@ import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,15 @@ public class EquipoInicialControlador {
         }
 
         @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
-        public String procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo, HttpSession session) {
+        public String procesarNuevoEquipo(@Valid @ModelAttribute("equipo") EquipoDTO equipo
+          ,HttpSession session,BindingResult result) {
+
+
+           if (result.hasErrors()) {
+              result.getAllErrors().forEach(System.out::println);
+
+              return "creacionEquipo";
+           }
             ModelAndView mav = new ModelAndView("home");
             mav.addObject("nombreEquipo", equipo.getNombre());
             mav.addObject("equipo", equipo);
@@ -82,11 +92,9 @@ public class EquipoInicialControlador {
             equipoEntity.setJugadores(jugadores);
 
             for (Jugador jugador : jugadores) {
-                jugador.setEquipo(equipoEntity); // ← esto es clave para que persista la relación
+                jugador.setEquipo(equipoEntity);
             }
-
-
-            this.equipoService.saveEntity(equipoEntity);
+            this.equipoService.save(equipoEntity.convertToDTO());
 
             ModelAndView mav = new ModelAndView("sorteoEquipo");
             mav.addObject("equipo", equipo);

@@ -7,7 +7,6 @@ import com.tallerwebi.presentacion.dto.EquipoDTO;
 import java.util.List;
 
 public interface EquipoService{
-    void saveEntity(Equipo equipo);
 
     List<EquipoDTO> getAll();
     EquipoDTO getById(Long id);

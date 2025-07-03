@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class SobreController {
@@ -51,10 +53,10 @@ public class SobreController {
         mav.addObject("sobre", sobre);
 
         // AGREGAR LOS JUGADORES QUE ESTAN EN EL SOBRE AL USUARIO
-//        Usuario usuario = this.usuarioService.buscarUsuarioPorId(id_usuario);
-//        Equipo equipo = usuario.getEquipo();
-//        EquipoDTO equipoDTO = equipo.convertToDTO();
-//        equipoDTO.getJugadores().addAll(sobre.getJugadores());
+        Usuario usuario = this.usuarioService.buscarUsuarioPorId(id_usuario);
+        List<Jugador> jugadores = this.usuarioService.convertirJugadoresDtoToEntity(sobre.getJugadores());
+
+        usuario.getEquipo().getJugadores().addAll(jugadores);
 
         return mav;
     }

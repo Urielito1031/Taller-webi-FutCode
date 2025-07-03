@@ -3,7 +3,6 @@ package com.tallerwebi.dominio.service;
 import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
 import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
-import com.tallerwebi.dominio.factory.SobreFactory;
 import com.tallerwebi.dominio.model.entities.*;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
@@ -127,7 +126,20 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return jugadoresDTO;
     }
 
-//    @Override
+    @Override
+    public List<Jugador> convertirJugadoresDtoToEntity(List<JugadorDTO> jugadores) {
+        List<Jugador> jugadoresEntidad = new ArrayList<>();
+
+        for (JugadorDTO jugadorDTO : jugadores) {
+            jugadoresEntidad.add(jugadorDTO.convertToEntity(jugadorDTO));
+        }
+
+        return jugadoresEntidad;
+    }
+
+
+
+    //    @Override
 //    public void actualizarUsuario(Usuario usuario) {
 //        getSession().update(usuario);
 //    }

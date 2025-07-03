@@ -1,30 +1,30 @@
-package com.tallerwebi.dominio.service;
-
-import com.tallerwebi.dominio.model.entities.Jugador;
-import com.tallerwebi.dominio.model.enums.PosicionEnum;
-import com.tallerwebi.dominio.model.enums.RarezaJugador;
-import com.tallerwebi.infraestructura.JugadorLoader;
-import com.tallerwebi.presentacion.dto.JugadorDTO;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Service
-public class SorteoServiceImpl implements SorteoService {
-
-
-
-    public SorteoServiceImpl() {
-
-    }
-
-    @Override
-    public List<Jugador> sortearEquipoInicial() {
-        return List.of();
-    }
+//package com.tallerwebi.dominio.service;
+//
+//import com.tallerwebi.dominio.model.entities.Jugador;
+//import com.tallerwebi.dominio.model.enums.PosicionEnum;
+//import com.tallerwebi.dominio.model.enums.RarezaJugador;
+//import com.tallerwebi.infraestructura.JugadorLoader;
+//import com.tallerwebi.presentacion.dto.JugadorDTO;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.List;
+//import java.util.stream.Collectors;
+//
+//@Service
+//public class SorteoServiceImpl implements SorteoService {
+//
+//
+//
+//    public SorteoServiceImpl() {
+//
+//    }
+//
+//    @Override
+//    public List<Jugador> sortearEquipoInicial() {
+//        return List.of();
+//    }
 
 //    public List<JugadorDTO> sortearEquipoInicial(){
 //
@@ -50,13 +50,13 @@ public class SorteoServiceImpl implements SorteoService {
 //
 //        return nuevoEquipo;
 //    }
-
-    private List<JugadorDTO> seleccionarJugadores(List<JugadorDTO> futurosJugadores, PosicionEnum posicion, int cantidad){
-        return futurosJugadores.stream()
-                .filter(j -> j.getPosicionNatural().equals(posicion))
-                .limit(cantidad)
-                .collect(Collectors.toList());
-    }
-
-
-}
+//
+//    private List<JugadorDTO> seleccionarJugadores(List<JugadorDTO> futurosJugadores, PosicionEnum posicion, int cantidad){
+//        return futurosJugadores.stream()
+//                .filter(j -> j.getPosicionNatural().equals(posicion))
+//                .limit(cantidad)
+//                .collect(Collectors.toList());
+//    }
+//
+//
+//}

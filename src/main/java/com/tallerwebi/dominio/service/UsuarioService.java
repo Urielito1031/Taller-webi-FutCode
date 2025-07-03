@@ -22,6 +22,8 @@ public interface UsuarioService{
 
     List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores);
 
+    List<Jugador> convertirJugadoresDtoToEntity(List<JugadorDTO> jugadores);
+
     //    @Override
     //    public void actualizarUsuario(Usuario usuario) {
     //        getSession().update(usuario);

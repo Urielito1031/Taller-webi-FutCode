@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.tallerwebi.dominio.factory.SobreFactory;
+import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import lombok.Builder;
@@ -39,11 +41,20 @@ public class SobreDTO {
         this.jugadores = new ArrayList<>();
     }
 
+    public SobreDTO(String titulo, Double precio, TipoSobre tipoSobre, String imagen, List<Jugador> jugadores) {
+        this.titulo = titulo;
+        this.precio = precio;
+        this.tipoSobre = tipoSobre;
+        this.imagenUrl = imagen;
+        this.jugadores = new ArrayList<>();
+
+    }
+
     public Sobre fromEntity(){
-        Sobre sobre = new Sobre();
+        Sobre sobre = SobreFactory.crearSobre(tipoSobre);
 
         sobre.setTitulo(titulo);
-        sobre.setTipoSobre(tipoSobre);
+//        sobre.setTipoSobre(tipoSobre);
         sobre.setPrecio(precio);
         sobre.setDescripcion(descripcion);
         sobre.setImagenUrl(imagenUrl);

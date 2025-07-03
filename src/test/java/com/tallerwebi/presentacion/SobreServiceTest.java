@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.SobreServiceImpl;
+import com.tallerwebi.dominio.service.SobreServiceImpl;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.dominio.model.enums.TipoSobre;

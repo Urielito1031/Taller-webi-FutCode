@@ -20,4 +20,8 @@ public interface UsuarioService{
     List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores);
 
     void actualizar(Usuario usuario);
+
+    List<Jugador> convertirJugadoresDtoToEntity(List<JugadorDTO> jugadores);
+
+
 }

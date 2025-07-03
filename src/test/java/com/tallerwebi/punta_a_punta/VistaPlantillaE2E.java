@@ -40,7 +40,6 @@ public class VistaPlantillaE2E{
 
    @Test
    void deberiaGuardarFormacionCon11Jugadores() {
-
       //estado inicial
       Assertions.assertEquals(11, vistaPlantilla.page.locator(".position-marker.occupied").count(), "El campo debería empezar con 11 jugadores");
 

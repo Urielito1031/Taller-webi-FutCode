@@ -1,10 +1,14 @@
 package com.tallerwebi.presentacion.controller;
 
+import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
+import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.dominio.service.SobreService;
 import com.tallerwebi.dominio.service.UsuarioService;
+import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class SobreController {
@@ -26,7 +31,7 @@ public class SobreController {
     }
 
     @PostMapping("/sobre")
-    public ModelAndView getSobre(@RequestParam("tipoDeSobre") TipoSobre tipoSobre, HttpServletRequest request) {
+    public ModelAndView getSobre(@RequestParam("tipoDeSobre") TipoSobre tipoSobre, HttpServletRequest request) throws UsuarioNoEncontrado {
         SobreDTO sobre = this.sobreService.crearSobre(tipoSobre);
 
         Long id_usuario = (Long) request.getSession().getAttribute("USUARIO_ID");
@@ -37,18 +42,21 @@ public class SobreController {
                 .findFirst()
                 .orElse(null);
 
-
-//        SobreDTO sobreDTO = new SobreDTO();
-//        sobreDTO.setTipoSobre(sobre.getTipoSobre());
-//        sobreDTO.setJugadores(usuarioService.convertirJugadoresEntidad(sobre.getJugadores()));
-
-
-        // Puede tirar NullPointer
+        if (id_usuario == null){
+            throw new UsuarioNoEncontrado("El usuario con ID " + id_usuario + " no fue encontrado.");
+        }
         this.usuarioService.borrarSobreAUsuario(id_usuario, sobreParaBorrar.getId());
 
 
         ModelAndView mav = new ModelAndView("sobre");
         mav.addObject("sobre", sobre);
+
+        // AGREGAR LOS JUGADORES QUE ESTAN EN EL SOBRE AL USUARIO
+        Usuario usuario = this.usuarioService.buscarUsuarioPorId(id_usuario);
+        List<Jugador> jugadores = this.usuarioService.convertirJugadoresDtoToEntity(sobre.getJugadores());
+
+        usuario.getEquipo().getJugadores().addAll(jugadores);
+
         return mav;
     }
 

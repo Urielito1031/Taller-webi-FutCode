@@ -77,6 +77,7 @@ public class Equipo {
 
       return entity;
    }
+
    public String toString(){
       return "ID: " + this.id + "\n Nombre: " + this.nombre +
              "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +

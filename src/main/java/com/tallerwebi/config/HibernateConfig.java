@@ -21,7 +21,7 @@ public class HibernateConfig {
 
         String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
         String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
-        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
+        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode4";
         String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
         // Local: "", Docker: "root"
         String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";

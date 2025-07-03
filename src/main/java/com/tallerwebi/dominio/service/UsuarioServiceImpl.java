@@ -3,6 +3,7 @@ package com.tallerwebi.dominio.service;
 import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
 import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
+import com.tallerwebi.dominio.factory.SobreFactory;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
@@ -32,44 +33,12 @@ public class UsuarioServiceImpl implements  UsuarioService{
     public Boolean agregarSobreAJugador(Long idUsuario, SobreDTO sobreDTO) {
         Usuario usuario = this.buscarUsuarioPorId(idUsuario);
 
-        if(usuario == null)
-            throw new UsuarioNoEncontrado("El usuario con ID " + idUsuario + " no fue encontrado.");
-
+        if(usuario == null) throw new UsuarioNoEncontrado("El usuario con ID " + idUsuario + " no fue encontrado.");
 
         Sobre sobre = sobreDTO.fromEntity();
-
-        if (sobre.getTipoSobre() == null)
-            throw new TipoDeSobreDesconocido();
-
-        switch (sobre.getTipoSobre()){
-            case BRONCE:
-                sobre.setTitulo("Sobre de Bronce");
-                sobre.setPrecio(2500.0);
-                sobre.setImagenUrl("sobreFutCodeBronce.png");
-                break;
-            case PLATA:
-                sobre.setTitulo("Sobre de Plata");
-                sobre.setPrecio(5000.0);
-                sobre.setImagenUrl("sobreFutCodePlata.png");
-                break;
-            case ORO:
-                sobre.setTitulo("Sobre de Oro");
-                sobre.setPrecio(7500.0);
-                sobre.setImagenUrl("sobreFutCodeOro.png");
-                break;
-            case ESPECIAL:
-                sobre.setTitulo("Sobre de Especial");
-                sobre.setPrecio(10000.0);
-                sobre.setImagenUrl("sobreFutCodeEspecial.png");
-                break;
-        }
-
         sobre.setUsuario(usuario);
 
-        if(usuario.getMonedas() < sobre.getPrecio()){
-            throw new MonedasInsuficientes();
-        }
-
+        validarMonedas(usuario.getMonedas(), sobre.getPrecio());
         usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);
@@ -78,6 +47,13 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
         return agregado;
     }
+
+    private void validarMonedas(Double monedasUsuario, Double precioSobre){
+        if(monedasUsuario < precioSobre){
+            throw new MonedasInsuficientes();
+        }
+    }
+
 
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
@@ -101,8 +77,8 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
 
     private Sobre convertirDTOAEntidad(SobreDTO sobreDTO) {
-        Sobre sobre = new Sobre();
-        sobre.setTipoSobre(sobreDTO.getTipoSobre());
+        Sobre sobre = SobreFactory.crearSobre(sobreDTO.getTipoSobre());
+//        sobre.setTipoSobre(sobreDTO.getTipoSobre());
         sobre.setTitulo(sobreDTO.getTitulo());
         sobre.setPrecio(sobreDTO.getPrecio());
 
@@ -117,7 +93,7 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
         SobreDTO sobreDTO = new SobreDTO();
         sobreDTO.setId(sobre.getId());
-        sobreDTO.setTipoSobre(sobre.getTipoSobre());
+//        sobreDTO.setTipoSobre(sobre.getTipoSobre());
         sobreDTO.setTitulo(sobre.getTitulo());
         sobreDTO.setPrecio(sobre.getPrecio());
         sobreDTO.setImagenUrl(sobre.getImagenUrl());

@@ -13,5 +13,7 @@ public interface RepositorioUsuario {
     Usuario buscarUsuarioPorId(Long id);
 
     void borrarSobreAUsuario(Long idUsuario, Long idSobre);
+
+    void asignarEquipoAUsuario(Long usuarioId,Long equipoId);
 }
 

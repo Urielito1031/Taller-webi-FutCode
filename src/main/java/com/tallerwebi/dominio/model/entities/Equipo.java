@@ -28,7 +28,7 @@ public class Equipo {
    @JoinColumn(name = "club_id")
    private Club club;
 
-   @ManyToOne(fetch = FetchType.EAGER)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @JoinColumn(name = "esquema_id", nullable = false)
    private Esquema esquema;
 
@@ -36,7 +36,7 @@ public class Equipo {
    @JoinColumn(name = "usuario_id")
    private Usuario usuario;
 
-   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER)
    private List<Jugador> jugadores = new ArrayList<>();
 
    public EquipoDTO convertToDTO() {

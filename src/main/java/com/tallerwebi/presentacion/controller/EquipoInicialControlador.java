@@ -32,12 +32,10 @@ public class EquipoInicialControlador {
         private final UsuarioService usuarioService;
         private final EquipoService equipoService;
 
-        private final RepositorioUsuario repositorioUsuario;
-        public EquipoInicialControlador(JugadorService jugadorService,UsuarioService usuarioService,EquipoService equipoService,RepositorioUsuario repositorioUsuario) {
+        public EquipoInicialControlador(JugadorService jugadorService,UsuarioService usuarioService,EquipoService equipoService) {
             this.jugadorService = jugadorService;
             this.usuarioService = usuarioService;
             this.equipoService = equipoService;
-           this.repositorioUsuario = repositorioUsuario;
         }
 
         @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.GET)
@@ -85,7 +83,6 @@ public class EquipoInicialControlador {
          jugadorDTO.setEquipo(equipo);
       }
       equipo.setJugadores(jugadoresDto);
-
       session.setAttribute("equipo", equipo);
 
       Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
@@ -103,24 +100,25 @@ public class EquipoInicialControlador {
       equipoEntity.setUsuario(usuario);
       equipoEntity.setJugadores(jugadores);
 
-      // Obtener el esquema persistido con id = 1
       Esquema esquema = new Esquema();
-      esquema.setId(1L); // Asignar el ID del esquema por defecto
+      esquema.setId(1L);
       equipoEntity.setEsquema(esquema);
-      System.out.println("Esquema asignado al equipo: " + esquema.getId());
 
+      // Asociar jugadores al equipo
       for (Jugador jugador : jugadores) {
          jugador.setEquipo(equipoEntity);
       }
 
-      // Persistir el equipo
-      this.equipoService.save(equipoEntity.convertToDTO());
-      Long equipoId = equipoEntity.getId();
-      System.out.println("sorteoEquipoInicial: Equipo creado con ID: " + equipoId);
+      System.out.println("EquipoEntity antes de guardar, controlador: " + equipoEntity);
 
-      // Actualizar el usuario con el equipo persistido
+
+      equipo.setUsuarioId(usuarioId);
+      this.equipoService.save(equipo);
+      System.out.println("Equipo guardado con ID: " + equipo.getId());
+
       usuario.setEquipo(equipoEntity);
-      this.repositorioUsuario.modificar(usuario);
+      this.usuarioService.modificar(usuario);
+      System.out.println("Usuario actualizado con equipo ID: " + (usuario.getEquipo() != null ? usuario.getEquipo().getId() : "null"));
 
       ModelAndView mav = new ModelAndView("sorteoEquipo");
       mav.addObject("equipo", equipo);

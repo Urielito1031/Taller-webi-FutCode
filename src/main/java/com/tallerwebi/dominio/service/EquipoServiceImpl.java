@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
@@ -15,25 +16,28 @@ import java.util.stream.Collectors;
 public class EquipoServiceImpl implements EquipoService{
 
    private final EquipoRepository repository;
+   private final RepositorioUsuario repositorioUsuario;
 
    @Autowired
-   public EquipoServiceImpl(EquipoRepository repository) {
+   public EquipoServiceImpl(EquipoRepository repository,RepositorioUsuario repositorioUsuario) {
       this.repository = repository;
+      this.repositorioUsuario = repositorioUsuario;
    }
 
    @Override
    public void save(EquipoDTO dto){
-      System.out.println("llego a metodo save de EquipoServiceImpl");
       if(!isValid(dto)){
-         System.out.println("El nombre del equipo no puede ser vacio");
          throw new IllegalArgumentException("El nombre no puede ser vacio");
       }
-      System.out.println("Validando equipo: " + dto.getNombre());
-      Equipo entity = Equipo.convertToEntity(dto);
+      Equipo equipoEntity = Equipo.convertToEntity(dto);
 
-      System.out.println("Guardando equipo: " + entity.getNombre());
-      repository.save(entity);
-      System.out.println("Equipo guardado con éxito: " + entity.getId());
+      repository.save(equipoEntity);
+      if (dto.getUsuarioId() != null) {
+         repositorioUsuario.asignarEquipoAUsuario(dto.getUsuarioId(), equipoEntity.getId());
+      }
+
+      dto.setId(equipoEntity.getId());
+      System.out.println("Equipo guardado con éxito: " + equipoEntity);
    }
 
 

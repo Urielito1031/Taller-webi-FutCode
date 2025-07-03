@@ -58,6 +58,7 @@ public class EquipoDTO {
       if (dto == null) {
          return null;
       }
+
       Equipo equipo = new Equipo();
       equipo.setId(dto.getId());
       equipo.setNombre(dto.getNombre());
@@ -66,14 +67,20 @@ public class EquipoDTO {
          equipo.setClub(dto.getClub().convertToEntity(dto.getClub()));
       }
 
-      if (dto.getFormacionActual() != null) {
+      if (dto.getFormacionActual() != null && dto.getFormacionActual().getId() != null) {
          Esquema esquema = new Esquema();
-         esquema.setEsquema(dto.getFormacionActual().getEsquema());
+         esquema.setId(dto.getFormacionActual().getId());
          equipo.setEsquema(esquema);
+      } else {
+
+         Esquema esquemaPorDefecto = new Esquema();
+         esquemaPorDefecto.setId(1L);
+         equipo.setEsquema(esquemaPorDefecto);
       }
 
       return equipo;
    }
+
    public EquipoDTO convertFromEntity(Equipo equipo) {
       if (equipo == null) {
          return null;
@@ -88,7 +95,10 @@ public class EquipoDTO {
 
       if (equipo.getEsquema() != null) {
          EsquemaDTO esquemaDTO = new EsquemaDTO();
-         esquemaDTO.setEsquema(equipo.getEsquema().getEsquema());
+         esquemaDTO.setId(equipo.getEsquema().getId());
+         // 🔥 Omití esto si no estás seguro de que está inicializado:
+         // esquemaDTO.setNombre(equipo.getEsquema().getNombre());
+
          dto.setFormacionActual(esquemaDTO);
       }
 

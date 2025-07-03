@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +95,14 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .executeUpdate();
     }
 
-
+    @Override
+    public void asignarEquipoAUsuario(Long usuarioId, Long equipoId) {
+        getCurrentSession()
+          .createQuery("UPDATE Usuario u SET u.equipo_id = :equipoId WHERE u.id = :usuarioId")
+          .setParameter("equipoId", equipoId)
+          .setParameter("usuarioId", usuarioId)
+          .executeUpdate();
+    }
 
 
 }

@@ -10,7 +10,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 
-@Transactional
 public interface UsuarioService{
     Boolean agregarSobreAJugador(Long idUsuario, SobreDTO sobreDTO);
 
@@ -21,4 +20,6 @@ public interface UsuarioService{
     void borrarSobreAUsuario(Long idUsuario, Long idSobre);
 
     List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores);
+    void modificar(Usuario usuario);
+
 }

@@ -13,14 +13,16 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UsuarioServiceImpl implements  UsuarioService{
 
-    private RepositorioUsuarioImpl repositorioUsuario;
+    private final RepositorioUsuarioImpl repositorioUsuario;
 
     @Autowired
     public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
@@ -152,6 +154,11 @@ public class UsuarioServiceImpl implements  UsuarioService{
         }
 
         return jugadoresDTO;
+    }
+
+    @Override
+    public void modificar(Usuario usuario){
+        this.repositorioUsuario.modificar(usuario);
     }
 
 }

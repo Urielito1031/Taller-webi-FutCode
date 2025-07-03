@@ -66,7 +66,7 @@ public class EquipoInicialControladorTest {
     }
 
     @Test
-    public void dadoQueCreoUnEquipoInicialEsteObtendraLos14JugadoresIniciales() throws Exception {
+    public void dadoQueCreoUnEquipoInicialEsteObtendraLos14JugadoresIniciales(){
         EquipoDTO equipoNuevo = new EquipoDTO();
         equipoNuevo.setNombre("Nuevo Equipo");
         equipoNuevo.setId(1L);
@@ -138,6 +138,72 @@ public class EquipoInicialControladorTest {
         assertEquals(14, equipoNuevo.getJugadores().size());
 
        verify(equipoService).saveBoth(equipoNuevo, usuarioMock);
+    }
+
+    @Test
+    public void dadoQueTengoUnEquipoConSuUsuarioAsociadoVerificoQueAmbosEstenAsociados(){
+
+        EquipoDTO equipoNuevo = new EquipoDTO();
+        equipoNuevo.setNombre("EquipoMock");
+        equipoNuevo.setId(2L);
+
+        Long idUsuario = 3L;
+        Usuario usuarioMock = new Usuario();
+        usuarioMock.setId(idUsuario);
+
+        equipoNuevo.setUsuarioId(usuarioMock.getId());
+
+
+        List<JugadorDTO> jugadoresMock = IntStream.range(0, 14)
+                .mapToObj(i -> {
+                    JugadorDTO jugador = new JugadorDTO();
+                    jugador.setNombre("Jugador " + i);
+                    jugador.setId((long)i);
+                    jugador.setRarezaJugador(RarezaJugador.NORMAL);
+                    return jugador;
+                }).collect(Collectors.toList());
+
+        // siumulamos la carga de jugadores
+        doAnswer( invocation -> {
+            EquipoDTO equipo = invocation.getArgument(0);
+            equipo.setJugadores(jugadoresMock);
+            return null;
+        }).when(jugadorService).cargarJugadoresAlEquipo(any(EquipoDTO.class));
+
+
+
+        when(httpSession.getAttribute("equipo")).thenReturn(equipoNuevo);
+        when(httpSession.getAttribute("USUARIO_ID")).thenReturn(idUsuario);
+        when(usuarioService.buscarUsuarioPorId(idUsuario)).thenReturn(usuarioMock);
+
+        // tenemos que simular el "saveBoth" de equipoService porque una vez que se guarda el equipo y el usuario y se convierten a entidades, no se devuelve al controlador
+        doAnswer(invocation -> {
+            EquipoDTO dto = invocation.getArgument(0);
+            Usuario u = invocation.getArgument(1);
+            Equipo equipoEntidad = new Equipo();
+            equipoEntidad.setId(dto.getId());
+            equipoEntidad.setNombre(dto.getNombre());
+            u.setEquipo(equipoEntidad); // ¡acá simula el efecto real!
+            return null;
+        }).when(equipoService).saveBoth(any(EquipoDTO.class), any(Usuario.class));
+
+
+        ModelAndView mav = this.equipoInicialControlador.sorteEquipoInicial(httpSession);
+
+        assertEquals("sorteoEquipo", mav.getViewName());
+        assertEquals(equipoNuevo, mav.getModel().get("equipo"));
+        assertEquals("EquipoMock", mav.getModel().get("nombreEquipo"));
+        assertNotNull(equipoNuevo.getJugadores());
+        assertEquals(14, equipoNuevo.getJugadores().size());
+
+
+        assertEquals(equipoNuevo.getUsuarioId(), usuarioMock.getId());
+        assertNotNull(usuarioMock.getEquipo());
+        assertEquals(usuarioMock.getEquipo().getId(), equipoNuevo.getId());
+
+        verify(jugadorService).cargarJugadoresAlEquipo(equipoNuevo);
+        verify(usuarioService).buscarUsuarioPorId(idUsuario);
+        verify(equipoService).saveBoth(equipoNuevo, usuarioMock);
     }
 
 }

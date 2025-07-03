@@ -42,7 +42,6 @@ public class EquipoInicialControlador {
         public ModelAndView nuevoEquipo(HttpSession session){
            Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
            if(usuarioId == null){
-              System.out.println("nuevoEquipo: No se encontró el ID de usuario en la sesión, redirigiendo a /login");
               return new ModelAndView("redirect:/login");
            }
            return new ModelAndView("creacionEquipo").addObject("equipo",new EquipoDTO());

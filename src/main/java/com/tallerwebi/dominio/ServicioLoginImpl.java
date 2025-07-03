@@ -25,7 +25,6 @@ public class ServicioLoginImpl implements ServicioLogin {
     @Override
     public Usuario consultarUsuario (String email, String rawPassword) {
         Usuario usuario=  repositorioUsuario.buscarUsuario(email);
-        System.out.println("consultar usuario: " + usuario);
         if (usuario != null && passwordEncoder.matches(rawPassword, usuario.getPassword())) {
             return usuario;
         }

@@ -42,7 +42,7 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
 
 
       getSession().save(equipoTorneo);
-      System.out.println("Se guardó equipo en torneo: " + equipoTorneo.getId());
+
    }
 
    private Session getSession(){

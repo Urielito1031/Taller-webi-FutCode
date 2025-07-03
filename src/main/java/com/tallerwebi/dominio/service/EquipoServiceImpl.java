@@ -41,13 +41,11 @@ public class EquipoServiceImpl implements EquipoService{
       if (!isValid(equipoDTO)) {
          throw new IllegalArgumentException("El nombre no puede ser vacío");
       }
-      // Convertir DTO a entidad
       Equipo entity = Equipo.convertToEntity(equipoDTO);
       entity.setUsuario(usuario);
 
-      // Asignar esquema (asegúrate de que exista)
       Esquema esquema = new Esquema();
-      esquema.setId(1L); // Ajusta según tu lógica o obténlo de la base de datos
+      esquema.setId(1L);
       entity.setEsquema(esquema);
 
       // Convertir y persistir jugadores si existen

@@ -43,7 +43,6 @@ import javax.validation.Valid;
       if (usuarioBuscado != null) {
          session.setAttribute("ROL", usuarioBuscado.getRol());
          session.setAttribute("USUARIO_ID", usuarioBuscado.getId());
-         System.out.println("Usuario encontrado desde /validar-login: " + usuarioBuscado);
          return new ModelAndView("redirect:/home");
       } else {
          model.put("error", "Usuario o clave incorrecta");
@@ -55,7 +54,6 @@ import javax.validation.Valid;
    public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult result,
                                    HttpServletRequest request) {
       ModelMap model = new ModelMap();
-      System.out.println("Intentando registrar usuario: " + usuario.getEmail());
 
       if (result.hasErrors()) {
          System.out.println("Errores de validación encontrados: " + result.getAllErrors());
@@ -66,11 +64,9 @@ import javax.validation.Valid;
          request.getSession().setAttribute("USUARIO_ID", usuario.getId());
          request.getSession().setAttribute("ROL", usuario.getRol());
       } catch (UsuarioExistente e) {
-         System.out.println("Excepción UsuarioExistente: " + e.getMessage());
          model.put("error", "El usuario ya existe");
          return new ModelAndView("nuevo-usuario", model);
       } catch (Exception e) {
-         System.out.println("Excepción general: " + e.getMessage());
          model.put("error", "Error al registrar el nuevo usuario");
          return new ModelAndView("nuevo-usuario", model);
       }

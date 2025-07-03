@@ -54,7 +54,6 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
 
       //validar que el torneo no tenga el equipo a unir
       if(!validarEquipoNoUnidoATorneo(torneoId, equipoId)){
-         System.out.println("El equipo ya se encuentra unido al torneo");
          throw new IllegalArgumentException("El equipo ya se encuentra unido al torneo");
       };
 
@@ -63,7 +62,6 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
       verificarFormatoTorneoParaValidarCapacidadMaxima(torneoId,torneo);
 
 
-      System.out.println("Unir equipo al torneo: " + torneoId + " con equipo: " + equipoId);
       repository.unirEquipoATorneo(equipoId, torneoId);
 
    }
@@ -78,14 +76,12 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
    private void verificarFormatoTorneoParaValidarCapacidadMaxima(Long torneoId,Torneo torneo){
       if(torneo.getFormatoTorneo().getTipo().equals(TipoFormato.LIGA)){
          if(repository.getAllByTorneoId(torneoId).size() >= CAPACIDAD_MAXIMA_TORNEO_LIGA){
-            System.out.println("El torneo ya tiene el maximo de equipos permitidos");
             throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
          }
 
       }
       if(torneo.getFormatoTorneo().getTipo().equals(TipoFormato.COPA)){
          if(repository.getAllByTorneoId(torneoId).size() >= CAPACIDAD_MAXIMA_TORNEO_COPA){
-            System.out.println("El torneo ya tiene el maximo de equipos permitidos");
             throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
          }
       }

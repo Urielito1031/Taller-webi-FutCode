@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -98,6 +99,13 @@ public class EquipoDTO {
          esquemaDTO.setId(equipo.getEsquema().getId());
 
          dto.setFormacionActual(esquemaDTO);
+      }
+
+      if (equipo.getJugadores() != null) {
+         List<JugadorDTO> jugadoresDTO = equipo.getJugadores().stream()
+                 .map(jugador -> new JugadorDTO().convertFromEntity(jugador))
+                 .collect(Collectors.toList());
+         dto.setJugadores(jugadoresDTO);
       }
 
       return dto;

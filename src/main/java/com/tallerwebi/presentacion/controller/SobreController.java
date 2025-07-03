@@ -39,17 +39,17 @@ public class SobreController {
                 .orElse(null);
 
 
-//        SobreDTO sobreDTO = new SobreDTO();
-//        sobreDTO.setTipoSobre(sobre.getTipoSobre());
-//        sobreDTO.setJugadores(usuarioService.convertirJugadoresEntidad(sobre.getJugadores()));
-
-
         // Puede tirar NullPointer
         this.usuarioService.borrarSobreAUsuario(id_usuario, sobreParaBorrar.getId());
 
 
         ModelAndView mav = new ModelAndView("sobre");
         mav.addObject("sobre", sobre);
+
+        // AGREGAR LOS JUGADORES QUE ESTAN EN EL SOBRE AL USUARIO
+//        Usuario usuario = this.usuarioService.buscarUsuarioPorId(id_usuario);
+//        usuario.getEquipo().add?
+
         return mav;
     }
 

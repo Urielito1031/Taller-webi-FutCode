@@ -53,10 +53,14 @@ public class PlantillaController {
 
    @GetMapping("/plantilla")
    public String showViewPlantilla(Model model, HttpServletRequest request) {
+
+
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
       System.out.println("EL USUARIO EN SESSION ES: " +usuario);
-      EsquemaDTO formacion = service.getFormacionPorEquipoId(1L);
+      Long equipoId = usuario.getEquipo().getId();
+      System.out.println("EL EQUIPO EN SESSION ES: " + equipoId);
+      EsquemaDTO formacion = service.getFormacionPorEquipoId(equipoId);
 
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
@@ -146,4 +150,7 @@ public class PlantillaController {
       model.addAttribute("error", Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
       return "vista-plantilla";
    }
+
+
+
 }

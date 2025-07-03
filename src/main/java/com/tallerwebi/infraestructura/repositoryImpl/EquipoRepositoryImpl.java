@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 @Repository
 public class EquipoRepositoryImpl implements EquipoRepository{
@@ -32,6 +31,7 @@ public class EquipoRepositoryImpl implements EquipoRepository{
 
    @Override
    public void save(Equipo equipo){
+      System.out.println("Estado de equipo en repository equipo: " + equipo);
        getSession().saveOrUpdate(equipo);
    }
 

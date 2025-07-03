@@ -25,10 +25,9 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public Usuario buscarUsuario(String email) {
 
        return getCurrentSession().createQuery(
-         "FROM Usuario u " +
-           "        WHERE u.email = :email", Usuario.class)
-             .setParameter("email",email).
-             uniqueResult();
+               "FROM Usuario u WHERE u.email = :email", Usuario.class)
+               .setParameter("email", email)
+               .uniqueResult();
     }
 
     @Override

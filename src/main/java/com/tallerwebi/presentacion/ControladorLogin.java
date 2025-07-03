@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -35,27 +36,24 @@ import javax.validation.Valid;
          return new ModelAndView("login", modelo);
       }
 
-      @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
-      public ModelAndView validarLogin( @ModelAttribute("datosLogin") DatosLogin datosLogin,HttpServletRequest request) {
-         ModelMap model = new ModelMap();
-
-         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
-         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-
-
-            request.getSession().setAttribute("USUARIO_ID", usuarioBuscado.getId());
-
-
-            return new ModelAndView("redirect:/home");
-         } else {
-            model.put("error", "Usuario o clave incorrecta");
-         }
-         return new ModelAndView("login", model);
+   @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+   public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpSession session) {
+      ModelMap model = new ModelMap();
+      Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
+      if (usuarioBuscado != null) {
+         session.setAttribute("ROL", usuarioBuscado.getRol());
+         session.setAttribute("USUARIO_ID", usuarioBuscado.getId());
+         System.out.println("Usuario encontrado desde /validar-login: " + usuarioBuscado);
+         return new ModelAndView("redirect:/home");
+      } else {
+         model.put("error", "Usuario o clave incorrecta");
       }
+      return new ModelAndView("login", model);
+   }
 
    @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-   public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult result) {
+   public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult result,
+                                   HttpServletRequest request) {
       ModelMap model = new ModelMap();
       System.out.println("Intentando registrar usuario: " + usuario.getEmail());
 
@@ -64,9 +62,9 @@ import javax.validation.Valid;
          return new ModelAndView("nuevo-usuario", model);
       }
       try {
-         System.out.println("Llamando a servicioLogin.registrar");
          servicioLogin.registrar(usuario);
-         System.out.println("Registro exitoso, redirigiendo a /nuevo-equipo");
+         request.getSession().setAttribute("USUARIO_ID", usuario.getId());
+         request.getSession().setAttribute("ROL", usuario.getRol());
       } catch (UsuarioExistente e) {
          System.out.println("Excepción UsuarioExistente: " + e.getMessage());
          model.put("error", "El usuario ya existe");

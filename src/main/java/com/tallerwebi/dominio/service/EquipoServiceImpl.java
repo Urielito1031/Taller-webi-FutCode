@@ -23,12 +23,17 @@ public class EquipoServiceImpl implements EquipoService{
 
    @Override
    public void save(EquipoDTO dto){
+      System.out.println("llego a metodo save de EquipoServiceImpl");
       if(!isValid(dto)){
+         System.out.println("El nombre del equipo no puede ser vacio");
          throw new IllegalArgumentException("El nombre no puede ser vacio");
       }
+      System.out.println("Validando equipo: " + dto.getNombre());
       Equipo entity = Equipo.convertToEntity(dto);
 
+      System.out.println("Guardando equipo: " + entity.getNombre());
       repository.save(entity);
+      System.out.println("Equipo guardado con éxito: " + entity.getId());
    }
 
 

@@ -29,7 +29,7 @@ public class Equipo {
    private Club club;
 
    @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "esquema_id")
+   @JoinColumn(name = "esquema_id", nullable = false)
    private Esquema esquema;
 
    @OneToOne
@@ -74,6 +74,9 @@ public class Equipo {
       return entity;
    }
    public String toString(){
-      return "ID: " + this.id + "\n Nombre: " + this.nombre + " \nClub: " + this.club.getNombre();
+      return "ID: " + this.id + "\n Nombre: " + this.nombre +
+             "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
+             "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
+             "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
    }
 }

@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Esquema;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.service.EquipoService;
@@ -40,10 +41,14 @@ public class EquipoInicialControlador {
         }
 
         @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.GET)
-        public ModelAndView nuevoEquipo() {
-            return new ModelAndView("creacionEquipo").addObject("equipo", new EquipoDTO());
+        public ModelAndView nuevoEquipo(HttpSession session){
+           Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
+           if(usuarioId == null){
+              System.out.println("nuevoEquipo: No se encontró el ID de usuario en la sesión, redirigiendo a /login");
+              return new ModelAndView("redirect:/login");
+           }
+           return new ModelAndView("creacionEquipo").addObject("equipo",new EquipoDTO());
         }
-
    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
    public String procesarNuevoEquipo(@Valid @ModelAttribute("equipo") EquipoDTO equipo,
                                      HttpSession session,
@@ -60,12 +65,16 @@ public class EquipoInicialControlador {
       session.setAttribute("equipo", equipo);
       return "redirect:/sorteoEquipoInicial";
    }
+
+
    @RequestMapping(path = "/sorteoEquipoInicial", method = RequestMethod.GET)
    public ModelAndView sorteEquipoInicial(HttpSession session) {
       EquipoDTO equipo = (EquipoDTO) session.getAttribute("equipo");
       if (equipo == null) {
+         System.out.println("sorteoEquipoInicial: No se encontró el equipo en la sesión.");
          return new ModelAndView("redirect:/nuevo-equipo");
       }
+      System.out.println("sorteoEquipoInicial: Equipo encontrado en la sesión: " + equipo.getNombre());
 
       List<Jugador> jugadores = this.jugadorService.sortearJugadoresIniciales(14);
       List<JugadorDTO> jugadoresDto = new ArrayList<>();
@@ -79,32 +88,39 @@ public class EquipoInicialControlador {
 
       session.setAttribute("equipo", equipo);
 
-      Long usuarioId = (Long) session.getAttribute("USUARIO_ID"); // Corrección de "usuarioId"
+      Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
       if (usuarioId == null) {
+         System.out.println("sorteoEquipoInicial: No se encontró el ID de usuario en la sesión.");
          return new ModelAndView("redirect:/login");
       }
+      System.out.println("sorteoEquipoInicial: ID de usuario encontrado en la sesión: " + usuarioId);
       Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
       if (usuario == null) {
          return new ModelAndView("redirect:/login");
       }
 
-      // Convertir EquipoDTO a Equipo entity con esquema
       Equipo equipoEntity = Equipo.convertToEntity(equipo);
       equipoEntity.setUsuario(usuario);
       equipoEntity.setJugadores(jugadores);
+
+      // Obtener el esquema persistido con id = 1
+      Esquema esquema = new Esquema();
+      esquema.setId(1L); // Asignar el ID del esquema por defecto
+      equipoEntity.setEsquema(esquema);
+      System.out.println("Esquema asignado al equipo: " + esquema.getId());
+
       for (Jugador jugador : jugadores) {
          jugador.setEquipo(equipoEntity);
       }
 
-      try {
-         this.equipoService.save (equipoEntity.convertToDTO()); // Persistir el equipo entity
-      } catch (ConstraintViolationException e) {
-         System.out.println("Error de restricción: " + e.getMessage());
-         return new ModelAndView("redirect:/nuevo-equipo");
-      }
+      // Persistir el equipo
+      this.equipoService.save(equipoEntity.convertToDTO());
+      Long equipoId = equipoEntity.getId();
+      System.out.println("sorteoEquipoInicial: Equipo creado con ID: " + equipoId);
 
+      // Actualizar el usuario con el equipo persistido
       usuario.setEquipo(equipoEntity);
-      this.repositorioUsuario.modificar(usuario); // Actualizar el usuario con el equipo
+      this.repositorioUsuario.modificar(usuario);
 
       ModelAndView mav = new ModelAndView("sorteoEquipo");
       mav.addObject("equipo", equipo);

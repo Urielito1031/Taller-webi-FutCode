@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 @Repository
 public class EquipoRepositoryImpl implements EquipoRepository{
@@ -32,7 +31,7 @@ public class EquipoRepositoryImpl implements EquipoRepository{
 
    @Override
    public void save(Equipo equipo){
-       getSession().saveOrUpdate(Equipo.class);
+       getSession().saveOrUpdate(equipo);
    }
 
 
@@ -41,6 +40,14 @@ public class EquipoRepositoryImpl implements EquipoRepository{
 
       return this.getById(equipoId) != null;
    }
+
+   @Override
+   public void saveAndFlush(Equipo equipo) {
+      Session current = getSession();
+      current.saveOrUpdate(equipo);
+      current.flush(); // ← fuerza escritura en la DB, genera el ID
+   }
+
 
    private Session getSession() {
       return session.getCurrentSession();

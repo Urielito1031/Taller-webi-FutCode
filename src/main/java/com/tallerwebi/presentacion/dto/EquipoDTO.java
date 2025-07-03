@@ -16,7 +16,7 @@ public class EquipoDTO {
    private ClubDTO club;
    private List<JugadorDTO> jugadores;
    private Double ratingEquipo;
-
+   private Long usuarioId;
    private EsquemaDTO formacionActual;
    public EquipoDTO() {}
 

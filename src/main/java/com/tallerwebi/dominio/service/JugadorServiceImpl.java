@@ -4,11 +4,14 @@ import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.dominio.repository.JugadorRepository;
+import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +47,32 @@ public class JugadorServiceImpl implements JugadorService{
         .collect(Collectors.toList());
    }
       return null;
+   }
+
+   @Override
+   public void cargarJugadoresAlEquipo(EquipoDTO equipo){
+      List<Jugador> listaJugadoresEntities = sortearJugadoresIniciales(14);
+
+      List<JugadorDTO> listaDeJugadoresDto = new ArrayList<>();
+
+      for(Jugador j : listaJugadoresEntities){
+         listaDeJugadoresDto.add(j.convertToDTO());
+      }
+
+      equipo.setJugadores(listaDeJugadoresDto);
+   }
+
+   private List<Jugador> sortearJugadoresIniciales(int cantidad) {
+
+      List<Jugador> jugadoresEquipo = new ArrayList<>();
+
+      jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.ARQUERO, 2));
+      jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.MEDIOCAMPISTA, 3));
+      jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.DEFENSOR, 5));
+      jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.DELANTERO, 4));
+
+      Collections.shuffle(jugadoresEquipo);
+      return jugadoresEquipo;
    }
 
 //   public Jugador crearJugador(String imagen, String nombre, String apellido, Double rating, RarezaJugador rarezaJugador,

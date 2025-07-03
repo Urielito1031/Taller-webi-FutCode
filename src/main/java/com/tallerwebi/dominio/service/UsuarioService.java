@@ -21,4 +21,22 @@ public interface UsuarioService{
     void borrarSobreAUsuario(Long idUsuario, Long idSobre);
 
     List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores);
+
+    //    @Override
+    //    public void actualizarUsuario(Usuario usuario) {
+    //        getSession().update(usuario);
+    //    }
+    //
+    void actualizar(Usuario usuario);
+
+    //    @Override
+    //    public void actualizarUsuario(Usuario usuario) {
+    //        getSession().update(usuario);
+    //    }
+    //
+//    void actualizar(Usuario usuario);
+
+//    void actualizarUsuario(Usuario usuario);
+//
+//    void actualizar(Usuario usuario);
 }

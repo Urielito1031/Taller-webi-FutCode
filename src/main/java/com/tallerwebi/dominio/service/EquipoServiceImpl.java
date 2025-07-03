@@ -1,6 +1,5 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.repository.EquipoRepository;
@@ -17,11 +16,14 @@ import java.util.stream.Collectors;
 public class EquipoServiceImpl implements EquipoService{
 
    private final EquipoRepository repository;
+   private UsuarioService usuarioService;
 
    @Autowired
-   public EquipoServiceImpl(EquipoRepository repository) {
+   public EquipoServiceImpl(EquipoRepository repository, UsuarioService usuarioService) {
       this.repository = repository;
+      this.usuarioService = usuarioService;
    }
+
    @Override
    public void save(EquipoDTO dto){
       if(!isValid(dto)){
@@ -31,6 +33,23 @@ public class EquipoServiceImpl implements EquipoService{
 
       repository.save(entity);
    }
+
+   @Override
+   public void saveBoth(EquipoDTO equipo, Usuario usuario) {
+      if(!isValid(equipo)){
+         throw new IllegalArgumentException("El nombre no puede ser vacio");
+      }
+      Equipo entity = Equipo.convertToEntity(equipo);
+      entity.setUsuario(usuario);
+      repository.save(entity);
+
+
+
+      usuario.setEquipo(entity);
+      usuarioService.actualizar(usuario);
+   }
+
+
 
 
 
@@ -71,6 +90,11 @@ public class EquipoServiceImpl implements EquipoService{
    @Override
    public void delete(Long id){
 
+   }
+
+   @Override
+   public Equipo sortearEquipoInicial() {
+      return null;
    }
 
 }

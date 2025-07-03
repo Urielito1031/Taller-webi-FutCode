@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,6 +15,7 @@ import javax.persistence.*;
 @Table(name = "equipo")
 public class Equipo {
    @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id", nullable = false)
    private Long id;
 
@@ -29,6 +32,12 @@ public class Equipo {
    @JoinColumn(name = "esquema_id")
    private Esquema esquema;
 
+   @OneToOne
+   @JoinColumn(name = "usuario_id")
+   private Usuario usuario;
+
+   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<Jugador> jugadores = new ArrayList<>();
 
    public EquipoDTO convertToDTO() {
       EquipoDTO dto = new EquipoDTO();
@@ -51,6 +60,10 @@ public class Equipo {
       Equipo entity = new Equipo();
       entity.setId(dto.getId());
       entity.setNombre(dto.getNombre());
+
+      Usuario usuario = new Usuario();
+      usuario.setId(dto.getUsuarioId());
+      entity.setUsuario(usuario);
 
       if (dto.getClub() != null) {
          Club club = new Club();

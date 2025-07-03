@@ -10,6 +10,6 @@ public interface EquipoRepository {
    List<Equipo>getAll();
    Equipo getById(Long id);
    void save(Equipo equipo);
-
    Boolean existsById(Long equipoId);
+   void saveAndFlush(Equipo equipo);
 }

@@ -5,13 +5,14 @@ import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.service.EquipoService;
 import com.tallerwebi.dominio.service.JugadorService;
-import com.tallerwebi.dominio.service.SorteoServiceImpl;
+
 import com.tallerwebi.dominio.service.UsuarioService;
-import com.tallerwebi.infraestructura.JugadorLoader;
+
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,4 +81,26 @@ public class EquipoInicialControlador {
             mav.addObject("nombreEquipo", equipo.getNombre());
             return mav;
         }
-    }
+
+        @GetMapping("/mi-equipo")
+        public ModelAndView mostrarEquipo(HttpSession session) {
+            Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
+
+            if (usuarioId == null) {
+                return new ModelAndView("redirect:/login");
+            }
+
+            Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+            if (usuario == null || usuario.getEquipo() == null) {
+                return new ModelAndView("redirect:/nuevo-equipo");
+            }
+
+            Equipo equipo = usuario.getEquipo();
+            EquipoDTO equipoDTO = new EquipoDTO();
+            equipoDTO.convertFromEntity(equipo);
+
+            ModelAndView mav = new ModelAndView("miEquipoVista");
+            mav.addObject("equipo", equipoDTO);
+            return mav;
+        }
+}

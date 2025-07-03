@@ -4,7 +4,6 @@ import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.*;
 import com.tallerwebi.dominio.repository.SobreRepository;
 import com.tallerwebi.dominio.service.SobreService;
-import com.tallerwebi.infraestructura.JugadorLoader;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -56,7 +56,6 @@ import javax.validation.Valid;
       ModelMap model = new ModelMap();
 
       if (result.hasErrors()) {
-         System.out.println("Errores de validación encontrados: " + result.getAllErrors());
          return new ModelAndView("nuevo-usuario", model);
       }
       try {
@@ -85,7 +84,7 @@ import javax.validation.Valid;
       HttpSession session = request.getSession(false);
       if (session != null) {
          session.invalidate();
-         System.out.println("Sesión invalidada correctamente.");
+
       }
       return new ModelAndView("redirect:/login");
    }

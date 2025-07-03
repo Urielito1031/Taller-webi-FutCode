@@ -96,8 +96,6 @@ public class EquipoDTO {
       if (equipo.getEsquema() != null) {
          EsquemaDTO esquemaDTO = new EsquemaDTO();
          esquemaDTO.setId(equipo.getEsquema().getId());
-         // 🔥 Omití esto si no estás seguro de que está inicializado:
-         // esquemaDTO.setNombre(equipo.getEsquema().getNombre());
 
          dto.setFormacionActual(esquemaDTO);
       }

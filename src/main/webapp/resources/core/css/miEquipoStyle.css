@@ -1,0 +1,251 @@
+body {
+    background-color: #0d1b2a;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    height: 100vh;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1b263b;
+    padding: 10px 40px;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-link, .dropdown-toggle i, .dropdown-toggle span, #titulo-nav, a {
+    text-decoration: none;
+    color: #00ffc3;
+}
+
+#titulo-nav {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1b263b;
+    padding: 10px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.ms-auto {
+    display: flex;
+    justify-content: right;
+}
+
+.nav-item {
+    margin-left: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-link, #nombre-usuario, .bi-person-circle {
+    transition: 0.1111s ease;
+}
+
+.nav-link:hover {
+    color: #00ffc3a7;;
+
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    color: #a6cfff;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-toggle:focus + .dropdown-menu,
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #1c2a3a;
+    border: 1px solid #334;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    border-radius: 8px;
+    min-width: 150px;
+    z-index: 100;
+}
+
+.dropdown-menu a {
+    color: #ddd;
+    padding: 10px 16px;
+    display: block;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #2e3d4f;
+}
+
+.dropdown-menu hr {
+    margin: 5px 0;
+    border: 0;
+    height: 1px;
+    background: #445;
+}
+
+.dropdown-menu a.danger {
+    color: #ff6666;
+}
+
+.badge {
+    background-color: red;
+    border-radius: 50px;
+    padding: 0.2px 6px;
+    color: white;
+}
+
+ul {
+    list-style: none;
+}
+
+#contenedor-principal {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    height: 60vh;
+}
+
+#subContenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    max-width: 1800px;
+    margin: auto;
+    padding: 2rem;
+    background-color: #1e2a3c;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 255, 180, 0.1);
+
+}
+
+h1, h2 {
+    text-align: center;
+    color: #00ffc3;
+}
+
+h4 {
+    text-align: center;
+}
+
+.contenedor-jugador {
+    width: 180px;
+    height: 250px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 1rem;
+    background-color: #23344f;
+    border-radius: 8px;
+    margin: 10px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 10px rgba(0, 255, 180, 0.2);
+    position: relative;
+}
+
+.overlay {
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    height: 17%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.contenedor-jugador:hover .overlay {
+    height: 70%;
+}
+
+.contenedor-jugador h3 {
+    margin: 1px;
+}
+
+.contenedor-jugador span {
+    color: #00ffc3;
+}
+
+.titulo-con-linea {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 10px;
+}
+
+.titulo-con-linea h4 {
+    margin: 0;
+    white-space: nowrap; /* para evitar que el texto se rompa */
+}
+
+.titulo-con-linea hr {
+    flex-grow: 1;
+    height: 2px;
+    border: none;
+    background-color: #ccc;
+}
+
+button {
+    background-color: #00ffc3;
+    color: #001f2d;
+    border: none;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    font-weight: bold;
+    padding: 8px;
+    height: 45px;
+    width: 180px;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #00cfa6dd;
+    box-shadow: #00cfa6dd 0 0 10px;
+}
+
+

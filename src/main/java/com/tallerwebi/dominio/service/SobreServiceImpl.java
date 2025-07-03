@@ -1,6 +1,5 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.factory.SobreDTOFactory;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.*;
 import com.tallerwebi.dominio.repository.SobreRepository;
@@ -45,7 +44,8 @@ public class SobreServiceImpl implements SobreService {
 
     @Override
     public SobreDTO crearSobre(TipoSobre tipo) {
-        SobreDTO sobre = SobreDTOFactory.crearSobreDTO(tipo);
+       SobreDTO sobre = new SobreDTO();
+       sobre.setTipoSobre(TipoSobre.valueOf(tipo.toString()));
 
         switch (tipo) {
             case BRONCE:

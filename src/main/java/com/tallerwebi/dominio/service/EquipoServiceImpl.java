@@ -67,8 +67,6 @@ public class EquipoServiceImpl implements EquipoService{
 
 
 
-
-
    private boolean isValid(EquipoDTO equipo){
       return !equipo.getNombre().trim().isEmpty();
 

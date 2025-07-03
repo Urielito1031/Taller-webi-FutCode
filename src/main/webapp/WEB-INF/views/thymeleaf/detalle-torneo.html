@@ -29,6 +29,20 @@
       <h1 class="page-title">Detalle del Torneo</h1>
       <p class="subtitle">Información completa y opciones de participación</p>
    </header>
+   <th:block th:if="${errorUnirse}">
+      <div class="alerta-error">
+         <i class="bi bi-exclamation-triangle"></i>
+         <span th:text="${errorUnirse}">Hubo un error</span>
+      </div>
+   </th:block>
+   <th:block th:if="${mensajeTorneo}">
+      <div class="alerta-exito">
+         <i class="bi bi-check-circle-fill"></i>
+         <span th:text="${mensajeTorneo}">¡Operación exitosa!</span>
+      </div>
+   </th:block>
+
+
 
    <main class="torneo-card" th:object="${torneo}">
       <div class="torneo-header">
@@ -114,11 +128,13 @@
 
       <div class="action-section">
          <th:block th:if="${torneo.estado.name() == 'ABIERTO'}">
-            <a th:href="@{/detalle-torneo/{id}(id=${torneo.id})}" class="btn-join">
-               <i class="bi bi-trophy"></i>
-               Unirse al Torneo
-               <i class="bi bi-arrow-right"></i>
-            </a>
+            <form th:action="@{/torneo/{id}/unirse(id=${torneo.id})}" method="POST">
+               <button type="submit" class="btn-join">
+                  <i class="bi bi-trophy"></i>
+                  Unirse al Torneo
+                  <i class="bi bi-arrow-right"></i>
+               </button>
+            </form>
          </th:block>
 
          <th:block th:unless="${torneo.estado.name() == 'ABIERTO'}">

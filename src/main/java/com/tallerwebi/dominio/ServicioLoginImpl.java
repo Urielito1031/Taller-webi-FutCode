@@ -43,6 +43,8 @@ public class ServicioLoginImpl implements ServicioLogin {
         usuario.setPassword(hashedPassword);
         usuario.setRol("USER");
         usuario.setActivo(true);
+        // Agregar Monedas registrarse
+        usuario.setMonedas(10000.0);
 
         repositorioUsuario.guardar(usuario);
         return usuario;

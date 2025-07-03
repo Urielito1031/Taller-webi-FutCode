@@ -1,6 +1,8 @@
 package com.tallerwebi.infraestructura.repositoryImpl;
 
+import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.model.entities.EquipoTorneo;
+import com.tallerwebi.dominio.model.entities.Torneo;
 import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,6 +32,17 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
           "WHERE et.torneo.id = :torneoId",
             EquipoTorneo.class
       ).setParameter("torneoId", torneoId).list();
+   }
+
+   @Override
+   public void unirEquipoATorneo(Long torneoId,Long equipoId){
+      EquipoTorneo equipoTorneo = new EquipoTorneo();
+      equipoTorneo.setTorneo(getSession().get(Torneo.class, torneoId));
+      equipoTorneo.setEquipo(getSession().get(Equipo.class, equipoId));
+
+
+      getSession().save(equipoTorneo);
+
    }
 
    private Session getSession(){

@@ -69,7 +69,7 @@
    </nav>
 </header>
 
-<main>
+<main class="d-flex flex-column">
    <div class="fondo"></div>
    <section>
       <div class="sobres">
@@ -86,15 +86,15 @@
                </button>
             </form>
          </article>
-         <div th:if="${mensajeError}" class="alert alert-danger">
-            <p th:text="${mensajeError}"></p>
-         </div>
       </div>
       <aside>
          <h3 id="titulo-descripcion">Sobre de Oro</h3>
          <p id="parrafo-descripcion">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab animi vitae debitis ex aliquid, sapiente, quaerat voluptatem accusamus voluptas quas explicabo assumenda ut magni laboriosam tenetur blanditiis beatae cupiditate eos.</p>
       </aside>
    </section>
+   <div th:if="${mensajeError}">
+      <p th:text="${mensajeError}" class="text-danger"></p>
+   </div>
 
 </main>
 

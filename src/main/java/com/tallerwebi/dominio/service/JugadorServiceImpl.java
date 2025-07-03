@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
@@ -75,17 +76,19 @@ public class JugadorServiceImpl implements JugadorService{
       return jugadoresEquipo;
    }
 
-//   public Jugador crearJugador(String imagen, String nombre, String apellido, Double rating, RarezaJugador rarezaJugador,
-//           PosicionEnum posicionNatural){
-//         Jugador jugador = new Jugador();
-//         jugador.setImagen(imagen);
-//         jugador.setNombre(nombre);
-//         jugador.setApellido(apellido);
-//         jugador.setRating(rating);
-//         jugador.setRarezaJugador(rarezaJugador);
-//         jugador.setPosicion(posicionNatural);
-//      return repository.save(jugador);
-//   }
+   @Override
+   public void cargarJugadoresAlEquipo(EquipoDTO equipo){
+      List<Jugador> listaJugadoresEntities = sortearJugadoresIniciales(14);
+
+      List<JugadorDTO> listaDeJugadoresDto = new ArrayList<>();
+
+      for(Jugador j : listaJugadoresEntities){
+         listaDeJugadoresDto.add(j.convertToDTO());
+      }
+
+      equipo.setJugadores(listaDeJugadoresDto);
+
+   }
 
 
 

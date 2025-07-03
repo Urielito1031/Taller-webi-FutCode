@@ -1,9 +1,9 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.factory.SobreDTOFactory;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.*;
 import com.tallerwebi.dominio.repository.SobreRepository;
-import com.tallerwebi.dominio.service.SobreService;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SobreServiceImpl implements SobreService {
@@ -46,8 +45,7 @@ public class SobreServiceImpl implements SobreService {
 
     @Override
     public SobreDTO crearSobre(TipoSobre tipo) {
-        SobreDTO sobre = new SobreDTO();
-        sobre.setTipoSobre(TipoSobre.valueOf(tipo.toString()));
+        SobreDTO sobre = SobreDTOFactory.crearSobreDTO(tipo);
 
         switch (tipo) {
             case BRONCE:

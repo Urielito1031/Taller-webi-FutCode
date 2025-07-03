@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-06-2025 a las 23:40:04
+-- Tiempo de generación: 02-07-2025 a las 17:00:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -74,44 +74,46 @@ CREATE TABLE `equipo` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `club_id` int(11) DEFAULT NULL,
-  `esquema_id` int(11) DEFAULT NULL
+  `esquema_id` int(11) NOT NULL DEFAULT 1,
+  `usuario_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `equipo`
 --
 
-INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
-(1, 'River Plate Titulares', 1, 1),
-(2, 'Flamengo Juveniles', 2, 2),
-(3, 'Barcelona B', 3, 3),
-(4, 'Bayern Múnich Sub-20', 4, 4),
-(5, 'AC Milan Primavera', 5, 5),
-(6, 'Manchester United U21', 6, 4),
-(7, 'Liverpool Reserves', 7, 1),
-(8, 'PSG B', 8, 1),
-(9, 'Juventus U19', 9, 3),
-(10, 'Chelsea Academy', 10, 2),
-(11, 'América Titulares', 11, 2),
-(12, 'Peñarol B', 12, 5),
-(13, 'Colo-Colo Proyección', 13, 3),
-(14, 'Atlético Madrid Juveniles', 14, 5),
-(15, 'Borussia Dortmund II', 15, 4),
-(16, 'Benfica B', 16, 5),
-(17, 'Ajax Sub-21', 17, 1),
-(18, 'Atlanta United B', 18, 1),
-(19, 'Celtic Youth', 19, 3),
-(20, 'Anderlecht U21', 20, 5),
-(21, 'Porto B', 21, 2),
-(22, 'PSV U19', 22, 4),
-(23, 'New York City FC II', 23, 5),
-(24, 'Rangers Academy', 23, 4),
-(25, 'Club Brugge Juveniles', 21, 1),
-(26, 'Benfica Legends', 16, 2),
-(27, 'Ajax Reservas', 17, 2),
-(28, 'Anderlecht B', 20, 2),
-(29, 'Celtic Reservas', 19, 3),
-(30, 'PSV Academy', 22, 2);
+INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`, `usuario_id`) VALUES
+(1, 'River Plate Titulares', 1, 1, NULL),
+(2, 'Flamengo Juveniles', 2, 2, NULL),
+(3, 'Barcelona B', 3, 3, NULL),
+(4, 'Bayern Múnich Sub-20', 4, 4, NULL),
+(5, 'AC Milan Primavera', 5, 5, NULL),
+(6, 'Manchester United U21', 6, 4, NULL),
+(7, 'Liverpool Reserves', 7, 1, NULL),
+(8, 'PSG B', 8, 1, NULL),
+(9, 'Juventus U19', 9, 3, NULL),
+(10, 'Chelsea Academy', 10, 2, NULL),
+(11, 'América Titulares', 11, 2, NULL),
+(12, 'Peñarol B', 12, 5, NULL),
+(13, 'Colo-Colo Proyección', 13, 3, NULL),
+(14, 'Atlético Madrid Juveniles', 14, 5, NULL),
+(15, 'Borussia Dortmund II', 15, 4, NULL),
+(16, 'Benfica B', 16, 5, NULL),
+(17, 'Ajax Sub-21', 17, 1, NULL),
+(18, 'Atlanta United B', 18, 1, NULL),
+(19, 'Celtic Youth', 19, 3, NULL),
+(20, 'Anderlecht U21', 20, 5, NULL),
+(21, 'Porto B', 21, 2, NULL),
+(22, 'PSV U19', 22, 4, NULL),
+(23, 'New York City FC II', 23, 5, NULL),
+(24, 'Rangers Academy', 23, 4, NULL),
+(25, 'Club Brugge Juveniles', 21, 1, NULL),
+(26, 'Benfica Legends', 16, 2, NULL),
+(27, 'Ajax Reservas', 17, 2, NULL),
+(28, 'Anderlecht B', 20, 2, NULL),
+(29, 'Celtic Reservas', 19, 3, NULL),
+(30, 'PSV Academy', 22, 2, NULL),
+(76, 'equipoNuevooo', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -122,7 +124,7 @@ INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`) VALUES
 CREATE TABLE `equipo_torneo` (
   `id` int(11) NOT NULL,
   `equipo_id` int(11) NOT NULL,
-  `posicion` int(11) NOT NULL,
+  `posicion` int(11) NOT NULL DEFAULT 0,
   `partidos_jugados` int(11) NOT NULL DEFAULT 0,
   `partidos_ganados` int(11) NOT NULL DEFAULT 0,
   `partidos_empatados` int(11) NOT NULL DEFAULT 0,
@@ -138,7 +140,6 @@ CREATE TABLE `equipo_torneo` (
 --
 
 INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, `partidos_ganados`, `partidos_empatados`, `partidos_perdidos`, `goles_a_favor`, `goles_en_contra`, `puntos`, `torneo_id`) VALUES
-(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1),
@@ -168,7 +169,6 @@ INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, 
 (28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (29, 29, 0, 0, 0, 0, 0, 0, 0, 0, 1),
 (30, 30, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-(31, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2),
 (32, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2),
 (33, 3, 0, 0, 0, 0, 0, 0, 0, 0, 2),
 (34, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2),
@@ -228,7 +228,6 @@ INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, 
 (88, 28, 0, 0, 0, 0, 0, 0, 0, 0, 4),
 (89, 29, 0, 0, 0, 0, 0, 0, 0, 0, 4),
 (90, 30, 0, 0, 0, 0, 0, 0, 0, 0, 4),
-(91, 1, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (92, 2, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (93, 3, 0, 0, 0, 0, 0, 0, 0, 0, 7),
 (94, 4, 0, 0, 0, 0, 0, 0, 0, 0, 7),
@@ -370,17 +369,17 @@ CREATE TABLE `formacion_equipo` (
 --
 
 INSERT INTO `formacion_equipo` (`id`, `equipo_id`, `jugador_id`, `posicion_en_campo`) VALUES
-(1527, 1, 16, 'ARQUERO'),
-(1528, 1, 2, 'DEFENSOR'),
-(1529, 1, 3, 'DEFENSOR'),
-(1530, 1, 4, 'DEFENSOR'),
-(1531, 1, 5, 'DEFENSOR'),
-(1532, 1, 6, 'DEFENSOR'),
-(1533, 1, 10, 'MEDIOCAMPISTA'),
-(1534, 1, 118, 'MEDIOCAMPISTA'),
-(1535, 1, 20, 'MEDIOCAMPISTA'),
-(1536, 1, 21, 'DELANTERO'),
-(1537, 1, 17, 'DELANTERO');
+(1538, 1, 16, 'ARQUERO'),
+(1539, 1, 2, 'DEFENSOR'),
+(1540, 1, 3, 'DEFENSOR'),
+(1541, 1, 4, 'DEFENSOR'),
+(1542, 1, 5, 'DEFENSOR'),
+(1543, 1, 6, 'DEFENSOR'),
+(1544, 1, 10, 'MEDIOCAMPISTA'),
+(1545, 1, 68, 'MEDIOCAMPISTA'),
+(1546, 1, 20, 'MEDIOCAMPISTA'),
+(1547, 1, 21, 'DELANTERO'),
+(1548, 1, 17, 'DELANTERO');
 
 -- --------------------------------------------------------
 
@@ -430,108 +429,105 @@ CREATE TABLE `jugador` (
 --
 
 INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_camiseta`, `rating`, `lesionado`, `estado_fisico`, `pais_id`, `rareza_jugador`, `posicion`, `equipo_id`, `sobre_id`) VALUES
-
 (1, 'Emiliano', 'Martínez', 'https://futcodejugadores.free.nf/jugadores/emiliano_martinez.png', 31, 1, 88.0, 0, 95.00, 1, 'RARO', 'ARQUERO', 1, NULL),
 (2, 'Cristian', 'Romero', 'https://futcodejugadores.free.nf/jugadores/cristianRomero.png', 26, 23, 87.0, 0, 90.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
 (3, 'Nicolás', 'Otamendi', 'https://futcodejugadores.free.nf/jugadores/otamendi.png', 36, 3, 85.0, 0, 88.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
 (4, 'Marcos', 'Acuña', 'https://futcodejugadores.free.nf/jugadores/acuna.png', 32, 8, 84.0, 0, 87.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
 (5, 'Gonzalo', 'Montiel', 'https://futcodejugadores.free.nf/jugadores/montiel.png', 27, 4, 83.0, 0, 89.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
-(7, 'Alexis', 'Mac Allister', 'https://futcodejugadores.free.nf/jugadores/macalister.png', 25, 5, 85.0, 0, 90.00, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
-(8, 'Enzo', 'Fernández', 'https://futcodejugadores.free.nf/jugadores/enzo.png', 23, 24, 87.0, 0, 92.00, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
-(9, 'Lionel', 'Messi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/messi.png', 36, 10, 94.0, 0, 89.00, 1, 'LEYENDA', 'DELANTERO', 1, NULL),
-(10, 'Julián', 'Álvarez', 'https://futcodejugadores.free.nf/jugadores/julianAlvarez.png', 24, 9, 86.0, 0, 88.00, 1, 'RARO', 'DELANTERO', 1, NULL),
-(11, 'Lautaro', 'Martínez', 'https://futcodejugadores.free.nf/jugadores/lautaro_martinez.png', 26, 21, 88.0, 0, 90.00, 1, 'RARO', 'DELANTERO', 1, NULL),
-(12, 'Cristiano', 'Ronaldo', 'https://tomaszfutcode.free.nf/jugadoresFutcode/cristianoRonaldo.png', 40, 7, 98.2, 0, 97.50, 11, 'LEYENDA', 'DELANTERO', 1, NULL),
-(13, 'Kylian', 'Mbappé', 'https://tomaszfutcode.free.nf/jugadoresFutcode/mbappe.png', 26, 10, 84.3, 0, 98.70, 4, 'EPICO', 'DELANTERO', 1, NULL),
-(14, 'Kevin', 'De Bruyne', 'https://tomaszfutcode.free.nf/jugadoresFutcode/deBruyne.png', 33, 17, 82.7, 0, 96.40, 14, 'EPICO', 'MEDIOCAMPISTA', 1, NULL),
-(15, 'Virgil', 'van Dijk', 'https://tomaszfutcode.free.nf/jugadoresFutcode/vanDijk.png', 33, 4, 47.3, 0, 95.80, 12, 'RARO', 'DEFENSOR', 1, NULL),
-(16, 'Thibaut', 'Courtois', 'https://tomaszfutcode.free.nf/jugadoresFutcode/courtois.png', 33, 1, 49.1, 0, 94.90, 14, 'RARO', 'ARQUERO', 1, NULL),
-(17, 'Robert', 'Lewandowski', 'https://tomaszfutcode.free.nf/jugadoresFutcode/lewandowski.png', 36, 9, 83.6, 0, 98.20, 3, 'EPICO', 'DELANTERO', 1, NULL),
-(18, 'Erling', 'Haaland', 'https://tomaszfutcode.free.nf/jugadoresFutcode/haaland.png', 24, 9, 85.2, 0, 98.80, 5, 'EPICO', 'DELANTERO', 1, NULL),
-(19, 'Neymar', 'Jr', 'https://tomaszfutcode.free.nf/jugadoresFutcode/neymarJr.png', 33, 11, 80.4, 0, 97.00, 2, 'EPICO', 'MEDIOCAMPISTA', 1, NULL),
-(20, 'Luka', 'Modrić', 'https://tomaszfutcode.free.nf/jugadoresFutcode/modric.png', 39, 10, 48.7, 0, 96.70, 3, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
-(21, 'Mohamed', 'Salah', 'https://tomaszfutcode.free.nf/jugadoresFutcode/salah.png', 32, 11, 46.2, 0, 97.20, 7, 'RARO', 'DELANTERO', 1, NULL),
-(22, 'Sadio', 'Mané', 'https://tomaszfutcode.free.nf/jugadoresFutcode/mane.png', 33, 10, 45.8, 0, 96.50, 2, 'RARO', 'DELANTERO', 2, NULL),
-(23, 'Casemiro', 'Carlos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/casemiro.png', 32, 5, 44.3, 0, 95.90, 2, 'RARO', 'MEDIOCAMPISTA', 3, NULL),
-(24, 'Joshua', 'Kimmich', 'https://tomaszfutcode.free.nf/jugadoresFutcode/kimmich.png', 30, 6, 50.0, 0, 96.00, 5, 'RARO', 'MEDIOCAMPISTA', 4, NULL),
-(25, 'Vinícius', 'Jr', 'https://tomaszfutcode.free.nf/jugadoresFutcode/17_Vinícius_Jr.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 5, NULL),
-(26, 'Bruno', 'Fernandes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/16_Bruno_Fernandes.png', 30, 8, 25.7, 0, 96.10, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
-(28, 'Marc-André', 'ter Stegen', 'https://tomaszfutcode.free.nf/jugadoresFutcode/18_Marc-André_ter_Stegen.png', 33, 1, 22.4, 0, 95.20, 3, 'NORMAL', 'ARQUERO', 6, NULL),
-(29, 'Alisson', 'Becker', 'https://futcodejugadores.free.nf/jugadores/alisson_becker.png', 32, 1, 24.6, 0, 95.70, 2, 'NORMAL', 'ARQUERO', 7, NULL),
-(30, 'Ederson', 'Moraes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/20_Ederson_Moraes.png', 31, 31, 27.8, 0, 95.40, 2, 'NORMAL', 'ARQUERO', 8, NULL),
-(31, 'Antonio', 'Rüdiger', 'https://futcodejugadores.free.nf/jugadores/antonio_rudiger.png', 31, 2, 23.5, 0, 95.10, 12, 'NORMAL', 'DEFENSOR', 9, NULL),
-(32, 'Marquinhos', 'Marcos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/22_Marquinhos_Marcos.png', 30, 5, 26.3, 0, 95.60, 2, 'NORMAL', 'DEFENSOR', 10, NULL),
-(33, 'João', 'Cancelo', 'https://tomaszfutcode.free.nf/jugadoresFutcode/23_João_Cancelo.png', 30, 3, 21.9, 0, 95.30, 11, 'NORMAL', 'DEFENSOR', 2, NULL),
-(34, 'Trent', 'Alexander-Arnold', 'https://futcodejugadores.free.nf/jugadores/trent_alexander.png', 26, 66, 30.0, 0, 95.00, 7, 'NORMAL', 'DEFENSOR', 3, NULL),
-(35, 'Andrew', 'Robertson', 'https://tomaszfutcode.free.nf/jugadoresFutcode/25_Andrew_Robertson.png', 30, 26, 24.1, 0, 94.80, 7, 'NORMAL', 'DEFENSOR', 4, NULL),
-(36, 'Theo', 'Hernández', 'https://tomaszfutcode.free.nf/jugadoresFutcode/26_Theo_Hernández.png', 28, 19, 28.7, 0, 94.70, 6, 'NORMAL', 'DEFENSOR', 5, NULL),
-(37, 'Achraf', 'Hakimi', 'https://futcodejugadores.free.nf/jugadores/achraf.png', 26, 2, 19.2, 0, 94.60, 2, 'NORMAL', 'DEFENSOR', 6, NULL),
-(38, 'Paul', 'Pogba', 'https://tomaszfutcode.free.nf/jugadoresFutcode/28_Paul_Pogba.png', 31, 6, 26.8, 0, 94.50, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
-(39, 'Marco', 'Verratti', 'https://tomaszfutcode.free.nf/jugadoresFutcode/29_Marco_Verratti.png', 32, 8, 25.3, 0, 94.40, 6, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL),
-(40, 'Son', 'Heung-min', 'https://tomaszfutcode.free.nf/jugadoresFutcode/30_Son_Heung-min.png', 32, 7, 48.1, 0, 97.50, 13, 'RARO', 'DELANTERO', 9, NULL),
-(41, 'Dusan', 'Vlahović', 'https://futcodejugadores.free.nf/jugadores/dusan_vlahovic.png', 24, 9, 22.7, 0, 94.30, 6, 'NORMAL', 'DELANTERO', 10, NULL),
-(42, 'Phil', 'Foden', 'https://futcodejugadores.free.nf/jugadores/phil_foden.png', 24, 47, 22.7, 0, 93.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 2, NULL),
-(43, 'Bernardo', 'Silva', 'https://tomaszfutcode.free.nf/jugadoresFutcode/43_Bernardo_Silva.png', 30, 20, 49.3, 0, 96.30, 11, 'RARO', 'MEDIOCAMPISTA', 3, NULL),
-(44, 'Rafael', 'Leão', 'https://futcodejugadores.free.nf/jugadores/LeaoRafael.png', 25, 17, 25.8, 0, 93.10, 11, 'NORMAL', 'DELANTERO', 4, NULL),
-(45, 'Hugo', 'Lloris', 'https://tomaszfutcode.free.nf/jugadoresFutcode/45_Hugo_Lloris.png', 38, 1, 19.4, 0, 93.00, 4, 'NORMAL', 'ARQUERO', 5, NULL),
-(46, 'Keylor', 'Navas', 'https://tomaszfutcode.free.nf/jugadoresFutcode/46_Keylor_Navas.png', 37, 1, 28.6, 0, 92.90, 10, 'NORMAL', 'ARQUERO', 6, NULL),
-(47, 'David', 'de Gea', 'https://tomaszfutcode.free.nf/jugadoresFutcode/47_David_de_Gea.png', 34, 1, 23.5, 0, 92.80, 3, 'NORMAL', 'ARQUERO', 7, NULL),
-(48, 'Mike', 'Maignan', 'https://futcodejugadores.free.nf/jugadores/mike_maignan.png', 29, 16, 26.9, 0, 92.70, 4, 'NORMAL', 'ARQUERO', 8, NULL),
-(49, 'Edin', 'Džeko', 'https://futcodejugadores.free.nf/jugadores/edin_dzeko.png', 38, 9, 21.3, 0, 92.60, 6, 'NORMAL', 'DELANTERO', 9, NULL),
-(50, 'Memphis', 'Depay', 'https://tomaszfutcode.free.nf/jugadoresFutcode/50_Memphis_Depay.png', 30, 9, 27.7, 0, 92.50, 12, 'NORMAL', 'DELANTERO', 10, NULL),
-(51, 'Gabriel', 'Jesus', 'https://futcodejugadores.free.nf/jugadores/Gabriel-Jesus.png', 27, 9, 24.2, 0, 92.40, 2, 'NORMAL', 'DELANTERO', 2, NULL),
-(52, 'Raheem', 'Sterling', 'https://tomaszfutcode.free.nf/jugadoresFutcode/52_Raheem_Sterling.png', 29, 7, 28.8, 0, 92.30, 7, 'NORMAL', 'DELANTERO', 3, NULL),
-(53, 'João', 'Félix', 'https://tomaszfutcode.free.nf/jugadoresFutcode/53_João_Félix.png', 25, 11, 20.4, 0, 92.20, 11, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
-(54, 'Alejandro', 'Garnacho', 'https://tomaszfutcode.free.nf/jugadoresFutcode/54_Alejandro_Garnacho.png', 21, 17, 29.1, 0, 91.50, 1, 'NORMAL', 'DELANTERO', 5, NULL),
-(55, 'Francisco', 'Trincão', 'https://futcodejugadores.free.nf/jugadores/francisco_trincao.png', 24, 21, 22.6, 0, 91.40, 11, 'NORMAL', 'DELANTERO', 6, NULL),
-(56, 'Ansu', 'Fati', 'https://tomaszfutcode.free.nf/jugadoresFutcode/56_Ansu_Fati.png', 22, 10, 25.3, 0, 91.30, 3, 'NORMAL', 'DELANTERO', 7, NULL),
-(57, 'Rodrygo', 'Goes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/57_Rodrygo_Goes.png', 23, 11, 21.7, 0, 91.20, 2, 'NORMAL', 'DELANTERO', 8, NULL),
-(58, 'Ferran', 'Torres', 'https://tomaszfutcode.free.nf/jugadoresFutcode/58_Ferran_Torres.png', 24, 7, 26.4, 0, 91.10, 3, 'NORMAL', 'DELANTERO', 9, NULL),
-(59, 'Gonçalo', 'Ramos', 'https://futcodejugadores.free.nf/jugadores/goncalo_ramos.png', 23, 9, 23.9, 0, 91.00, 11, 'NORMAL', 'DELANTERO', 10, NULL),
-(60, 'Darwin', 'Núñez', 'https://futcodejugadores.free.nf/jugadores/darwin_nunez.png', 25, 19, 28.1, 0, 92.10, 9, 'NORMAL', 'DELANTERO', 11, NULL),
-(81, 'Sebastien', 'Haller', 'https://tomaszfutcode.free.nf/jugadoresFutcode/61_Sebastien_Haller.png', 30, 9, 19.8, 0, 92.00, 12, 'NORMAL', 'DELANTERO', 2, NULL),
-(82, 'Victor', 'Osimhen', 'https://futcodejugadores.free.nf/jugadores/victor_osimhen.png', 26, 9, 29.5, 0, 91.90, 8, 'NORMAL', 'DELANTERO', 3, NULL),
-(83, 'Dušan', 'Tadić', 'https://futcodejugadores.free.nf/jugadores/dusan_tadic.png', 35, 10, 22.2, 0, 91.80, 13, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
-(84, 'Lucas', 'Paquetá', 'https://tomaszfutcode.free.nf/jugadoresFutcode/64_Lucas_Paquetá.png', 27, 11, 26.7, 0, 91.70, 2, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
-(85, 'James', 'Maddison', 'https://tomaszfutcode.free.nf/jugadoresFutcode/65_James_Maddison.png', 28, 10, 21.4, 0, 91.60, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
-(86, 'Karim', 'Benzema', 'https://tomaszfutcode.free.nf/jugadoresFutcode/66_Karim_Benzema.png', 37, 9, 95.6, 0, 98.50, 3, 'LEYENDA', 'DELANTERO', 7, NULL),
-(87, 'Harry', 'Kane', 'https://tomaszfutcode.free.nf/jugadoresFutcode/67_Harry_Kane.png', 31, 10, 81.3, 0, 98.00, 7, 'EPICO', 'DELANTERO', 8, NULL),
-(88, 'Antoine', 'Griezmann', 'https://futcodejugadores.free.nf/jugadores/GRIEZMANN.png', 33, 7, 46.9, 0, 97.30, 3, 'RARO', 'MEDIOCAMPISTA', 9, NULL),
-(89, 'Romelu', 'Lukaku', 'https://tomaszfutcode.free.nf/jugadoresFutcode/69_Romelu_Lukaku.png', 31, 9, 43.7, 0, 96.60, 6, 'RARO', 'DELANTERO', 10, NULL),
-(90, 'Paulo', 'Dybala', 'https://tomaszfutcode.free.nf/jugadoresFutcode/70_Paulo_Dybala.png', 30, 21, 45.2, 0, 96.20, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
-(91, 'Jadon', 'Sancho', 'https://tomaszfutcode.free.nf/jugadoresFutcode/71_Jadon_Sancho.png', 24, 25, 23.8, 0, 95.70, 7, 'NORMAL', 'DELANTERO', 2, NULL),
-(92, 'Marcus', 'Rashford', 'https://futcodejugadores.free.nf/jugadores/Marcus-Rashford.png', 26, 10, 27.1, 0, 95.50, 7, 'NORMAL', 'DELANTERO', 3, NULL),
-(93, 'Jack', 'Grealish', 'https://tomaszfutcode.free.nf/jugadoresFutcode/73_Jack_Grealish.png', 28, 7, 22.5, 0, 95.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
-(94, 'Mikel', 'Oyarzabal', 'https://tomaszfutcode.free.nf/jugadoresFutcode/74_Mikel_Oyarzabal.png', 27, 10, 28.7, 0, 94.90, 3, 'NORMAL', 'DELANTERO', 5, NULL),
-(95, 'Wilfried', 'Zaha', 'https://tomaszfutcode.free.nf/jugadoresFutcode/75_Wilfried_Zaha.png', 31, 11, 25.3, 0, 94.60, 13, 'NORMAL', 'DELANTERO', 6, NULL),
-(96, 'Dominic', 'Calvert-Lewin', 'https://tomaszfutcode.free.nf/jugadoresFutcode/calvert.png', 27, 9, 18.9, 0, 94.40, 7, 'NORMAL', 'DELANTERO', 7, NULL),
-(97, 'Tammy', 'Abraham', 'https://futcodejugadores.free.nf/jugadores/tammy_abraham.png', 26, 9, 26.4, 0, 94.20, 7, 'NORMAL', 'DELANTERO', 8, NULL),
-(98, 'Olivier', 'Giroud', 'https://futcodejugadores.free.nf/jugadores/olivier_giroud.png', 37, 9, 24.6, 0, 94.00, 4, 'NORMAL', 'DELANTERO', 9, NULL),
-(99, 'Arkadiusz', 'Milik', 'https://futcodejugadores.free.nf/jugadores/arkadiusz_milik.png', 30, 99, 27.8, 0, 93.80, 6, 'NORMAL', 'DELANTERO', 10, NULL),
-(100, 'Sebastian', 'Haller', 'https://tomaszfutcode.free.nf/jugadoresFutcode/80_Sebastian_Haller.png', 29, 22, 20.2, 0, 93.60, 12, 'NORMAL', 'DELANTERO', 11, NULL),
-(101, 'Ivan', 'Toney', 'https://futcodejugadores.free.nf/jugadores/ivan_toney.png', 28, 17, 29.5, 0, 93.40, 7, 'NORMAL', 'DELANTERO', 2, NULL),
-(102, 'Patrik', 'Schick', 'https://tomaszfutcode.free.nf/jugadoresFutcode/82_Patrik_Schick.png', 28, 14, 23.1, 0, 93.20, 5, 'NORMAL', 'DELANTERO', 3, NULL),
-(103, 'Florian', 'Wirtz', 'https://tomaszfutcode.free.nf/jugadoresFutcode/83_Florian_Wirtz.png', 21, 10, 25.7, 0, 93.00, 5, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
-(104, 'Nicolò', 'Zaniolo', 'https://futcodejugadores.free.nf/jugadores/Zaniolo.png', 24, 22, 19.3, 0, 92.80, 6, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
-(105, 'Houssem', 'Aouar', 'https://tomaszfutcode.free.nf/jugadoresFutcode/85_Houssem_Aouar.png', 26, 8, 29.8, 0, 92.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
-(106, 'James', 'Milner', 'https://tomaszfutcode.free.nf/jugadoresFutcode/86_James_Milner.png', 38, 7, 26.4, 0, 92.40, 7, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
-(107, 'Jordan', 'Henderson', 'https://tomaszfutcode.free.nf/jugadoresFutcode/87_Jordan_Henderson.png', 34, 8, 21.6, 0, 92.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL),
-(108, 'Youri', 'Tielemans', 'https://futcodejugadores.free.nf/jugadores/youri_tielemans.png', 27, 9, 27.1, 0, 92.00, 14, 'NORMAL', 'MEDIOCAMPISTA', 9, NULL),
-(109, 'Renato', 'Sanches', 'https://tomaszfutcode.free.nf/jugadoresFutcode/89_Renato_Sanches.png', 26, 18, 23.7, 0, 91.80, 11, 'NORMAL', 'MEDIOCAMPISTA', 10, NULL),
-(110, 'Weston', 'McKennie', 'https://futcodejugadores.free.nf/jugadores/weston_mckennie.png', 25, 16, 28.1, 0, 91.20, 13, 'NORMAL', 'MEDIOCAMPISTA', 11, NULL),
-(111, 'Kalvin', 'Phillips', 'https://tomaszfutcode.free.nf/jugadoresFutcode/91_Kalvin_Phillips.png', 28, 15, 26.9, 0, 91.00, 7, 'NORMAL', 'MEDIOCAMPISTA', 12, NULL),
-(112, 'Declan', 'Rice', 'https://futcodejugadores.free.nf/jugadores/declan_rice.png', 25, 6, 32.7, 0, 90.80, 7, 'NORMAL', 'MEDIOCAMPISTA', 13, NULL),
-(113, 'Wilfred', 'Ndidi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/93_Wilfred_Ndidi.png', 27, 25, 32.5, 0, 90.60, 14, 'NORMAL', 'MEDIOCAMPISTA', 14, NULL),
-(115, 'Sergio', 'Busquets', 'https://tomaszfutcode.free.nf/jugadoresFutcode/94_Sergio_Busquets.png', 36, 5, 24.3, 0, 90.40, 3, 'NORMAL', 'MEDIOCAMPISTA', 3, NULL),
-(116, 'Rodrigo', 'De Paul', 'https://futcodejugadores.free.nf/jugadores/de_paul.png', 30, 7, 22.1, 0, 90.20, 1, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
-(117, 'Lucas', 'Torreira', 'https://tomaszfutcode.free.nf/jugadoresFutcode/96_Lucas_Torreira.png', 29, 14, 21.9, 0, 90.00, 9, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
-(118, 'Leandro', 'Paredes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/97_Leandro_Paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 1, NULL),
-(119, 'Matteo', 'Guendouzi', 'https://futcodejugadores.free.nf/jugadores/guen.png', 27, 16, 46.5, 0, 89.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
-(120, 'Ryan', 'Gravenberch', 'https://tomaszfutcode.free.nf/jugadoresFutcode/99_Ryan_Gravenberch.png', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL);
-
+(6, 'Alexis', 'Mac Allister', 'https://futcodejugadores.free.nf/jugadores/macalister.png', 25, 5, 85.0, 0, 90.00, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(7, 'Enzo', 'Fernández', 'https://futcodejugadores.free.nf/jugadores/enzoFernandez.webp', 23, 24, 87.0, 0, 92.00, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(8, 'Lionel', 'Messi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/messi.png', 36, 10, 94.0, 0, 89.00, 1, 'LEYENDA', 'DELANTERO', 1, NULL),
+(9, 'Julián', 'Álvarez', 'https://futcodejugadores.free.nf/jugadores/julianAlvarez.png', 24, 9, 86.0, 0, 88.00, 1, 'RARO', 'DELANTERO', 1, NULL),
+(10, 'Lautaro', 'Martínez', 'https://tomaszfutcode.free.nf/jugadoresFutcode/32_Lautaro_Martínez.webp', 26, 21, 88.0, 0, 90.00, 1, 'RARO', 'DELANTERO', 1, NULL),
+(11, 'Cristiano', 'Ronaldo', 'https://tomaszfutcode.free.nf/jugadoresFutcode/cristianoRonaldo.png', 40, 7, 98.2, 0, 97.50, 11, 'LEYENDA', 'DELANTERO', 1, NULL),
+(12, 'Kylian', 'Mbappé', 'https://tomaszfutcode.free.nf/jugadoresFutcode/mbappe.png', 26, 10, 84.3, 0, 98.70, 4, 'EPICO', 'DELANTERO', 1, NULL),
+(13, 'Kevin', 'De Bruyne', 'https://tomaszfutcode.free.nf/jugadoresFutcode/deBruyne.png', 33, 17, 82.7, 0, 96.40, 14, 'EPICO', 'MEDIOCAMPISTA', 1, NULL),
+(14, 'Virgil', 'van Dijk', 'https://tomaszfutcode.free.nf/jugadoresFutcode/vanDijk.png', 33, 4, 47.3, 0, 95.80, 12, 'RARO', 'DEFENSOR', 1, NULL),
+(15, 'Thibaut', 'Courtois', 'https://tomaszfutcode.free.nf/jugadoresFutcode/courtois.png', 33, 1, 49.1, 0, 94.90, 14, 'RARO', 'ARQUERO', 1, NULL),
+(16, 'Robert', 'Lewandowski', 'https://tomaszfutcode.free.nf/jugadoresFutcode/lewandowski.png', 36, 9, 83.6, 0, 98.20, 3, 'EPICO', 'DELANTERO', 1, NULL),
+(17, 'Erling', 'Haaland', 'https://tomaszfutcode.free.nf/jugadoresFutcode/haaland.png', 24, 9, 85.2, 0, 98.80, 5, 'EPICO', 'DELANTERO', 1, NULL),
+(18, 'Neymar', 'Jr', 'https://tomaszfutcode.free.nf/jugadoresFutcode/neymarJr.png', 33, 11, 80.4, 0, 97.00, 2, 'EPICO', 'MEDIOCAMPISTA', 1, NULL),
+(19, 'Luka', 'Modrić', 'https://tomaszfutcode.free.nf/jugadoresFutcode/modric.png', 39, 10, 48.7, 0, 96.70, 3, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(20, 'Mohamed', 'Salah', 'https://tomaszfutcode.free.nf/jugadoresFutcode/salah.png', 32, 11, 46.2, 0, 97.20, 7, 'RARO', 'DELANTERO', 1, NULL),
+(21, 'Sadio', 'Mané', 'https://tomaszfutcode.free.nf/jugadoresFutcode/mane.png', 33, 10, 45.8, 0, 96.50, 2, 'RARO', 'DELANTERO', 1, NULL),
+(22, 'Casemiro', 'Carlos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/casemiro.png', 32, 5, 44.3, 0, 95.90, 2, 'RARO', 'MEDIOCAMPISTA', 3, NULL),
+(23, 'Joshua', 'Kimmich', 'https://tomaszfutcode.free.nf/jugadoresFutcode/kimmich.png', 30, 6, 50.0, 0, 96.00, 5, 'RARO', 'MEDIOCAMPISTA', 4, NULL),
+(24, 'Vinícius', 'Jr', 'https://tomaszfutcode.free.nf/jugadoresFutcode/17_Vinícius_Jr.png', 24, 7, 29.1, 0, 97.80, 2, 'NORMAL', 'DELANTERO', 76, NULL),
+(25, 'Bruno', 'Fernandes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/16_Bruno_Fernandes.png', 30, 8, 25.7, 0, 96.10, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
+(26, 'Marc-André', 'ter Stegen', 'https://tomaszfutcode.free.nf/jugadoresFutcode/18_Marc-André_ter_Stegen.png', 33, 1, 22.4, 0, 95.20, 3, 'NORMAL', 'ARQUERO', 76, NULL),
+(27, 'Alisson', 'Becker', 'https://tomaszfutcode.free.nf/jugadoresFutcode/19_Alisson_Becker.webp', 32, 1, 24.6, 0, 95.70, 2, 'NORMAL', 'ARQUERO', 76, NULL),
+(28, 'Ederson', 'Moraes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/20_Ederson_Moraes.png', 31, 31, 27.8, 0, 95.40, 2, 'NORMAL', 'ARQUERO', 8, NULL),
+(29, 'Antonio', 'Rüdiger', 'https://tomaszfutcode.free.nf/jugadoresFutcode/21_Antonio_Rüdiger.webp', 31, 2, 23.5, 0, 95.10, 12, 'NORMAL', 'DEFENSOR', 9, NULL),
+(30, 'Marquinhos', 'Marcos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/22_Marquinhos_Marcos.png', 30, 5, 26.3, 0, 95.60, 2, 'NORMAL', 'DEFENSOR', 76, NULL),
+(31, 'João', 'Cancelo', 'https://tomaszfutcode.free.nf/jugadoresFutcode/23_João_Cancelo.png', 30, 3, 21.9, 0, 95.30, 11, 'NORMAL', 'DEFENSOR', 76, NULL),
+(32, 'Trent', 'Alexander-Arnold', 'https://tomaszfutcode.free.nf/jugadoresFutcode/24_Trent_Alexander-Arnold.webp', 26, 66, 30.0, 0, 95.00, 7, 'NORMAL', 'DEFENSOR', 76, NULL),
+(33, 'Andrew', 'Robertson', 'https://tomaszfutcode.free.nf/jugadoresFutcode/25_Andrew_Robertson.png', 30, 26, 24.1, 0, 94.80, 7, 'NORMAL', 'DEFENSOR', 76, NULL),
+(34, 'Theo', 'Hernández', 'https://tomaszfutcode.free.nf/jugadoresFutcode/26_Theo_Hernández.png', 28, 19, 28.7, 0, 94.70, 6, 'NORMAL', 'DEFENSOR', 5, NULL),
+(35, 'Achraf', 'Hakimi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/27_Achraf_Hakimi.webp', 26, 2, 19.2, 0, 94.60, 2, 'NORMAL', 'DEFENSOR', 76, NULL),
+(36, 'Paul', 'Pogba', 'https://tomaszfutcode.free.nf/jugadoresFutcode/28_Paul_Pogba.png', 31, 6, 26.8, 0, 94.50, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
+(37, 'Marco', 'Verratti', 'https://tomaszfutcode.free.nf/jugadoresFutcode/29_Marco_Verratti.png', 32, 8, 25.3, 0, 94.40, 6, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL),
+(38, 'Son', 'Heung-min', 'https://tomaszfutcode.free.nf/jugadoresFutcode/30_Son_Heung-min.png', 32, 7, 48.1, 0, 97.50, 13, 'RARO', 'DELANTERO', 9, NULL),
+(39, 'Dusan', 'Vlahović', 'https://tomaszfutcode.free.nf/jugadoresFutcode/31_Dusan_Vlahović.webp', 24, 9, 22.7, 0, 94.30, 6, 'NORMAL', 'DELANTERO', 10, NULL),
+(40, 'Phil', 'Foden', 'https://tomaszfutcode.free.nf/jugadoresFutcode/42_Phil_Foden.webp', 24, 47, 22.7, 0, 93.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 2, NULL),
+(41, 'Bernardo', 'Silva', 'https://tomaszfutcode.free.nf/jugadoresFutcode/43_Bernardo_Silva.png', 30, 20, 49.3, 0, 96.30, 11, 'RARO', 'MEDIOCAMPISTA', 3, NULL),
+(42, 'Rafael', 'Leão', 'https://tomaszfutcode.free.nf/jugadoresFutcode/44_Rafael_Leão.webp', 25, 17, 25.8, 0, 93.10, 11, 'NORMAL', 'DELANTERO', 4, NULL),
+(43, 'Hugo', 'Lloris', 'https://tomaszfutcode.free.nf/jugadoresFutcode/45_Hugo_Lloris.png', 38, 1, 19.4, 0, 93.00, 4, 'NORMAL', 'ARQUERO', 5, NULL),
+(44, 'Keylor', 'Navas', 'https://tomaszfutcode.free.nf/jugadoresFutcode/46_Keylor_Navas.png', 37, 1, 28.6, 0, 92.90, 10, 'NORMAL', 'ARQUERO', 6, NULL),
+(45, 'David', 'de Gea', 'https://tomaszfutcode.free.nf/jugadoresFutcode/47_David_de_Gea.png', 34, 1, 23.5, 0, 92.80, 3, 'NORMAL', 'ARQUERO', 7, NULL),
+(46, 'Mike', 'Maignan', 'https://tomaszfutcode.free.nf/jugadoresFutcode/48_Mike_Maignan.webp', 29, 16, 26.9, 0, 92.70, 4, 'NORMAL', 'ARQUERO', 8, NULL),
+(47, 'Edin', 'Džeko', 'https://tomaszfutcode.free.nf/jugadoresFutcode/49_Edin_Džeko.png', 38, 9, 21.3, 0, 92.60, 6, 'NORMAL', 'DELANTERO', 9, NULL),
+(48, 'Memphis', 'Depay', 'https://tomaszfutcode.free.nf/jugadoresFutcode/50_Memphis_Depay.png', 30, 9, 27.7, 0, 92.50, 12, 'NORMAL', 'DELANTERO', 10, NULL),
+(49, 'Gabriel', 'Jesus', 'https://tomaszfutcode.free.nf/jugadoresFutcode/51_Gabriel_Jesus.webp', 27, 9, 24.2, 0, 92.40, 2, 'NORMAL', 'DELANTERO', 2, NULL),
+(50, 'Raheem', 'Sterling', 'https://tomaszfutcode.free.nf/jugadoresFutcode/52_Raheem_Sterling.png', 29, 7, 28.8, 0, 92.30, 7, 'NORMAL', 'DELANTERO', 3, NULL),
+(51, 'João', 'Félix', 'https://tomaszfutcode.free.nf/jugadoresFutcode/53_João_Félix.png', 25, 11, 20.4, 0, 92.20, 11, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(52, 'Alejandro', 'Garnacho', 'https://tomaszfutcode.free.nf/jugadoresFutcode/54_Alejandro_Garnacho.png', 21, 17, 29.1, 0, 91.50, 1, 'NORMAL', 'DELANTERO', 5, NULL),
+(53, 'Francisco', 'Trincão', 'https://tomaszfutcode.free.nf/jugadoresFutcode/55_Francisco_Trincão.webp', 24, 21, 22.6, 0, 91.40, 11, 'NORMAL', 'DELANTERO', 6, NULL),
+(54, 'Ansu', 'Fati', 'https://tomaszfutcode.free.nf/jugadoresFutcode/56_Ansu_Fati.png', 22, 10, 25.3, 0, 91.30, 3, 'NORMAL', 'DELANTERO', 7, NULL),
+(55, 'Rodrygo', 'Goes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/57_Rodrygo_Goes.png', 23, 11, 21.7, 0, 91.20, 2, 'NORMAL', 'DELANTERO', 8, NULL),
+(56, 'Ferran', 'Torres', 'https://tomaszfutcode.free.nf/jugadoresFutcode/58_Ferran_Torres.png', 24, 7, 26.4, 0, 91.10, 3, 'NORMAL', 'DELANTERO', 9, NULL),
+(57, 'Gonçalo', 'Ramos', 'https://tomaszfutcode.free.nf/jugadoresFutcode/59_Gonçalo_Ramos.webp', 23, 9, 23.9, 0, 91.00, 11, 'NORMAL', 'DELANTERO', 10, NULL),
+(58, 'Darwin', 'Núñez', 'https://tomaszfutcode.free.nf/jugadoresFutcode/60_Darwin_Núñez.webp', 25, 19, 28.1, 0, 92.10, 9, 'NORMAL', 'DELANTERO', 11, NULL),
+(59, 'Sebastien', 'Haller', 'https://tomaszfutcode.free.nf/jugadoresFutcode/61_Sebastien_Haller.png', 30, 9, 19.8, 0, 92.00, 12, 'NORMAL', 'DELANTERO', 2, NULL),
+(60, 'Victor', 'Osimhen', 'https://tomaszfutcode.free.nf/jugadoresFutcode/62_Victor_Osimhen.webp', 26, 9, 29.5, 0, 91.90, 8, 'NORMAL', 'DELANTERO', 76, NULL),
+(61, 'Dušan', 'Tadić', 'https://tomaszfutcode.free.nf/jugadoresFutcode/63_Dušan_Tadić.png', 35, 10, 22.2, 0, 91.80, 13, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(62, 'Lucas', 'Paquetá', 'https://tomaszfutcode.free.nf/jugadoresFutcode/64_Lucas_Paquetá.png', 27, 11, 26.7, 0, 91.70, 2, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
+(63, 'James', 'Maddison', 'https://tomaszfutcode.free.nf/jugadoresFutcode/65_James_Maddison.png', 28, 10, 21.4, 0, 91.60, 7, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
+(64, 'Karim', 'Benzema', 'https://tomaszfutcode.free.nf/jugadoresFutcode/66_Karim_Benzema.png', 37, 9, 95.6, 0, 98.50, 3, 'LEYENDA', 'DELANTERO', 7, NULL),
+(65, 'Harry', 'Kane', 'https://tomaszfutcode.free.nf/jugadoresFutcode/67_Harry_Kane.png', 31, 10, 81.3, 0, 98.00, 7, 'EPICO', 'DELANTERO', 8, NULL),
+(66, 'Antoine', 'Griezmann', 'https://tomaszfutcode.free.nf/jugadoresFutcode/68_Antoine_Griezmann.webp', 33, 7, 46.9, 0, 97.30, 3, 'RARO', 'MEDIOCAMPISTA', 9, NULL),
+(67, 'Romelu', 'Lukaku', 'https://tomaszfutcode.free.nf/jugadoresFutcode/69_Romelu_Lukaku.png', 31, 9, 43.7, 0, 96.60, 6, 'RARO', 'DELANTERO', 10, NULL),
+(68, 'Paulo', 'Dybala', 'https://tomaszfutcode.free.nf/jugadoresFutcode/70_Paulo_Dybala.png', 30, 21, 45.2, 0, 96.20, 1, 'RARO', 'MEDIOCAMPISTA', 1, NULL),
+(69, 'Jadon', 'Sancho', 'https://tomaszfutcode.free.nf/jugadoresFutcode/71_Jadon_Sancho.png', 24, 25, 23.8, 0, 95.70, 7, 'NORMAL', 'DELANTERO', 2, NULL),
+(70, 'Marcus', 'Rashford', 'https://tomaszfutcode.free.nf/jugadoresFutcode/72_Marcus_Rashford.webp', 26, 10, 27.1, 0, 95.50, 7, 'NORMAL', 'DELANTERO', 3, NULL),
+(71, 'Jack', 'Grealish', 'https://tomaszfutcode.free.nf/jugadoresFutcode/73_Jack_Grealish.png', 28, 7, 22.5, 0, 95.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 76, NULL),
+(72, 'Mikel', 'Oyarzabal', 'https://tomaszfutcode.free.nf/jugadoresFutcode/74_Mikel_Oyarzabal.png', 27, 10, 28.7, 0, 94.90, 3, 'NORMAL', 'DELANTERO', 5, NULL),
+(73, 'Wilfried', 'Zaha', 'https://tomaszfutcode.free.nf/jugadoresFutcode/75_Wilfried_Zaha.png', 31, 11, 25.3, 0, 94.60, 13, 'NORMAL', 'DELANTERO', 6, NULL),
+(74, 'Dominic', 'Calvert-Lewin', 'https://tomaszfutcode.free.nf/jugadoresFutcode/calvert.png', 27, 9, 18.9, 0, 94.40, 7, 'NORMAL', 'DELANTERO', 7, NULL),
+(75, 'Tammy', 'Abraham', 'https://tomaszfutcode.free.nf/jugadoresFutcode/77_Tammy_Abraham.webp', 26, 9, 26.4, 0, 94.20, 7, 'NORMAL', 'DELANTERO', 8, NULL),
+(76, 'Olivier', 'Giroud', 'https://tomaszfutcode.free.nf/jugadoresFutcode/78_Olivier_Giroud.webp', 37, 9, 24.6, 0, 94.00, 4, 'NORMAL', 'DELANTERO', 76, NULL),
+(77, 'Arkadiusz', 'Milik', 'https://tomaszfutcode.free.nf/jugadoresFutcode/79_Arkadiusz_Milik.webp', 30, 99, 27.8, 0, 93.80, 6, 'NORMAL', 'DELANTERO', 76, NULL),
+(78, 'Sebastian', 'Haller', 'https://tomaszfutcode.free.nf/jugadoresFutcode/80_Sebastian_Haller.png', 29, 22, 20.2, 0, 93.60, 12, 'NORMAL', 'DELANTERO', 11, NULL),
+(79, 'Ivan', 'Toney', 'https://tomaszfutcode.free.nf/jugadoresFutcode/81_Ivan_Toney.webp', 28, 17, 29.5, 0, 93.40, 7, 'NORMAL', 'DELANTERO', 2, NULL),
+(80, 'Patrik', 'Schick', 'https://tomaszfutcode.free.nf/jugadoresFutcode/82_Patrik_Schick.png', 28, 14, 23.1, 0, 93.20, 5, 'NORMAL', 'DELANTERO', 3, NULL),
+(81, 'Florian', 'Wirtz', 'https://tomaszfutcode.free.nf/jugadoresFutcode/83_Florian_Wirtz.png', 21, 10, 25.7, 0, 93.00, 5, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(82, 'Nicolò', 'Zaniolo', 'https://tomaszfutcode.free.nf/jugadoresFutcode/84_Nicolò_Zaniolo.webp', 24, 22, 19.3, 0, 92.80, 6, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
+(83, 'Houssem', 'Aouar', 'https://tomaszfutcode.free.nf/jugadoresFutcode/85_Houssem_Aouar.png', 26, 8, 29.8, 0, 92.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 6, NULL),
+(84, 'James', 'Milner', 'https://tomaszfutcode.free.nf/jugadoresFutcode/86_James_Milner.png', 38, 7, 26.4, 0, 92.40, 7, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
+(85, 'Jordan', 'Henderson', 'https://tomaszfutcode.free.nf/jugadoresFutcode/87_Jordan_Henderson.png', 34, 8, 21.6, 0, 92.20, 7, 'NORMAL', 'MEDIOCAMPISTA', 8, NULL),
+(86, 'Youri', 'Tielemans', 'https://tomaszfutcode.free.nf/jugadoresFutcode/88_Youri_Tielemans.webp', 27, 9, 27.1, 0, 92.00, 14, 'NORMAL', 'MEDIOCAMPISTA', 9, NULL),
+(87, 'Renato', 'Sanches', 'https://tomaszfutcode.free.nf/jugadoresFutcode/89_Renato_Sanches.png', 26, 18, 23.7, 0, 91.80, 11, 'NORMAL', 'MEDIOCAMPISTA', 10, NULL),
+(88, 'Weston', 'McKennie', 'https://tomaszfutcode.free.nf/jugadoresFutcode/90_Weston_McKennie.webp', 25, 16, 28.1, 0, 91.20, 13, 'NORMAL', 'MEDIOCAMPISTA', 11, NULL),
+(89, 'Kalvin', 'Phillips', 'https://tomaszfutcode.free.nf/jugadoresFutcode/91_Kalvin_Phillips.png', 28, 15, 26.9, 0, 91.00, 7, 'NORMAL', 'MEDIOCAMPISTA', 12, NULL),
+(90, 'Declan', 'Rice', 'https://tomaszfutcode.free.nf/jugadoresFutcode/92_Declan_Rice.webp', 25, 6, 32.7, 0, 90.80, 7, 'NORMAL', 'MEDIOCAMPISTA', 13, NULL),
+(91, 'Wilfred', 'Ndidi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/93_Wilfred_Ndidi.png', 27, 25, 32.5, 0, 90.60, 14, 'NORMAL', 'MEDIOCAMPISTA', 14, NULL),
+(92, 'Sergio', 'Busquets', 'https://tomaszfutcode.free.nf/jugadoresFutcode/94_Sergio_Busquets.png', 36, 5, 24.3, 0, 90.40, 3, 'NORMAL', 'MEDIOCAMPISTA', 3, NULL),
+(93, 'Rodrigo', 'De Paul', 'https://tomaszfutcode.free.nf/jugadoresFutcode/95_Rodrigo_De_Paul.webp', 30, 7, 22.1, 0, 90.20, 1, 'NORMAL', 'MEDIOCAMPISTA', 4, NULL),
+(94, 'Lucas', 'Torreira', 'https://tomaszfutcode.free.nf/jugadoresFutcode/96_Lucas_Torreira.png', 29, 14, 21.9, 0, 90.00, 9, 'NORMAL', 'MEDIOCAMPISTA', 5, NULL),
+(95, 'Leandro', 'Paredes', 'https://tomaszfutcode.free.nf/jugadoresFutcode/97_Leandro_Paredes.png', 30, 8, 51.7, 0, 59.80, 1, 'NORMAL', 'MEDIOCAMPISTA', 76, NULL),
+(96, 'Matteo', 'Guendouzi', 'https://tomaszfutcode.free.nf/jugadoresFutcode/98_Matteo_Guendouzi.webp', 27, 16, 46.5, 0, 89.60, 4, 'NORMAL', 'MEDIOCAMPISTA', 7, NULL),
+(97, 'Ryan', 'Gravenberch', 'https://tomaszfutcode.free.nf/jugadoresFutcode/99_Ryan_Gravenberch.png', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', 76, NULL);
 
 -- --------------------------------------------------------
-
 
 --
 -- Estructura de tabla para la tabla `pais`
@@ -686,9 +682,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `email`, `password`, `rol`, `activo`, `equipo_id`, `monedas`) VALUES
-(1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1, NULL),
-(4, 'urielestebanyurquina@gmail.com', '$2a$10$yXWLYL6XZvYS99xh2v9atun9rD/AhsilknimfnvrzYj90FD0S5CsK', 'USER', 1, NULL, NULL),
-(5, 'ejemplo@gmail.com', '$2a$10$7UXQl8PGShG6xVhinhMmu.GHL80RA8ZGNUKh48X.DUnF00x4Sxu4.', 'USER', 1, NULL, NULL);
+(1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -832,13 +826,13 @@ ALTER TABLE `club`
 -- AUTO_INCREMENT de la tabla `equipo`
 --
 ALTER TABLE `equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo_torneo`
 --
 ALTER TABLE `equipo_torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT de la tabla `esquema`
@@ -868,7 +862,7 @@ ALTER TABLE `fase`
 -- AUTO_INCREMENT de la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1538;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1549;
 
 --
 -- AUTO_INCREMENT de la tabla `formato_torneo`
@@ -880,7 +874,7 @@ ALTER TABLE `formato_torneo`
 -- AUTO_INCREMENT de la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT de la tabla `pais`
@@ -910,7 +904,7 @@ ALTER TABLE `torneo`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Restricciones para tablas volcadas
@@ -947,8 +941,8 @@ ALTER TABLE `evento_partido`
 -- Filtros para la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  ADD CONSTRAINT `formacion_equipo_ibfk_1` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `formacion_equipo_ibfk_2` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK1mi0g4v6h0cgspm60xwh1lhcy` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK7i67ejgicdvtoavo5ekifakuw` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `jugador`
@@ -961,28 +955,15 @@ ALTER TABLE `jugador`
 -- Filtros para la tabla `partido`
 --
 ALTER TABLE `partido`
-  ADD CONSTRAINT `partido_ibfk_1` FOREIGN KEY (`equipo_local_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `partido_ibfk_2` FOREIGN KEY (`equipo_visitante_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `partido_ibfk_3` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK1akyk92mjh1v27nu8fhufpal3` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK7d0ff294y8ul2ego1km5r0tmq` FOREIGN KEY (`equipo_local_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FKksi4gq2o9almp8a1gfnadjfu1` FOREIGN KEY (`equipo_visitante_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `torneo`
 --
 ALTER TABLE `torneo`
-  ADD CONSTRAINT `torneo_ibfk_1` FOREIGN KEY (`formato_torneo_id`) REFERENCES `formato_torneo` (`id`) ON DELETE SET NULL;
-
---
--- Filtros para la tabla `torneo_copa`
---
-ALTER TABLE `torneo_copa`
-  ADD CONSTRAINT `torneo_copa_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`),
-  ADD CONSTRAINT `torneo_copa_ibfk_2` FOREIGN KEY (`id_fase`) REFERENCES `fase` (`id`);
-
---
--- Filtros para la tabla `torneo_liga`
---
-ALTER TABLE `torneo_liga`
-  ADD CONSTRAINT `torneo_liga_ibfk_1` FOREIGN KEY (`id`) REFERENCES `torneo` (`id`);
+  ADD CONSTRAINT `FKfm7k6pcp9qv5s3k11hn20326b` FOREIGN KEY (`formato_torneo_id`) REFERENCES `formato_torneo` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

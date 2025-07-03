@@ -54,25 +54,20 @@ public class PlantillaController {
    @GetMapping("/plantilla")
    public String showViewPlantilla(Model model, HttpServletRequest request) {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
-      System.out.println("EL ID DE USUARIO EN SESSION ES: " + usuarioId);
       if (usuarioId == null) {
-         System.out.println("No hay usuario autenticado. Redirigiendo a login.");
          return "redirect:/login";
       }
 
       Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
-      System.out.println("EL USUARIO EN SESSION ES: " + usuario);
       if (usuario == null) {
-         System.out.println("Usuario no encontrado para ID: " + usuarioId);
          return "redirect:/login";
       }
 
       Long equipoId = usuario.getEquipo() != null ? usuario.getEquipo().getId() : null;
       if (equipoId == null) {
-         System.out.println("El usuario no tiene un equipo asignado. Redirigiendo a nuevo-equipo.");
+
          return "redirect:/nuevo-equipo";
       }
-      System.out.println("EL EQUIPO EN SESSION ES: " + equipoId);
 
       EsquemaDTO formacion = service.getFormacionPorEquipoId(equipoId);
 

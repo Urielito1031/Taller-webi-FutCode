@@ -48,7 +48,6 @@ public class EquipoServiceImpl implements EquipoService{
       esquema.setId(1L);
       entity.setEsquema(esquema);
 
-      // Convertir y persistir jugadores si existen
       if (equipoDTO.getJugadores() != null && !equipoDTO.getJugadores().isEmpty()) {
          List<Jugador> jugadores = equipoDTO.getJugadores().stream()
            .map(jugadorDTO -> {

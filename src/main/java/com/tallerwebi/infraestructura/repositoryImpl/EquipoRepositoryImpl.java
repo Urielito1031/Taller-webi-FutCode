@@ -31,7 +31,6 @@ public class EquipoRepositoryImpl implements EquipoRepository{
 
    @Override
    public void save(Equipo equipo){
-      System.out.println("Estado de equipo en repository equipo: " + equipo);
        getSession().saveOrUpdate(equipo);
    }
 

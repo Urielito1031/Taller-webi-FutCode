@@ -4,9 +4,7 @@ import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
-import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 

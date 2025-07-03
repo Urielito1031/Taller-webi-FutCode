@@ -51,7 +51,19 @@ public class JugadorServiceImpl implements JugadorService{
    }
 
    @Override
-   public List<Jugador> sortearJugadoresIniciales(int cantidad) {
+   public void cargarJugadoresAlEquipo(EquipoDTO equipo){
+      List<Jugador> listaJugadoresEntities = sortearJugadoresIniciales(14);
+
+      List<JugadorDTO> listaDeJugadoresDto = new ArrayList<>();
+
+      for(Jugador j: listaJugadoresEntities){
+         listaDeJugadoresDto.add(j.convertToDTO());
+      }
+
+      equipo.setJugadores(listaDeJugadoresDto);
+   }
+
+   private List<Jugador> sortearJugadoresIniciales(int cantidad){
 
       List<Jugador> jugadoresEquipo = new ArrayList<>();
 

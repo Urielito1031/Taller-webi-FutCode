@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Entity
 @Table(name = "jugador")
-public class Jugador {
+public class Jugador{
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
@@ -73,17 +73,17 @@ public class Jugador {
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
 
-   @ManyToOne (fetch = FetchType.EAGER)
-   @JoinColumn (name = "sobre_id")
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "sobre_id")
    private Sobre sobre;
 
 
-   public Jugador(String nombre, RarezaJugador rarezaJugador) {
+   public Jugador(String nombre,RarezaJugador rarezaJugador){
       this.nombre = nombre;
       this.rarezaJugador = rarezaJugador;
    }
 
-   public Jugador() {
+   public Jugador(){
 
    }
 

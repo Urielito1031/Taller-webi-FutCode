@@ -74,46 +74,44 @@ CREATE TABLE `equipo` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `club_id` int(11) DEFAULT NULL,
-  `esquema_id` int(11) NOT NULL DEFAULT 1,
-  `usuario_id` bigint(20) DEFAULT NULL
+  `esquema_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `equipo`
 --
 
-INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`, `usuario_id`) VALUES
-(1, 'River Plate Titulares', 1, 1, NULL),
-(2, 'Flamengo Juveniles', 2, 2, NULL),
-(3, 'Barcelona B', 3, 3, NULL),
-(4, 'Bayern Múnich Sub-20', 4, 4, NULL),
-(5, 'AC Milan Primavera', 5, 5, NULL),
-(6, 'Manchester United U21', 6, 4, NULL),
-(7, 'Liverpool Reserves', 7, 1, NULL),
-(8, 'PSG B', 8, 1, NULL),
-(9, 'Juventus U19', 9, 3, NULL),
-(10, 'Chelsea Academy', 10, 2, NULL),
-(11, 'América Titulares', 11, 2, NULL),
-(12, 'Peñarol B', 12, 5, NULL),
-(13, 'Colo-Colo Proyección', 13, 3, NULL),
-(14, 'Atlético Madrid Juveniles', 14, 5, NULL),
-(15, 'Borussia Dortmund II', 15, 4, NULL),
-(16, 'Benfica B', 16, 5, NULL),
-(17, 'Ajax Sub-21', 17, 1, NULL),
-(18, 'Atlanta United B', 18, 1, NULL),
-(19, 'Celtic Youth', 19, 3, NULL),
-(20, 'Anderlecht U21', 20, 5, NULL),
-(21, 'Porto B', 21, 2, NULL),
-(22, 'PSV U19', 22, 4, NULL),
-(23, 'New York City FC II', 23, 5, NULL),
-(24, 'Rangers Academy', 23, 4, NULL),
-(25, 'Club Brugge Juveniles', 21, 1, NULL),
-(26, 'Benfica Legends', 16, 2, NULL),
-(27, 'Ajax Reservas', 17, 2, NULL),
-(28, 'Anderlecht B', 20, 2, NULL),
-(29, 'Celtic Reservas', 19, 3, NULL),
-(30, 'PSV Academy', 22, 2, NULL),
-(76, 'equipoNuevooo', NULL, 1, NULL);
+INSERT INTO `equipo` (`id`, `nombre`, `club_id`, `esquema_id`)
+VALUES (1, 'River Plate Titulares', 1, 1),
+       (2, 'Flamengo Juveniles', 2, 2),
+       (3, 'Barcelona B', 3, 3),
+       (4, 'Bayern Múnich Sub-20', 4, 4),
+       (5, 'AC Milan Primavera', 5, 5),
+       (6, 'Manchester United U21', 6, 4),
+       (7, 'Liverpool Reserves', 7, 1),
+       (8, 'PSG B', 8, 1),
+       (9, 'Juventus U19', 9, 3),
+       (10, 'Chelsea Academy', 10, 2),
+       (11, 'América Titulares', 11, 2),
+       (12, 'Peñarol B', 12, 5),
+       (13, 'Colo-Colo Proyección', 13, 3),
+       (14, 'Atlético Madrid Juveniles', 14, 5),
+       (15, 'Borussia Dortmund II', 15, 4),
+       (16, 'Benfica B', 16, 5),
+       (17, 'Ajax Sub-21', 17, 1),
+       (18, 'Atlanta United B', 18, 1),
+       (19, 'Celtic Youth', 19, 3),
+       (20, 'Anderlecht U21', 20, 5),
+       (21, 'Porto B', 21, 2),
+       (22, 'PSV U19', 22, 4),
+       (23, 'New York City FC II', 23, 5),
+       (24, 'Rangers Academy', 23, 4),
+       (25, 'Club Brugge Juveniles', 21, 1),
+       (26, 'Benfica Legends', 16, 2),
+       (27, 'Ajax Reservas', 17, 2),
+       (28, 'Anderlecht B', 20, 2),
+       (29, 'Celtic Reservas', 19, 3),
+       (30, 'PSV Academy', 22, 2);
 
 -- --------------------------------------------------------
 
@@ -429,6 +427,7 @@ CREATE TABLE `jugador` (
 --
 
 INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `imagen`, `edad`, `numero_camiseta`, `rating`, `lesionado`, `estado_fisico`, `pais_id`, `rareza_jugador`, `posicion`, `equipo_id`, `sobre_id`) VALUES
+
 (1, 'Emiliano', 'Martínez', 'https://futcodejugadores.free.nf/jugadores/emiliano_martinez.png', 31, 1, 88.0, 0, 95.00, 1, 'RARO', 'ARQUERO', 1, NULL),
 (2, 'Cristian', 'Romero', 'https://futcodejugadores.free.nf/jugadores/cristianRomero.png', 26, 23, 87.0, 0, 90.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
 (3, 'Nicolás', 'Otamendi', 'https://futcodejugadores.free.nf/jugadores/otamendi.png', 36, 3, 85.0, 0, 88.00, 1, 'RARO', 'DEFENSOR', 1, NULL),
@@ -826,13 +825,15 @@ ALTER TABLE `club`
 -- AUTO_INCREMENT de la tabla `equipo`
 --
 ALTER TABLE `equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT = 76;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo_torneo`
 --
 ALTER TABLE `equipo_torneo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT = 111;
 
 --
 -- AUTO_INCREMENT de la tabla `esquema`
@@ -862,7 +863,8 @@ ALTER TABLE `fase`
 -- AUTO_INCREMENT de la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1549;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT = 1538;
 
 --
 -- AUTO_INCREMENT de la tabla `formato_torneo`
@@ -874,7 +876,8 @@ ALTER TABLE `formato_torneo`
 -- AUTO_INCREMENT de la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT = 121;
 
 --
 -- AUTO_INCREMENT de la tabla `pais`
@@ -904,7 +907,8 @@ ALTER TABLE `torneo`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT = 6;
 
 --
 -- Restricciones para tablas volcadas
@@ -941,8 +945,8 @@ ALTER TABLE `evento_partido`
 -- Filtros para la tabla `formacion_equipo`
 --
 ALTER TABLE `formacion_equipo`
-  ADD CONSTRAINT `FK1mi0g4v6h0cgspm60xwh1lhcy` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK7i67ejgicdvtoavo5ekifakuw` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
+    ADD CONSTRAINT `formacion_equipo_ibfk_1` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+    ADD CONSTRAINT `formacion_equipo_ibfk_2` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `jugador`
@@ -955,9 +959,9 @@ ALTER TABLE `jugador`
 -- Filtros para la tabla `partido`
 --
 ALTER TABLE `partido`
-  ADD CONSTRAINT `FK1akyk92mjh1v27nu8fhufpal3` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK7d0ff294y8ul2ego1km5r0tmq` FOREIGN KEY (`equipo_local_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FKksi4gq2o9almp8a1gfnadjfu1` FOREIGN KEY (`equipo_visitante_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE;
+    ADD CONSTRAINT `partido_ibfk_1` FOREIGN KEY (`equipo_local_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+    ADD CONSTRAINT `partido_ibfk_2` FOREIGN KEY (`equipo_visitante_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+    ADD CONSTRAINT `partido_ibfk_3` FOREIGN KEY (`torneo_id`) REFERENCES `torneo` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `torneo`

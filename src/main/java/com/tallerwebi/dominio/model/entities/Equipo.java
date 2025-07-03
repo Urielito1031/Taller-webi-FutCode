@@ -15,8 +15,8 @@ import java.util.List;
 @Table(name = "equipo")
 public class Equipo {
    @Id
-   @Column(name = "id", nullable = false)
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id", nullable = false)
    private Long id;
 
    @javax.validation.constraints.Size(max = 100)
@@ -62,6 +62,10 @@ public class Equipo {
       Equipo entity = new Equipo();
       entity.setId(dto.getId());
       entity.setNombre(dto.getNombre());
+
+      Usuario usuario = new Usuario();
+      usuario.setId(dto.getUsuarioId());
+      entity.setUsuario(usuario);
 
       if (dto.getClub() != null) {
          Club club = new Club();

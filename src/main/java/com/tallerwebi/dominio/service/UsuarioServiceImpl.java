@@ -157,8 +157,9 @@ public class UsuarioServiceImpl implements  UsuarioService{
     }
 
     @Override
-    public void modificar(Usuario usuario){
-        this.repositorioUsuario.modificar(usuario);
+    public void actualizar(Usuario usuario) {
+        repositorioUsuario.actualizar(usuario);
     }
+
 
 }

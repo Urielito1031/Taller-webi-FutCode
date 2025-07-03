@@ -9,11 +9,9 @@ public interface RepositorioUsuario {
     Usuario buscarUsuario(String email);
     void guardar(Usuario usuario);
     Usuario buscar(String email);
-    void modificar(Usuario usuario);
     Usuario buscarUsuarioPorId(Long id);
 
     void borrarSobreAUsuario(Long idUsuario, Long idSobre);
 
-    void asignarEquipoAUsuario(Long usuarioId,Long equipoId);
-}
+    void actualizar(Usuario usuario);}
 

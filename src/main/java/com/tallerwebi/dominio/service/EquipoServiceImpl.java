@@ -1,7 +1,7 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 public class EquipoServiceImpl implements EquipoService{
 
    private final EquipoRepository repository;
-   private final RepositorioUsuario repositorioUsuario;
+   private final UsuarioService usuarioService;
 
    @Autowired
-   public EquipoServiceImpl(EquipoRepository repository,RepositorioUsuario repositorioUsuario) {
+   public EquipoServiceImpl(EquipoRepository repository, UsuarioService usuarioService) {
       this.repository = repository;
-      this.repositorioUsuario = repositorioUsuario;
+      this.usuarioService = usuarioService;
    }
 
    @Override
@@ -29,16 +29,28 @@ public class EquipoServiceImpl implements EquipoService{
       if(!isValid(dto)){
          throw new IllegalArgumentException("El nombre no puede ser vacio");
       }
-      Equipo equipoEntity = Equipo.convertToEntity(dto);
+      Equipo entity = Equipo.convertToEntity(dto);
 
-      repository.save(equipoEntity);
-      if (dto.getUsuarioId() != null) {
-         repositorioUsuario.asignarEquipoAUsuario(dto.getUsuarioId(), equipoEntity.getId());
-      }
-
-      dto.setId(equipoEntity.getId());
-      System.out.println("Equipo guardado con éxito: " + equipoEntity);
+      repository.save(entity);
    }
+
+   @Override
+   public void saveBoth(EquipoDTO equipo, Usuario usuario) {
+      if(!isValid(equipo)){
+         throw new IllegalArgumentException("El nombre no puede ser vacio");
+      }
+      Equipo entity = Equipo.convertToEntity(equipo);
+      entity.setUsuario(usuario);
+      repository.save(entity);
+
+
+
+      usuario.setEquipo(entity);
+      usuarioService.actualizar(usuario);
+   }
+
+
+
 
 
    private boolean isValid(EquipoDTO equipo){
@@ -48,8 +60,8 @@ public class EquipoServiceImpl implements EquipoService{
 
    @Override
    public List<EquipoDTO> getAll(){
-    List<Equipo>equipos = repository.getAll();
-    return equipos.stream().map(Equipo::convertToDTO).collect(Collectors.toList());
+      List<Equipo>equipos = repository.getAll();
+      return equipos.stream().map(Equipo::convertToDTO).collect(Collectors.toList());
    }
 
 

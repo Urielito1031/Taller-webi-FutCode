@@ -67,65 +67,35 @@ public class EquipoInicialControlador {
 
    @RequestMapping(path = "/sorteoEquipoInicial", method = RequestMethod.GET)
    public ModelAndView sorteEquipoInicial(HttpSession session) {
+
       EquipoDTO equipo = (EquipoDTO) session.getAttribute("equipo");
-      if (equipo == null) {
-         System.out.println("sorteoEquipoInicial: No se encontró el equipo en la sesión.");
+
+      if(equipo == null){
          return new ModelAndView("redirect:/nuevo-equipo");
       }
-      System.out.println("sorteoEquipoInicial: Equipo encontrado en la sesión: " + equipo.getNombre());
 
-      List<Jugador> jugadores = this.jugadorService.sortearJugadoresIniciales(14);
-      List<JugadorDTO> jugadoresDto = new ArrayList<>();
-      for (Jugador jugador : jugadores) {
-         jugadoresDto.add(jugador.convertToDTO());
-      }
-      for (JugadorDTO jugadorDTO : jugadoresDto) {
-         jugadorDTO.setEquipo(equipo);
-      }
-      equipo.setJugadores(jugadoresDto);
+      this.jugadorService.cargarJugadoresAlEquipo(equipo);
+
       session.setAttribute("equipo", equipo);
 
       Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
       if (usuarioId == null) {
-         System.out.println("sorteoEquipoInicial: No se encontró el ID de usuario en la sesión.");
-         return new ModelAndView("redirect:/login");
+         throw new IllegalStateException("No se encontró el usuarioId en la sesión.");
       }
-      System.out.println("sorteoEquipoInicial: ID de usuario encontrado en la sesión: " + usuarioId);
       Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
       if (usuario == null) {
-         return new ModelAndView("redirect:/login");
+         throw new IllegalStateException("No se encontró el Usuario con ID: " + usuarioId);
       }
 
-      Equipo equipoEntity = Equipo.convertToEntity(equipo);
-      equipoEntity.setUsuario(usuario);
-      equipoEntity.setJugadores(jugadores);
-
-      Esquema esquema = new Esquema();
-      esquema.setId(1L);
-      equipoEntity.setEsquema(esquema);
-
-      // Asociar jugadores al equipo
-      for (Jugador jugador : jugadores) {
-         jugador.setEquipo(equipoEntity);
-      }
-
-      System.out.println("EquipoEntity antes de guardar, controlador: " + equipoEntity);
 
 
-      equipo.setUsuarioId(usuarioId);
-      this.equipoService.save(equipo);
-      System.out.println("Equipo guardado con ID: " + equipo.getId());
+      equipo.setUsuarioId(usuario.getId());
+      this.equipoService.saveBoth(equipo, usuario);
 
-      usuario.setEquipo(equipoEntity);
-      this.usuarioService.modificar(usuario);
-      System.out.println("Usuario actualizado con equipo ID: " + (usuario.getEquipo() != null ? usuario.getEquipo().getId() : "null"));
 
       ModelAndView mav = new ModelAndView("sorteoEquipo");
       mav.addObject("equipo", equipo);
       mav.addObject("nombreEquipo", equipo.getNombre());
       return mav;
    }
-
-
-
-    }
+}

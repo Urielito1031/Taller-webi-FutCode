@@ -44,10 +44,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
               .uniqueResult();
     }
 
-    @Override
-    public void modificar(Usuario usuario) {
-        getCurrentSession().update(usuario);
-    }
+
 
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
@@ -96,13 +93,10 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void asignarEquipoAUsuario(Long usuarioId, Long equipoId) {
-        getCurrentSession()
-          .createQuery("UPDATE Usuario u SET u.equipo_id = :equipoId WHERE u.id = :usuarioId")
-          .setParameter("equipoId", equipoId)
-          .setParameter("usuarioId", usuarioId)
-          .executeUpdate();
+    public void actualizar(Usuario usuario) {
+        getCurrentSession().update(usuario);
     }
+
 
 
 }

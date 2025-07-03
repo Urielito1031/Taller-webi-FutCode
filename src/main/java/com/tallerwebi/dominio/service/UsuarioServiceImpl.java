@@ -4,9 +4,8 @@ import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
 import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.factory.SobreFactory;
-import com.tallerwebi.dominio.model.entities.Jugador;
-import com.tallerwebi.dominio.model.entities.Sobre;
-import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.dominio.model.entities.*;
+import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
@@ -54,12 +53,10 @@ public class UsuarioServiceImpl implements  UsuarioService{
         }
     }
 
-
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
         return this.repositorioUsuario.buscarUsuarioPorId(id);
     }
-
 
     @Override
     public List<SobreDTO> obtenerSobresDelUsuario(Long id) {
@@ -72,31 +69,28 @@ public class UsuarioServiceImpl implements  UsuarioService{
         this.repositorioUsuario.borrarSobreAUsuario(idUsuario, idSobre);
     }
 
+    public SobreDTO convertirEntidadADTO(Sobre sobre) {
+        TipoSobre tipo;
 
-
-
-
-    private Sobre convertirDTOAEntidad(SobreDTO sobreDTO) {
-        Sobre sobre = SobreFactory.crearSobre(sobreDTO.getTipoSobre());
-//        sobre.setTipoSobre(sobreDTO.getTipoSobre());
-        sobre.setTitulo(sobreDTO.getTitulo());
-        sobre.setPrecio(sobreDTO.getPrecio());
-
-        if (sobreDTO.getJugadores() != null && !sobreDTO.getJugadores().isEmpty()) {
-            // sobre.setJugadores(convertirJugadoresDTO(sobreDTO.getJugadores()));
+        if (sobre instanceof SobreBronce) {
+            tipo = TipoSobre.BRONCE;
+        } else if (sobre instanceof SobrePlata) {
+            tipo = TipoSobre.PLATA;
+        } else if (sobre instanceof SobreOro) {
+            tipo = TipoSobre.ORO;
+        } else if (sobre instanceof SobreEspecial) {
+            tipo = TipoSobre.ESPECIAL;
+        } else {
+            throw new TipoDeSobreDesconocido();
         }
 
-        return sobre;
-    }
-
-    public SobreDTO convertirEntidadADTO(Sobre sobre) {
-
         SobreDTO sobreDTO = new SobreDTO();
-        sobreDTO.setId(sobre.getId());
-//        sobreDTO.setTipoSobre(sobre.getTipoSobre());
         sobreDTO.setTitulo(sobre.getTitulo());
         sobreDTO.setPrecio(sobre.getPrecio());
+        sobreDTO.setTipoSobre(tipo);
         sobreDTO.setImagenUrl(sobre.getImagenUrl());
+
+        sobreDTO.setId(sobre.getId());
 
 //      convertir jugadores del sobre JugadorDTO tambien
         if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {

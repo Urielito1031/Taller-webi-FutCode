@@ -34,11 +34,11 @@ public abstract class Sobre{
    @Column(name = "imagen_url")
    private String imagenUrl;
 
-   @ManyToOne (fetch = FetchType.EAGER)
-   @JoinColumn (name = "usuario_id")
+   @ManyToOne(fetch = FetchType.LAZY) // CAMBIO: LAZY en lugar de EAGER
+   @JoinColumn(name = "usuario_id")
    private Usuario usuario;
 
-   @OneToMany(mappedBy = "sobre", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy = "sobre", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // CAMBIO: LAZY
    private List<Jugador> jugadores;
 
    protected abstract void setearSobre();

@@ -28,15 +28,15 @@ public class Equipo {
    @JoinColumn(name = "club_id")
    private Club club;
 
-   @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "esquema_id")
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
+   @JoinColumn(name = "esquema_id", nullable = false)
    private Esquema esquema;
 
    @OneToOne
    @JoinColumn(name = "usuario_id")
    private Usuario usuario;
 
-   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true)
+   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER)
    private List<Jugador> jugadores = new ArrayList<>();
 
    public EquipoDTO convertToDTO() {
@@ -44,12 +44,14 @@ public class Equipo {
       dto.setId(this.id);
       dto.setNombre(this.nombre);
 
+
       if (this.club != null) {
          ClubDTO clubDTO = new ClubDTO();
          clubDTO.setId(this.club.getId());
          clubDTO.setNombre(this.club.getNombre());
          clubDTO.setPais(this.club.getPais());
          clubDTO.setImagen(this.club.getImagen());
+
          dto.setClub(clubDTO);
       }
 
@@ -77,6 +79,9 @@ public class Equipo {
    }
 
    public String toString(){
-      return "ID: " + this.id + "\n Nombre: " + this.nombre + " \nClub: " + this.club.getNombre();
+      return "ID: " + this.id + "\n Nombre: " + this.nombre +
+             "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
+             "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
+             "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
    }
 }

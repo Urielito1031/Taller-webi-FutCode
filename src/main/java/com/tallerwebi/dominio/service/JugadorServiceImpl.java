@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
@@ -74,6 +75,7 @@ public class JugadorServiceImpl implements JugadorService{
       }
 
       equipo.setJugadores(listaDeJugadoresDto);
+
    }
 
 

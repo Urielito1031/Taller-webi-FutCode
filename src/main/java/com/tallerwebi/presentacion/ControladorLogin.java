@@ -86,10 +86,13 @@ import javax.validation.Valid;
 
    @RequestMapping("/logout")
    public ModelAndView logout(HttpServletRequest request) {
-      request.getSession().invalidate();
+      HttpSession session = request.getSession(false);
+      if (session != null) {
+         session.invalidate();
+         System.out.println("Sesión invalidada correctamente.");
+      }
       return new ModelAndView("redirect:/login");
    }
-
 
 
    @RequestMapping(path = "/", method = RequestMethod.GET)

@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Esquema;
+import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
@@ -35,15 +37,32 @@ public class EquipoServiceImpl implements EquipoService{
    }
 
    @Override
-   public void saveBoth(EquipoDTO equipo, Usuario usuario) {
-      if(!isValid(equipo)){
-         throw new IllegalArgumentException("El nombre no puede ser vacio");
+   public void saveBoth(EquipoDTO equipoDTO, Usuario usuario) {
+      if (!isValid(equipoDTO)) {
+         throw new IllegalArgumentException("El nombre no puede ser vacío");
       }
-      Equipo entity = Equipo.convertToEntity(equipo);
+      // Convertir DTO a entidad
+      Equipo entity = Equipo.convertToEntity(equipoDTO);
       entity.setUsuario(usuario);
+
+      // Asignar esquema (asegúrate de que exista)
+      Esquema esquema = new Esquema();
+      esquema.setId(1L); // Ajusta según tu lógica o obténlo de la base de datos
+      entity.setEsquema(esquema);
+
+      // Convertir y persistir jugadores si existen
+      if (equipoDTO.getJugadores() != null && !equipoDTO.getJugadores().isEmpty()) {
+         List<Jugador> jugadores = equipoDTO.getJugadores().stream()
+           .map(jugadorDTO -> {
+              Jugador jugador = Jugador.convertToEntity(jugadorDTO);
+              jugador.setEquipo(entity);
+              return jugador;
+           })
+           .collect(Collectors.toList());
+         entity.setJugadores(jugadores);
+      }
+
       repository.save(entity);
-
-
 
       usuario.setEquipo(entity);
       usuarioService.actualizar(usuario);

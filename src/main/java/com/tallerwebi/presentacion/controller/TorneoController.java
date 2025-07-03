@@ -34,6 +34,7 @@ public class TorneoController {
       if(torneos.isEmpty()){
          model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
       }
+
       model.addAttribute("torneos",torneos);
       return "home";
    }

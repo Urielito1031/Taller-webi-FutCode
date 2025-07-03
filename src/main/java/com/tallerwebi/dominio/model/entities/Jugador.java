@@ -87,6 +87,41 @@ public class Jugador {
 
    }
 
+   public static Jugador convertToEntity(JugadorDTO jugadorDTO) {
+      if (jugadorDTO == null) {
+         return null;
+      }
+
+      Jugador jugador = new Jugador();
+      jugador.setId(jugadorDTO.getId());
+      jugador.setNombre(jugadorDTO.getNombre());
+      jugador.setApellido(jugadorDTO.getApellido());
+      jugador.setImagen(jugadorDTO.getImagen());
+      jugador.setEdad(jugadorDTO.getEdad());
+      jugador.setNumeroCamiseta(jugadorDTO.getNumeroCamiseta());
+      jugador.setRating(jugadorDTO.getRating());
+      jugador.setLesionado(jugadorDTO.getLesionado() != null ? jugadorDTO.getLesionado() : false);
+      jugador.setEstadoFisico(jugadorDTO.getEstadoFisico());
+      jugador.setRarezaJugador(jugadorDTO.getRarezaJugador());
+      jugador.setPosicion(jugadorDTO.getPosicionNatural());
+
+      if (jugadorDTO.getPaisOrigen() != null) {
+         Pais pais = new Pais();
+         pais.setId(jugadorDTO.getPaisOrigen().getId());
+         pais.setNombre(jugadorDTO.getPaisOrigen().getNombre());
+         jugador.setPais(pais);
+      }
+
+      if (jugadorDTO.getEquipo() != null) {
+         Equipo equipo = new Equipo();
+         equipo.setId(jugadorDTO.getEquipo().getId());
+         equipo.setNombre(jugadorDTO.getEquipo().getNombre());
+         jugador.setEquipo(equipo);
+      }
+
+
+      return jugador;
+   }
 
    public JugadorDTO convertToDTO() {
       JugadorDTO dto = new JugadorDTO();

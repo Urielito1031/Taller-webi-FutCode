@@ -1,15 +1,11 @@
 package com.tallerwebi.presentacion.controller;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.model.entities.Equipo;
-import com.tallerwebi.dominio.model.entities.Esquema;
-import com.tallerwebi.dominio.model.entities.Jugador;
+
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.service.EquipoService;
 import com.tallerwebi.dominio.service.JugadorService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
-import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -20,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Controller
 public class EquipoInicialControlador {
@@ -52,7 +46,6 @@ public class EquipoInicialControlador {
                                      BindingResult result,
                                      Model model) {
       if (result.hasErrors()) {
-         result.getAllErrors().forEach(System.out::println);
          model.addAttribute("errors", result.getAllErrors()); // Pasar errores al modelo
          return "creacionEquipo"; // Volver a la vista con los errores
       }

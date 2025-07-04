@@ -1,9 +1,12 @@
 package com.tallerwebi.presentacion.dto;
 
 import com.tallerwebi.dominio.model.entities.Equipo;
+import com.tallerwebi.dominio.model.entities.Esquema;
+import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,21 +15,22 @@ import java.util.List;
 
 public class EquipoDTO {
    private Long id;
+   @NotBlank(message = "El nombre del equipo no puede estar vacío")
    private String nombre;
    private ClubDTO club;
    private List<JugadorDTO> jugadores;
    private Double ratingEquipo;
-
+   private Long usuarioId;
    private EsquemaDTO formacionActual;
-   public EquipoDTO() {}
 
 
-   public EquipoDTO(String nombre, ClubDTO club) {
-      this.nombre = nombre;
-      this.club = club;
+
+   public EquipoDTO() {
       this.jugadores = new ArrayList<>();
       this.formacionActual = new EsquemaDTO();
+      this.formacionActual.setEsquema(FormacionEsquema.CUATRO_CUATRO_DOS);
    }
+
 
    public Double ratingEquipo(List<JugadorDTO> jugadores){
       double total = 0;
@@ -54,6 +58,7 @@ public class EquipoDTO {
       if (dto == null) {
          return null;
       }
+
       Equipo equipo = new Equipo();
       equipo.setId(dto.getId());
       equipo.setNombre(dto.getNombre());
@@ -62,8 +67,20 @@ public class EquipoDTO {
          equipo.setClub(dto.getClub().convertToEntity(dto.getClub()));
       }
 
+      if (dto.getFormacionActual() != null && dto.getFormacionActual().getId() != null) {
+         Esquema esquema = new Esquema();
+         esquema.setId(dto.getFormacionActual().getId());
+         equipo.setEsquema(esquema);
+      } else {
+
+         Esquema esquemaPorDefecto = new Esquema();
+         esquemaPorDefecto.setId(1L);
+         equipo.setEsquema(esquemaPorDefecto);
+      }
+
       return equipo;
    }
+
    public EquipoDTO convertFromEntity(Equipo equipo) {
       if (equipo == null) {
          return null;
@@ -76,6 +93,12 @@ public class EquipoDTO {
          dto.setClub(new ClubDTO().convertFromEntity(equipo.getClub()));
       }
 
+      if (equipo.getEsquema() != null) {
+         EsquemaDTO esquemaDTO = new EsquemaDTO();
+         esquemaDTO.setId(equipo.getEsquema().getId());
+
+         dto.setFormacionActual(esquemaDTO);
+      }
 
       return dto;
    }

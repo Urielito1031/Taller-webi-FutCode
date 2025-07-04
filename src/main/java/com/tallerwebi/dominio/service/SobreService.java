@@ -15,4 +15,7 @@ public interface SobreService {
     List<Jugador> getJugadoresPorTipoDeSobre(TipoSobre tipoSobre);
 
     List<SobreDTO> obtenerSobresDTO();
+
+
+
 }

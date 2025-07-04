@@ -7,60 +7,49 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "equipo_torneo")
 public class EquipoTorneo {
+
    @Id
-   @Column(name = "id", nullable = false)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
-   @javax.validation.constraints.NotNull
-   @Column(name = "posicion", nullable = false)
-   private Integer posicion;
+   @Column(name = "posicion")
+   private Integer posicion = 0;
 
+   @Column(name = "partidos_jugados")
+   private Integer partidosJugados = 0;
 
-   @javax.validation.constraints.NotNull
-   @Column(name = "partidos_jugados", nullable = false)
-   private Integer partidosJugados;
+   @Column(name = "partidos_ganados")
+   private Integer partidosGanados= 0;
 
-   @javax.validation.constraints.NotNull
-   @Column(name = "partidos_ganados", nullable = false)
-   private Integer partidosGanados;
+   @Column(name = "partidos_empatados")
+   private Integer partidosEmpatados= 0;
 
-   @javax.validation.constraints.NotNull
-   @Column(name = "partidos_empatados", nullable = false)
-   private Integer partidosEmpatados;
+   @Column(name = "partidos_perdidos")
+   private Integer partidosPerdidos= 0;
 
-   @javax.validation.constraints.NotNull
-   @Column(name = "partidos_perdidos", nullable = false)
-   private Integer partidosPerdidos;
+   @Column(name = "goles_a_favor")
+   private Integer golesAFavor= 0;
 
-   @javax.validation.constraints.NotNull
-   @Column(name = "goles_a_favor", nullable = false)
-   private Integer golesAFavor;
+   @Column(name = "goles_en_contra")
+   private Integer golesEnContra= 0;
 
-   @javax.validation.constraints.NotNull
-   @Column(name = "goles_en_contra", nullable = false)
-   private Integer golesEnContra;
-
-   @javax.validation.constraints.NotNull
-   @Column(name = "puntos", nullable = false)
-   private Integer puntos;
+   @Column(name = "puntos")
+   private Integer puntos= 0;
 
    @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "torneo_id")
    private com.tallerwebi.dominio.model.entities.Torneo torneo;
 
-   @NotNull
-   @ManyToOne(fetch = FetchType.EAGER, optional = false)
-   @JoinColumn(name = "equipo_id", nullable = false)
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "equipo_id")
    private Equipo equipo;
-
 
    public EquipoTorneoDTO convertToDTO() {
       EquipoTorneoDTO equipoTorneoDTO = new EquipoTorneoDTO();
@@ -78,4 +67,20 @@ public class EquipoTorneo {
       return equipoTorneoDTO;
    }
 
+   @Override
+   public String toString() {
+      return "EquipoTorneo{" +
+        "id=" + id +
+        ", posicion=" + posicion +
+        ", partidosJugados=" + partidosJugados +
+        ", partidosGanados=" + partidosGanados +
+        ", partidosEmpatados=" + partidosEmpatados +
+        ", partidosPerdidos=" + partidosPerdidos +
+        ", golesAFavor=" + golesAFavor +
+        ", golesEnContra=" + golesEnContra +
+        ", puntos=" + puntos +
+        ", torneo=" + (torneo != null ? torneo.getId() : null) +
+        ", equipo=" + (equipo != null ? equipo.getId() : null) +
+        '}';
+   }
 }

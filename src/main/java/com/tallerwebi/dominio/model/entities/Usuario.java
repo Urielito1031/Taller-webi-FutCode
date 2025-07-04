@@ -21,24 +21,25 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @NotNull(message = "El email no puede ser nulo")
     @Email(message = "El email debe ser válido")
     private String email;
+
     @NotBlank(message = "La contraseña no puede estar vacía")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d).{6,}$",
       message = "Debe tener al menos 6 caracteres, una mayúscula y un número")
     private String password;
+
     private String rol;
     private Boolean activo;
     private Double monedas;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Sobre> sobres = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "equipo_id")
     private Equipo equipo;
-
 
     public String toString() {
         return "ID: " + id + " \nEquipo: " + equipo + " \nRol: " + rol + " \nActivo: " + activo;

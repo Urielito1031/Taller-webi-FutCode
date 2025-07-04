@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,6 +15,7 @@ import javax.persistence.*;
 @Table(name = "equipo")
 public class Equipo {
    @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id", nullable = false)
    private Long id;
 
@@ -25,15 +28,22 @@ public class Equipo {
    @JoinColumn(name = "club_id")
    private Club club;
 
-   @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "esquema_id")
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
+   @JoinColumn(name = "esquema_id", nullable = false)
    private Esquema esquema;
 
+   @OneToOne
+   @JoinColumn(name = "usuario_id")
+   private Usuario usuario;
+
+   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER)
+   private List<Jugador> jugadores = new ArrayList<>();
 
    public EquipoDTO convertToDTO() {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(this.id);
       dto.setNombre(this.nombre);
+
 
       if (this.club != null) {
          ClubDTO clubDTO = new ClubDTO();
@@ -41,6 +51,7 @@ public class Equipo {
          clubDTO.setNombre(this.club.getNombre());
          clubDTO.setPais(this.club.getPais());
          clubDTO.setImagen(this.club.getImagen());
+
          dto.setClub(clubDTO);
       }
 
@@ -52,6 +63,10 @@ public class Equipo {
       entity.setId(dto.getId());
       entity.setNombre(dto.getNombre());
 
+      Usuario usuario = new Usuario();
+      usuario.setId(dto.getUsuarioId());
+      entity.setUsuario(usuario);
+
       if (dto.getClub() != null) {
          Club club = new Club();
          club.setId(dto.getClub().getId());
@@ -62,7 +77,11 @@ public class Equipo {
 
       return entity;
    }
+
    public String toString(){
-      return "ID: " + this.id + "\n Nombre: " + this.nombre + " \nClub: " + this.club.getNombre();
+      return "ID: " + this.id + "\n Nombre: " + this.nombre +
+             "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
+             "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
+             "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
    }
 }

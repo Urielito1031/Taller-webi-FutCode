@@ -3,9 +3,8 @@ package com.tallerwebi.dominio.service;
 import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
 import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
-import com.tallerwebi.dominio.model.entities.Jugador;
-import com.tallerwebi.dominio.model.entities.Sobre;
-import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.dominio.model.entities.*;
+import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
@@ -13,14 +12,16 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UsuarioServiceImpl implements  UsuarioService{
 
-    private RepositorioUsuarioImpl repositorioUsuario;
+    private final RepositorioUsuarioImpl repositorioUsuario;
 
     @Autowired
     public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
@@ -32,44 +33,12 @@ public class UsuarioServiceImpl implements  UsuarioService{
     public Boolean agregarSobreAJugador(Long idUsuario, SobreDTO sobreDTO) {
         Usuario usuario = this.buscarUsuarioPorId(idUsuario);
 
-        if(usuario == null)
-            throw new UsuarioNoEncontrado("El usuario con ID " + idUsuario + " no fue encontrado.");
-
+        if(usuario == null) throw new UsuarioNoEncontrado("El usuario con ID " + idUsuario + " no fue encontrado.");
 
         Sobre sobre = sobreDTO.fromEntity();
-
-        if (sobre.getTipoSobre() == null)
-            throw new TipoDeSobreDesconocido();
-
-        switch (sobre.getTipoSobre()){
-            case BRONCE:
-                sobre.setTitulo("Sobre de Bronce");
-                sobre.setPrecio(2500.0);
-                sobre.setImagenUrl("sobreFutCodeBronce.png");
-                break;
-            case PLATA:
-                sobre.setTitulo("Sobre de Plata");
-                sobre.setPrecio(5000.0);
-                sobre.setImagenUrl("sobreFutCodePlata.png");
-                break;
-            case ORO:
-                sobre.setTitulo("Sobre de Oro");
-                sobre.setPrecio(7500.0);
-                sobre.setImagenUrl("sobreFutCodeOro.png");
-                break;
-            case ESPECIAL:
-                sobre.setTitulo("Sobre de Especial");
-                sobre.setPrecio(10000.0);
-                sobre.setImagenUrl("sobreFutCodeEspecial.png");
-                break;
-        }
-
         sobre.setUsuario(usuario);
 
-        if(usuario.getMonedas() < sobre.getPrecio()){
-            throw new MonedasInsuficientes();
-        }
-
+        validarMonedas(usuario.getMonedas(), sobre.getPrecio());
         usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);
@@ -79,11 +48,16 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return agregado;
     }
 
+    private void validarMonedas(Double monedasUsuario, Double precioSobre){
+        if(monedasUsuario < precioSobre){
+            throw new MonedasInsuficientes();
+        }
+    }
+
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
         return this.repositorioUsuario.buscarUsuarioPorId(id);
     }
-
 
     @Override
     public List<SobreDTO> obtenerSobresDelUsuario(Long id) {
@@ -96,31 +70,28 @@ public class UsuarioServiceImpl implements  UsuarioService{
         this.repositorioUsuario.borrarSobreAUsuario(idUsuario, idSobre);
     }
 
+    public SobreDTO convertirEntidadADTO(Sobre sobre) {
+        TipoSobre tipo;
 
-
-
-
-    private Sobre convertirDTOAEntidad(SobreDTO sobreDTO) {
-        Sobre sobre = new Sobre();
-        sobre.setTipoSobre(sobreDTO.getTipoSobre());
-        sobre.setTitulo(sobreDTO.getTitulo());
-        sobre.setPrecio(sobreDTO.getPrecio());
-
-        if (sobreDTO.getJugadores() != null && !sobreDTO.getJugadores().isEmpty()) {
-            // sobre.setJugadores(convertirJugadoresDTO(sobreDTO.getJugadores()));
+        if (sobre instanceof SobreBronce) {
+            tipo = TipoSobre.BRONCE;
+        } else if (sobre instanceof SobrePlata) {
+            tipo = TipoSobre.PLATA;
+        } else if (sobre instanceof SobreOro) {
+            tipo = TipoSobre.ORO;
+        } else if (sobre instanceof SobreEspecial) {
+            tipo = TipoSobre.ESPECIAL;
+        } else {
+            throw new TipoDeSobreDesconocido();
         }
 
-        return sobre;
-    }
-
-    public SobreDTO convertirEntidadADTO(Sobre sobre) {
-
         SobreDTO sobreDTO = new SobreDTO();
-        sobreDTO.setId(sobre.getId());
-        sobreDTO.setTipoSobre(sobre.getTipoSobre());
         sobreDTO.setTitulo(sobre.getTitulo());
         sobreDTO.setPrecio(sobre.getPrecio());
+        sobreDTO.setTipoSobre(tipo);
         sobreDTO.setImagenUrl(sobre.getImagenUrl());
+
+        sobreDTO.setId(sobre.getId());
 
 //      convertir jugadores del sobre JugadorDTO tambien
         if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {
@@ -153,5 +124,29 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
         return jugadoresDTO;
     }
+
+    @Override
+    public List<Jugador> convertirJugadoresDtoToEntity(List<JugadorDTO> jugadores) {
+        List<Jugador> jugadoresEntidad = new ArrayList<>();
+
+        for (JugadorDTO jugadorDTO : jugadores) {
+            jugadoresEntidad.add(jugadorDTO.convertToEntity(jugadorDTO));
+        }
+
+        return jugadoresEntidad;
+    }
+
+
+
+    //    @Override
+//    public void actualizarUsuario(Usuario usuario) {
+//        getSession().update(usuario);
+//    }
+//
+@Override
+public void actualizar(Usuario usuario) {
+        repositorioUsuario.actualizar(usuario);
+    }
+
 
 }

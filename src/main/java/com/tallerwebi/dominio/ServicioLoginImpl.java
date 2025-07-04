@@ -32,7 +32,7 @@ public class ServicioLoginImpl implements ServicioLogin {
     }
 
     @Override
-    public void registrar(Usuario usuario) throws UsuarioExistente {
+    public Usuario registrar(Usuario usuario) throws UsuarioExistente{
         Usuario usuarioEncontrado = repositorioUsuario.buscarUsuario(usuario.getEmail());
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();
@@ -43,8 +43,11 @@ public class ServicioLoginImpl implements ServicioLogin {
         usuario.setPassword(hashedPassword);
         usuario.setRol("USER");
         usuario.setActivo(true);
+        // Agregar Monedas registrarse
+        usuario.setMonedas(10000.0);
 
         repositorioUsuario.guardar(usuario);
+        return usuario;
     }
 
 }

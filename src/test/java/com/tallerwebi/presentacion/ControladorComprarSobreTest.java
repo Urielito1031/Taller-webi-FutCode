@@ -1,23 +1,13 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.SobreServiceImpl;
-import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.dominio.service.SobreService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.presentacion.controller.ComprarSobreController;
-import com.tallerwebi.presentacion.dto.SobreDTO;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 
 public class ControladorComprarSobreTest {
 
@@ -33,7 +23,7 @@ public class ControladorComprarSobreTest {
         comprarSobreController = new ComprarSobreController(usuarioService, sobreService);
     }
 
-//   @Test
+//    @Test
 //    public void testShowViewComprarSobre(){
 //        List<SobreDTO> sobresEsperados = new ArrayList<>();
 //        sobresEsperados.add(new SobreDTO("Sobre de Bronce", 2500.0, TipoSobre.BRONCE, "sobreFutCodeBronce.png"));
@@ -43,7 +33,7 @@ public class ControladorComprarSobreTest {
 //
 //        when(sobreService.obtenerSobresDTO()).thenReturn(sobresEsperados);
 //
-//        // Pide HttpServletRequest request
+//        // Pide HttpServletRequest request mockear
 //        ModelAndView mav = comprarSobreController.mostrarVistaComprarSobres();
 //        String vista = mav.getViewName();
 //
@@ -61,7 +51,7 @@ public class ControladorComprarSobreTest {
 //
 //        assertThat(respuesta, is("Sobre creado con exito"));
 //    }
-
+//
 //    @Test
 //    public void dadoQueElSobreNoSePuedeCrearDevuelveUnMensajeDeError(){
 //        Mockito.when(this.sobreService.crearSobre(TipoSobre.BRONCE)).thenReturn(null);

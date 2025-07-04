@@ -20,13 +20,17 @@ public class SobreRepositoryImpl implements SobreRepository {
 
     @Override
     public List<Jugador> getJugadoresPorRareza(RarezaJugador rareza, int cantidad) {
-        String hql = "FROM Jugador WHERE rarezaJugador = :rareza";
+        String hql = "FROM Jugador WHERE rarezaJugador = :rareza ORDER BY function('RAND')";
         List<Jugador> jugadores = sessionFactory.getCurrentSession()
                 .createQuery(hql, Jugador.class)
                 .setParameter("rareza", rareza)
+                .setMaxResults(cantidad)
                 .list();
 
-        Collections.shuffle(jugadores);
-        return jugadores.stream().limit(cantidad).collect(Collectors.toList());
+
+//        Collections.shuffle(jugadores);
+//        return jugadores.stream().limit(cantidad).collect(Collectors.toList());
+
+        return jugadores;
     }
 }

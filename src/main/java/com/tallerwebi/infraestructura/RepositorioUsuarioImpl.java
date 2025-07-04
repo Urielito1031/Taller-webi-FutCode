@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +26,9 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public Usuario buscarUsuario(String email) {
 
        return getCurrentSession().createQuery(
-         "FROM Usuario u " +
-           "        WHERE u.email = :email", Usuario.class)
-             .setParameter("email",email).
-             uniqueResult();
+               "FROM Usuario u WHERE u.email = :email", Usuario.class)
+               .setParameter("email", email)
+               .uniqueResult();
     }
 
     @Override
@@ -44,10 +44,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
               .uniqueResult();
     }
 
-    @Override
-    public void modificar(Usuario usuario) {
-        getCurrentSession().update(usuario);
-    }
+
 
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
@@ -99,4 +96,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public void actualizar(Usuario usuario) {
         getCurrentSession().update(usuario);
     }
+
+
+
 }

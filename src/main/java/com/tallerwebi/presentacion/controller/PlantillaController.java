@@ -1,11 +1,14 @@
 package com.tallerwebi.presentacion.controller;
 
+import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.service.JugadorService;
 import com.tallerwebi.dominio.service.PlantillaService;
+import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.presentacion.dto.EsquemaDTO;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -27,12 +30,14 @@ public class PlantillaController {
 
    private final PlantillaService service;
    private final JugadorService jugadorService;
+   private final UsuarioService usuarioService;
 
 
    @Autowired
-   public PlantillaController(PlantillaService service,JugadorService jugadorService) {
+   public PlantillaController(PlantillaService service,JugadorService jugadorService,UsuarioService usuarioService) {
       this.service = service;
       this.jugadorService = jugadorService;
+      this.usuarioService = usuarioService;
    }
 
    @InitBinder
@@ -47,12 +52,32 @@ public class PlantillaController {
    }
 
    @GetMapping("/plantilla")
-   public String showViewPlantilla(Model model) {
-      Long equipoId = 1L; // Este ID debería ser dinámico, posiblemente pasado como parámetro o desde la sesión del usuario
+   public String showViewPlantilla(Model model, HttpServletRequest request) {
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      if (usuarioId == null) {
+         return "redirect:/login";
+      }
+
+      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+      if (usuario == null) {
+         return "redirect:/login";
+      }
+
+      Long equipoId = usuario.getEquipo() != null ? usuario.getEquipo().getId() : null;
+      if (equipoId == null) {
+
+         return "redirect:/nuevo-equipo";
+      }
+
       EsquemaDTO formacion = service.getFormacionPorEquipoId(equipoId);
 
+
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
-      model.addAttribute("jugadores", jugadores);
+      model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
+      System.out.println("Los jugadores del equipo son: ");
+      for (JugadorDTO jugador : jugadores) {
+         System.out.println("Jugador: " + jugador.getId());
+      }
       model.addAttribute("formacion", formacion);
 
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
@@ -62,9 +87,14 @@ public class PlantillaController {
    }
 
    @GetMapping("/formacion-inicial")
-   public String cambiarFormacion(@RequestParam("esquema") String esquemaTexto, Model model) {
+   public String cambiarFormacion(@RequestParam("esquema") String esquemaTexto,Model model,HttpServletRequest request) {
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+      Long equipoId = usuario.getEquipo().getId();
+
       FormacionEsquema esquemaSeleccionado = FormacionEsquema.fromString(esquemaTexto);
-      EsquemaDTO formacion = service.initPlantillaBase();
+      EsquemaDTO formacion = service.initPlantillaBase(equipoId);
+
       formacion.setEsquema(esquemaSeleccionado);
       model.addAttribute("formacion", formacion);
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
@@ -130,4 +160,7 @@ public class PlantillaController {
       model.addAttribute("error", Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
       return "vista-plantilla";
    }
+
+
+
 }

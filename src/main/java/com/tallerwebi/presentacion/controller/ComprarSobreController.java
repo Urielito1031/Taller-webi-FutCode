@@ -44,6 +44,7 @@ public class ComprarSobreController {
         Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
 
         mav.addObject("monedas", usuario.getMonedas());
+
         return mav;
     }
 
@@ -62,19 +63,27 @@ public class ComprarSobreController {
     }
 
     @PostMapping("/agregarSobre")
-    public String crearSobre(@RequestParam("tipoDeSobre")TipoSobre tipo, HttpServletRequest request, Model model){
+    public ModelAndView crearSobre(@RequestParam("tipoDeSobre")TipoSobre tipo, HttpServletRequest request){
         SobreDTO sobreObtenido = this.sobreService.crearSobre(tipo);
 
         Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
 
         try{
             this.usuarioService.agregarSobreAJugador(id, sobreObtenido);
+            return new ModelAndView("redirect:/jugador/mis-sobres");
+
         }catch(MonedasInsuficientes ex){
-            model.addAttribute("mensajeError", ex.getMessage());
-            return "vista-comprar-sobres";
+            ModelAndView mav = new ModelAndView("vista-comprar-sobres");
+            mav.addObject("mensajeError", ex.getMessage());
+            mav.addObject("sobres", this.sobreService.obtenerSobresDTO());
+
+            Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
+            mav.addObject("monedas", usuario.getMonedas());
+
+            return mav;
+
         }
 
-        return "redirect:/jugador/mis-sobres";
     }
 
 

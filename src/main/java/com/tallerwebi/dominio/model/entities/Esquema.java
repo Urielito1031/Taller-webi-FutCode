@@ -22,4 +22,6 @@ public class Esquema{
    @Column(name = "esquema", nullable = false)
    private FormacionEsquema esquema;
 
+   public Esquema() {}
+
 }

@@ -10,4 +10,7 @@ public interface EquipoTorneoRepository{
    List<EquipoTorneo> getAllByTorneoId(Long torneoId);
 
 
+   void unirEquipoATorneo(Long torneoId, Long equipoId);
+
+
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -35,49 +36,42 @@ import javax.validation.Valid;
          return new ModelAndView("login", modelo);
       }
 
-      @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
-      public ModelAndView validarLogin( @ModelAttribute("datosLogin") DatosLogin datosLogin,HttpServletRequest request) {
-         ModelMap model = new ModelMap();
-
-         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
-         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-
-
-            request.getSession().setAttribute("USUARIO_ID", usuarioBuscado.getId());
-
-
-            return new ModelAndView("redirect:/home");
-         } else {
-            model.put("error", "Usuario o clave incorrecta");
-         }
-         return new ModelAndView("login", model);
+   @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
+   public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpSession session) {
+      ModelMap model = new ModelMap();
+      Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
+      if (usuarioBuscado != null) {
+         session.setAttribute("ROL", usuarioBuscado.getRol());
+         session.setAttribute("USUARIO_ID", usuarioBuscado.getId());
+         return new ModelAndView("redirect:/home");
+      } else {
+         model.put("error", "Usuario o clave incorrecta");
       }
+      return new ModelAndView("login", model);
+   }
 
-      @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-      public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario,BindingResult result, HttpServletRequest request) {
-         ModelMap model = new ModelMap();
+   @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
+   public ModelAndView registrarme(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult result,
+                                   HttpServletRequest request) {
+      ModelMap model = new ModelMap();
 
-         if(result.hasErrors()) {
-            return new ModelAndView("nuevo-usuario", model);
-         }
-         try {
-            Usuario usuarioRegistrado = servicioLogin.registrar(usuario);
-
-            // Guardar datos en la sesión
-            request.getSession().setAttribute("ROL", usuarioRegistrado.getRol());
-            request.getSession().setAttribute("USUARIO_ID", usuarioRegistrado.getId());
-
-            return new ModelAndView("redirect:/nuevo-equipo");
-
-         } catch (UsuarioExistente e) {
-            model.put("error", "El usuario ya existe");
-            return new ModelAndView("nuevo-usuario", model);
-         } catch (Exception e) {
-            model.put("error", "Error al registrar el nuevo usuario");
-            return new ModelAndView("nuevo-usuario", model);
-         }
+      if (result.hasErrors()) {
+         System.out.println("Errores de validación encontrados: " + result.getAllErrors());
+         return new ModelAndView("nuevo-usuario", model);
       }
+      try {
+         servicioLogin.registrar(usuario);
+         request.getSession().setAttribute("USUARIO_ID", usuario.getId());
+         request.getSession().setAttribute("ROL", usuario.getRol());
+      } catch (UsuarioExistente e) {
+         model.put("error", "El usuario ya existe");
+         return new ModelAndView("nuevo-usuario", model);
+      } catch (Exception e) {
+         model.put("error", "Error al registrar el nuevo usuario");
+         return new ModelAndView("nuevo-usuario", model);
+      }
+      return new ModelAndView("redirect:/nuevo-equipo");
+   }
 
       @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
       public ModelAndView nuevoUsuario() {
@@ -86,9 +80,18 @@ import javax.validation.Valid;
          return new ModelAndView("nuevo-usuario", model);
       }
 
+   @RequestMapping("/logout")
+   public ModelAndView logout(HttpServletRequest request) {
+      HttpSession session = request.getSession(false);
+      if (session != null) {
+         session.invalidate();
+         System.out.println("Sesión invalidada correctamente.");
+      }
+      return new ModelAndView("redirect:/login");
+   }
 
 
-      @RequestMapping(path = "/", method = RequestMethod.GET)
+   @RequestMapping(path = "/", method = RequestMethod.GET)
       public ModelAndView inicio() {
          return new ModelAndView("redirect:/login");
       }

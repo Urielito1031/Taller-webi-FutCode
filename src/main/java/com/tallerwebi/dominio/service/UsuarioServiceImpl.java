@@ -22,13 +22,10 @@ import java.util.stream.Collectors;
 public class UsuarioServiceImpl implements  UsuarioService{
 
     private final RepositorioUsuarioImpl repositorioUsuario;
-//    private final SessionFactory sessionFactory;
-//
 
     @Autowired
     public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
         this.repositorioUsuario = repositorioUsuario;
-//        this.sessionFactory = sessionFactory;
     }
 
     @SneakyThrows
@@ -151,9 +148,5 @@ public void actualizar(Usuario usuario) {
         repositorioUsuario.actualizar(usuario);
     }
 
-
-//    private Session getSession() {
-//        return sessionFactory.getCurrentSession();
-//    }
 
 }

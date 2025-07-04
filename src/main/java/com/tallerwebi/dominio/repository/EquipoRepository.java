@@ -11,5 +11,6 @@ public interface EquipoRepository {
    Equipo getById(Long id);
    void save(Equipo equipo);
    Boolean existsById(Long equipoId);
+
    void saveAndFlush(Equipo equipo);
 }

@@ -4,13 +4,10 @@ import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
-import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 
-@Transactional
 public interface UsuarioService{
     Boolean agregarSobreAJugador(Long idUsuario, SobreDTO sobreDTO);
 
@@ -26,19 +23,5 @@ public interface UsuarioService{
 
     List<Jugador> convertirJugadoresDtoToEntity(List<JugadorDTO> jugadores);
 
-    //    @Override
-    //    public void actualizarUsuario(Usuario usuario) {
-    //        getSession().update(usuario);
-    //    }
-    //
-    //    @Override
-    //    public void actualizarUsuario(Usuario usuario) {
-    //        getSession().update(usuario);
-    //    }
-    //
-//    void actualizar(Usuario usuario);
 
-//    void actualizarUsuario(Usuario usuario);
-//
-//    void actualizar(Usuario usuario);
 }

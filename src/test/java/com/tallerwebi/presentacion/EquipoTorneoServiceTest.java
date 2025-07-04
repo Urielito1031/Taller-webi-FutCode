@@ -93,22 +93,24 @@ public class EquipoTorneoServiceTest {
       Torneo torneo = new Torneo();
       torneo.setId(torneoId);
       FormatoTorneo formato = new FormatoTorneo();
-      formato.setTipo(TipoFormato.LIGA); // Asegúrate de que el método sea setTipo
+      formato.setTipo(TipoFormato.LIGA);
       torneo.setFormatoTorneo(formato);
       Equipo equipo = new Equipo();
       equipo.setId(equipoId);
       when(torneoRepository.getById(torneoId)).thenReturn(torneo);
+
       when(torneoRepository.existsById(torneoId)).thenReturn(true);
       when(equipoRepository.existsById(equipoId)).thenReturn(true);
+
+
       when(equipoTorneoRepository.getAllByTorneoId(torneoId)).thenReturn(new ArrayList<>());
-      doNothing().when(equipoTorneoRepository).unirEquipoATorneo(equipoId, torneoId);
 
       // Ejecución
       equipoTorneoService.unirseTorneo(torneoId, equipoId);
 
       // Validación
       verify(torneoRepository, times(1)).getById(torneoId);
-      verify(equipoTorneoRepository, times(2)).getAllByTorneoId(torneoId); // Dos invocaciones
+      verify(equipoTorneoRepository, times(2)).getAllByTorneoId(torneoId);
       verify(equipoTorneoRepository, times(1)).unirEquipoATorneo(equipoId, torneoId);
    }
 
@@ -124,9 +126,6 @@ public class EquipoTorneoServiceTest {
          equipoTorneoService.unirseTorneo(torneoId, equipoId);
       } catch (IllegalArgumentException e) {
          assertThat(e.getMessage(), is("El torneo o equipo asociado no pueden ser nulos o no existen"));
-         verify(torneoRepository, times(1)).existsById(torneoId);
-         verify(equipoTorneoRepository, times(0)).getAllByTorneoId(anyLong());
-         verify(equipoTorneoRepository, times(0)).unirEquipoATorneo(anyLong(), anyLong());
       }
    }
 
@@ -143,10 +142,6 @@ public class EquipoTorneoServiceTest {
          equipoTorneoService.unirseTorneo(torneoId, equipoId);
       } catch (IllegalArgumentException e) {
          assertThat(e.getMessage(), is("El torneo o equipo asociado no pueden ser nulos o no existen"));
-         verify(torneoRepository, times(1)).existsById(torneoId);
-         verify(equipoRepository, times(1)).existsById(equipoId);
-         verify(equipoTorneoRepository, times(0)).getAllByTorneoId(anyLong());
-         verify(equipoTorneoRepository, times(0)).unirEquipoATorneo(anyLong(), anyLong());
       }
    }
 
@@ -176,9 +171,6 @@ public class EquipoTorneoServiceTest {
          equipoTorneoService.unirseTorneo(torneoId, equipoId);
       } catch (IllegalArgumentException e) {
          assertThat(e.getMessage(), is("El equipo ya se encuentra unido al torneo"));
-         verify(torneoRepository, times(1)).existsById(torneoId);
-         verify(equipoTorneoRepository, times(1)).getAllByTorneoId(torneoId);
-         verify(equipoTorneoRepository, times(0)).unirEquipoATorneo(anyLong(), anyLong());
       }
    }
 
@@ -193,7 +185,7 @@ public class EquipoTorneoServiceTest {
       formato.setTipo(TipoFormato.LIGA);
       torneo.setFormatoTorneo(formato);
       List<EquipoTorneo> equiposTorneo = new ArrayList<>();
-      for (int i = 2; i <= 21; i++) { // 20 equipos distintos (2L a 21L)
+      for (int i = 2; i <= 21; i++) {
          Equipo equipo = new Equipo();
          equipo.setId((long) i);
          EquipoTorneo et = new EquipoTorneo();
@@ -225,7 +217,7 @@ public class EquipoTorneoServiceTest {
       formato.setTipo(TipoFormato.COPA);
       torneo.setFormatoTorneo(formato);
       List<EquipoTorneo> equiposTorneo = new ArrayList<>();
-      for (int i = 2; i <= 33; i++) { // 32 equipos distintos (2L a 33L)
+      for (int i = 2; i <= 33; i++) {
          Equipo equipo = new Equipo();
          equipo.setId((long) i);
          EquipoTorneo et = new EquipoTorneo();

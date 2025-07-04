@@ -51,6 +51,11 @@ public class EquipoTorneo {
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
 
+   public EquipoTorneo() {}
+   public EquipoTorneo(Equipo equipo, Torneo torneo) {
+      this.equipo = equipo;
+      this.torneo = torneo;
+   }
    public EquipoTorneoDTO convertToDTO() {
       EquipoTorneoDTO equipoTorneoDTO = new EquipoTorneoDTO();
       equipoTorneoDTO.setId(this.id);

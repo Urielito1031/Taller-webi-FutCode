@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.EstadoPartido;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -13,8 +14,10 @@ import java.time.Instant;
 @Entity
 @Table(name = "partido")
 public class Partido {
+
+
    @Id
-   @Column(name = "id", nullable = false)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @javax.validation.constraints.NotNull
@@ -34,13 +37,15 @@ public class Partido {
    private Instant fechaEncuentro;
 
    @javax.validation.constraints.NotNull
-   @Lob
+   @Enumerated(EnumType.STRING)
    @Column(name = "estado_partido", nullable = false)
-   private String estadoPartido;
+   private EstadoPartido estadoPartido;
 
    @ManyToOne(fetch = FetchType.LAZY)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "torneo_id")
    private com.tallerwebi.dominio.model.entities.Torneo torneo;
+
+
 
 }

@@ -57,12 +57,14 @@ public class JugadorRepositoryImpl implements JugadorRepository{
 
    @Override
    public Jugador getById(Long id){
-      return null;
+
+      return getSession().get(Jugador.class, id);
+
    }
 
    @Override
    public Jugador save(Jugador jugador){
-
+      getSession().saveOrUpdate(jugador);
       return jugador;
    }
 

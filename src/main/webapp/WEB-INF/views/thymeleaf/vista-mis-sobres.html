@@ -56,13 +56,11 @@
                                 <i class="bi bi-person-circle"></i>
                                 <span
                                         id="nombre-usuario"
-                                        th:text="${#httpSession.getAttribute('usuario') != null ? #httpSession.getAttribute('usuario').nombre : 'Diego Maradona'}"
+                                        th:text="${equipoNombre}"
                                 >Diego Maradona</span
                                 >
                             </button>
                             <div class="dropdown-menu">
-                                <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>
-                                <hr />
                                 <a th:href="@{/logout}" class="danger"
                                 ><i class="bi bi-box-arrow-right"></i> Salir</a
                                 >

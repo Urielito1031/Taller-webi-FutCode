@@ -37,7 +37,7 @@ public class UsuarioServiceTest{
         this.usuarioService = new UsuarioServiceImpl(repositorioUsuario);
     }
 
-    //region Tests para agregarSobreAJugador
+
     @Test
     public void dadoQueAgregoUnSobreAUnUsuarioExistenteConSuficientesMonedas_cuandoAgregoElSobre_entoncesElUsuarioTieneUnSobreYMonedasActualizadas() throws UsuarioNoEncontrado, MonedasInsuficientes, TipoDeSobreDesconocido{
         // GIVEN

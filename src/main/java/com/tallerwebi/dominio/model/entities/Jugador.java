@@ -18,64 +18,6 @@ import java.util.List;
    @Entity
    @Table(name = "jugador")
    public class Jugador {
-//      @Id
-//      @GeneratedValue(strategy = GenerationType.IDENTITY)
-//      private Long id;
-//
-//      @javax.validation.constraints.Size(max = 50)
-//      @javax.validation.constraints.NotNull
-//      @Column(name = "nombre", nullable = false, length = 50)
-//      private String nombre;
-//
-//      @javax.validation.constraints.Size(max = 50)
-//      @javax.validation.constraints.NotNull
-//      @Column(name = "apellido", nullable = false, length = 50)
-//      private String apellido;
-//
-//      @javax.validation.constraints.Size(max = 255)
-//      @Column(name = "imagen")
-//      private String imagen;
-//
-//      @javax.validation.constraints.NotNull
-//      @Column(name = "edad", nullable = false)
-//      private Integer edad;
-//
-//      @javax.validation.constraints.NotNull
-//      @Column(name = "numero_camiseta", nullable = false)
-//      private Integer numeroCamiseta;
-//
-//      @javax.validation.constraints.NotNull
-//      @Column(name = "rating", nullable = false, precision = 4, scale = 1)
-//      private Double rating;
-//
-//      @javax.validation.constraints.NotNull
-//      @Column(name = "lesionado", nullable = false)
-//      private Boolean lesionado = false;
-//
-//      @javax.validation.constraints.NotNull
-//      @Column(name = "estado_fisico", nullable = false, precision = 5, scale = 2)
-//      private Double estadoFisico;
-//
-//      @ManyToOne(fetch = FetchType.EAGER)
-//      @JoinColumn(name = "pais_id")
-//      private Pais pais;
-//
-//      @javax.validation.constraints.NotNull
-//      @Enumerated(EnumType.STRING)
-//      @Column(name = "rareza_jugador", nullable = false)
-//      private RarezaJugador rarezaJugador;
-//
-//      @NotNull
-//      @Enumerated(EnumType.STRING)
-//      @Column(name = "posicion", nullable = false)
-//      private PosicionEnum posicion;
-//
-//      @ManyToMany(mappedBy = "jugadores", fetch = FetchType.EAGER)
-//      private List<Equipo> equipos = new ArrayList<>();
-//
-//      @ManyToOne (fetch = FetchType.EAGER)
-//      @JoinColumn (name = "sobre_id")
-//      private Sobre sobre;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -20,36 +20,17 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class TorneoServiceImpl implements TorneoService{
-
    private final TorneoRepository torneoRepository;
-   private final EquipoRepository equipoRepository;
-   private final EquipoTorneoRepository equipoTorneoRepository;
-   private final FechaRepository fechaRepository;
-   private final PartidoRepository partidoRepository;
-
 
    @Autowired
-   public TorneoServiceImpl(TorneoRepository torneoRepository,
-                            EquipoRepository equipoRepository,
-                            EquipoTorneoRepository equipoTorneoRepository,
-                            FechaRepository fechaRepository,
-                            PartidoRepository partidoRepository) {
-
+   public TorneoServiceImpl(TorneoRepository torneoRepository) {
       this.torneoRepository = torneoRepository;
-      this.equipoRepository = equipoRepository;
-      this.equipoTorneoRepository = equipoTorneoRepository;
-      this.fechaRepository = fechaRepository;
-      this.partidoRepository = partidoRepository;
    }
-
 
    @Override
    public List<TorneoDTO> getAll() {
       List<Torneo> torneos = torneoRepository.findAll();
-
-      return torneos.stream()
-            .map(Torneo::convertToDTO)
-            .collect(Collectors.toList());
+      return torneos.stream().map(Torneo::convertToDTO).collect(Collectors.toList());
    }
 
    @Override
@@ -92,6 +73,4 @@ public class TorneoServiceImpl implements TorneoService{
               .sorted(Comparator.comparingInt(EquipoTorneo::getPuntos).reversed())
               .collect(Collectors.toList());
    }
-
-
 }

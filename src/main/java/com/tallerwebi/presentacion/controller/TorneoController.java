@@ -9,7 +9,6 @@ import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.model.entities.Usuario;
-import com.tallerwebi.infraestructura.repositoryImpl.TorneoRepositoryImpl;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,10 +94,6 @@ public class TorneoController {
    @GetMapping("/fechas")
    public ModelAndView mostrarFechas(@RequestParam Long torneoId) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
-
-
-
-
       ModelAndView mav = new ModelAndView("simular-fechas");
       mav.addObject("fechas", torneo.getFechas());
       mav.addObject("torneoId", torneoId);
@@ -117,7 +112,6 @@ public class TorneoController {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
       List<Partido> partidos = torneo.getFechas().stream()
               .flatMap(f -> f.getPartidos().stream())
-//              .filter(p -> p.getResultado() != null) // opcional
               .collect(Collectors.toList());
 
       List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos);
@@ -126,9 +120,5 @@ public class TorneoController {
       mav.addObject("tabla", tabla);
       return mav;
    }
-
-
-
-
 
 }

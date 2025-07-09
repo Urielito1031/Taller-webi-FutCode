@@ -9,6 +9,7 @@ import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,19 +46,63 @@ public class TorneoController {
 
 
    @GetMapping(path = "/lista-torneos")
-   public String verTorneos(Model model) {
+   public String verTorneos(Model model, HttpServletRequest request) {
+   try {
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+
+      if (usuarioId == null) {
+         return "redirect:/login";
+      }
+
+      Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
+
+      if (usuario == null) {
+         return "redirect:/login";
+      }
+
+
       List<TorneoDTO> torneos = torneoService.getAll();
       if (torneos.isEmpty()) {
          model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
       }
-      model.addAttribute("torneos", torneos);
-      return "vista-list-torneos";
+
+      List<TorneoDTO> torneosUnidos = new ArrayList<>();
+
+
+
+      for (TorneoDTO torneo : torneos) {
+         List<EquipoTorneoDTO> equiposDelTorneo = this.equipoTorneoService.getAllByTorneoId(torneo.getId());
+
+         for (EquipoTorneoDTO etdto : equiposDelTorneo) {
+            EquipoDTO equipo = etdto.getEquipo();
+            if (equipo != null && equipo.getUsuarioId() != null && equipo.getUsuarioId().equals(usuarioId)) {
+               torneosUnidos.add(torneo);
+               break;
+            }
+         }
+      }
+
+      if(torneosUnidos.isEmpty()) {
+         model.addAttribute("mensajeTorneo", "Usted no se ha unido a ningun torneo");
+      }
+
+      model.addAttribute("torneos", torneosUnidos);
+      return "vista-mis-torneos";
+   } catch (Exception e) {
+      model.addAttribute("error", "Error al cargar torneos: " + e.getMessage());
+      e.printStackTrace();
+      return "error"; //
+   }
    }
 
    @GetMapping("/detalle-torneo/{id}")
-   public String detalleTorneo(@PathVariable Long id, Model model) {
+   public String detalleTorneo(@PathVariable Long id, Model model, HttpServletRequest request) {
       TorneoDTO torneo = torneoService.getById(id);
       List<EquipoTorneoDTO> torneoEquipos = equipoTorneoService.getAllByTorneoId(id);
+
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      model.addAttribute("usuarioId", usuarioId);
+
       model.addAttribute("torneo", torneo);
       model.addAttribute("torneoEquipos", torneoEquipos);
       return "detalle-torneo";
@@ -106,7 +152,7 @@ public class TorneoController {
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
       simularTorneoService.simularFecha(torneoId, numeroFecha);
-      return "redirect:/fechas?torneoId=" + torneoId;
+      return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 
    @GetMapping("/tabla-posiciones")

@@ -103,7 +103,8 @@
                </tr>
                </thead>
                <tbody>
-               <tr th:each="equipo : ${torneoEquipos}">
+               <tr th:each="equipo : ${torneoEquipos}"
+                   th:classappend="${equipo.equipo.usuarioId == usuarioId} ? 'mi-equipo'" >
                   <td th:text="${equipo.posicion}">1</td>
                   <td th:text="${equipo.equipo.nombre}">Equipo 1</td>
                   <td th:text="${equipo.partidosJugados}">0</td>

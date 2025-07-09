@@ -63,6 +63,10 @@ public class Equipo {
          dto.setClub(clubDTO);
       }
 
+      if (this.usuario != null) {
+         dto.setUsuarioId(this.usuario.getId());
+      }
+
       return dto;
    }
 

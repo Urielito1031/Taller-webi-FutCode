@@ -72,6 +72,7 @@ public class TorneoController {
 
       try {
          Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+
          if (usuario == null) {
             redirectAttributes.addFlashAttribute("errorUnirse", "Usuario no encontrado.");
             return "redirect:/detalle-torneo/" + torneoId;

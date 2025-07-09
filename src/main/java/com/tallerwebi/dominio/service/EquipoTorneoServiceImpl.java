@@ -54,15 +54,13 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
       //validar que el torneo no tenga el equipo a unir
       if(!validarEquipoNoUnidoATorneo(torneoId, equipoId)){
          throw new IllegalArgumentException("El equipo ya se encuentra unido al torneo");
-      };
+      }
 
       Torneo torneo = torneoRepository.getById(torneoId);
 
       verificarFormatoTorneoParaValidarCapacidadMaxima(torneoId,torneo);
 
-
-      repository.unirEquipoATorneo(equipoId, torneoId);
-
+      repository.unirEquipoATorneo(torneoId, equipoId);
    }
 
    private boolean validarEquipoNoUnidoATorneo(Long torneoId,Long equipoId){

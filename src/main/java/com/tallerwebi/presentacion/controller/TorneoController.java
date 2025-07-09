@@ -68,6 +68,8 @@ public class TorneoController {
 
       List<TorneoDTO> torneosUnidos = new ArrayList<>();
 
+
+
       for (TorneoDTO torneo : torneos) {
          List<EquipoTorneoDTO> equiposDelTorneo = this.equipoTorneoService.getAllByTorneoId(torneo.getId());
 
@@ -80,12 +82,16 @@ public class TorneoController {
          }
       }
 
+      if(torneosUnidos.isEmpty()) {
+         model.addAttribute("mensajeTorneo", "Usted no se ha unido a ningun torneo");
+      }
+
       model.addAttribute("torneos", torneosUnidos);
       return "vista-mis-torneos";
    } catch (Exception e) {
       model.addAttribute("error", "Error al cargar torneos: " + e.getMessage());
-      e.printStackTrace(); // Esto te lo tira a consola
-      return "error"; // o una vista especial de error
+      e.printStackTrace();
+      return "error"; //
    }
    }
 

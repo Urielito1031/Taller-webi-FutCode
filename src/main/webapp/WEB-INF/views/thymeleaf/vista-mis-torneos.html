@@ -70,7 +70,14 @@
 
 <main class="contenedor-principal-torneos">
 <h1>Torneos a los que estoy unido</h1>
+    <th:block th:if="${mensajeTorneo}">
+        <div class="alerta-exito">
+            <i class="bi bi-info-circle"></i>
+            <span th:text="${mensajeTorneo}"></span>
+        </div>
+    </th:block>
 <div class="contenedores row">
+
     <section class="contenedor-torneo col-12 col-md-6 col-lg-4 mb-4" th:each="torneo : ${torneos}">
         <div class="torneo-card card h-100 shadow-sm position-relative">
             <!-- Estado del torneo -->

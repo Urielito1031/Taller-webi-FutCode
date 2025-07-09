@@ -60,8 +60,12 @@ import javax.validation.Valid;
       }
       try {
          servicioLogin.registrar(usuario);
-         request.getSession().setAttribute("USUARIO_ID", usuario.getId());
-         request.getSession().setAttribute("ROL", usuario.getRol());
+
+         Usuario usuarioRegistrado = servicioLogin.consultarUsuarioPorEmail(usuario.getEmail());
+
+         request.getSession().setAttribute("USUARIO_ID", usuarioRegistrado.getId());
+         request.getSession().setAttribute("ROL", usuarioRegistrado.getRol());
+         request.getSession().setAttribute("MONEDAS", usuario.getMonedas());
       } catch (UsuarioExistente e) {
          model.put("error", "El usuario ya existe");
          return new ModelAndView("nuevo-usuario", model);

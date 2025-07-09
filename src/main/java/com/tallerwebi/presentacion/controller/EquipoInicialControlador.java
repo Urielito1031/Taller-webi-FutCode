@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +42,17 @@ public class EquipoInicialControlador {
         }
 
         @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
-        public String procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo, HttpSession session) {
+        public String procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo, HttpSession session, HttpServletRequest request) {
             ModelAndView mav = new ModelAndView("home");
             mav.addObject("nombreEquipo", equipo.getNombre());
             mav.addObject("equipo", equipo);
 
+            Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
+            Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
+            mav.addObject("monedas", usuario.getMonedas());
+
             session.setAttribute("equipo", equipo);
+            session.setAttribute("MONEDAS", usuario.getMonedas());
 
             return "redirect:/sorteoEquipoInicial";
         }
@@ -76,9 +82,12 @@ public class EquipoInicialControlador {
             equipo.setUsuarioId(usuario.getId());
             this.equipoService.saveBoth(equipo, usuario);
 
+            session.setAttribute("MONEDAS", usuario.getMonedas());
+
             ModelAndView mav = new ModelAndView("sorteoEquipo");
             mav.addObject("equipo", equipo);
             mav.addObject("nombreEquipo", equipo.getNombre());
+            mav.addObject("monedas", usuario.getMonedas());
             return mav;
         }
 

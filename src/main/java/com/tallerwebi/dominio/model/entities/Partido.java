@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.EstadoPartido;
 import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,6 +63,10 @@ public class Partido {
 
    @Column(name = "goles_visitante", nullable = false)
    private Integer golesVisitante = 0;
+   @javax.validation.constraints.NotNull
+   @Enumerated(EnumType.STRING)
+   @Column(name = "estado_partido", nullable = false)
+   private EstadoPartido estadoPartido;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "resultado", nullable = false)

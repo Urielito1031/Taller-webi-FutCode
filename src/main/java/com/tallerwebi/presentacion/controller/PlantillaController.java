@@ -74,10 +74,7 @@ public class PlantillaController {
 
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
-      System.out.println("Los jugadores del equipo son: ");
-      for (JugadorDTO jugador : jugadores) {
-         System.out.println("Jugador: " + jugador.getId());
-      }
+
       model.addAttribute("formacion", formacion);
 
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());

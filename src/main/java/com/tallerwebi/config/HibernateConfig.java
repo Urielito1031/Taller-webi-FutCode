@@ -23,10 +23,12 @@ public class HibernateConfig {
         String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
         String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_test";
         String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
-        // Local: "", Docker: "root"
         String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
 
-        dataSource.setUrl("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+        String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName +
+          "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=30000";
+        System.out.println("Conectando a: " + url + " con usuario: " + dbUser + " y contraseña: " + dbPassword);
+        dataSource.setUrl(url);
         dataSource.setUsername(dbUser);
         dataSource.setPassword(dbPassword);
 
@@ -53,6 +55,7 @@ public class HibernateConfig {
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
+      //  properties.setProperty("hibernate.connection.timeout", "30000");
         return properties;
     }
 }

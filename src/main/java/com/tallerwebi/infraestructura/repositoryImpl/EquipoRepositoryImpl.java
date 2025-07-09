@@ -42,7 +42,7 @@ public class EquipoRepositoryImpl implements EquipoRepository{
    }
 
    @Override
-   public void saveAndFlush(Equipo equipo) {
+   public void saveAndFlush(Equipo equipo){
       Session current = getSession();
       current.saveOrUpdate(equipo);
       current.flush(); // ← fuerza escritura en la DB, genera el ID

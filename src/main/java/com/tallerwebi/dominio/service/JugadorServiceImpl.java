@@ -63,7 +63,8 @@ public class JugadorServiceImpl implements JugadorService{
 //      equipo.setJugadores(listaDeJugadoresDto);
 //   }
 
-   public List<Jugador> sortearJugadoresIniciales(int cantidad) {
+   @Override
+   public List<Jugador> sortearJugadoresIniciales(int cantidad){
 
       List<Jugador> jugadoresEquipo = new ArrayList<>();
 

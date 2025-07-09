@@ -56,13 +56,16 @@ import javax.validation.Valid;
       ModelMap model = new ModelMap();
 
       if (result.hasErrors()) {
-         System.out.println("Errores de validación encontrados: " + result.getAllErrors());
          return new ModelAndView("nuevo-usuario", model);
       }
       try {
          servicioLogin.registrar(usuario);
-         request.getSession().setAttribute("USUARIO_ID", usuario.getId());
-         request.getSession().setAttribute("ROL", usuario.getRol());
+
+         Usuario usuarioRegistrado = servicioLogin.consultarUsuarioPorEmail(usuario.getEmail());
+
+         request.getSession().setAttribute("USUARIO_ID", usuarioRegistrado.getId());
+         request.getSession().setAttribute("ROL", usuarioRegistrado.getRol());
+         request.getSession().setAttribute("MONEDAS", usuario.getMonedas());
       } catch (UsuarioExistente e) {
          model.put("error", "El usuario ya existe");
          return new ModelAndView("nuevo-usuario", model);
@@ -85,7 +88,7 @@ import javax.validation.Valid;
       HttpSession session = request.getSession(false);
       if (session != null) {
          session.invalidate();
-         System.out.println("Sesión invalidada correctamente.");
+
       }
       return new ModelAndView("redirect:/login");
    }

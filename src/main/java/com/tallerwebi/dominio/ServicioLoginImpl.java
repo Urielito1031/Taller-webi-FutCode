@@ -32,7 +32,13 @@ public class ServicioLoginImpl implements ServicioLogin {
     }
 
     @Override
-    public Usuario registrar(Usuario usuario) throws UsuarioExistente {
+    public Usuario consultarUsuarioPorEmail(String email) {
+        return this.repositorioUsuario.buscarUsuario(email);
+    }
+
+    @Transactional
+    @Override
+    public Usuario registrar(Usuario usuario) throws UsuarioExistente{
         Usuario usuarioEncontrado = repositorioUsuario.buscarUsuario(usuario.getEmail());
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();

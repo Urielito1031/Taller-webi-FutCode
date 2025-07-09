@@ -6,60 +6,66 @@
     <title>FutCode</title>
     <link th:href="@{/css/estilos-mis-sobres.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
+<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">-->
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">-->
 </head>
 <body>
-
 <header>
     <nav class="navbar">
-        <a id="titulo-nav" class="navbar-brand" href="#">FUTCODE</a>
+        <a id="titulo-nav" class="navbar-brand" th:href="@{/home}">FUTCODE</a>
         <div class="container">
             <div id="navbarNav">
                 <ul class="ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/equipo"><i class="bi bi-people-fill"></i> Mi Equipo</a>
+                        <a class="nav-link" th:href="@{/plantilla}"
+                        ><i class="bi bi-people-fill"></i> Mi Plantilla</a
+                        >
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/spring/torneo/1/tabla-general"><i class="bi bi-trophy-fill"></i> Torneos</a>
+                        <a class="nav-link" th:href="@{/home}"
+                        ><i class="bi bi-trophy-fill"></i> Torneos</a
+                        >
                     </li>
-
-
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/jugador/mis-sobres}">
+                            <i class="bi bi-archive"></i> Mis Sobres
+                            <span class="badge bg-warning ms-1">3</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/jugador/comprar-sobres}">
-                            <i class="bi bi-gift-fill"></i> Mercado
+                            <i class="bi bi-cart"></i> Mercado
+                            <span class="badge bg-warning ms-1">3</span>
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <i class="bi bi-coin"></i> Monedas
-                            <p th:text="${monedas}"></p>
+                            <i class="bi bi-coin"></i>
+                            <span th:text="${monedas}"></span>
                         </a>
                     </li>
-
                     <li class="nav-item dropdown">
                         <div class="dropdown">
                             <button class="dropdown-toggle">
                                 <i class="bi bi-person-circle"></i>
-                                <span id="nombre-usuario" th:text="${#httpSession.getAttribute('usuario') != null ? #httpSession.getAttribute('usuario').nombre : 'Diego Maradona'}">Diego Maradona</span>
+                                <span
+                                        id="nombre-usuario"
+                                        th:text="${#httpSession.getAttribute('usuario') != null ? #httpSession.getAttribute('usuario').nombre : 'Diego Maradona'}"
+                                >Diego Maradona</span
+                                >
                             </button>
                             <div class="dropdown-menu">
                                 <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>
-                                <a class="nav-link" th:href="@{/jugador/mis-sobres}">
-                                    <i class="bi bi-gift-fill"></i> Mis Sobres
-                                    <span class="badge bg-warning ms-1" th:text="${cantidadSobres}"></span>
-                                </a>
-
-
-                                <hr>
-                                <a th:href="@{/login}" class="danger"><i class="bi bi-box-arrow-right"></i> Salir</a>
+                                <hr />
+                                <a th:href="@{/logout}" class="danger"
+                                ><i class="bi bi-box-arrow-right"></i> Salir</a
+                                >
                             </div>
                         </div>
                     </li>
@@ -68,6 +74,57 @@
         </div>
     </nav>
 </header>
+
+<!--    <nav class="navbar">-->
+<!--        <a id="titulo-nav" class="navbar-brand" href="#">FUTCODE</a>-->
+<!--        <div class="container">-->
+<!--            <div id="navbarNav">-->
+<!--                <ul class="ms-auto">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/equipo"><i class="bi bi-people-fill"></i> Mi Equipo</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/spring/torneo/1/tabla-general"><i class="bi bi-trophy-fill"></i> Torneos</a>-->
+<!--                    </li>-->
+
+
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" th:href="@{/jugador/comprar-sobres}">-->
+<!--                            <i class="bi bi-gift-fill"></i> Mercado-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="#">-->
+<!--                            <i class="bi bi-coin"></i> Monedas-->
+<!--                            <p th:text="${monedas}"></p>-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <div class="dropdown">-->
+<!--                            <button class="dropdown-toggle">-->
+<!--                                <i class="bi bi-person-circle"></i>-->
+<!--                                <span id="nombre-usuario" th:text="${#httpSession.getAttribute('usuario') != null ? #httpSession.getAttribute('usuario').nombre : 'Diego Maradona'}">Diego Maradona</span>-->
+<!--                            </button>-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <a href="/perfil"><i class="bi bi-gear"></i> Configuración</a>-->
+<!--                                <a class="nav-link" th:href="@{/jugador/mis-sobres}">-->
+<!--                                    <i class="bi bi-gift-fill"></i> Mis Sobres-->
+<!--                                    <span class="badge bg-warning ms-1" th:text="${cantidadSobres}"></span>-->
+<!--                                </a>-->
+
+
+<!--                                <hr>-->
+<!--                                <a th:href="@{/login}" class="danger"><i class="bi bi-box-arrow-right"></i> Salir</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+
 
 <main>
     <div class="fondo"></div>

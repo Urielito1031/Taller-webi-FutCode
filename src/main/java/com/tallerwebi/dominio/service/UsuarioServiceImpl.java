@@ -152,8 +152,4 @@ public void actualizar(Usuario usuario) {
     }
 
 
-//    private Session getSession() {
-//        return sessionFactory.getCurrentSession();
-//    }
-
 }

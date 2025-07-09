@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "equipo_torneo")
 public class EquipoTorneo {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
@@ -78,6 +79,11 @@ public class EquipoTorneo {
    }
 
 
+   public EquipoTorneo() {}
+   public EquipoTorneo(Equipo equipo, Torneo torneo) {
+      this.equipo = equipo;
+      this.torneo = torneo;
+   }
    public EquipoTorneoDTO convertToDTO() {
       EquipoTorneoDTO equipoTorneoDTO = new EquipoTorneoDTO();
       equipoTorneoDTO.setId(this.id);

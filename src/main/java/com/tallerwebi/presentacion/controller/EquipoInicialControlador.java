@@ -1,29 +1,28 @@
 package com.tallerwebi.presentacion.controller;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
+
 import com.tallerwebi.dominio.model.entities.Equipo;
-import com.tallerwebi.dominio.model.entities.Esquema;
-import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.service.EquipoService;
 import com.tallerwebi.dominio.service.JugadorService;
+
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
-import com.tallerwebi.presentacion.dto.JugadorDTO;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Controller
 public class EquipoInicialControlador {
@@ -46,20 +45,27 @@ public class EquipoInicialControlador {
            }
            return new ModelAndView("creacionEquipo").addObject("equipo",new EquipoDTO());
         }
+
    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
    public String procesarNuevoEquipo(@Valid @ModelAttribute("equipo") EquipoDTO equipo,
                                      HttpSession session,
-                                     BindingResult result,
-                                     Model model) {
+                                     HttpServletRequest request,BindingResult result, Model model) {
       if (result.hasErrors()) {
-         result.getAllErrors().forEach(System.out::println);
          model.addAttribute("errors", result.getAllErrors()); // Pasar errores al modelo
          return "creacionEquipo"; // Volver a la vista con los errores
       }
       ModelAndView mav = new ModelAndView("home");
+
       mav.addObject("nombreEquipo", equipo.getNombre());
       mav.addObject("equipo", equipo);
+
+      Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
+      Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
+      mav.addObject("monedas", usuario.getMonedas());
+
       session.setAttribute("equipo", equipo);
+      session.setAttribute("MONEDAS", usuario.getMonedas());
+
       return "redirect:/sorteoEquipoInicial";
    }
 
@@ -78,23 +84,45 @@ public class EquipoInicialControlador {
       session.setAttribute("equipo", equipo);
 
       Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
-      if (usuarioId == null) {
+      if(usuarioId == null){
          throw new IllegalStateException("No se encontró el usuarioId en la sesión.");
       }
       Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
-      if (usuario == null) {
+      if(usuario == null){
          throw new IllegalStateException("No se encontró el Usuario con ID: " + usuarioId);
       }
 
-
-
       equipo.setUsuarioId(usuario.getId());
-      this.equipoService.saveBoth(equipo, usuario);
+      this.equipoService.saveBoth(equipo,usuario);
 
+            session.setAttribute("MONEDAS", usuario.getMonedas());
 
-      ModelAndView mav = new ModelAndView("sorteoEquipo");
-      mav.addObject("equipo", equipo);
-      mav.addObject("nombreEquipo", equipo.getNombre());
+            ModelAndView mav = new ModelAndView("sorteoEquipo");
+            mav.addObject("equipo", equipo);
+            mav.addObject("nombreEquipo", equipo.getNombre());
+            mav.addObject("monedas", usuario.getMonedas());
+            return mav;
+        }
+
+   @GetMapping("/mi-equipo")
+   public ModelAndView mostrarEquipo(HttpSession session){
+      Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
+
+      if(usuarioId == null){
+         return new ModelAndView("redirect:/login");
+      }
+
+      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+      if(usuario == null || usuario.getEquipo() == null){
+         return new ModelAndView("redirect:/nuevo-equipo");
+      }
+
+      Equipo equipo = usuario.getEquipo();
+      EquipoDTO equipoDTO = new EquipoDTO();
+      equipoDTO.convertFromEntity(equipo);
+
+      ModelAndView mav = new ModelAndView("miEquipoVista");
+      mav.addObject("equipo",equipoDTO);
       return mav;
    }
 }

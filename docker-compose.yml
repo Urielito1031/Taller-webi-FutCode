@@ -10,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_futcode
     ports:
-      - "3307:3307"
+      - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 
@@ -25,7 +25,7 @@ services:
       - mysql
     environment:
       DB_HOST: mysql
-      DB_PORT: 3307
+      DB_PORT: 3306
       DB_NAME: db_futcode
       DB_USER: root
       DB_PASSWORD: root

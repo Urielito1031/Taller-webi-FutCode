@@ -69,8 +69,29 @@ public class JugadorDTO {
       return jugador;
    }
 
+
+
     public JugadorDTO(String nombre, RarezaJugador rarezaJugador) {
       this.nombre = nombre;
       this.rarezaJugador = rarezaJugador;
     }
+
+   public JugadorDTO convertFromEntity(Jugador jugador) {
+      JugadorDTO dto = new JugadorDTO();
+      dto.setId(jugador.getId());
+      dto.setNombre(jugador.getNombre());
+      dto.setApellido(jugador.getApellido());
+      dto.setImagen(jugador.getImagen());
+      dto.setEdad(jugador.getEdad());
+      dto.setNumeroCamiseta(jugador.getNumeroCamiseta());
+      dto.setRating(jugador.getRating());
+      dto.setEstadoFisico(jugador.getEstadoFisico());
+      dto.setLesionado(jugador.getLesionado());
+      dto.setPaisOrigen(jugador.getPais());
+
+      dto.setRarezaJugador(jugador.getRarezaJugador());
+      dto.setPosicionNatural(jugador.getPosicion());
+
+      return dto;
+   }
 }

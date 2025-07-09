@@ -1,9 +1,10 @@
-<div th:fragment="torneoList">
+<div id="lista-torneos" th:fragment="torneoList">
    <main class="contenedor-principal-torneos">
       <header class="text-center mb-5">
          <h1 class="display-4 fw-bold text-primary">
             <i class="bi bi-trophy me-2"></i>Torneos
          </h1>
+         <link th:href="@{./css/list-torneos.css}" rel="stylesheet" />
       </header>
 
       <div class="contenedores row">

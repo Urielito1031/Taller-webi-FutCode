@@ -10,7 +10,6 @@ import java.util.List;
 public interface EquipoService{
 
 
-    void saveBoth(EquipoDTO equipo, Usuario usuario);
     List<EquipoDTO> getAll();
     EquipoDTO getById(Long id);
    EquipoDTO getByNombre(String nombre);

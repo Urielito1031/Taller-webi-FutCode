@@ -40,7 +40,6 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
       equipoTorneo.setTorneo(getSession().get(Torneo.class, torneoId));
       equipoTorneo.setEquipo(getSession().get(Equipo.class, equipoId));
 
-
       getSession().save(equipoTorneo);
 
    }

@@ -1,0 +1,4 @@
+package com.tallerwebi.dominio.service;
+
+public class PartidoServiceImpl {
+}

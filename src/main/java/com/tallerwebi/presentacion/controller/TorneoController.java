@@ -89,7 +89,7 @@ public class TorneoController {
       } catch (IllegalArgumentException e) {
          redirectAttributes.addFlashAttribute("errorUnirse", e.getMessage());
       }
-      return "redirect:/torneo/detalle-torneo/" + torneoId;
+      return "redirect:/detalle-torneo/" + torneoId;
    }
 
 
@@ -106,7 +106,7 @@ public class TorneoController {
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
       simularTorneoService.simularFecha(torneoId, numeroFecha);
-      return "redirect:/torneo/fechas?torneoId=" + torneoId;
+      return "redirect:/fechas?torneoId=" + torneoId;
    }
 
    @GetMapping("/tabla-posiciones")

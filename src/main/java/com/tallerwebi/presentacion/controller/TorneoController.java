@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion.controller;
 
+import com.tallerwebi.dominio.model.entities.EquipoTorneo;
+import com.tallerwebi.dominio.model.entities.Partido;
 import com.tallerwebi.dominio.model.entities.Torneo;
 import com.tallerwebi.dominio.repository.TorneoRepository;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/torneo")
@@ -102,8 +105,24 @@ public class TorneoController {
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
       simularTorneoService.simularFecha(torneoId, numeroFecha);
-      return "redirect:/torneos/" + torneoId + "/fechas";
+      return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
+
+   @GetMapping("/tabla-posiciones")
+   public ModelAndView mostrarTabla(@RequestParam Long torneoId) {
+      Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+      List<Partido> partidos = torneo.getFechas().stream()
+              .flatMap(f -> f.getPartidos().stream())
+//              .filter(p -> p.getResultado() != null) // opcional
+              .collect(Collectors.toList());
+
+      List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos);
+
+      ModelAndView mav = new ModelAndView("tabla-posiciones");
+      mav.addObject("tabla", tabla);
+      return mav;
+   }
+
 
 
 

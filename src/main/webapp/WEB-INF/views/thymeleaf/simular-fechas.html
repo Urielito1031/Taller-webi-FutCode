@@ -7,22 +7,18 @@
 </head>
 <body>
     <h1>Fechas del Torneo</h1>
-
     <table>
         <thead>
         <tr>
             <th>N°</th>
             <th>Estado</th>
             <th>Acción</th>
-            <th>Local</th>
-            <th>Visitante</th>
-
         </tr>
         </thead>
         <tbody>
         <tr th:each="fecha : ${fechas}">
             <td th:text="${fecha.numeroDeFecha}">1</td>
-            <td th:text="${fecha.simulada ? 'Simulada' : 'Pendiente'}">Estado</td>
+            <td th:text="${fecha.simulada ? 'JUGADA' : 'PROXIMAMENTE'}">Estado</td>
             <td>
                 <form th:action="@{/torneo/simular-fecha}" method="post" th:if="${!fecha.simulada}">
                     <input type="hidden" name="torneoId" th:value="${torneoId}">
@@ -32,6 +28,7 @@
                 <span th:if="${fecha.simulada}">✅</span>
             </td>
         </tr>
+
         <tr th:each="fecha : ${fechas}">
             <td th:text="${fecha.numeroDeFecha}"></td>
             <td>

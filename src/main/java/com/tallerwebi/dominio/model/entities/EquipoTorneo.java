@@ -51,6 +51,34 @@ public class EquipoTorneo {
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
 
+   public void actualizarConPartido(Partido partido, Boolean esLocal){
+      int golesEquipo = 0;
+      int golesRival = 0;
+
+      if(esLocal){
+         golesEquipo = partido.getGolesLocal();
+         golesRival = partido.getGolesVisitante();
+      }else{
+         golesEquipo = partido.getGolesVisitante();
+         golesRival = partido.getGolesLocal();
+      }
+
+      this.partidosJugados += 1;
+      this.golesAFavor += golesEquipo;
+      this.golesEnContra += golesRival;
+
+      if(golesEquipo > golesRival){
+         this.partidosGanados += 1;
+         this.puntos += 3;
+      } else if (golesEquipo == golesRival) {
+         this.partidosEmpatados += 1;
+         this.puntos += 1;
+      }else{
+         this.partidosPerdidos += 1;
+      }
+   }
+
+
    public EquipoTorneoDTO convertToDTO() {
       EquipoTorneoDTO equipoTorneoDTO = new EquipoTorneoDTO();
       equipoTorneoDTO.setId(this.id);

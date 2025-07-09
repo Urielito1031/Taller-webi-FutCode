@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.model.entities.EquipoTorneo;
+import com.tallerwebi.dominio.model.entities.Partido;
 import com.tallerwebi.dominio.model.entities.Torneo;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 
@@ -10,4 +12,6 @@ public interface TorneoService {
    TorneoDTO getById(Long id);
 
    Torneo obtenerTorneoConFechas(Long torneoId);
+
+   List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos);
 }

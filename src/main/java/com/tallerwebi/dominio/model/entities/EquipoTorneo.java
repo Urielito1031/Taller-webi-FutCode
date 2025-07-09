@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
+import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,11 +43,6 @@ public class EquipoTorneo {
    @Column(name = "puntos")
    private Integer puntos= 0;
 
-//   @ManyToOne(fetch = FetchType.EAGER)
-//   @OnDelete(action = OnDeleteAction.CASCADE)
-//   @JoinColumn(name = "torneo_id")
-//   private com.tallerwebi.dominio.model.entities.Torneo torneo;
-
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
@@ -73,14 +69,16 @@ public class EquipoTorneo {
       this.golesAFavor += golesEquipo;
       this.golesEnContra += golesRival;
 
-      if(golesEquipo > golesRival){
-         this.partidosGanados += 1;
-         this.puntos += 3;
-      } else if (golesEquipo == golesRival) {
-         this.partidosEmpatados += 1;
-         this.puntos += 1;
-      }else{
-         this.partidosPerdidos += 1;
+      if(partido.getResultado() != ResultadoPartido.PENDIENTE){ /* agrego para fix en tabla */
+         if(golesEquipo > golesRival){
+            this.partidosGanados += 1;
+            this.puntos += 3;
+         } else if (golesEquipo == golesRival) {
+            this.partidosEmpatados += 1;
+            this.puntos += 1;
+         }else{
+            this.partidosPerdidos += 1;
+         }
       }
    }
 

@@ -1,8 +1,6 @@
 package com.tallerwebi.dominio.service;
 
-import com.tallerwebi.dominio.model.entities.EquipoTorneo;
-import com.tallerwebi.dominio.model.entities.Partido;
-import com.tallerwebi.dominio.model.entities.Torneo;
+import com.tallerwebi.dominio.model.entities.*;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 
 import java.util.List;
@@ -12,6 +10,7 @@ public interface TorneoService {
    TorneoDTO getById(Long id);
 
    Torneo obtenerTorneoConFechas(Long torneoId);
-
    List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos);
+   List<Fecha> generarFechas(List<Equipo> equipos, Torneo torneo);
+   void crearFixtureConLasFechas(Long torneoId);
 }

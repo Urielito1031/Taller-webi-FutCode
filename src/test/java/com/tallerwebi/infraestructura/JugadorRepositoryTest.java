@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.model.enums.RarezaJugador;
 import com.tallerwebi.dominio.repository.JugadorRepository;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class JugadorRepositoryTest {
    private JugadorRepository jugadorRepository;
 
    @Autowired
-   private org.hibernate.SessionFactory sessionFactory;
+   private SessionFactory sessionFactory;
 
 
    @Test
@@ -46,7 +47,7 @@ public class JugadorRepositoryTest {
       List<Jugador> jugadores = jugadorRepository.getAll();
 
       assertNotNull(jugadores);
-      assertThat(jugadores, hasSize(21)); // Ahora debería ser 21 jugadores en total según el script unificado
+      assertThat(jugadores, hasSize(21));
    }
 
    @Test
@@ -109,7 +110,7 @@ public class JugadorRepositoryTest {
 
    @Test
    public void debeObtenerTodosLosJugadoresDeUnEquipoExistente() {
-      Long equipoId = 201L; // Usamos Equipo 201 del área de Torneos para el test
+      Long equipoId = 201L;
 
       List<Jugador> jugadores = jugadorRepository.getAllByEquipoId(equipoId);
 
@@ -122,7 +123,7 @@ public class JugadorRepositoryTest {
 
    @Test
    public void debeRetornarListaVaciaParaUnEquipoSinJugadores() {
-      Long equipoId = 104L; // Equipo 104 existe pero no tiene jugadores asignados en el script
+      Long equipoId = 104L;
 
       List<Jugador> jugadores = jugadorRepository.getAllByEquipoId(equipoId);
 
@@ -192,7 +193,7 @@ public class JugadorRepositoryTest {
 
    @Test
    public void debeActualizarUnJugadorExistenteEnLaBaseDeDatos() {
-      Long jugadorId = 5013L; // Usamos un ID diferente para actualizar, para no afectar el 5012
+      Long jugadorId = 5013L;
       Jugador jugadorAActualizar = sessionFactory.getCurrentSession().get(Jugador.class, jugadorId);
 
       assertNotNull(jugadorAActualizar);

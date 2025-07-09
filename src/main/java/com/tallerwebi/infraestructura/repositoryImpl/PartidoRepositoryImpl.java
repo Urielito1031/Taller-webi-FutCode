@@ -30,6 +30,16 @@ public class PartidoRepositoryImpl implements PartidoRepository {
                 .setParameter("idTorneo", idTorneo).getResultList();
     }
 
+    @Override
+    public List<Partido> obtenerPartidosPorEquipoId(Long idEquipo){
+        return   getSession().createQuery(
+          "SELECT p " +
+            "FROM Partido p " +
+            "WHERE p.equipoLocal.id = :idEquipo" +
+            " OR p.equipoVisitante.id = :idEquipo",
+          Partido.class).setParameter("idEquipo", idEquipo).getResultList();
+    }
+
     private Session getSession(){
         return sessionFactory.getCurrentSession();
     }

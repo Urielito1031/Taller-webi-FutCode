@@ -71,7 +71,7 @@ public class EquipoInicialControlador {
 
 
    @RequestMapping(path = "/sorteoEquipoInicial", method = RequestMethod.GET)
-   public ModelAndView sorteEquipoInicial(HttpSession session) {
+   public ModelAndView  sorteEquipoInicial(HttpSession session) {
 
       EquipoDTO equipo = (EquipoDTO) session.getAttribute("equipo");
 
@@ -104,25 +104,5 @@ public class EquipoInicialControlador {
             return mav;
         }
 
-   @GetMapping("/mi-equipo")
-   public ModelAndView mostrarEquipo(HttpSession session){
-      Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
 
-      if(usuarioId == null){
-         return new ModelAndView("redirect:/login");
-      }
-
-      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
-      if(usuario == null || usuario.getEquipo() == null){
-         return new ModelAndView("redirect:/nuevo-equipo");
-      }
-
-      Equipo equipo = usuario.getEquipo();
-      EquipoDTO equipoDTO = new EquipoDTO();
-      equipoDTO.convertFromEntity(equipo);
-
-      ModelAndView mav = new ModelAndView("miEquipoVista");
-      mav.addObject("equipo",equipoDTO);
-      return mav;
-   }
 }

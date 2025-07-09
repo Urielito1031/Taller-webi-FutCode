@@ -205,4 +205,116 @@ public class EquipoInicialControladorTest{
       verify(equipoService).saveBoth(equipoNuevo,usuarioMock);
    }
 
+   @Test
+   public void dadoQueNoHayEquipoEnSesionEntoncesRedirigeANuevoEquipo() {
+      Long idUsuario = 4L;
+      when(httpSession.getAttribute("USUARIO_ID")).thenReturn(idUsuario);
+      when(httpSession.getAttribute("equipo")).thenReturn(null);
+
+      ModelAndView mav = this.equipoInicialControlador.sorteEquipoInicial(httpSession);
+
+      assertEquals("redirect:/nuevo-equipo", mav.getViewName()); // o el nombre de tu vista de creación
+   }
+
+
+   @Test
+   public void dadoQueNoHayUsuarioEnSesionEntoncesRedirigeAlLogin() {
+      when(httpSession.getAttribute("USUARIO_ID")).thenReturn(null);
+
+      ModelAndView mav = this.equipoInicialControlador.sorteEquipoInicial(httpSession);
+
+      assertEquals("redirect:/nuevo-equipo", mav.getViewName()); // o la vista que uses por defecto
+   }
+
+
+
+
+   @Test
+   public void dadoQueEquipoNoTieneJugadoresLosCargaCorrectamente() {
+      EquipoDTO equipoNuevo = new EquipoDTO();
+      equipoNuevo.setId(10L);
+      equipoNuevo.setNombre("SinJugadores");
+
+      Long usuarioId = 5L;
+      Usuario usuario = new Usuario();
+      usuario.setId(usuarioId);
+
+      when(httpSession.getAttribute("equipo")).thenReturn(equipoNuevo);
+      when(httpSession.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+      when(usuarioService.buscarUsuarioPorId(usuarioId)).thenReturn(usuario);
+
+      List<JugadorDTO> jugadoresMock = IntStream.range(0, 14)
+              .mapToObj(i -> {
+                 JugadorDTO j = new JugadorDTO();
+                 j.setId((long) i);
+                 j.setNombre("Jugador " + i);
+                 return j;
+              }).collect(Collectors.toList());
+
+      doAnswer(invocation -> {
+         EquipoDTO equipo = invocation.getArgument(0);
+         equipo.setJugadores(jugadoresMock);
+         return null;
+      }).when(jugadorService).cargarJugadoresAlEquipo(any(EquipoDTO.class));
+
+      doAnswer(invocation -> {
+         EquipoDTO dto = invocation.getArgument(0);
+         Usuario u = invocation.getArgument(1);
+         Equipo entidad = new Equipo();
+         entidad.setId(dto.getId());
+         u.setEquipo(entidad);
+         return null;
+      }).when(equipoService).saveBoth(any(), any());
+
+      ModelAndView mav = equipoInicialControlador.sorteEquipoInicial(httpSession);
+
+      assertEquals("sorteoEquipo", mav.getViewName());
+      assertEquals("SinJugadores", mav.getModel().get("nombreEquipo"));
+      assertNotNull(equipoNuevo.getJugadores());
+      assertEquals(14, equipoNuevo.getJugadores().size());
+
+      verify(jugadorService).cargarJugadoresAlEquipo(equipoNuevo);
+   }
+
+
+   @Test
+   public void dadoQueNoHayUsuarioNiEquipoEnSesionRedirige() {
+      when(httpSession.getAttribute("USUARIO_ID")).thenReturn(null);
+      when(httpSession.getAttribute("equipo")).thenReturn(null);
+
+      ModelAndView mav = equipoInicialControlador.sorteEquipoInicial(httpSession);
+
+      assertEquals("redirect:/nuevo-equipo", mav.getViewName());
+   }
+
+
+   @Test
+   public void dadoQueNoHayEquipoEnSesionSeCreaNuevoEquipoYSeGuarda() {
+      Long usuarioId = 8L;
+      Usuario usuario = new Usuario();
+      usuario.setId(usuarioId);
+
+      when(httpSession.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+      when(httpSession.getAttribute("equipo")).thenReturn(null);
+      when(usuarioService.buscarUsuarioPorId(usuarioId)).thenReturn(usuario);
+
+      // Simular que el equipoService guarda el equipo y asigna ID
+      doAnswer(invocation -> {
+         EquipoDTO equipoDto = invocation.getArgument(0);
+         equipoDto.setId(100L);
+         return null;
+      }).when(equipoService).save(any(EquipoDTO.class));
+
+      // Simular que carga jugadores al equipo
+      doNothing().when(jugadorService).cargarJugadoresAlEquipo(any(EquipoDTO.class));
+
+      ModelAndView mav = equipoInicialControlador.sorteEquipoInicial(httpSession);
+
+      // En este caso esperás redirección o vista creada para nuevo equipo
+      assertEquals("redirect:/nuevo-equipo", mav.getViewName()); // Ajustar según implementación
+   }
+
+
+
+
 }

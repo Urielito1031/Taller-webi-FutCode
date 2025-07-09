@@ -42,7 +42,6 @@ public class UsuarioServiceTest {
         sobre.setTipoSobre(TipoSobre.BRONCE);
         sobre.setPrecio(2500.0);
 
-
         Mockito.when(sobreService.crearSobre(TipoSobre.BRONCE)).thenReturn(sobre);
 
         Mockito.when(repositorioUsuario.buscarUsuarioPorId(1L)).thenReturn(usuario);

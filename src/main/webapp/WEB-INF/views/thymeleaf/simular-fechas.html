@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Fechas del Torneo</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>N°</th>
+            <th>Estado</th>
+            <th>Acción</th>
+            <th>Local</th>
+            <th>Visitante</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="fecha : ${fechas}">
+            <td th:text="${fecha.numeroDeFecha}">1</td>
+            <td th:text="${fecha.simulada ? 'Simulada' : 'Pendiente'}">Estado</td>
+            <td>
+                <form th:action="@{/torneo/simular-fecha}" method="post" th:if="${!fecha.simulada}">
+                    <input type="hidden" name="torneoId" th:value="${torneoId}">
+                    <input type="hidden" name="numeroFecha" th:value="${fecha.numeroDeFecha}">
+                    <button type="submit">Simular</button>
+                </form>
+                <span th:if="${fecha.simulada}">✅</span>
+            </td>
+        </tr>
+        <tr th:each="fecha : ${fechas}">
+            <td th:text="${fecha.numeroDeFecha}"></td>
+            <td>
+                <ul>
+                    <li th:each="partido : ${fecha.partidos}">
+                        <span th:text="${partido.equipoLocal.nombre}"></span>
+                        vs
+                        <span th:text="${partido.equipoVisitante.nombre}"></span>
+                        (<span th:text="${partido.golesLocal}">0</span> -
+                        <span th:text="${partido.golesVisitante}">0</span>)
+                    </li>
+                </ul>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</body>
+</html>

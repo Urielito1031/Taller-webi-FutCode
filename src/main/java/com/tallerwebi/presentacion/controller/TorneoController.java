@@ -1,34 +1,43 @@
 package com.tallerwebi.presentacion.controller;
 
+import com.tallerwebi.dominio.model.entities.Torneo;
+import com.tallerwebi.dominio.repository.TorneoRepository;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
+import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.infraestructura.repositoryImpl.TorneoRepositoryImpl;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
+@RequestMapping("/torneo")
 public class TorneoController {
 
    private final TorneoService torneoService;
    private final EquipoTorneoService equipoTorneoService;
    private final UsuarioService usuarioService;
+   private final SimularTorneoService simularTorneoService;
+   private final TorneoRepository torneoRepository;
 
    @Autowired
-   public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService, UsuarioService usuarioService) {
+   public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService, UsuarioService usuarioService,
+                           SimularTorneoService simularTorneoService, TorneoRepository torneoRepository) {
       this.torneoService = torneoService;
       this.equipoTorneoService = equipoTorneoService;
       this.usuarioService = usuarioService;
+      this.simularTorneoService = simularTorneoService;
+      this.torneoRepository = torneoRepository;
    }
 
    @GetMapping(path = "/home")
@@ -78,4 +87,25 @@ public class TorneoController {
       }
       return "redirect:/detalle-torneo/" + torneoId;
    }
+
+
+   @GetMapping("/fechas")
+   public ModelAndView mostrarFechas(@RequestParam Long torneoId) {
+      Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+      ModelAndView mav = new ModelAndView("simular-fechas");
+      mav.addObject("fechas", torneo.getFechas());
+      mav.addObject("torneoId", torneoId);
+
+      return mav;
+   }
+
+   @PostMapping("/simular-fecha")
+   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
+      simularTorneoService.simularFecha(torneoId, numeroFecha);
+      return "redirect:/torneos/" + torneoId + "/fechas";
+   }
+
+
+
+
 }

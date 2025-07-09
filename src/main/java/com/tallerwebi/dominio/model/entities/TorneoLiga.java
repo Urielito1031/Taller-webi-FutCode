@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Table(name = "torneo_liga")
 public class TorneoLiga{
    @Id
-//   @Column(name = "id", nullable = false)
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 

@@ -19,6 +19,5 @@ public interface EquipoService{
     void delete(Long id);
     Equipo sortearEquipoInicial();
 
-   void saveBoth(EquipoDTO equipo,Usuario usuario);
 
 }

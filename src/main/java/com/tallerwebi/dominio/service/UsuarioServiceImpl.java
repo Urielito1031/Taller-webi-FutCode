@@ -22,13 +22,10 @@ import java.util.stream.Collectors;
 public class UsuarioServiceImpl implements  UsuarioService{
 
     private final RepositorioUsuarioImpl repositorioUsuario;
-//    private final SessionFactory sessionFactory;
-//
 
     @Autowired
     public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
         this.repositorioUsuario = repositorioUsuario;
-//        this.sessionFactory = sessionFactory;
     }
 
     @SneakyThrows
@@ -42,6 +39,8 @@ public class UsuarioServiceImpl implements  UsuarioService{
         sobre.setUsuario(usuario);
 
         validarMonedas(usuario.getMonedas(), sobre.getPrecio());
+
+        // restar monedas en la clase usuario
         usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);
@@ -51,6 +50,7 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return agregado;
     }
 
+    // llevar a la clase usuario
     private void validarMonedas(Double monedasUsuario, Double precioSobre){
         if(monedasUsuario < precioSobre){
             throw new MonedasInsuficientes();

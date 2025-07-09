@@ -10,4 +10,6 @@ public interface TorneoRepository {
    Torneo getById(Long id);
 
    boolean existsById(Long torneoId);
+
+   Torneo obtenerTorneoConFechas(Long torneoId);
 }

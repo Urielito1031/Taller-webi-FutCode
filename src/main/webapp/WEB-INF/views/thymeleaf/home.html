@@ -18,7 +18,7 @@
 <body>
 
 <nav class="navbar">
-  <a id="titulo-nav" class="navbar-brand" href="#">FUTCODE</a>
+  <a id="titulo-nav" class="navbar-brand" th:href="@{/home}">FUTCODE</a>
   <div class="container">
     <div id="navbarNav">
       <ul class="ms-auto">
@@ -28,7 +28,7 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#lista-torneos"
+          <a class="nav-link" th:href="@{/lista-torneos}"
           ><i class="bi bi-trophy-fill"></i> Torneos</a
           >
         </li>

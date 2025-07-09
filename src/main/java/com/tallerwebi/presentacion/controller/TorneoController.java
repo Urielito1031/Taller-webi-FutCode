@@ -40,6 +40,15 @@ public class TorneoController {
       model.addAttribute("torneos", torneos);
       return "home";
    }
+   @GetMapping(path = "/lista-torneos")
+   public String verTorneos(Model model) {
+      List<TorneoDTO> torneos = torneoService.getAll();
+      if (torneos.isEmpty()) {
+         model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
+      }
+      model.addAttribute("torneos", torneos);
+      return "vista-list-torneos";
+   }
 
    @GetMapping("/detalle-torneo/{id}")
    public String detalleTorneo(@PathVariable Long id, Model model) {

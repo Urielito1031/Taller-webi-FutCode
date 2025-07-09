@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class EquipoDTO {
    private Long id;
-   @NotBlank(message = "El nombre del equipo no puede estar vacío")
+   @NotNull(message = "El nombre del equipo no puede estar vacío")
    private String nombre;
    private ClubDTO club;
    private List<JugadorDTO> jugadores;

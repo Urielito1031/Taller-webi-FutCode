@@ -1,6 +1,5 @@
 package com.tallerwebi.presentacion.dto;
 
-import com.tallerwebi.dominio.model.enums.EstadoPartido;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +14,6 @@ public class PartidoDTO {
    private EquipoDTO equipoLocal;
    private EquipoDTO equipoVisitante;
    private Date fechaEncuentro;
-   private EstadoPartido estadoPartido;
    private List<EventoPartidoDTO> eventosPartido;
 
    public PartidoDTO() {}
@@ -23,7 +21,6 @@ public class PartidoDTO {
       this.id = id;
       this.equipoLocal = equipoLocal;
       this.equipoVisitante = equipoVisitante;
-      this.estadoPartido = EstadoPartido.SIN_JUGAR;
       this.fechaEncuentro = fechaEncuentro;
       this.eventosPartido = new ArrayList<>();
    }

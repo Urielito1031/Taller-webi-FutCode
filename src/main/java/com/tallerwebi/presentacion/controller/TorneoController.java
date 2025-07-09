@@ -9,6 +9,7 @@ import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,13 +46,47 @@ public class TorneoController {
 
 
    @GetMapping(path = "/lista-torneos")
-   public String verTorneos(Model model) {
+   public String verTorneos(Model model, HttpServletRequest request) {
+   try {
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+
+      if (usuarioId == null) {
+         return "redirect:/login";
+      }
+
+      Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
+
+      if (usuario == null) {
+         return "redirect:/login";
+      }
+
+
       List<TorneoDTO> torneos = torneoService.getAll();
       if (torneos.isEmpty()) {
          model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
       }
-      model.addAttribute("torneos", torneos);
-      return "vista-list-torneos";
+
+      List<TorneoDTO> torneosUnidos = new ArrayList<>();
+
+      for (TorneoDTO torneo : torneos) {
+         List<EquipoTorneoDTO> equiposDelTorneo = this.equipoTorneoService.getAllByTorneoId(torneo.getId());
+
+         for (EquipoTorneoDTO etdto : equiposDelTorneo) {
+            EquipoDTO equipo = etdto.getEquipo();
+            if (equipo != null && equipo.getUsuarioId() != null && equipo.getUsuarioId().equals(usuarioId)) {
+               torneosUnidos.add(torneo);
+               break;
+            }
+         }
+      }
+
+      model.addAttribute("torneos", torneosUnidos);
+      return "vista-mis-torneos";
+   } catch (Exception e) {
+      model.addAttribute("error", "Error al cargar torneos: " + e.getMessage());
+      e.printStackTrace(); // Esto te lo tira a consola
+      return "error"; // o una vista especial de error
+   }
    }
 
    @GetMapping("/detalle-torneo/{id}")

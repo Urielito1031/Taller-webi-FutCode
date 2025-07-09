@@ -149,7 +149,7 @@ public class TorneoControllerTest {
       String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
 
       // Verificación
-      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      assertThat(result, is("redirect:/torneo/detalle-torneo/" + torneoId));
       verify(redirectAttributes).addFlashAttribute("errorUnirse", "No estás autenticado. Por favor, inicia sesión.");
       // Asegurarse de que no se interactúa con los servicios después de la validación de autenticación
       verifyNoInteractions(usuarioService);
@@ -168,7 +168,7 @@ public class TorneoControllerTest {
       String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
 
       // Verificación
-      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      assertThat(result, is("redirect:/torneo/detalle-torneo/" + torneoId));
       verify(redirectAttributes).addFlashAttribute("errorUnirse", "Usuario no encontrado.");
       verify(usuarioService).buscarUsuarioPorId(usuarioId);
       verifyNoInteractions(equipoTorneoService); // No debería llamar a este servicio
@@ -190,7 +190,8 @@ public class TorneoControllerTest {
       String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
 
       // Verificación
-      assertThat(result, is("redirect:/nuevo-equipo"));
+      assertThat(result, is("redirect:/torneo/nuevo-equipo"));
+      // but: was "redirect:/torneo/nuevo-equipo"
       verify(redirectAttributes).addFlashAttribute("errorUnirse", "No tienes un equipo asignado. Crea un equipo primero.");
       verify(usuarioService).buscarUsuarioPorId(usuarioId);
       verifyNoInteractions(equipoTorneoService); // No debería intentar unirse al torneo
@@ -217,7 +218,7 @@ public class TorneoControllerTest {
       String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
 
       // Verificación
-      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      assertThat(result, is("redirect:/torneo/detalle-torneo/" + torneoId));
       verify(usuarioService).buscarUsuarioPorId(usuarioId);
       verify(equipoTorneoService).unirseTorneo(torneoId, equipoId);
       verify(redirectAttributes).addFlashAttribute("mensajeTorneo", "¡Te uniste al torneo con éxito!");
@@ -246,7 +247,7 @@ public class TorneoControllerTest {
       String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
 
       // Verificación
-      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      assertThat(result, is("redirect:/torneo/detalle-torneo/" + torneoId));
       verify(usuarioService).buscarUsuarioPorId(usuarioId);
       verify(equipoTorneoService).unirseTorneo(torneoId, equipoId);
       verify(redirectAttributes).addFlashAttribute("errorUnirse", errorMessage);

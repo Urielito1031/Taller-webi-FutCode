@@ -31,15 +31,7 @@ public class TorneoController {
       this.usuarioService = usuarioService;
    }
 
-   @GetMapping(path = "/home")
-   public String irAHome(Model model) {
-      List<TorneoDTO> torneos = torneoService.getAll();
-      if (torneos.isEmpty()) {
-         model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
-      }
-      model.addAttribute("torneos", torneos);
-      return "home";
-   }
+
    @GetMapping(path = "/lista-torneos")
    public String verTorneos(Model model) {
       List<TorneoDTO> torneos = torneoService.getAll();

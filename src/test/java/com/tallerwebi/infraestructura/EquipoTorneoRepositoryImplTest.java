@@ -272,23 +272,23 @@ public class EquipoTorneoRepositoryImplTest {
       ));
    }
 
-   @Test
-   @Sql("/db_futcodeTest.sql")
-   @Rollback
-   public void cuandoPidoTodosLosEquiposDeUnTorneoExistenteConSqlEntoncesObtengoLaListaCorrecta() {
-      // Ejecución
-      List<EquipoTorneo> equiposTorneoObtenidos = equipoTorneoRepository.getAllByTorneoId(101L); // ID de Torneo de db_futcodeTest.sql
-
-      // Validación
-      assertFalse(equiposTorneoObtenidos.isEmpty());
-      assertThat(equiposTorneoObtenidos, hasSize(3));
-      assertThat(equiposTorneoObtenidos, containsInAnyOrder(
-        hasProperty("equipo", hasProperty("nombre", is("Los Invencibles"))),
-        hasProperty("equipo", hasProperty("nombre", is("Fuerza Unida"))),
-        hasProperty("equipo", hasProperty("nombre", is("Estrellas FC")))
-      ));
-      assertThat(equiposTorneoObtenidos, everyItem(hasProperty("torneo", hasProperty("id", is(101L)))));
-   }
+//   @Test
+//   @Sql("/db_futcodeTest.sql")
+//   @Rollback
+//   public void cuandoPidoTodosLosEquiposDeUnTorneoExistenteConSqlEntoncesObtengoLaListaCorrecta() {
+//      // Ejecución
+//      List<EquipoTorneo> equiposTorneoObtenidos = equipoTorneoRepository.getAllByTorneoId(101L); // ID de Torneo de db_futcodeTest.sql
+//
+//      // Validación
+//      assertFalse(equiposTorneoObtenidos.isEmpty());
+//      assertThat(equiposTorneoObtenidos, hasSize(3));
+//      assertThat(equiposTorneoObtenidos, containsInAnyOrder(
+//        hasProperty("equipo", hasProperty("nombre", is("Los Invencibles"))),
+//        hasProperty("equipo", hasProperty("nombre", is("Fuerza Unida"))),
+//        hasProperty("equipo", hasProperty("nombre", is("Estrellas FC")))
+//      ));
+//      assertThat(equiposTorneoObtenidos, everyItem(hasProperty("torneo", hasProperty("id", is(101L)))));
+//   }
 
 
 

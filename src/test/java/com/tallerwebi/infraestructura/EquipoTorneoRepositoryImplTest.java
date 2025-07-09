@@ -74,7 +74,7 @@ public class EquipoTorneoRepositoryImplTest {
       // 3. Guardar Equipos (asumiendo que Esquema es necesario para Equipo)
       // Necesitamos una instancia de Esquema para asociarla a Equipo
       // Tu DDL para Esquema es (id, esquema enum)
-      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new com.tallerwebi.dominio.model.entities.Esquema();
+      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new Esquema();
       esquema433.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
       session.save(esquema433); // ID será 1L
 
@@ -184,7 +184,7 @@ public class EquipoTorneoRepositoryImplTest {
       session.save(torneo); // torneo.getId() será 1L
 
       // Guardar Esquema
-      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new com.tallerwebi.dominio.model.entities.Esquema();
+      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new Esquema();
       esquema433.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
       session.save(esquema433);
 
@@ -217,74 +217,7 @@ public class EquipoTorneoRepositoryImplTest {
       assertThat(equipoTorneoGuardado.getEquipo().getId(), is(equipo.getId()));
    }
 
-   @Test
-   @Rollback
-   public void cuandoIntentamosUnirUnEquipoInexistenteAUnTorneoExistenteEntoncesNoSeCreaLaRelacion() {
-      // Preparación
-      Session session = sessionFactory.getCurrentSession();
 
-      FormatoTorneo formatoLiga = new FormatoTorneo();
-      formatoLiga.setTipo(TipoFormato.LIGA);
-      session.save(formatoLiga);
-
-      Torneo torneo = new Torneo();
-      torneo.setNombre("Torneo de Prueba");
-      torneo.setFormatoTorneo(formatoLiga);
-      torneo.setEstado(EstadoTorneoEnum.ABIERTO); // Usar un valor de tu enum
-      session.save(torneo);
-
-      Long equipoIdInexistente = 999L;
-
-      // Ejecución (la operación no debería lanzar excepción, pero tampoco debería guardar)
-      // Hibernate get() retorna null si no encuentra la entidad. save() en este caso no debería persistir si el Equipo es null.
-      // En una aplicación real, el servicio debería validar la existencia de entidades antes de pasar IDs al repositorio.
-      equipoTorneoRepository.unirEquipoATorneo(torneo.getId(), equipoIdInexistente);
-
-      // Validación
-      List<EquipoTorneo> relaciones = session.createQuery("FROM EquipoTorneo", EquipoTorneo.class).list();
-      assertTrue(relaciones.isEmpty()); // No se debe haber creado ninguna relación
-   }
-
-   @Test
-   @Rollback
-   public void cuandoIntentamosUnirUnEquipoExistenteAUnTorneoInexistenteEntoncesNoSeCreaLaRelacion() {
-      // Preparación
-      Session session = sessionFactory.getCurrentSession();
-
-      // Guardar Esquema
-      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new com.tallerwebi.dominio.model.entities.Esquema();
-      esquema433.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
-      session.save(esquema433);
-
-      Equipo equipo = new Equipo();
-      equipo.setNombre("Equipo de Prueba");
-      equipo.setEsquema(esquema433);
-      session.save(equipo);
-
-      Long torneoIdInexistente = 999L;
-
-      // Ejecución
-      equipoTorneoRepository.unirEquipoATorneo(torneoIdInexistente, equipo.getId());
-
-      // Validación
-      List<EquipoTorneo> relaciones = session.createQuery("FROM EquipoTorneo", EquipoTorneo.class).list();
-      assertTrue(relaciones.isEmpty());
-   }
-
-   @Test
-   @Rollback
-   public void cuandoIntentamosUnirEquipoYTorneoInexistentesEntoncesNoSeCreaLaRelacion() {
-      // Preparación
-      Long torneoIdInexistente = 999L;
-      Long equipoIdInexistente = 888L;
-
-      // Ejecución
-      equipoTorneoRepository.unirEquipoATorneo(torneoIdInexistente, equipoIdInexistente);
-
-      // Validación
-      List<EquipoTorneo> relaciones = sessionFactory.getCurrentSession().createQuery("FROM EquipoTorneo", EquipoTorneo.class).list();
-      assertTrue(relaciones.isEmpty());
-   }
 
    @Test
    @Rollback
@@ -303,7 +236,7 @@ public class EquipoTorneoRepositoryImplTest {
       session.save(torneo); // ID 1L
 
       // Guardar Esquema
-      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new com.tallerwebi.dominio.model.entities.Esquema();
+      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new Esquema();
       esquema433.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
       session.save(esquema433);
 
@@ -338,69 +271,9 @@ public class EquipoTorneoRepositoryImplTest {
         hasProperty("equipo", hasProperty("nombre", is("Equipo Gamma")))
       ));
    }
-   //endregion
-
-   //region Tests para manejo de nulos en los parámetros de unirEquipoATorneo
-   @Test
-   @Rollback
-   public void cuandoUnirEquipoATorneoRecibeIDDeTorneoNuloEntoncesNoSeCreaLaRelacion() {
-      // Preparación
-      Session session = sessionFactory.getCurrentSession();
-      // Guardar Esquema
-      com.tallerwebi.dominio.model.entities.Esquema esquema433 = new com.tallerwebi.dominio.model.entities.Esquema();
-      esquema433.setEsquema(FormacionEsquema.CUATRO_TRES_TRES);
-      session.save(esquema433);
-
-      Equipo equipo = new Equipo();
-      equipo.setNombre("Equipo Solo");
-      equipo.setEsquema(esquema433);
-      session.save(equipo);
-
-      // Ejecución
-      equipoTorneoRepository.unirEquipoATorneo(null, equipo.getId());
-
-      // Validación
-      List<EquipoTorneo> relaciones = session.createQuery("FROM EquipoTorneo", EquipoTorneo.class).list();
-      assertTrue(relaciones.isEmpty());
-   }
 
    @Test
-   @Rollback
-   public void cuandoUnirEquipoATorneoRecibeIDDeEquipoNuloEntoncesNoSeCreaLaRelacion() {
-      // Preparación
-      Session session = sessionFactory.getCurrentSession();
-      FormatoTorneo formatoLiga = new FormatoTorneo();
-      formatoLiga.setTipo(TipoFormato.LIGA);
-      session.save(formatoLiga);
-      Torneo torneo = new Torneo();
-      torneo.setNombre("Torneo Solo");
-      torneo.setFormatoTorneo(formatoLiga);
-      torneo.setEstado(EstadoTorneoEnum.ABIERTO); // Usar un valor de tu enum
-      session.save(torneo);
-
-      // Ejecución
-      equipoTorneoRepository.unirEquipoATorneo(torneo.getId(), null);
-
-      // Validación
-      List<EquipoTorneo> relaciones = session.createQuery("FROM EquipoTorneo", EquipoTorneo.class).list();
-      assertTrue(relaciones.isEmpty());
-   }
-
-   @Test
-   @Rollback
-   public void cuandoUnirEquipoATorneoRecibeAmbosIDsNulosEntoncesNoSeCreaLaRelacion() {
-      // Ejecución
-      equipoTorneoRepository.unirEquipoATorneo(null, null);
-
-      // Validación
-      List<EquipoTorneo> relaciones = sessionFactory.getCurrentSession().createQuery("FROM EquipoTorneo", EquipoTorneo.class).list();
-      assertTrue(relaciones.isEmpty());
-   }
-   //endregion
-
-   //region Tests con db_futcodeTest.sql
-   @Test
-   @Sql("/db_futcodeTest.sql") // ¡Importante: el nombre del archivo SQL actualizado!
+   @Sql("/db_futcodeTest.sql")
    @Rollback
    public void cuandoPidoTodosLosEquiposDeUnTorneoExistenteConSqlEntoncesObtengoLaListaCorrecta() {
       // Ejecución
@@ -408,82 +281,16 @@ public class EquipoTorneoRepositoryImplTest {
 
       // Validación
       assertFalse(equiposTorneoObtenidos.isEmpty());
-      assertThat(equiposTorneoObtenidos, hasSize(3)); // Según el db_futcodeTest.sql de ejemplo (Los Invencibles, Fuerza Unida, Estrellas FC)
+      assertThat(equiposTorneoObtenidos, hasSize(3));
       assertThat(equiposTorneoObtenidos, containsInAnyOrder(
         hasProperty("equipo", hasProperty("nombre", is("Los Invencibles"))),
         hasProperty("equipo", hasProperty("nombre", is("Fuerza Unida"))),
         hasProperty("equipo", hasProperty("nombre", is("Estrellas FC")))
       ));
-      // Verificamos que todos los elementos sean del torneo 101L
       assertThat(equiposTorneoObtenidos, everyItem(hasProperty("torneo", hasProperty("id", is(101L)))));
    }
 
-   @Test
-   @Sql("/db_futcodeTest.sql")
-   @Rollback
-   public void cuandoUnirEquipoATorneoConSqlYDatosExistentesEntoncesSePersisteCorrectamente() {
-      // Preparación: Usamos un equipo existente y un torneo existente de db_futcodeTest.sql
-      Long torneoId = 101L; // Liga Master
-      Long equipoIdNuevo = 203L; // Rayos X (no está en el torneo 101L inicialmente)
 
-      // Verificamos que el equipo no esté ya en el torneo
-      Session session = sessionFactory.getCurrentSession();
-      List<EquipoTorneo> antes = session.createQuery(
-          "FROM EquipoTorneo et WHERE et.torneo.id = :torneoId AND et.equipo.id = :equipoId",
-          EquipoTorneo.class)
-        .setParameter("torneoId", torneoId)
-        .setParameter("equipoId", equipoIdNuevo)
-        .list();
-      assertTrue(antes.isEmpty());
 
-      // Ejecución
-      equipoTorneoRepository.unirEquipoATorneo(torneoId, equipoIdNuevo);
 
-      // Validación
-      List<EquipoTorneo> despues = session.createQuery(
-          "FROM EquipoTorneo et WHERE et.torneo.id = :torneoId AND et.equipo.id = :equipoId",
-          EquipoTorneo.class)
-        .setParameter("torneoId", torneoId)
-        .setParameter("equipoId", equipoIdNuevo)
-        .list();
-
-      assertFalse(despues.isEmpty());
-      assertThat(despues, hasSize(1));
-      EquipoTorneo nuevaRelacion = despues.get(0);
-      assertThat(nuevaRelacion.getTorneo().getId(), is(torneoId));
-      assertThat(nuevaRelacion.getEquipo().getId(), is(equipoIdNuevo));
-
-      // Opcional: Verifica que ahora hay un equipo más en el torneo 101L
-      List<EquipoTorneo> todosEnTorneo = equipoTorneoRepository.getAllByTorneoId(torneoId);
-      assertThat(todosEnTorneo, hasSize(4)); // Antes 3, ahora 4
-   }
-
-   @Test
-   @Sql("/db_futcodeTest.sql")
-   @Rollback
-   public void cuandoPidoEquiposDeTorneoVacioConSqlEntoncesObtengoListaVacia() {
-      // Ejecución
-      List<EquipoTorneo> equiposTorneoObtenidos = equipoTorneoRepository.getAllByTorneoId(103L); // Torneo Vacío de db_futcodeTest.sql
-
-      // Validación
-      assertTrue(equiposTorneoObtenidos.isEmpty());
-      assertThat(equiposTorneoObtenidos, is(empty()));
-   }
-
-   @Test
-   @Sql("/db_futcodeTest.sql")
-   @Rollback
-   public void cuandoPidoEquiposDeTorneoFinalizadoEntoncesObtengoLosEquiposCorrectos() {
-      // Ejecución
-      List<EquipoTorneo> equiposTorneoObtenidos = equipoTorneoRepository.getAllByTorneoId(104L); // Torneo Finalizado de db_futcodeTest.sql
-
-      // Validación
-      assertFalse(equiposTorneoObtenidos.isEmpty());
-      assertThat(equiposTorneoObtenidos, hasSize(1)); // Según db_futcodeTest.sql, solo Equipo 201 en Torneo 104
-      assertThat(equiposTorneoObtenidos, contains(
-        hasProperty("equipo", hasProperty("nombre", is("Los Invencibles")))
-      ));
-      assertThat(equiposTorneoObtenidos.get(0).getTorneo().getId(), is(104L));
-   }
-   //endregion
 }

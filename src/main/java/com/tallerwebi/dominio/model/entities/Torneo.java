@@ -47,7 +47,8 @@ public class Torneo {
    @OrderBy("numeroDeFecha ASC")
    private Set<Fecha> fechas = new TreeSet<>();
 
-
+   @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
+   private Set<EquipoTorneo> equipos = new HashSet<>();
 
 
 

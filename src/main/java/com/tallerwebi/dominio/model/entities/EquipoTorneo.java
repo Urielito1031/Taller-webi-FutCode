@@ -42,14 +42,20 @@ public class EquipoTorneo {
    @Column(name = "puntos")
    private Integer puntos= 0;
 
-   @ManyToOne(fetch = FetchType.EAGER)
-   @OnDelete(action = OnDeleteAction.CASCADE)
-   @JoinColumn(name = "torneo_id")
-   private com.tallerwebi.dominio.model.entities.Torneo torneo;
+//   @ManyToOne(fetch = FetchType.EAGER)
+//   @OnDelete(action = OnDeleteAction.CASCADE)
+//   @JoinColumn(name = "torneo_id")
+//   private com.tallerwebi.dominio.model.entities.Torneo torneo;
 
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
+
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "torneo_id", nullable = false)
+   private Torneo torneo;
+
+
 
    public void actualizarConPartido(Partido partido, Boolean esLocal){
       int golesEquipo = 0;

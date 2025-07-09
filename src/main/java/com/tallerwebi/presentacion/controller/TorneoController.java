@@ -62,7 +62,7 @@ public class TorneoController {
       return "detalle-torneo";
    }
 
-   @PostMapping("/torneo/{id}/unirse")
+   @PostMapping("/{id}/unirse")
    public String unirseATorneo(@PathVariable("id") Long torneoId, RedirectAttributes redirectAttributes, HttpServletRequest request) {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       if (usuarioId == null) {
@@ -88,7 +88,7 @@ public class TorneoController {
       } catch (IllegalArgumentException e) {
          redirectAttributes.addFlashAttribute("errorUnirse", e.getMessage());
       }
-      return "redirect:/detalle-torneo/" + torneoId;
+      return "redirect:/torneo/detalle-torneo/" + torneoId;
    }
 
 

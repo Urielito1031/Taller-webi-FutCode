@@ -152,7 +152,7 @@ public class TorneoController {
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
       simularTorneoService.simularFecha(torneoId, numeroFecha);
-      return "redirect:/fechas?torneoId=" + torneoId;
+      return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 
    @GetMapping("/tabla-posiciones")

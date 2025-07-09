@@ -415,7 +415,7 @@
                 </div>
             </div>
 
-            <form th:action="@{/simular-fecha}" method="post" th:if="${!fecha.simulada}">
+            <form th:action="@{/torneo/simular-fecha}" method="post" th:if="${!fecha.simulada}">
                 <input type="hidden" name="torneoId" th:value="${torneoId}">
                 <input type="hidden" name="numeroFecha" th:value="${fecha.numeroDeFecha}">
                 <button type="submit" class="simular-btn">

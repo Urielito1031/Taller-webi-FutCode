@@ -147,7 +147,6 @@ VALUES (1, 'Copa Mundial 2025', 'Torneo eliminatorio con 16 equipos', 1, 'ABIERT
         2, 'ABIERTO', NULL, NULL);
 
 
-
 INSERT INTO `equipo_torneo` (`id`, `equipo_id`, `posicion`, `partidos_jugados`, `partidos_ganados`,
                              `partidos_empatados`, `partidos_perdidos`, `goles_a_favor`, `goles_en_contra`, `puntos`,
                              `torneo_id`)

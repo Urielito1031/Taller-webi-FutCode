@@ -5,21 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 
-@Getter
-@Setter
 @Entity
+@Getter @Setter
 @Table(name = "equipo_torneo")
 public class EquipoTorneo {
-
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "posicion")
    private Integer posicion = 0;
+
+   @Column(name = "posicion_anterior")
+   private Integer posicionAnterior;
 
    @Column(name = "partidos_jugados")
    private Integer partidosJugados = 0;
@@ -78,8 +78,8 @@ public class EquipoTorneo {
       }
    }
 
-
    public EquipoTorneo() {}
+
    public EquipoTorneo(Equipo equipo, Torneo torneo) {
       this.equipo = equipo;
       this.torneo = torneo;

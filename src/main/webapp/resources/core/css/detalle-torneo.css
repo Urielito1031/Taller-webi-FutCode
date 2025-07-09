@@ -4,6 +4,13 @@
     box-sizing: border-box;
 }
 
+.mi-equipo {
+    background-color: rgba(0, 255, 200, 0.1);
+    font-weight: bold;
+    border-left: 4px solid #00ffc3;
+    color: #00ffc3;
+}
+
 body {
     background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%);
     color: #ffffff;

@@ -90,9 +90,13 @@ public class TorneoController {
    }
 
    @GetMapping("/detalle-torneo/{id}")
-   public String detalleTorneo(@PathVariable Long id, Model model) {
+   public String detalleTorneo(@PathVariable Long id, Model model, HttpServletRequest request) {
       TorneoDTO torneo = torneoService.getById(id);
       List<EquipoTorneoDTO> torneoEquipos = equipoTorneoService.getAllByTorneoId(id);
+
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      model.addAttribute("usuarioId", usuarioId);
+
       model.addAttribute("torneo", torneo);
       model.addAttribute("torneoEquipos", torneoEquipos);
       return "detalle-torneo";

@@ -61,12 +61,20 @@ public class TorneoControllerTest {
    @Test
    public void deberiaMostrarDetalleTorneoCuandoSeVerificaUnIdValido(){
       Long idTorneo = 1L;
+      Long usuarioId = 2L;
       TorneoDTO torneo = new TorneoDTO();
       torneo.setId(idTorneo);
 
+      HttpServletRequest request = mock(HttpServletRequest.class);
+      HttpSession session = mock(HttpSession.class);
+
+
+      when(request.getSession()).thenReturn(session);
+      when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+
       when(torneoService.getById(idTorneo)).thenReturn(torneo);
 
-      String vistaDetalleTorneo = torneoController.detalleTorneo(idTorneo, model);
+      String vistaDetalleTorneo = torneoController.detalleTorneo(idTorneo, model, request);
 
       verify(torneoService).getById(idTorneo);
       verify(model).addAttribute("torneo", torneo);
@@ -80,14 +88,21 @@ public class TorneoControllerTest {
    @Test
    public void deberiaMostrarDetalleTorneoCuandoSeVerificaUnIdValidoIncluyendoListaEquipos() {
       Long torneoId = 1L;
+      Long usuarioId = 2L;
       TorneoDTO torneo = new TorneoDTO();
       List<EquipoTorneoDTO> equipoTorneoList = new ArrayList<>();
       equipoTorneoList.add(new EquipoTorneoDTO());
 
+      HttpServletRequest request = mock(HttpServletRequest.class);
+      HttpSession session = mock(HttpSession.class);
+
+      when(request.getSession()).thenReturn(session);
+      when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+
       when(torneoService.getById(torneoId)).thenReturn(torneo);
       when(equipoTorneoService.getAllByTorneoId(torneoId)).thenReturn(equipoTorneoList);
 
-      String vistaDetalleTorneo = torneoController.detalleTorneo(torneoId, model);
+      String vistaDetalleTorneo = torneoController.detalleTorneo(torneoId, model, request);
 
       assertThat(vistaDetalleTorneo, is("detalle-torneo"));
 
@@ -100,12 +115,20 @@ public class TorneoControllerTest {
 
    @Test
    public void deberiaRetornarVistaDetalleTorneoInclusoSiElTorneoNoExiste() {
-
+      Long usuarioId = 2L;
       Long idInexistente = 99L;
+
+
+      HttpServletRequest request = mock(HttpServletRequest.class);
+      HttpSession session = mock(HttpSession.class);
+
+      when(request.getSession()).thenReturn(session);
+      when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+
       when(torneoService.getById(idInexistente)).thenReturn(null);
       when(equipoTorneoService.getAllByTorneoId(idInexistente)).thenReturn(new ArrayList<>());
 
-      String vistaDetalle = torneoController.detalleTorneo(idInexistente, model);
+      String vistaDetalle = torneoController.detalleTorneo(idInexistente, model, request);
 
       verify(torneoService).getById(idInexistente);
       verify(equipoTorneoService).getAllByTorneoId(idInexistente);

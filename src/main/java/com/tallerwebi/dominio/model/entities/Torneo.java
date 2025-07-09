@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Getter
 @Setter
@@ -42,7 +43,12 @@ public class Torneo {
    @JoinColumn(name = "torneo_copa_id", unique = true, nullable = true)
    private TorneoCopa torneoCopa;
 
+   @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+   @OrderBy("numeroDeFecha ASC")
+   private Set<Fecha> fechas = new TreeSet<>();
 
+   @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
+   private Set<EquipoTorneo> equipos = new HashSet<>();
 
 
 

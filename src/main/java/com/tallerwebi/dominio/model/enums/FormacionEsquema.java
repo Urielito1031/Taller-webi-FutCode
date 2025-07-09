@@ -36,7 +36,6 @@ public enum FormacionEsquema {
             return CUATRO_CUATRO_DOS;
          case "3-5-2":
             return TRES_CINCO_DOS;
-
          case "5-3-2":
             return CINCO_TRES_DOS;
          case "3-4-3":

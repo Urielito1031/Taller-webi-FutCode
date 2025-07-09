@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fechas del Torneo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0d1b2a;
+            --secondary-bg: #1b263b;
+            --accent-bg: #1c2a3a;
+            --dark-bg: #0d1a2e;
+            --text-primary: #00ffc3;
+            --text-secondary: #ffffff;
+            --text-muted: #b0b8c1;
+            --border-color: #2a3f5f;
+            --hover-bg: #1e3148;
+            --shadow: 0 4px 20px rgba(0, 255, 195, 0.1);
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--dark-bg) 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-secondary);
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            color: var(--text-primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        .fechas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .fecha-card {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fecha-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 40px rgba(0, 255, 195, 0.15);
+        }
+
+        .fecha-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--text-primary), rgba(0, 255, 195, 0.3));
+        }
+
+        .fecha-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .fecha-numero {
+            background: linear-gradient(135deg, var(--text-primary), rgba(0, 255, 195, 0.8));
+            color: var(--primary-bg);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .estado-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .estado-jugada {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .estado-proximamente {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .partidos-container {
+            margin-top: 20px;
+        }
+
+        .partidos-title {
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .partido-item {
+            background: var(--accent-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .partido-item:hover {
+            background: var(--hover-bg);
+            transform: translateX(5px);
+        }
+
+        .partido-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .partido-teams {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .equipo-nombre {
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 0;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .vs-separator {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0 5px;
+        }
+
+        .partido-resultado {
+            background: var(--dark-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1rem;
+            min-width: 60px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .simular-btn {
+            background: linear-gradient(135deg, var(--text-primary), rgba(0, 255, 195, 0.8));
+            color: var(--primary-bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .simular-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 255, 195, 0.4);
+            background: linear-gradient(135deg, rgba(0, 255, 195, 0.9), var(--text-primary));
+        }
+
+        .simular-btn:active {
+            transform: translateY(0);
+        }
+
+        .no-partidos {
+            text-align: center;
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .stats-summary {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--accent-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--text-primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .fechas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .fecha-card {
+                padding: 20px;
+            }
+
+            .partido-teams {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+
+            .vs-separator {
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fecha-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+
+            .partido-item {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-calendar-alt"></i> Fechas del Torneo</h1>
+        <p>Calendario y resultados del campeonato</p>
+    </div>
+
+    <div class="stats-summary">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number" id="total-fechas">0</span>
+                <span class="stat-label">Total Fechas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="fechas-jugadas">0</span>
+                <span class="stat-label">Jugadas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="fechas-pendientes">0</span>
+                <span class="stat-label">Pendientes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="progreso">0%</span>
+                <span class="stat-label">Progreso</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fechas-grid">
+        <div class="fecha-card" th:each="fecha : ${fechas}">
+            <div class="fecha-header">
+                <div class="fecha-numero">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>Fecha <span th:text="${fecha.numeroDeFecha}">1</span></span>
+                </div>
+                <div class="estado-badge" th:classappend="${fecha.simulada ? 'estado-jugada' : 'estado-proximamente'}">
+                    <i th:class="${fecha.simulada ? 'fas fa-check-circle' : 'fas fa-clock'}" class="fas fa-clock"></i>
+                    <span th:text="${fecha.simulada ? 'JUGADA' : 'PRÓXIMAMENTE'}">Estado</span>
+                </div>
+            </div>
+
+            <div class="partidos-container">
+                <div class="partidos-title">
+                    <i class="fas fa-futbol"></i>
+                    <span>Partidos</span>
+                </div>
+
+                <div th:if="${fecha.partidos != null && !fecha.partidos.empty}">
+                    <div class="partido-item" th:each="partido : ${fecha.partidos}" style="justify-content: center; gap: 8px;">
+                        <span class="equipo-nombre" th:text="${partido.equipoLocal.nombre}">Equipo Local</span>
+                        <span class="partido-resultado" style="padding: 0 8px; border-radius: 8px; background: var(--dark-bg); color: var(--text-primary); font-weight: 700; border: 1px solid var(--border-color);">
+                        <span th:text="${partido.golesLocal}">0</span> - <span th:text="${partido.golesVisitante}">0</span></span>
+                        <span class="equipo-nombre" th:text="${partido.equipoVisitante.nombre}">Equipo Visitante</span>
+                    </div>
+                </div>
+
+                <div class="no-partidos" th:if="${fecha.partidos == null || fecha.partidos.empty}">
+                    <i class="fas fa-info-circle"></i>
+                    No hay partidos programados
+                </div>
+            </div>
+
+            <form th:action="@{/torneo/simular-fecha}" method="post" th:if="${!fecha.simulada}">
+                <input type="hidden" name="torneoId" th:value="${torneoId}">
+                <input type="hidden" name="numeroFecha" th:value="${fecha.numeroDeFecha}">
+                <button type="submit" class="simular-btn">
+                    <i class="fas fa-play"></i>
+                    Simular Fecha
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="loading-indicator" id="loading">
+        <div class="loading-spinner"></div>
+        <p>Simulando fecha...</p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Calcular estadísticas
+    function calcularEstadisticas() {
+        const fechas = document.querySelectorAll('.fecha-card');
+        const total = fechas.length;
+        let jugadas = 0;
+
+        fechas.forEach(fecha => {
+            const estado = fecha.querySelector('.estado-badge span').textContent;
+            if (estado === 'JUGADA') {
+                jugadas++;
+            }
+        });
+
+        const pendientes = total - jugadas;
+        const progreso = total > 0 ? Math.round((jugadas / total) * 100) : 0;
+
+        document.getElementById('total-fechas').textContent = total;
+        document.getElementById('fechas-jugadas').textContent = jugadas;
+        document.getElementById('fechas-pendientes').textContent = pendientes;
+        document.getElementById('progreso').textContent = progreso + '%';
+    }
+
+    // Manejar envío de formularios
+    document.addEventListener('DOMContentLoaded', function() {
+        calcularEstadisticas();
+
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const button = this.querySelector('.simular-btn');
+                if (button) {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Simulando...';
+                    button.disabled = true;
+
+                    // Mostrar indicador de carga
+                    document.getElementById('loading').style.display = 'block';
+
+                    // Simular delay para mejor UX
+                    setTimeout(() => {
+                        // El formulario se enviará normalmente
+                    }, 500);
+                }
+            });
+        });
+    });
+
+    // Animaciones adicionales
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.fecha-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.style.animation = 'fadeInUp 0.6s ease forwards';
+        });
+    });
+
+    // Keyframes para animaciones
+    const style = document.createElement('style');
+    style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .fecha-card {
+                opacity: 0;
+            }
+        `;
+    document.head.appendChild(style);
+</script>
+</body>
+</html>

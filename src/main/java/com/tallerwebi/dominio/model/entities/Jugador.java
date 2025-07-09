@@ -9,13 +9,74 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
-@Setter
-@Entity
-@Table(name = "jugador")
-public class Jugador{
+   @Setter
+   @Entity
+   @Table(name = "jugador")
+   public class Jugador {
+//      @Id
+//      @GeneratedValue(strategy = GenerationType.IDENTITY)
+//      private Long id;
+//
+//      @javax.validation.constraints.Size(max = 50)
+//      @javax.validation.constraints.NotNull
+//      @Column(name = "nombre", nullable = false, length = 50)
+//      private String nombre;
+//
+//      @javax.validation.constraints.Size(max = 50)
+//      @javax.validation.constraints.NotNull
+//      @Column(name = "apellido", nullable = false, length = 50)
+//      private String apellido;
+//
+//      @javax.validation.constraints.Size(max = 255)
+//      @Column(name = "imagen")
+//      private String imagen;
+//
+//      @javax.validation.constraints.NotNull
+//      @Column(name = "edad", nullable = false)
+//      private Integer edad;
+//
+//      @javax.validation.constraints.NotNull
+//      @Column(name = "numero_camiseta", nullable = false)
+//      private Integer numeroCamiseta;
+//
+//      @javax.validation.constraints.NotNull
+//      @Column(name = "rating", nullable = false, precision = 4, scale = 1)
+//      private Double rating;
+//
+//      @javax.validation.constraints.NotNull
+//      @Column(name = "lesionado", nullable = false)
+//      private Boolean lesionado = false;
+//
+//      @javax.validation.constraints.NotNull
+//      @Column(name = "estado_fisico", nullable = false, precision = 5, scale = 2)
+//      private Double estadoFisico;
+//
+//      @ManyToOne(fetch = FetchType.EAGER)
+//      @JoinColumn(name = "pais_id")
+//      private Pais pais;
+//
+//      @javax.validation.constraints.NotNull
+//      @Enumerated(EnumType.STRING)
+//      @Column(name = "rareza_jugador", nullable = false)
+//      private RarezaJugador rarezaJugador;
+//
+//      @NotNull
+//      @Enumerated(EnumType.STRING)
+//      @Column(name = "posicion", nullable = false)
+//      private PosicionEnum posicion;
+//
+//      @ManyToMany(mappedBy = "jugadores", fetch = FetchType.EAGER)
+//      private List<Equipo> equipos = new ArrayList<>();
+//
+//      @ManyToOne (fetch = FetchType.EAGER)
+//      @JoinColumn (name = "sobre_id")
+//      private Sobre sobre;
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
@@ -77,15 +138,14 @@ public class Jugador{
    @JoinColumn(name = "sobre_id")
    private Sobre sobre;
 
+      public Jugador(String nombre, RarezaJugador rarezaJugador) {
+         this.nombre = nombre;
+         this.rarezaJugador = rarezaJugador;
+      }
 
-   public Jugador(String nombre,RarezaJugador rarezaJugador){
-      this.nombre = nombre;
-      this.rarezaJugador = rarezaJugador;
-   }
+      public Jugador() {
 
-   public Jugador(){
-
-   }
+      }
 
    public static Jugador convertToEntity(JugadorDTO jugadorDTO) {
       if (jugadorDTO == null) {
@@ -116,7 +176,7 @@ public class Jugador{
          Equipo equipo = new Equipo();
          equipo.setId(jugadorDTO.getEquipo().getId());
          equipo.setNombre(jugadorDTO.getEquipo().getNombre());
-         jugador.setEquipo(equipo);
+//         jugador.setEquipo(equipo);
       }
 
 
@@ -141,10 +201,10 @@ public class Jugador{
 
 
 
-      if (this.getEquipo() != null) {
-         EquipoDTO equipoDTO = new EquipoDTO();
-         dto.setEquipo(equipoDTO.convertFromEntity(this.getEquipo()));
-      }
+//      if (this.getEquipo() != null) {
+//         EquipoDTO equipoDTO = new EquipoDTO();
+//         dto.setEquipo(equipoDTO.convertFromEntity(this.getEquipo()));
+//      }
 
       return dto;
    }

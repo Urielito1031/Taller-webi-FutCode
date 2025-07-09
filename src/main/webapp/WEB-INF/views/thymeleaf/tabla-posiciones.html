@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabla de Posiciones</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: #0d1b2a;
+      --secondary-bg: #1b263b;
+      --accent-bg: #1c2a3a;
+      --dark-bg: #0d1a2e;
+      --text-primary: #00ffc3;
+      --text-secondary: #ffffff;
+      --text-muted: #b0b8c1;
+      --border-color: #2a3f5f;
+      --hover-bg: #1e3148;
+      --shadow: 0 4px 20px rgba(0, 255, 195, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, var(--dark-bg) 100%);
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-secondary);
+      padding: 20px 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px;
+    }
+
+    .header h1 {
+      color: var(--text-primary);
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    .table-container {
+      background: var(--secondary-bg);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .table-responsive {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .table {
+      margin-bottom: 0;
+      background: var(--accent-bg);
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    .table thead th {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, var(--secondary-bg) 100%);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 20px 15px;
+      border: none;
+      position: relative;
+      text-align: center;
+    }
+
+    .table thead th:first-child {
+      text-align: left;
+      padding-left: 25px;
+    }
+
+    .table thead th::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--text-primary), transparent);
+    }
+
+    .table tbody tr {
+      background: var(--accent-bg);
+      transition: all 0.3s ease;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table tbody tr:hover {
+      background: var(--hover-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 255, 195, 0.1);
+    }
+
+    .table tbody tr:nth-child(1) {
+      background: linear-gradient(135deg, rgba(0, 255, 195, 0.1) 0%, var(--accent-bg) 100%);
+      border-left: 4px solid var(--text-primary);
+    }
+
+    .table tbody tr:nth-child(2),
+    .table tbody tr:nth-child(3) {
+      background: linear-gradient(135deg, rgba(0, 255, 195, 0.05) 0%, var(--accent-bg) 100%);
+      border-left: 4px solid rgba(0, 255, 195, 0.5);
+    }
+
+    .table tbody tr:nth-last-child(1),
+    .table tbody tr:nth-last-child(2),
+    .table tbody tr:nth-last-child(3) {
+      background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, var(--accent-bg) 100%);
+      border-left: 4px solid #dc3545;
+    }
+
+    .table tbody td {
+      padding: 18px 15px;
+      border: none;
+      vertical-align: middle;
+      color: var(--text-secondary);
+      background: #0d1b2a;
+      font-weight: 500;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .table tbody td:first-child {
+      text-align: left;
+      padding-left: 30px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .position-badge {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background: var(--text-primary);
+      color: var(--primary-bg);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-right: 15px;
+    }
+
+    .stat-highlight {
+      background: rgba(0, 255, 195, 0.1);
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .footer-info {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    .legend-color.champion {
+      background: var(--text-primary);
+    }
+
+    .legend-color.qualify {
+      background: rgba(0, 255, 195, 0.5);
+    }
+
+    .legend-color.relegation {
+      background: #dc3545;
+    }
+
+    .update-time {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .table-container {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .table thead th,
+      .table tbody td {
+        padding: 12px 8px;
+        font-size: 0.8rem;
+      }
+
+      .table tbody td:first-child {
+        padding-left: 15px;
+      }
+
+      .position-badge {
+        width: 25px;
+        height: 25px;
+        line-height: 25px;
+        font-size: 0.7rem;
+        margin-right: 10px;
+      }
+
+      .footer-info {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .table thead th:nth-child(n+4) {
+        display: none;
+      }
+
+      .table tbody td:nth-child(n+4) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1><i class="fas fa-trophy"></i> Tabla de Posiciones</h1>
+    <p>Clasificacion actual del torneo</p>
+  </div>
+
+  <div class="table-container">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+        <tr>
+          <th><i class="fas fa-medal"></i> Equipo</th>
+          <th><i class="fas fa-star"></i> Pts</th>
+          <th><i class="fas fa-calendar"></i> PJ</th>
+          <th><i class="fas fa-trophy"></i> PG</th>
+          <th><i class="fas fa-handshake"></i> PE</th>
+          <th><i class="fas fa-times"></i> PP</th>
+          <th><i class="fas fa-futbol"></i> GF</th>
+          <th><i class="fas fa-shield-alt"></i> GC</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pos, iterStat : ${tabla}">
+          <td>
+            <span class="position-badge" th:text="${iterStat.count}">1</span>
+            <span th:text="${pos.equipo.nombre}">Nombre del Equipo</span>
+          </td>
+          <td>
+            <span class="stat-highlight" th:text="${pos.puntos}">0</span>
+          </td>
+          <td th:text="${pos.partidosJugados}">0</td>
+          <td th:text="${pos.partidosGanados}">0</td>
+          <td th:text="${pos.partidosEmpatados}">0</td>
+          <td th:text="${pos.partidosPerdidos}">0</td>
+          <td th:text="${pos.golesAFavor}">0</td>
+          <td th:text="${pos.golesEnContra}">0</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-info">
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color champion"></div>
+          <span>CampeÃ³n</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color qualify"></div>
+          <span>ClasificaciÃ³n</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color relegation"></div>
+          <span>Descenso</span>
+        </div>
+      </div>
+      <div class="update-time">
+        <i class="fas fa-clock"></i> Actualizado: <span id="current-time"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+  function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleString('es-AR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    document.getElementById('current-time').textContent = timeString;
+  }
+
+  updateTime();
+  setInterval(updateTime, 60000); // Actualizar cada minuto
+</script>
+</body>
+</html>

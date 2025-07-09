@@ -5,21 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 
-@Getter
-@Setter
 @Entity
+@Getter @Setter
 @Table(name = "equipo_torneo")
 public class EquipoTorneo {
-
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "posicion")
    private Integer posicion = 0;
+
+   @Column(name = "posicion_anterior")
+   private Integer posicionAnterior;
 
    @Column(name = "partidos_jugados")
    private Integer partidosJugados = 0;
@@ -42,16 +42,50 @@ public class EquipoTorneo {
    @Column(name = "puntos")
    private Integer puntos= 0;
 
-   @ManyToOne(fetch = FetchType.EAGER)
-   @OnDelete(action = OnDeleteAction.CASCADE)
-   @JoinColumn(name = "torneo_id")
-   private com.tallerwebi.dominio.model.entities.Torneo torneo;
+//   @ManyToOne(fetch = FetchType.EAGER)
+//   @OnDelete(action = OnDeleteAction.CASCADE)
+//   @JoinColumn(name = "torneo_id")
+//   private com.tallerwebi.dominio.model.entities.Torneo torneo;
 
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "equipo_id")
    private Equipo equipo;
 
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "torneo_id", nullable = false)
+   private Torneo torneo;
+
+
+
+   public void actualizarConPartido(Partido partido, Boolean esLocal){
+      int golesEquipo = 0;
+      int golesRival = 0;
+
+      if(esLocal){
+         golesEquipo = partido.getGolesLocal();
+         golesRival = partido.getGolesVisitante();
+      }else{
+         golesEquipo = partido.getGolesVisitante();
+         golesRival = partido.getGolesLocal();
+      }
+
+      this.partidosJugados += 1;
+      this.golesAFavor += golesEquipo;
+      this.golesEnContra += golesRival;
+
+      if(golesEquipo > golesRival){
+         this.partidosGanados += 1;
+         this.puntos += 3;
+      } else if (golesEquipo == golesRival) {
+         this.partidosEmpatados += 1;
+         this.puntos += 1;
+      }else{
+         this.partidosPerdidos += 1;
+      }
+   }
+
    public EquipoTorneo() {}
+
    public EquipoTorneo(Equipo equipo, Torneo torneo) {
       this.equipo = equipo;
       this.torneo = torneo;

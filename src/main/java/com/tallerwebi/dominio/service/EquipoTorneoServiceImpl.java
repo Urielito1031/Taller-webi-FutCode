@@ -51,7 +51,6 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
          throw new IllegalArgumentException("El torneo o equipo asociado no pueden ser nulos o no existen");
       }
 
-
       //validar que el torneo no tenga el equipo a unir
       if(!validarEquipoNoUnidoATorneo(torneoId, equipoId)){
          throw new IllegalArgumentException("El equipo ya se encuentra unido al torneo");

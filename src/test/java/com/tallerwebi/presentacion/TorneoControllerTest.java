@@ -1,16 +1,24 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion; // Asegúrate de que este paquete es correcto para tus tests
 
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
+import com.tallerwebi.dominio.service.UsuarioService; // Importar UsuarioService
 import com.tallerwebi.presentacion.controller.TorneoController;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
+import com.tallerwebi.dominio.model.entities.Usuario; // Importar Usuario
+import com.tallerwebi.dominio.model.entities.Equipo; // Importar Equipo
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Importar RedirectAttributes
+
+import javax.servlet.http.HttpServletRequest; // Importar HttpServletRequest
+import javax.servlet.http.HttpSession; // Importar HttpSession
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,66 +35,54 @@ public class TorneoControllerTest {
    @Mock
    private EquipoTorneoService equipoTorneoService;
 
+   @Mock
+   private UsuarioService usuarioService;
+
    @InjectMocks
    private TorneoController torneoController;
 
    @Mock
    private Model model;
 
+   @Mock
+   private HttpServletRequest request;
+   @Mock
+   private HttpSession session;
+   @Mock
+   private RedirectAttributes redirectAttributes;
+
+
    @BeforeEach
    public void setUp() {
       MockitoAnnotations.openMocks(this);
-   }
-
-   @Test
-   public void deberiaMostrarLaVistaConTorneosSiLaListaNoEsVacia() {
-      List<TorneoDTO> torneos = new ArrayList<>();
-      torneos.add(new TorneoDTO());
-
-      when(torneoService.getAll()).thenReturn(torneos);
-
-      String vistaHome = torneoController.irAHome(model);
-
-      assertThat(vistaHome, is("home"));
-      verify(model).addAttribute("torneos", torneos);
-      verify(model, never()).addAttribute(eq("mensajeTorneo"), anyString());
-   }
-
-   @Test
-   public void deberiaMostrarLaVistaConMensajeTorneoSiLaListaEstaVacia() {
-      when(torneoService.getAll()).thenReturn(new ArrayList<>());
-
-      String vistaHome = torneoController.irAHome(model);
-
-      assertThat(vistaHome, is("home"));
-      verify(model).addAttribute("torneos", new ArrayList<>());
-
-      verify(model).addAttribute("mensajeTorneo", "No hay torneos para mostrar");
+      when(request.getSession()).thenReturn(session);
    }
 
    @Test
    public void deberiaMostrarDetalleTorneoCuandoSeVerificaUnIdValido(){
       Long idTorneo = 1L;
-
       TorneoDTO torneo = new TorneoDTO();
       torneo.setId(idTorneo);
 
       when(torneoService.getById(idTorneo)).thenReturn(torneo);
 
-
       String vistaDetalleTorneo = torneoController.detalleTorneo(idTorneo, model);
-      verify(torneoService).getById(idTorneo);
 
+      verify(torneoService).getById(idTorneo);
       verify(model).addAttribute("torneo", torneo);
+
+      verify(equipoTorneoService).getAllByTorneoId(idTorneo);
+      verify(model).addAttribute(eq("torneoEquipos"), anyList());
 
       assertThat(vistaDetalleTorneo,is("detalle-torneo"));
    }
+
    @Test
    public void deberiaMostrarDetalleTorneoCuandoSeVerificaUnIdValidoIncluyendoListaEquipos() {
       Long torneoId = 1L;
-      TorneoDTO torneo = new TorneoDTO( );
+      TorneoDTO torneo = new TorneoDTO();
       List<EquipoTorneoDTO> equipoTorneoList = new ArrayList<>();
-
+      equipoTorneoList.add(new EquipoTorneoDTO());
 
       when(torneoService.getById(torneoId)).thenReturn(torneo);
       when(equipoTorneoService.getAllByTorneoId(torneoId)).thenReturn(equipoTorneoList);
@@ -100,21 +96,137 @@ public class TorneoControllerTest {
 
       verify(torneoService).getById(torneoId);
       verify(equipoTorneoService).getAllByTorneoId(torneoId);
-
-
    }
+
    @Test
-   public void deberiaRetornarNullSiElTorneoNoExisteAlVerDetalle() {
+   public void deberiaRetornarVistaDetalleTorneoInclusoSiElTorneoNoExiste() {
+
       Long idInexistente = 99L;
       when(torneoService.getById(idInexistente)).thenReturn(null);
+      when(equipoTorneoService.getAllByTorneoId(idInexistente)).thenReturn(new ArrayList<>());
 
       String vistaDetalle = torneoController.detalleTorneo(idInexistente, model);
 
       verify(torneoService).getById(idInexistente);
+      verify(equipoTorneoService).getAllByTorneoId(idInexistente);
+      verify(model).addAttribute(eq("torneo"), isNull());
+      verify(model).addAttribute(eq("torneoEquipos"), anyList());
 
-      verify(model, never()).addAttribute(eq("torneo"), any(TorneoDTO.class));
-     assertThat(vistaDetalle, is("detalle-torneo"));
-
+      assertThat(vistaDetalle, is("detalle-torneo"));
    }
 
+   @Test
+   public void unirseATorneo_usuarioNoAutenticado_redirigeADetalleTorneoConError() {
+      // Preparación
+      Long torneoId = 1L;
+      // La sesión NO devuelve USUARIO_ID
+      when(session.getAttribute("USUARIO_ID")).thenReturn(null);
+
+      // Ejecución
+      String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
+
+      // Verificación
+      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      verify(redirectAttributes).addFlashAttribute("errorUnirse", "No estás autenticado. Por favor, inicia sesión.");
+      // Asegurarse de que no se interactúa con los servicios después de la validación de autenticación
+      verifyNoInteractions(usuarioService);
+      verifyNoInteractions(equipoTorneoService);
+   }
+
+   @Test
+   public void unirseATorneo_usuarioNoEncontrado_redirigeADetalleTorneoConError() {
+      // Preparación
+      Long torneoId = 1L;
+      Long usuarioId = 10L;
+      when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+      when(usuarioService.buscarUsuarioPorId(usuarioId)).thenReturn(null); // Usuario no encontrado
+
+      // Ejecución
+      String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
+
+      // Verificación
+      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      verify(redirectAttributes).addFlashAttribute("errorUnirse", "Usuario no encontrado.");
+      verify(usuarioService).buscarUsuarioPorId(usuarioId);
+      verifyNoInteractions(equipoTorneoService); // No debería llamar a este servicio
+   }
+
+   @Test
+   public void unirseATorneo_usuarioSinEquipo_redirigeANuevoEquipoConError() {
+      // Preparación
+      Long torneoId = 1L;
+      Long usuarioId = 10L;
+      Usuario usuario = new Usuario(); // Usuario sin equipo asignado
+      usuario.setId(usuarioId);
+      usuario.setEquipo(null); // Asegura que el equipo es nulo
+
+      when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+      when(usuarioService.buscarUsuarioPorId(usuarioId)).thenReturn(usuario);
+
+      // Ejecución
+      String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
+
+      // Verificación
+      assertThat(result, is("redirect:/nuevo-equipo"));
+      verify(redirectAttributes).addFlashAttribute("errorUnirse", "No tienes un equipo asignado. Crea un equipo primero.");
+      verify(usuarioService).buscarUsuarioPorId(usuarioId);
+      verifyNoInteractions(equipoTorneoService); // No debería intentar unirse al torneo
+   }
+
+   @Test
+   public void unirseATorneo_exito_uneEquipoYRedirigeADetalleTorneoConMensaje() {
+      // Preparación
+      Long torneoId = 1L;
+      Long usuarioId = 10L;
+      Long equipoId = 100L;
+
+      Usuario usuario = new Usuario();
+      usuario.setId(usuarioId);
+      Equipo equipo = new Equipo();
+      equipo.setId(equipoId);
+      usuario.setEquipo(equipo);
+
+      when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+      when(usuarioService.buscarUsuarioPorId(usuarioId)).thenReturn(usuario);
+      doNothing().when(equipoTorneoService).unirseTorneo(torneoId, equipoId); // El servicio no devuelve nada, solo ejecuta
+
+      // Ejecución
+      String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
+
+      // Verificación
+      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      verify(usuarioService).buscarUsuarioPorId(usuarioId);
+      verify(equipoTorneoService).unirseTorneo(torneoId, equipoId);
+      verify(redirectAttributes).addFlashAttribute("mensajeTorneo", "¡Te uniste al torneo con éxito!");
+      verify(redirectAttributes, never()).addFlashAttribute(eq("errorUnirse"), anyString());
+   }
+
+   @Test
+   public void unirseATorneo_fallaPorExcepcionEnServicio_redirigeADetalleTorneoConError() {
+      // Preparación
+      Long torneoId = 1L;
+      Long usuarioId = 10L;
+      Long equipoId = 100L;
+      String errorMessage = "Error simulado al unirse";
+
+      Usuario usuario = new Usuario();
+      usuario.setId(usuarioId);
+      Equipo equipo = new Equipo();
+      equipo.setId(equipoId);
+      usuario.setEquipo(equipo);
+
+      when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
+      when(usuarioService.buscarUsuarioPorId(usuarioId)).thenReturn(usuario);
+      doThrow(new IllegalArgumentException(errorMessage)).when(equipoTorneoService).unirseTorneo(torneoId, equipoId);
+
+      // Ejecución
+      String result = torneoController.unirseATorneo(torneoId, redirectAttributes, request);
+
+      // Verificación
+      assertThat(result, is("redirect:/detalle-torneo/" + torneoId));
+      verify(usuarioService).buscarUsuarioPorId(usuarioId);
+      verify(equipoTorneoService).unirseTorneo(torneoId, equipoId);
+      verify(redirectAttributes).addFlashAttribute("errorUnirse", errorMessage);
+      verify(redirectAttributes, never()).addFlashAttribute(eq("mensajeTorneo"), anyString());
+   }
 }

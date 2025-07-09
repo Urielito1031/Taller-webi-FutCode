@@ -39,6 +39,14 @@ public class Equipo {
    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER)
    private List<Jugador> jugadores = new ArrayList<>();
 
+
+
+
+
+
+
+
+
    public EquipoDTO convertToDTO() {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(this.id);
@@ -80,8 +88,9 @@ public class Equipo {
 
    public String toString(){
       return "ID: " + this.id + "\n Nombre: " + this.nombre +
-             "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
-             "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
-             "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
+              "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
+              "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
+              "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
    }
+
 }

@@ -6,6 +6,8 @@ import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.entities.Sobre;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
+import com.tallerwebi.dominio.service.EquipoService;
+import com.tallerwebi.dominio.service.JugadorService;
 import com.tallerwebi.dominio.service.SobreService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
@@ -23,11 +25,13 @@ import java.util.List;
 public class SobreController {
     private SobreService sobreService;
     private UsuarioService usuarioService;
+    private JugadorService jugadorService;
 
     @Autowired
-    public SobreController(SobreService sobreService, UsuarioService usuarioService) {
+    public SobreController(SobreService sobreService, UsuarioService usuarioService, JugadorService jugadorService) {
         this.usuarioService = usuarioService;
         this.sobreService = sobreService;
+        this.jugadorService = jugadorService;
     }
 
     @PostMapping("/sobre")
@@ -55,8 +59,11 @@ public class SobreController {
         Usuario usuario = this.usuarioService.buscarUsuarioPorId(id_usuario);
         List<Jugador> jugadores = this.usuarioService.convertirJugadoresDtoToEntity(sobre.getJugadores());
 
-        usuario.getEquipo().getJugadores().addAll(jugadores);
+        Equipo equipo = usuario.getEquipo();
+        equipo.getJugadores().addAll(jugadores);
+        EquipoDTO equipoDto = equipo.convertToDTO();
 
+        this.jugadorService.cargarJugadoresAlEquipo(equipoDto);
         return mav;
     }
 

@@ -10,6 +10,7 @@ import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
 import com.tallerwebi.dominio.repository.TorneoRepository;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.EquipoTorneoServiceImpl;
+import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,10 +40,12 @@ public class EquipoTorneoServiceTest {
 
    private EquipoTorneoService equipoTorneoService;
 
+   private TorneoService torneoService;
+
    @BeforeEach
    public void setUp() {
       MockitoAnnotations.openMocks(this);
-      equipoTorneoService = new EquipoTorneoServiceImpl(equipoTorneoRepository, torneoRepository, equipoRepository);
+      equipoTorneoService = new EquipoTorneoServiceImpl(equipoTorneoRepository, torneoRepository, equipoRepository, torneoService);
    }
 
    @Test

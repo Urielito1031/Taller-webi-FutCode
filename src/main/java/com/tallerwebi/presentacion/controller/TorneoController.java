@@ -149,6 +149,12 @@ public class TorneoController {
       return mav;
    }
 
+   @GetMapping("/generar-fixture")
+   public String generarFixture(@RequestParam Long torneoId) {
+      this.torneoService.crearFixtureConLasFechas(torneoId);
+      return "redirect:/torneo/fechas?torneoId=" + torneoId;
+   }
+
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
       simularTorneoService.simularFecha(torneoId, numeroFecha);

@@ -65,8 +65,6 @@ public class EquipoServiceImpl implements EquipoService{
       usuarioService.actualizar(usuario);
    }
 
-
-
    private boolean isValid(EquipoDTO equipo){
       return !equipo.getNombre().trim().isEmpty();
 
@@ -77,7 +75,6 @@ public class EquipoServiceImpl implements EquipoService{
       List<Equipo>equipos = repository.getAll();
       return equipos.stream().map(Equipo::convertToDTO).collect(Collectors.toList());
    }
-
 
    @Override
    public EquipoDTO getById(Long id){
@@ -94,7 +91,6 @@ public class EquipoServiceImpl implements EquipoService{
 
       return null;
    }
-
 
    @Override
    public void update(EquipoDTO equipo){

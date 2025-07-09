@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion.dto;
 
+import com.tallerwebi.dominio.model.entities.Partido;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,5 +24,9 @@ public class PartidoDTO {
       this.equipoVisitante = equipoVisitante;
       this.fechaEncuentro = fechaEncuentro;
       this.eventosPartido = new ArrayList<>();
+   }
+
+   public static Partido convertToDTO(Partido partido){
+
    }
 }

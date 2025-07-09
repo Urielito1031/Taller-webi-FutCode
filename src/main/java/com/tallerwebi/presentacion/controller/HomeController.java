@@ -21,7 +21,7 @@ public class HomeController {
    }
 
    @GetMapping(path = "/home")
-   public String irAHome(Model model, HttpServletRequest request) { // Añadir HttpServletRequest
+   public String irAHome(Model model, HttpServletRequest request) {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       if (usuarioId == null) {
          return "redirect:/login";

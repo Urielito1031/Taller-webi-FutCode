@@ -35,10 +35,7 @@ public class Fecha implements Comparable<Fecha>{
     private boolean simulada = false;
 
 
-    public void agregarPartido(Partido partido) {
-        partidos.add(partido);
-        partido.setFecha(this);
-    }
+
 
     @Override
     public int compareTo(Fecha o) {
@@ -55,5 +52,10 @@ public class Fecha implements Comparable<Fecha>{
     @Override
     public int hashCode() {
         return Objects.hash(id, numeroDeFecha, torneo, partidos, simulada);
+    }
+
+    public void agregarPartido(Partido partido) {
+        partidos.add(partido);
+        partido.setFecha(this);
     }
 }

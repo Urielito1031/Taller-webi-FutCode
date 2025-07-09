@@ -95,6 +95,10 @@ public class TorneoController {
    @GetMapping("/fechas")
    public ModelAndView mostrarFechas(@RequestParam Long torneoId) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+
+
+
+
       ModelAndView mav = new ModelAndView("simular-fechas");
       mav.addObject("fechas", torneo.getFechas());
       mav.addObject("torneoId", torneoId);

@@ -65,9 +65,9 @@
 
         .fechas-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
             gap: 25px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .fecha-card {
@@ -401,17 +401,11 @@
                 </div>
 
                 <div th:if="${fecha.partidos != null && !fecha.partidos.empty}">
-                    <div class="partido-item" th:each="partido : ${fecha.partidos}">
-                        <div class="partido-teams">
-                            <span class="equipo-nombre" th:text="${partido.equipoLocal.nombre}">Equipo Local</span>
-                            <span class="vs-separator">VS</span>
-                            <span class="equipo-nombre" th:text="${partido.equipoVisitante.nombre}">Equipo Visitante</span>
-                        </div>
-                        <div class="partido-resultado">
-                            <span th:text="${partido.golesLocal}">0</span>
-                            -
-                            <span th:text="${partido.golesVisitante}">0</span>
-                        </div>
+                    <div class="partido-item" th:each="partido : ${fecha.partidos}" style="justify-content: center; gap: 8px;">
+                        <span class="equipo-nombre" th:text="${partido.equipoLocal.nombre}">Equipo Local</span>
+                        <span class="partido-resultado" style="padding: 0 8px; border-radius: 8px; background: var(--dark-bg); color: var(--text-primary); font-weight: 700; border: 1px solid var(--border-color);">
+                        <span th:text="${partido.golesLocal}">0</span> - <span th:text="${partido.golesVisitante}">0</span></span>
+                        <span class="equipo-nombre" th:text="${partido.equipoVisitante.nombre}">Equipo Visitante</span>
                     </div>
                 </div>
 

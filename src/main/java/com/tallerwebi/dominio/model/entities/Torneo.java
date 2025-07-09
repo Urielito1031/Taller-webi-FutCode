@@ -43,7 +43,6 @@ public class Torneo {
    @JoinColumn(name = "torneo_copa_id", unique = true, nullable = true)
    private TorneoCopa torneoCopa;
 
-
    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
    @OrderBy("numeroDeFecha ASC")
    private Set<Fecha> fechas = new TreeSet<>();

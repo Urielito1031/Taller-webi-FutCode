@@ -1,6 +1,5 @@
 package com.tallerwebi.dominio.model.entities;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,9 +32,6 @@ public class Fecha implements Comparable<Fecha>{
 
     @Column(name = "simulada", nullable = false)
     private boolean simulada = false;
-
-
-
 
     @Override
     public int compareTo(Fecha o) {

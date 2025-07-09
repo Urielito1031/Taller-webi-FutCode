@@ -8,12 +8,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "fecha")
-public class Fecha {
+public class Fecha implements Comparable<Fecha>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,4 +40,20 @@ public class Fecha {
         partido.setFecha(this);
     }
 
+    @Override
+    public int compareTo(Fecha o) {
+        return this.numeroDeFecha.compareTo(o.numeroDeFecha);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Fecha fecha = (Fecha) o;
+        return simulada == fecha.simulada && Objects.equals(id, fecha.id) && Objects.equals(numeroDeFecha, fecha.numeroDeFecha) && Objects.equals(torneo, fecha.torneo) && Objects.equals(partidos, fecha.partidos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, numeroDeFecha, torneo, partidos, simulada);
+    }
 }

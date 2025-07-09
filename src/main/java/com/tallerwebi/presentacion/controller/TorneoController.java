@@ -67,7 +67,7 @@ public class TorneoController {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       if (usuarioId == null) {
          redirectAttributes.addFlashAttribute("errorUnirse", "No estás autenticado. Por favor, inicia sesión.");
-         return "redirect:/detalle-torneo/" + torneoId;
+         return "redirect:/torneo/detalle-torneo/" + torneoId;
       }
 
       try {
@@ -75,13 +75,13 @@ public class TorneoController {
 
          if (usuario == null) {
             redirectAttributes.addFlashAttribute("errorUnirse", "Usuario no encontrado.");
-            return "redirect:/detalle-torneo/" + torneoId;
+            return "redirect:/torneo/detalle-torneo/" + torneoId;
          }
 
          Long equipoId = usuario.getEquipo() != null ? usuario.getEquipo().getId() : null;
          if (equipoId == null) {
             redirectAttributes.addFlashAttribute("errorUnirse", "No tienes un equipo asignado. Crea un equipo primero.");
-            return "redirect:/nuevo-equipo";
+            return "redirect:/torneo/nuevo-equipo";
          }
 
          equipoTorneoService.unirseTorneo(torneoId, equipoId);

@@ -67,7 +67,7 @@ public class TorneoController {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       if (usuarioId == null) {
          redirectAttributes.addFlashAttribute("errorUnirse", "No estás autenticado. Por favor, inicia sesión.");
-         return "redirect:/torneo/detalle-torneo/" + torneoId;
+         return "redirect:/torneo/detalle-torneo/" + torneoId  ;
       }
 
       try {
@@ -89,7 +89,7 @@ public class TorneoController {
       } catch (IllegalArgumentException e) {
          redirectAttributes.addFlashAttribute("errorUnirse", e.getMessage());
       }
-      return "redirect:/detalle-torneo/" + torneoId;
+      return "redirect:/torneo/detalle-torneo/" + torneoId;
    }
 
 

@@ -32,6 +32,12 @@ public class PartidoRepositoryImpl implements PartidoRepository {
     }
 
     @Override
+    public Partido obtenerPartidoPorId(Long id) {
+        return getSession().get(Partido.class, id);
+    }
+
+
+    @Override
     public List<Partido> obtenerPartidosPorEquipoId(Long idEquipo){
         return   getSession().createQuery(
           "SELECT p " +

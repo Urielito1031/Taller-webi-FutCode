@@ -1,15 +1,14 @@
 package com.tallerwebi.presentacion.controller;
 
-import com.tallerwebi.dominio.model.entities.EquipoTorneo;
-import com.tallerwebi.dominio.model.entities.Partido;
-import com.tallerwebi.dominio.model.entities.Torneo;
+import com.tallerwebi.dominio.model.entities.*;
 import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
+import com.tallerwebi.dominio.repository.FechaRepository;
+import com.tallerwebi.dominio.repository.PartidoRepository;
 import com.tallerwebi.dominio.repository.TorneoRepository;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
-import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.infraestructura.repositoryImpl.EquipoTorneoRepositoryImpl;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
@@ -36,17 +35,21 @@ public class TorneoController {
    private final SimularTorneoService simularTorneoService;
    private final TorneoRepository torneoRepository;
    private final EquipoTorneoRepository equipoTorneoRepository;
+   private final PartidoRepository partidoRepository;
+   private final FechaRepository fechaRepository;
 
    @Autowired
    public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService, UsuarioService usuarioService,
                            SimularTorneoService simularTorneoService, TorneoRepository torneoRepository,
-                           EquipoTorneoRepository equipoTorneoRepository) {
+                           EquipoTorneoRepository equipoTorneoRepository, PartidoRepository partidoRepository, FechaRepository fechaRepository) {
       this.torneoService = torneoService;
       this.equipoTorneoService = equipoTorneoService;
       this.usuarioService = usuarioService;
       this.simularTorneoService = simularTorneoService;
       this.torneoRepository = torneoRepository;
       this.equipoTorneoRepository = equipoTorneoRepository;
+      this.partidoRepository = partidoRepository;
+      this.fechaRepository = fechaRepository;
    }
 
 
@@ -166,11 +169,87 @@ public class TorneoController {
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 
+//   @PostMapping("/simular-fecha")
+//   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha, HttpServletRequest request) {
+//      // 1. Simular toda la fecha
+//      simularTorneoService.simularFecha(torneoId, numeroFecha);
+//
+//      // 2. Obtener usuario y su equipo
+//      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+//      if (usuarioId == null) {
+//         // No está logueado, redirigir
+//         return "redirect:/login";
+//      }
+//
+//      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+//      if (usuario == null || usuario.getEquipo() == null) {
+//         // No tiene equipo asignado, redirigir a donde corresponda
+//         return "redirect:/torneo/fechas?torneoId=" + torneoId;
+//      }
+//
+//      Long equipoId = usuario.getEquipo().getId();
+//
+//      // 3. Buscar el partido donde juega el equipo en esa fecha
+//      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
+//      if (fecha != null && fecha.getPartidos() != null) {
+//         for (Partido partido : fecha.getPartidos()) {
+//            if (partido.getEquipoLocal().getId().equals(equipoId) || partido.getEquipoVisitante().getId().equals(equipoId)) {
+//               // 4. Redirigir al simulador con ese partido
+//               return "redirect:/torneo/simular-partido?partidoId=" + partido.getId();
+//            }
+//         }
+//      }
+//
+//      // Si no encontró partido del equipo, redirigir a fechas (o donde quieras)
+//      return "redirect:/torneo/fechas?torneoId=" + torneoId;
+//   }
+
+//
+//    ESTO ANDA
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
       simularTorneoService.simularFecha(torneoId, numeroFecha);
+
+//      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
+//      if (!fecha.getPartidos().isEmpty()) {
+//         Long primerPartidoId = fecha.getPartidos().get(0).getId();
+//         return "redirect:/torneo/simular-partido?partidoId=" + primerPartidoId;
+//      }
+
+      Long partidoId = simularTorneoService.simularFechaYDevolverPrimerPartido(torneoId, numeroFecha);
+
+      if (partidoId != null) {
+         return "redirect:/torneo/simular-partido?partidoId=" + partidoId;
+      }
+
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
+
+   @GetMapping("/simular-partido")
+   public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model) {
+      Partido partido = simularTorneoService.obtenerPartidoSimulado(partidoId);
+      if (partido == null) {
+         return "redirect:/torneo/fechas"; // o página de error
+      }
+
+      model.addAttribute("equipoLocal", partido.getEquipoLocal().getNombre());
+      model.addAttribute("equipoVisitante", partido.getEquipoVisitante().getNombre());
+      model.addAttribute("golesLocal", partido.getGolesLocal());
+      model.addAttribute("golesVisitante", partido.getGolesVisitante());
+
+      String resultado;
+      if (partido.getGolesLocal() > partido.getGolesVisitante()) {
+         resultado = "Ganó " + partido.getEquipoLocal().getNombre();
+      } else if (partido.getGolesVisitante() > partido.getGolesLocal()) {
+         resultado = "Ganó " + partido.getEquipoVisitante().getNombre();
+      } else {
+         resultado = "Empate";
+      }
+
+      model.addAttribute("resultado", resultado);
+      return "partido-Vista";
+   }
+
 
    @GetMapping("/tabla-posiciones")
    public ModelAndView mostrarTabla(@RequestParam Long torneoId) {

@@ -9,6 +9,8 @@ public interface PartidoRepository {
     void save(Partido partido);
     List<Partido> obtenerPartidosPorTorneoId(Long idTorneo);
 
+    Partido obtenerPartidoPorId(Long id);
+
     List<Partido>obtenerPartidosPorEquipoId(Long idEquipo);
 
     List<Partido> obtenerPartidosJugadosPorEquipoId(Long idEquipo);

@@ -62,4 +62,22 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         fechaASimular.setSimulada(true);
         fechaRepository.save(fechaASimular);
     }
+
+    @Override
+    public Long simularFechaYDevolverPrimerPartido(Long torneoId, Long numeroDeFecha) {
+        simularFecha(torneoId, numeroDeFecha); // Ya lo tenés hecho
+
+        Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha);
+
+        if (fecha != null && !fecha.getPartidos().isEmpty()) {
+            return fecha.getPartidos().get(0).getId(); // Primer partido simulado
+        }
+
+        return null;
+    }
+
+    @Override
+    public Partido obtenerPartidoSimulado(Long partidoId) {
+        return partidoRepository.obtenerPartidoPorId(partidoId);
+    }
 }

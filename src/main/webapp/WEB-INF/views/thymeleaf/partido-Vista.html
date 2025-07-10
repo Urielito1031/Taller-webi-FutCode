@@ -14,13 +14,13 @@
 
     <div class="match-info">
         <div class="team">
-            <div class="team-name" id="team1Name">River Plate</div>
-            <div class="team-score" id="team1Score">0</div>
+            <div class="team-name" id="team1Name" th:text="${equipoLocal}">River Plate</div>
+            <div class="team-score" id="team1Score" th:text="${golesLocal}">0</div>
         </div>
         <div class="vs">VS</div>
         <div class="team">
-            <div class="team-name" id="team2Name">Boca Juniors</div>
-            <div class="team-score" id="team2Score">0</div>
+            <div class="team-name" id="team2Name" th:text="${equipoVisitante}">Boca Juniors</div>
+            <div class="team-score" id="team2Score" th:text="${golesVisitante}">0</div>
         </div>
     </div>
 

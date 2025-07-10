@@ -9,18 +9,18 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>🏆 SIMULACIÓN DE PARTIDO</h1>
+        <h1> SIMULACIÓN DE PARTIDO</h1>
     </div>
 
     <div class="match-info">
         <div class="team">
-            <div class="team-name" id="team1Name">River Plate</div>
-            <div class="team-score" id="team1Score">0</div>
+            <div class="team-name" id="team1Name" th:text="${equipoLocal}">River Plate</div>
+            <div class="team-score" id="team1Score" th:text="${golesLocal}">0</div>
         </div>
         <div class="vs">VS</div>
         <div class="team">
-            <div class="team-name" id="team2Name">Boca Juniors</div>
-            <div class="team-score" id="team2Score">0</div>
+            <div class="team-name" id="team2Name" th:text="${equipoVisitante}">Boca Juniors</div>
+            <div class="team-score" id="team2Score" th:text="${golesVisitante}">0</div>
         </div>
     </div>
 
@@ -55,11 +55,11 @@
     </div>
 
     <div class="commentary-section scrollbar">
-        <div class="commentary-title">📺 NARRACIÓN EN VIVO</div>
+        <div class="commentary-title">NARRACIÓN EN VIVO</div>
         <div id="commentaryList">
-            <div class="commentary-item">
+            <div th:each="narracion : ${narraciones}"  class="commentary-item">
                 <span class="commentary-minute">0'</span>
-                ¡Bienvenidos al superclásico argentino! River Plate vs Boca Juniors promete ser un partido épico.
+                <span th:text="${narracion.getTexto()}">Aquí va una frase...</span>
             </div>
         </div>
     </div>
@@ -67,7 +67,344 @@
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
     </div>
 
+    <div class="navigation">
+        <a th:href="@{/home}" class="btn btn-home">
+            VOLVER AL INICIO
+        </a>
+    </div>
+
+
 </div>
-<script src="js.js"></script>
+<!--<script>-->
+<!--// Elementos del DOM-->
+<!--const matchTime = document.getElementById("matchTime");-->
+<!--const statusIndicator = document.getElementById("statusIndicator");-->
+<!--const team1Score = document.getElementById("team1Score");-->
+<!--const team2Score = document.getElementById("team2Score");-->
+<!--const totalGoals = document.getElementById("totalGoals");-->
+<!--const totalFouls = document.getElementById("totalFouls");-->
+<!--const totalCards = document.getElementById("totalCards");-->
+<!--const totalInjuries = document.getElementById("totalInjuries");-->
+<!--const commentaryList = document.getElementById("commentaryList");-->
+<!--const startBtn = document.getElementById("startBtn");-->
+<!--const pauseBtn = document.getElementById("pauseBtn");-->
+<!--const resetBtn = document.getElementById("resetBtn");-->
+<!--const omiteBtn = document.getElementById("omitebtn");-->
+
+<!--// Variables de estado-->
+<!--let tiempo = 0;-->
+<!--let partidoEnCurso = false;-->
+<!--let partidoTerminado = false;-->
+<!--let intervalo = null;-->
+<!--let narracionIndex = 0;-->
+<!--let velocidadNarracion = 1000; // milisegundos-->
+<!--let omitirNarracion = false;-->
+
+<!--// Estadísticas del partido-->
+<!--let stats = {-->
+<!--goles: parseInt(team1Score.textContent) + parseInt(team2Score.textContent),-->
+<!--faltas: 0,-->
+<!--tarjetas: 0,-->
+<!--lesionados: 0-->
+<!--};-->
+
+<!--// Obtener todas las narraciones iniciales-->
+<!--const narracionesOriginales = Array.from(commentaryList.querySelectorAll(".commentary-item"));-->
+<!--let narraciones = [...narracionesOriginales];-->
+
+<!--// Función para inicializar el partido-->
+<!--function inicializarPartido() {-->
+<!--// Mezclar narraciones para que aparezcan en orden aleatorio-->
+<!--narraciones = shuffleArray([...narracionesOriginales]);-->
+
+<!--// Limpiar el área de comentarios-->
+<!--commentaryList.innerHTML = '';-->
+
+<!--// Resetear índice-->
+<!--narracionIndex = 0;-->
+
+<!--// Actualizar estadísticas iniciales-->
+<!--actualizarEstadisticas();-->
+<!--}-->
+
+<!--// Función para mezclar array-->
+<!--function shuffleArray(array) {-->
+<!--const shuffled = [...array];-->
+<!--for (let i = shuffled.length - 1; i > 0; i&#45;&#45;) {-->
+<!--const j = Math.floor(Math.random() * (i + 1));-->
+<!--[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];-->
+<!--}-->
+<!--return shuffled;-->
+<!--}-->
+
+<!--// Función para iniciar el partido-->
+<!--function iniciarPartido() {-->
+<!--if (partidoEnCurso) return;-->
+
+<!--partidoEnCurso = true;-->
+<!--partidoTerminado = false;-->
+
+<!--// Cambiar estado visual-->
+<!--statusIndicator.textContent = "EN JUEGO";-->
+<!--statusIndicator.className = "status-indicator playing";-->
+
+<!--// Deshabilitar botón de inicio-->
+<!--startBtn.disabled = true;-->
+<!--pauseBtn.disabled = false;-->
+
+<!--// Iniciar cronómetro-->
+<!--if (!intervalo) {-->
+<!--intervalo = setInterval(actualizarTiempo, 1000);-->
+<!--}-->
+<!--}-->
+
+<!--// Función para pausar el partido-->
+<!--function pausarPartido() {-->
+<!--if (!partidoEnCurso) return;-->
+
+<!--partidoEnCurso = false;-->
+
+<!--// Cambiar estado visual-->
+<!--statusIndicator.textContent = "PAUSADO";-->
+<!--statusIndicator.className = "status-indicator paused";-->
+
+<!--// Habilitar/deshabilitar botones-->
+<!--startBtn.disabled = false;-->
+<!--pauseBtn.disabled = true;-->
+
+<!--// Pausar cronómetro-->
+<!--clearInterval(intervalo);-->
+<!--intervalo = null;-->
+<!--}-->
+
+<!--// Función para reiniciar el partido-->
+<!--function reiniciarPartido() {-->
+<!--// Detener cronómetro-->
+<!--clearInterval(intervalo);-->
+<!--intervalo = null;-->
+
+<!--// Resetear variables-->
+<!--tiempo = 0;-->
+<!--partidoEnCurso = false;-->
+<!--partidoTerminado = false;-->
+<!--narracionIndex = 0;-->
+<!--omitirNarracion = false;-->
+
+<!--// Resetear estadísticas-->
+<!--stats = {-->
+<!--goles: parseInt(team1Score.textContent) + parseInt(team2Score.textContent),-->
+<!--faltas: 0,-->
+<!--tarjetas: 0,-->
+<!--lesionados: 0-->
+<!--};-->
+
+<!--// Resetear UI-->
+<!--matchTime.textContent = "0'";-->
+<!--statusIndicator.textContent = "LISTO";-->
+<!--statusIndicator.className = "status-indicator ready";-->
+
+<!--// Habilitar/deshabilitar botones-->
+<!--startBtn.disabled = false;-->
+<!--pauseBtn.disabled = true;-->
+
+<!--// Reinicializar partido-->
+<!--inicializarPartido();-->
+<!--}-->
+
+<!--// Función para actualizar el tiempo-->
+<!--function actualizarTiempo() {-->
+<!--if (!partidoEnCurso) return;-->
+
+<!--tiempo++;-->
+<!--matchTime.textContent = `${tiempo}'`;-->
+
+<!--// Mostrar narración si no está omitida-->
+<!--if (!omitirNarracion) {-->
+<!--mostrarSiguienteNarracion();-->
+<!--}-->
+
+<!--// Terminar partido a los 90 minutos-->
+<!--if (tiempo >= 90) {-->
+<!--terminarPartido();-->
+<!--}-->
+<!--}-->
+
+<!--// Función para mostrar la siguiente narración-->
+<!--function mostrarSiguienteNarracion() {-->
+<!--// if (narracionIndex >= narraciones.length) {-->
+<!--// // Si se acabaron las narraciones, generar eventos aleatorios-->
+<!--// generarEventoAleatorio();-->
+<!--// return;-->
+<!--}-->
+
+<!--const narracion = narraciones[narracionIndex];-->
+<!--const nuevaNarracion = narracion.cloneNode(true);-->
+
+<!--// Actualizar el minuto-->
+<!--const minuteSpan = nuevaNarracion.querySelector('.commentary-minute');-->
+<!--if (minuteSpan) {-->
+<!--minuteSpan.textContent = `${tiempo}'`;-->
+<!--}-->
+
+<!--// Procesar la narración para estadísticas-->
+<!--procesarNarracion(nuevaNarracion.textContent);-->
+
+<!--// Agregar al inicio de la lista (más reciente arriba)-->
+<!--commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);-->
+
+<!--// Scroll automático para mostrar la narración más reciente-->
+<!--nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });-->
+
+<!--narracionIndex++;-->
+
+<!--// Actualizar estadísticas-->
+<!--actualizarEstadisticas();-->
+<!--}-->
+
+<!--// Función para procesar narración y extraer estadísticas-->
+<!--function procesarNarracion(texto) {-->
+<!--const textoLower = texto.toLowerCase();-->
+
+<!--// Detectar goles-->
+<!--if (textoLower.includes('gol') || textoLower.includes('golazo')) {-->
+<!--stats.goles++;-->
+<!--}-->
+
+<!--// Detectar tarjetas-->
+<!--if (textoLower.includes('amarilla') || textoLower.includes('tarjeta')) {-->
+<!--stats.tarjetas++;-->
+<!--}-->
+
+<!--// Detectar expulsiones-->
+<!--if (textoLower.includes('expuls') || textoLower.includes('roja')) {-->
+<!--stats.tarjetas++;-->
+<!--}-->
+
+<!--// Detectar lesiones-->
+<!--if (textoLower.includes('lesion') || textoLower.includes('duele') || textoLower.includes('dolor')) {-->
+<!--stats.lesionados++;-->
+<!--}-->
+
+<!--// Detectar faltas-->
+<!--if (textoLower.includes('falta') || textoLower.includes('brusco') || textoLower.includes('protestar')) {-->
+<!--stats.faltas++;-->
+<!--}-->
+<!--}-->
+
+<!--// Función para actualizar estadísticas en la UI-->
+<!--function actualizarEstadisticas() {-->
+<!--totalGoals.textContent = stats.goles;-->
+<!--totalFouls.textContent = stats.faltas;-->
+<!--totalCards.textContent = stats.tarjetas;-->
+<!--totalInjuries.textContent = stats.lesionados;-->
+<!--}-->
+
+<!--// // Función para generar eventos aleatorios cuando se acaban las narraciones-->
+<!--// function generarEventoAleatorio() {-->
+<!--// const eventos = [-->
+<!--// "Jugada de peligro que no encuentra definición",-->
+<!--// "El árbitro deja continuar el juego",-->
+<!--// "Intento de jugada que se va desviada",-->
+<!--// "El público se hace sentir en las tribunas",-->
+<!--// "Cambio de ritmo en el mediocampo",-->
+<!--// "Jugada que se corta en el último momento"-->
+<!--// ];-->
+<!--//-->
+<!--// const eventoAleatorio = eventos[Math.floor(Math.random() * eventos.length)];-->
+
+<!--// // Crear elemento de narración-->
+<!--// const nuevaNarracion = document.createElement('div');-->
+<!--// nuevaNarracion.className = 'commentary-item';-->
+<!--// nuevaNarracion.innerHTML = `-->
+<!--// <span class="commentary-minute">${tiempo}'</span>-->
+<!--// <span>${eventoAleatorio}</span>-->
+<!--// `;-->
+<!--//-->
+<!--// commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);-->
+<!--// nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });-->
+<!--// }-->
+
+<!--// Función para terminar el partido-->
+<!--function terminarPartido() {-->
+<!--partidoEnCurso = false;-->
+<!--partidoTerminado = true;-->
+
+<!--// Detener cronómetro-->
+<!--clearInterval(intervalo);-->
+<!--intervalo = null;-->
+
+<!--// Cambiar estado visual-->
+<!--statusIndicator.textContent = "FINALIZADO";-->
+<!--statusIndicator.className = "status-indicator finished";-->
+
+<!--// Deshabilitar botones-->
+<!--startBtn.disabled = true;-->
+<!--pauseBtn.disabled = true;-->
+
+<!--// Agregar narración de final-->
+<!--const narracionFinal = document.createElement('div');-->
+<!--narracionFinal.className = 'commentary-item';-->
+<!--narracionFinal.innerHTML = `-->
+<!--<span class="commentary-minute">90'</span>-->
+<!--<span><strong>¡FINAL DEL PARTIDO!</strong></span>-->
+<!--`;-->
+
+<!--commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);-->
+<!--narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });-->
+<!--}-->
+
+<!--// Función para omitir narración-->
+<!--function omitirNarracion() {-->
+<!--omitirNarracion = !omitirNarracion;-->
+
+<!--if (omitirNarracion) {-->
+<!--omiteBtn.textContent = "ACTIVAR NARRACIÓN";-->
+<!--omiteBtn.classList.add('active');-->
+<!--velocidadNarracion = 100; // Acelerar tiempo-->
+<!--} else {-->
+<!--omiteBtn.textContent = "OMITIR NARRACIÓN";-->
+<!--omiteBtn.classList.remove('active');-->
+<!--velocidadNarracion = 1000; // Velocidad normal-->
+<!--}-->
+
+<!--// Reiniciar intervalo con nueva velocidad-->
+<!--if (partidoEnCurso) {-->
+<!--clearInterval(intervalo);-->
+<!--intervalo = setInterval(actualizarTiempo, velocidadNarracion);-->
+<!--}-->
+<!--}-->
+
+<!--// Event listeners-->
+<!--startBtn.addEventListener("click", iniciarPartido);-->
+<!--pauseBtn.addEventListener("click", pausarPartido);-->
+<!--resetBtn.addEventListener("click", reiniciarPartido);-->
+<!--omiteBtn.addEventListener("click", omitirNarracion);-->
+
+<!--// Teclas de acceso rápido-->
+<!--document.addEventListener('keydown', function(e) {-->
+<!--if (e.code === 'Space') {-->
+<!--e.preventDefault();-->
+<!--if (partidoEnCurso) {-->
+<!--pausarPartido();-->
+<!--} else if (!partidoTerminado) {-->
+<!--iniciarPartido();-->
+<!--}-->
+<!--} else if (e.code === 'KeyR') {-->
+<!--reiniciarPartido();-->
+<!--} else if (e.code === 'KeyO') {-->
+<!--omitirNarracion();-->
+<!--}-->
+<!--});-->
+
+<!--// Inicializar al cargar la página-->
+<!--document.addEventListener('DOMContentLoaded', function() {-->
+<!--inicializarPartido();-->
+
+<!--// Configurar estado inicial-->
+<!--statusIndicator.textContent = "LISTO";-->
+<!--statusIndicator.className = "status-indicator ready";-->
+<!--pauseBtn.disabled = true;-->
+<!--});-->
+<!--</script>-->
 </body>
 </html>

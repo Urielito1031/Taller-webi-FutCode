@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "fecha")
-public class Fecha implements Comparable<Fecha>{
+public class    Fecha implements Comparable<Fecha>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

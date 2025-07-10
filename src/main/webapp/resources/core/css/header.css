@@ -1,0 +1,144 @@
+/* ====== Estilos encapsulados para el HEADER ====== */
+
+/* Prevenir scroll horizontal */
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.navbar {
+    background-color: #1b263b;
+    padding: 16px 30px;
+    position: relative;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+.navbar-brand, #titulo-nav {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00ffc3 !important;
+    text-align: left;
+    margin: 0;
+    text-decoration: none;
+}
+
+#titulo-nav {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar .container {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.ms-auto {
+    display: flex;
+    justify-content: right;
+}
+
+.nav-item {
+    margin-left: 40px;
+}
+
+@media (max-width: 768px) {
+    .navbar-brand, #titulo-nav {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    .nav-item {
+        margin-left: 20px;
+    }
+    .navbar .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.nav-link, .dropdown-toggle i, .dropdown-toggle span, #titulo-nav, a {
+    text-decoration: none;
+    color: #00ffc3;
+}
+
+.nav-link, #nombre-usuario, .bi-person-circle {
+    transition: 0.1111s ease;
+}
+
+.nav-link:hover {
+    color: #00ffc3a7;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    color: #a6cfff;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-toggle:focus + .dropdown-menu,
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #1c2a3a;
+    border: 1px solid #334;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    border-radius: 8px;
+    min-width: 150px;
+    z-index: 100;
+}
+
+.dropdown-menu a {
+    color: #ddd;
+    padding: 10px 16px;
+    display: block;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #2e3d4f;
+}
+
+.dropdown-menu hr {
+    margin: 5px 0;
+    border: 0;
+    height: 1px;
+    background: #445;
+}
+
+.dropdown-menu a.danger {
+    color: #ff6666;
+}
+
+.badge {
+    background-color: red;
+    border-radius: 50px;
+    padding: 0.2px 6px;
+    color: white;
+} 

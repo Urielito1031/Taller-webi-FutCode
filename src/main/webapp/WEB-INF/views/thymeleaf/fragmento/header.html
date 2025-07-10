@@ -13,14 +13,21 @@
           <li class="nav-item">
             <a class="nav-link" th:href="@{/jugador/comprar-sobres}">
               <i class="bi bi-cart"></i> Mercado
-              <span class="badge bg-warning ms-1">3</span>
+
             </a>
+          </li>
+          <!-- Monedas al lado de los ítems del menú -->
+          <li class="nav-item" style="margin-left: 20px;">
+            <span style="color:#C0C0C0;font-weight:bold;font-size:1.1rem;display:flex;align-items:center;gap:4px;">
+              <i class="bi bi-coin"></i>
+              <span th:text="${monedas}">0</span>
+            </span>
           </li>
           <li class="nav-item dropdown">
             <div class="dropdown">
               <button class="dropdown-toggle">
                 <i class="bi bi-person-circle"></i>
-                <span id="nombre-usuario" th:text="${equipoNombre}">Diego Maradona</span>
+                <span id="nombre-usuario" th:text="${equipoNombre}">River Plate Titulares</span>
               </button>
               <div class="dropdown-menu">
                 <a th:href="@{/logout}" class="danger">

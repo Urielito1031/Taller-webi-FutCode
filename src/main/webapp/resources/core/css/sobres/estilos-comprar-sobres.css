@@ -59,40 +59,50 @@ main {
 
 main section {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 95%;
-    height: 400px;
-    padding: 20px;
-    z-index: 1;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    gap: 32px;
+    padding: 24px 0;
+    box-sizing: border-box;
 }
 
-.sobres{
-    width: 1200px;
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+.sobres {
+    width: 100%;
+    min-height: 300px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    align-items: stretch;
+    justify-items: center;
+    padding: 24px 0;
+    box-sizing: border-box;
 }
 
-.sobres article{
-    height: 400px;
-    width: 20%;
+.sobres article {
+    height: 320px;
+    width: 100%;
+    max-width: 320px;
     background: var(--azulO);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    transition: 0.5s;
+    padding: 18px 12px;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    transition: 0.3s;
     text-decoration: none;
-
-    &:hover{
-        background: #9843F9;
-        transform: translateY(-10px);
-    }
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
 }
-
+.sobres article:hover {
+    background: #9843F9;
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+}
 .sobres article form button {
     background: none;
     border: none;
@@ -107,43 +117,49 @@ main section {
     cursor: pointer;
     gap: 10px;
 }
-
-.sobres article form button h3{
+.sobres article form button h3 {
     color: var(--verdeAgua);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     width: 100%;
     text-align: center;
     font-family: "Orbitron", sans-serif;
+    margin-bottom: 8px;
+    word-break: break-word;
 }
-
 .sobres article form button img {
-    height: 70%;
+    height: 120px;
     width: auto;
     object-fit: contain;
     display: block;
     max-width: 100%;
+    margin-bottom: 8px;
 }
 
 /* Estilo del aside descripcion */
-main section aside{
-    height: 400px;
-    width: 20%;
+main section aside {
+    min-width: 220px;
+    max-width: 340px;
+    width: 100%;
     background: var(--gris);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    margin-left: 0;
+    margin-top: 0;
+    padding: 18px 16px;
+    flex: 1 1 220px;
 }
-
-main section aside h3{
+main section aside h3 {
     text-align: left;
     color: var(--verdeAgua);
     font-family: "Orbitron", sans-serif;
-    padding: 15px 15px 0;
-    font-size: 2rem;
+    padding: 0 0 8px 0;
+    font-size: 1.5rem;
 }
-
-main section aside p{
-    padding: 15px;
+main section aside p {
     color: var(--blanco);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-family: "Inter", sans-serif;
+    margin: 0;
 }
 
 header{
@@ -253,4 +269,293 @@ ul {
     border-radius: 50px;
     padding: 0.2px 6px;
     color: white;
+}
+
+.sobres-section-responsive {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 0 0 0;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+.sobres {
+    flex: 2 1 0%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    align-items: stretch;
+    justify-items: center;
+    padding: 24px 0;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.aside-sobre-responsive {
+    flex: 1 1 320px;
+    min-width: 220px;
+    max-width: 340px;
+    background: var(--gris);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    padding: 24px 18px;
+    margin: 0;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.aside-sobre-responsive h3 {
+    color: var(--verdeAgua);
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+.aside-sobre-responsive p {
+    color: var(--blanco);
+    font-size: 1.1rem;
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    word-break: break-word;
+}
+
+.sobres-cards-nueva-ui {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.sobre-card-nueva-ui {
+    background: var(--azulO);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 220px;
+    min-width: 180px;
+    max-width: 240px;
+    padding: 18px 12px 16px 12px;
+    margin-bottom: 0;
+    position: relative;
+    transition: box-shadow 0.2s, transform 0.2s;
+    overflow: hidden;
+}
+.sobre-card-nueva-ui:hover {
+    background: #1b263b;
+    box-shadow: 0 8px 32px rgba(0,255,195,0.12);
+    transform: translateY(-6px) scale(1.03);
+}
+.sobre-card-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 8px;
+}
+.sobre-titulo {
+    color: var(--verdeAgua);
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px #0008;
+}
+.sobre-card-img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.sobre-card-img img {
+    max-width: 90%;
+    max-height: 110px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff1;
+    box-shadow: 0 2px 8px #0003;
+}
+.sobre-card-precio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.badge-precio {
+    background: linear-gradient(90deg, #00ffc3 60%, #27F2B9 100%);
+    color: #0d1b2a;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    padding: 4px 14px;
+    box-shadow: 0 2px 8px #00ffc355;
+    letter-spacing: 0.5px;
+}
+.moneda-icon {
+    color: #ffd700;
+    font-size: 1.2rem;
+    margin-left: 2px;
+}
+.sobre-card-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.btn-comprar-sobre {
+    background: linear-gradient(90deg, #00ffc3 60%, #27F2B9 100%);
+    color: #dbf5ff;
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 24px;
+    margin-top: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #00ffc355;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.btn-comprar-sobre:hover {
+    background: linear-gradient(90deg, #27F2B9 60%, #00ffc3 100%);
+    color: #1b263b;
+    transform: scale(1.06);
+}
+
+@media (max-width: 1100px) {
+    .sobres-section-responsive {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+        padding: 18px 0 0 0;
+    }
+    .sobres {
+        width: 100%;
+        min-width: 0;
+        max-width: 100vw;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+    }
+    .sobres article {
+        height: 220px;
+        max-width: 220px;
+        padding: 10px 6px;
+        margin-bottom: 18px;
+    }
+    .sobres article form button img {
+        height: 70px;
+    }
+    main section {
+        gap: 18px;
+        padding: 12px 0;
+    }
+    main section aside {
+        max-width: 220px;
+        padding: 10px 8px;
+    }
+    .aside-sobre-responsive {
+        max-width: 100vw;
+        margin: 0 auto;
+        padding: 16px 8px;
+    }
+    .sobres-cards-nueva-ui {
+        gap: 18px;
+        max-width: 100vw;
+    }
+    .sobre-card-nueva-ui {
+        width: 180px;
+        min-width: 140px;
+        max-width: 220px;
+        padding: 10px 6px 10px 6px;
+    }
+    .sobre-card-img img {
+        max-height: 70px;
+    }
+}
+
+@media (max-width: 900px) {
+    .sobres {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+    }
+    .sobres article {
+        height: 220px;
+        max-width: 220px;
+        padding: 10px 6px;
+    }
+    .sobres article form button img {
+        height: 70px;
+    }
+    main section {
+        gap: 18px;
+        padding: 12px 0;
+    }
+    main section aside {
+        max-width: 220px;
+        padding: 10px 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .sobres-section-responsive {
+        gap: 12px;
+        padding: 8px 0 0 0;
+    }
+    .sobres {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 8px 0;
+        max-width: 98vw;
+    }
+    .sobres article {
+        height: 180px;
+        max-width: 98vw;
+        padding: 6px 2px;
+        margin-bottom: 16px;
+    }
+    .aside-sobre-responsive {
+        padding: 8px 2px;
+        font-size: 1rem;
+        max-width: 98vw;
+        margin: 0 auto 16px auto;
+        min-width: 0;
+    }
+    /* Ajustar header para que no tape el contenido */
+    .navbar {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+    .sobres-cards-nueva-ui {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 0;
+    }
+    .sobre-card-nueva-ui {
+        width: 98vw;
+        min-width: 0;
+        max-width: 98vw;
+        padding: 8px 2px 8px 2px;
+        margin-bottom: 12px;
+    }
+    .sobre-card-img img {
+        max-height: 48px;
+    }
+}
+
+/* Asegurar que el aside siempre sea visible y no quede "hundido" */
+.sobres-section-responsive {
+    align-items: flex-start;
 }

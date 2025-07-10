@@ -65,6 +65,12 @@ public class TorneoController {
          return "redirect:/login";
       }
 
+      if (usuario.getEquipo() != null) {
+         model.addAttribute("equipoNombre", usuario.getEquipo().getNombre());
+      } else {
+         model.addAttribute("equipoNombre", "Sin equipo");
+      }
+
 
       List<TorneoDTO> torneos = torneoService.getAll();
       if (torneos.isEmpty()) {

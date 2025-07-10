@@ -98,7 +98,6 @@ public class PlantillaController {
       model.addAttribute("esquemas", esquemas);
 
 
-      //agregado para mostrar los jugadores totales del mismo equipo
       List<JugadorDTO> jugadores  = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
 

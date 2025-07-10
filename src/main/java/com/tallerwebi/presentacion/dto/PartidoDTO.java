@@ -9,15 +9,17 @@ import java.util.List;
 
 @Getter
 @Setter
-public class PartidoDTO {
+public class PartidoDTO{
    private Long id;
    private EquipoDTO equipoLocal;
    private EquipoDTO equipoVisitante;
    private Date fechaEncuentro;
    private List<EventoPartidoDTO> eventosPartido;
 
-   public PartidoDTO() {}
-   public PartidoDTO(Long id, EquipoDTO equipoLocal,EquipoDTO equipoVisitante, Date fechaEncuentro) {
+   public PartidoDTO(){
+   }
+
+   public PartidoDTO(Long id,EquipoDTO equipoLocal,EquipoDTO equipoVisitante,Date fechaEncuentro){
       this.id = id;
       this.equipoLocal = equipoLocal;
       this.equipoVisitante = equipoVisitante;
@@ -25,3 +27,4 @@ public class PartidoDTO {
       this.eventosPartido = new ArrayList<>();
    }
 }
+

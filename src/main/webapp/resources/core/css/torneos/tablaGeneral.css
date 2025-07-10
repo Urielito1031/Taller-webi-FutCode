@@ -1,0 +1,59 @@
+body {
+            background: url('./../img/estadio.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: sans-serif;
+            color: white;
+        }
+        .tabla-posiciones {
+            background-color: #1e1e1e;
+            border-radius: 0.5em;
+            overflow: hidden;
+            font-size: 0.9em;
+            margin-right:auto;
+            margin-left:auto;
+            width:90%
+        }
+        .tabla-posiciones thead {
+            background-color: #000;
+            text-transform: uppercase;
+        }
+        .tabla-posiciones tbody tr {
+            border-bottom: 1px solid #2c2c2c;
+        }
+        .tabla-posiciones tbody tr:nth-child(1) {
+            background-color: #222;
+            border-left: 5px solid gold;
+        }
+        .tabla-posiciones tbody tr:nth-child(2) {
+            background-color: #222;
+            border-left: 5px solid silver;
+        }
+        .tabla-posiciones tbody tr:nth-child(3) {
+            background-color: #222;
+            border-left: 5px solid #cd7f32; /* bronce */
+        }
+        .tabla-posiciones td, .tabla-posiciones th {
+            text-align: center;
+            vertical-align: middle;
+            padding: 0.6em;
+        }
+        .nombre-equipo {
+            text-align: left;
+            padding-left: 1em;
+        }
+        .botones-nav {
+            margin-top: 1em;
+            display: flex;
+            justify-content: space-around;
+        }
+        .botones-nav a {
+            padding: 0.5em 1.5em;
+            background-color: #2e2e2e;
+            color: white;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            border-radius: 0.4em;
+        }
+        .botones-nav a.active {
+            border: 2px solid yellow;
+        }

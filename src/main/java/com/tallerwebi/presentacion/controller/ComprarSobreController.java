@@ -43,6 +43,12 @@ public class ComprarSobreController {
         Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
         Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
 
+        if (usuario.getEquipo() != null) {
+            mav.addObject("equipoNombre", usuario.getEquipo().getNombre());
+        } else {
+            mav.addObject("equipoNombre", "Sin equipo");
+        }
+
         mav.addObject("monedas", usuario.getMonedas());
 
         return mav;
@@ -58,6 +64,13 @@ public class ComprarSobreController {
         mav.addObject("cantidadSobres", sobres.size());
 
         Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
+
+        if (usuario.getEquipo() != null) {
+            mav.addObject("equipoNombre", usuario.getEquipo().getNombre());
+        } else {
+            mav.addObject("equipoNombre", "Sin equipo");
+        }
+
         mav.addObject("monedas", usuario.getMonedas());
         return mav;
     }

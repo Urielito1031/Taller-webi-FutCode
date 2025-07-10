@@ -278,6 +278,27 @@ body {
     border-radius: 4px;
 }
 
+.btn-home {
+    background: linear-gradient(45deg, #00f5ff, #0080ff);
+    color: white;
+    text-decoration: none;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 245, 255, 0.3);
+}
+
+.btn-home:hover {
+    background: linear-gradient(45deg, #0080ff, #00f5ff);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 245, 255, 0.4);
+    text-decoration: none;
+    color: white;
+}
+
 @media (max-width: 768px) {
     .match-info {
         flex-direction: column;
@@ -300,4 +321,6 @@ body {
     .btn {
         width: 200px;
     }
+
+
 }

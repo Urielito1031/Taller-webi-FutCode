@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.model.enums.RarezaJugador;
+import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.JugadorRepository;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -22,10 +23,12 @@ public class JugadorServiceImpl implements JugadorService{
 
 
    private final JugadorRepository repository;
+   private final EquipoRepository equipoRepository;
 
    @Autowired
-   public JugadorServiceImpl(JugadorRepository repository) {
+   public JugadorServiceImpl(JugadorRepository repository, EquipoRepository equipoRepository) {
       this.repository = repository;
+      this.equipoRepository = equipoRepository;
    }
 
 
@@ -91,6 +94,28 @@ public class JugadorServiceImpl implements JugadorService{
 
    }
 
+   @Override
+   public void asegurarJugadoresIniciales(Equipo equipo) {
+      if (equipo.getJugadores() == null || equipo.getJugadores().isEmpty()) {
+         // Asegurarse de que la lista existe
+         if (equipo.getJugadores() == null) {
+            equipo.setJugadores(new ArrayList<>());
+         }
 
+         // Generar nuevos jugadores
+         List<Jugador> nuevosJugadores = sortearJugadoresIniciales(14);
+
+         // Asignar la relación bidireccional
+         for (Jugador jugador : nuevosJugadores) {
+            jugador.setEquipo(equipo);
+         }
+
+         // IMPORTANTE: Agregar a la lista existente, no reemplazarla
+         equipo.getJugadores().addAll(nuevosJugadores);
+
+         // Guardar el equipo
+         equipoRepository.save(equipo);
+      }
+   }
 
 }

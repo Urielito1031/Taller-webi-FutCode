@@ -31,7 +31,7 @@
     <li class="nav-item">
       <a class="nav-link" th:href="@{/jugador/mis-sobres}">
         <i class="bi bi-archive"></i> Mis Sobres
-        <span class="badge ms-2">3</span>
+        <span class="badge ms-2" th:text="${cantidadSobres}">0</span>
       </a>
     </li>
     <li class="nav-item">
@@ -39,6 +39,7 @@
         <i class="bi bi-clock-history"></i> Historial de Partidos
       </a>
     </li>
+
   </ul>
 </aside>
 
@@ -56,6 +57,32 @@
 
     <div th:if="${mensajeTorneo}" class="alert alert-info" role="alert" th:text="${mensajeTorneo}">
     </div>
+    
+    <!-- Sección de Acceso Rápido a Fechas -->
+    <div class="row mb-4" th:if="${torneosUnidos != null and !torneosUnidos.isEmpty()}">
+      <div class="col-12">
+        <div class="fechas-access-card">
+          <div class="fechas-card-content">
+            <div class="fechas-header">
+              <div class="fechas-icon">
+                <i class="bi bi-calendar-event"></i>
+              </div>
+              <div class="fechas-info">
+                <h5 class="fechas-title">Simular Fechas</h5>
+                <p class="fechas-description">Accede a las fechas de tus torneos para simular partidos</p>
+              </div>
+            </div>
+            <div class="fechas-actions">
+              <a th:href="@{/torneo/fechas(torneoId=${torneosUnidos[0].id})}" class="fechas-btn">
+                <i class="bi bi-play-circle"></i>
+                <span>Simular Fechas</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <div id="lista-torneos" th:replace="~{vista-list-torneos :: torneoList}">
     </div>
   </div>
@@ -81,7 +108,7 @@
       }
     });
 
-    document.addEventListener('keydown', (e) => {jj
+    document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && sidebar.classList.contains('active')) {
         toggleSidebar();
       }

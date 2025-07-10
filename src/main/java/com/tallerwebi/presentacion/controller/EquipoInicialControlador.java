@@ -29,10 +29,10 @@ public class EquipoInicialControlador {
         this.equipoService = equipoService;
     }
 
-//    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.GET)
-//    public ModelAndView nuevoEquipo() {
-//        return new ModelAndView("creacionEquipo").addObject("equipo", new EquipoDTO());
-//    }
+    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.GET)
+    public ModelAndView nuevoEquipo() {
+        return new ModelAndView("creacionEquipo").addObject("equipo", new EquipoDTO());
+    }
 
 //    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
 //    public String procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo, HttpSession session) {

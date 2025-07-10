@@ -4,6 +4,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     height: 100vh;
+    overflow-x: hidden;
 }
 
 
@@ -365,4 +366,141 @@ main {
     color: #00ffc3;
     cursor: pointer;
     z-index: 1100;
+}
+
+/* Estilos para la tarjeta de acceso a fechas */
+.fechas-access-card {
+    background: linear-gradient(135deg, #1b263b 0%, #1c2a3a 100%);
+    border: 1px solid rgba(0, 255, 195, 0.2);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 255, 195, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.fechas-access-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #00ffc3, #1c2a3a);
+    border-radius: 16px 16px 0 0;
+}
+
+.fechas-access-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 255, 195, 0.15);
+    border-color: rgba(0, 255, 195, 0.3);
+}
+
+.fechas-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.fechas-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.fechas-icon {
+    background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
+}
+
+.fechas-icon i {
+    color: #0d1b2a;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.fechas-info {
+    flex: 1;
+}
+
+.fechas-title {
+    color: #00ffc3;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    text-shadow: 0 0 10px rgba(0, 255, 195, 0.2);
+}
+
+.fechas-description {
+    color: #ffffff;
+    font-size: 0.95rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.fechas-actions {
+    display: flex;
+    align-items: center;
+}
+
+.fechas-btn {
+    background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+    color: #0d1b2a;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fechas-btn:hover {
+    background: linear-gradient(135deg, #00d4a3 0%, #00ffc3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 195, 0.4);
+    color: #0d1b2a;
+    text-decoration: none;
+}
+
+.fechas-btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.fechas-btn:hover i {
+    transform: scale(1.1);
+}
+
+/* Responsive para la tarjeta de fechas */
+@media (max-width: 768px) {
+    .fechas-card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .fechas-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .fechas-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }

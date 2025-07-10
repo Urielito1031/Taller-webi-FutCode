@@ -81,24 +81,24 @@ class FrasePartidoServiceImplTest {
     }
 
 //    @Test
-    public void dadoQueTengoFrasesDePartidoDeGolVemosQueAmbasSonDiferentes() {
-        Jugador jugador = new Jugador();
-        jugador.setId(1L);
-        jugador.setNombre("Messi");
-
-        Equipo equipo = new Equipo();
-        equipo.setId(1L);
-        equipo.setNombre("Barcelona");
-
-        when(jugadorRepository.getById(1L)).thenReturn(jugador);
-        when(equipoRepository.getById(1L)).thenReturn(equipo);
-
-        String frase = frasePartidoService.generarFrase(EventoPartido.GOL, 1L, 1L);
-        String frase2 = frasePartidoService.generarFrase(EventoPartido.GOL, 1L, 1L);
-
-        // si son iguales seria mucha coincidencia JAJA
-        assertNotEquals(frase, frase2);
-    }
+//    public void dadoQueTengoFrasesDePartidoDeGolVemosQueAmbasSonDiferentes() {
+//        Jugador jugador = new Jugador();
+//        jugador.setId(1L);
+//        jugador.setNombre("Messi");
+//
+//        Equipo equipo = new Equipo();
+//        equipo.setId(1L);
+//        equipo.setNombre("Barcelona");
+//
+//        when(jugadorRepository.getById(1L)).thenReturn(jugador);
+//        when(equipoRepository.getById(1L)).thenReturn(equipo);
+//
+//        String frase = frasePartidoService.generarFrase(EventoPartido.GOL, 1L, 1L);
+//        String frase2 = frasePartidoService.generarFrase(EventoPartido.GOL, 1L, 1L);
+//
+//        // si son iguales seria mucha coincidencia JAJA
+//        assertNotEquals(frase, frase2);
+//    }
 
     @Test
     public void deberiaGenerarFraseConJugadorAleatorio() {

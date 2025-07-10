@@ -19,12 +19,26 @@ public class FechaRepositoryImpl implements FechaRepository {
 
     @Override
     public Fecha getFechaByTorneoIdAndNumeroDeFecha(Long torneoId, Long numeroDeFecha) {
-        String hql = "SELECT f FROM Fecha f WHERE f.torneo.id = :torneoId AND f.numeroDeFecha = :numeroDeFecha";
+        String hql = "SELECT DISTINCT f FROM Fecha f " +
+                "LEFT JOIN FETCH f.partidos p " +
+                "LEFT JOIN FETCH p.equipoLocal " +
+                "LEFT JOIN FETCH p.equipoVisitante " +
+                "WHERE f.torneo.id = :torneoId AND f.numeroDeFecha = :numeroDeFecha";
         return sessionFactory.getCurrentSession()
                 .createQuery(hql, Fecha.class)
                 .setParameter("torneoId", torneoId)
                 .setParameter("numeroDeFecha", numeroDeFecha)
                 .uniqueResult();
     }
+
+//    @Override
+//    public Fecha getFechaByTorneoIdAndNumeroDeFecha(Long torneoId, Long numeroDeFecha) {
+//        String hql = "SELECT f FROM Fecha f WHERE f.torneo.id = :torneoId AND f.numeroDeFecha = :numeroDeFecha";
+//        return sessionFactory.getCurrentSession()
+//                .createQuery(hql, Fecha.class)
+//                .setParameter("torneoId", torneoId)
+//                .setParameter("numeroDeFecha", numeroDeFecha)
+//                .uniqueResult();
+//    }
 
 }

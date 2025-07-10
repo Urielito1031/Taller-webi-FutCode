@@ -186,43 +186,40 @@ main section {
     z-index: 1;
 }
 
-.sobres{
-    width: 1200px;
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+.sobres {
+    width: 100%;
+    min-height: 300px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    align-items: stretch;
+    justify-items: center;
+    padding: 24px 0;
+    box-sizing: border-box;
 }
 
-.sobres article{
-    height: 400px;
-    width: 20%;
+.sobres article {
+    height: 320px;
+    width: 100%;
+    max-width: 320px;
     background: var(--azulO);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    transition: 0.5s;
+    padding: 18px 12px;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    transition: 0.3s;
     text-decoration: none;
-
-    &:hover{
-        background: #9843F9;
-        transform: translateY(-10px);
-    }
+    position: relative;
+    overflow: hidden;
 }
-
-.sobres article form{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
+.sobres article:hover {
+    background: #9843F9;
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
 }
-
 .sobres article form button {
     background: none;
     border: none;
@@ -237,20 +234,64 @@ main section {
     cursor: pointer;
     gap: 10px;
 }
-
-.sobres article form button h3{
+.sobres article form button h3 {
     color: var(--verdeAgua);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     width: 100%;
     text-align: center;
     font-family: "Orbitron", sans-serif;
+    margin-bottom: 8px;
+    word-break: break-word;
 }
-
 .sobres article form button img {
-    height: 70%;
+    height: 120px;
     width: auto;
     object-fit: contain;
     display: block;
     max-width: 100%;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+    .sobres {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+    }
+    .sobres article {
+        height: 220px;
+        max-width: 220px;
+        padding: 10px 6px;
+    }
+    .sobres article form button img {
+        height: 70px;
+    }
+}
+
+@media (max-width: 600px) {
+    .sobres {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 8px 0;
+    }
+    .sobres article {
+        height: 180px;
+        max-width: 98vw;
+        padding: 6px 2px;
+    }
+    .sobres article form button img {
+        height: 48px;
+    }
+    main section {
+        padding: 8px;
+    }
+}
+
+main section h2 {
+    color: var(--verdeAgua);
+    font-family: "Orbitron", sans-serif;
+    text-align: center;
+    margin-bottom: 18px;
+    font-size: 2rem;
+    letter-spacing: 1px;
 }
 

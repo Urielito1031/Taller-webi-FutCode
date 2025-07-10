@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
+import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.presentacion.controller.HomeController;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,9 @@ public class HomeControllerTest {
 
    @Mock
    private UsuarioService usuarioService;
+
+   @Mock
+   private EquipoTorneoService equipoTorneoService;
 
    @InjectMocks
    private HomeController homeController;
@@ -62,6 +66,7 @@ public class HomeControllerTest {
       when(session.getAttribute("USUARIO_ID")).thenReturn(1L);
       when(torneoService.getAll()).thenReturn(torneos);
       when(usuarioService.buscarUsuarioPorId(1L)).thenReturn(usuario);
+      when(equipoTorneoService.getAllByTorneoId(any())).thenReturn(new ArrayList<>());
 
       // Ejecución
       String vistaHome = homeController.irAHome(model, request);
@@ -71,6 +76,7 @@ public class HomeControllerTest {
       verify(model).addAttribute("torneos", torneos);
       verify(model).addAttribute("usuario", usuario);
       verify(model).addAttribute("equipoNombre", "Equipo Test");
+      verify(model).addAttribute("torneosUnidos", new ArrayList<>());
       verify(model, never()).addAttribute(eq("mensajeTorneo"), anyString());
       verify(session).getAttribute("USUARIO_ID");
       verify(usuarioService).buscarUsuarioPorId(1L);
@@ -87,6 +93,7 @@ public class HomeControllerTest {
       when(session.getAttribute("USUARIO_ID")).thenReturn(1L);
       when(torneoService.getAll()).thenReturn(new ArrayList<>());
       when(usuarioService.buscarUsuarioPorId(1L)).thenReturn(usuario);
+      when(equipoTorneoService.getAllByTorneoId(any())).thenReturn(new ArrayList<>());
 
       // Ejecución
       String vistaHome = homeController.irAHome(model, request);
@@ -97,6 +104,7 @@ public class HomeControllerTest {
       verify(model).addAttribute("mensajeTorneo", "No hay torneos para mostrar");
       verify(model).addAttribute("usuario", usuario);
       verify(model).addAttribute("equipoNombre", "Equipo Test");
+      verify(model).addAttribute("torneosUnidos", new ArrayList<>());
       verify(session).getAttribute("USUARIO_ID");
       verify(usuarioService).buscarUsuarioPorId(1L);
    }
@@ -114,6 +122,7 @@ public class HomeControllerTest {
       verify(session).getAttribute("USUARIO_ID");
       verifyNoInteractions(torneoService);
       verifyNoInteractions(usuarioService);
+      verifyNoInteractions(equipoTorneoService);
       verifyNoInteractions(model);
    }
 
@@ -136,6 +145,7 @@ public class HomeControllerTest {
       verify(model).addAttribute("mensajeTorneo", "No hay torneos para mostrar");
       verify(model).addAttribute("usuario", usuario);
       verify(model).addAttribute("equipoNombre", "Sin equipo");
+      verify(model).addAttribute("torneosUnidos", new ArrayList<>());
       verify(session).getAttribute("USUARIO_ID");
       verify(usuarioService).buscarUsuarioPorId(1L);
    }

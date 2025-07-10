@@ -20,7 +20,7 @@ public class EquipoTorneo {
    private Integer posicion = 0;
 
    @Column(name = "posicion_anterior")
-   private Integer posicionAnterior;
+   private Integer posicionAnterior = 0;
 
    @Column(name = "partidos_jugados")
    private Integer partidosJugados = 0;
@@ -51,8 +51,6 @@ public class EquipoTorneo {
    @JoinColumn(name = "torneo_id", nullable = false)
    private Torneo torneo;
 
-
-
    public void actualizarConPartido(Partido partido, Boolean esLocal){
       int golesEquipo = 0;
       int golesRival = 0;
@@ -82,12 +80,33 @@ public class EquipoTorneo {
       }
    }
 
+   @Transient
+   public boolean isSubio() {
+      return posicionAnterior > posicion;
+   }
+
+   @Transient
+   public boolean isBajo() {
+      return posicionAnterior < posicion;
+   }
+
+   @Transient
+   public boolean isIgual() {
+      return posicionAnterior.equals(posicion);
+   }
+
+   @Transient
+   public int getVariacionPosicion() {
+      return posicion - posicionAnterior ;
+   }
+
    public EquipoTorneo() {}
 
    public EquipoTorneo(Equipo equipo, Torneo torneo) {
       this.equipo = equipo;
       this.torneo = torneo;
    }
+
    public EquipoTorneoDTO convertToDTO() {
       EquipoTorneoDTO equipoTorneoDTO = new EquipoTorneoDTO();
       equipoTorneoDTO.setId(this.id);

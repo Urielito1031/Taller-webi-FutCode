@@ -3,12 +3,14 @@ package com.tallerwebi.presentacion.controller;
 import com.tallerwebi.dominio.model.entities.EquipoTorneo;
 import com.tallerwebi.dominio.model.entities.Partido;
 import com.tallerwebi.dominio.model.entities.Torneo;
+import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
 import com.tallerwebi.dominio.repository.TorneoRepository;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.infraestructura.repositoryImpl.EquipoTorneoRepositoryImpl;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
@@ -33,15 +35,18 @@ public class TorneoController {
    private final UsuarioService usuarioService;
    private final SimularTorneoService simularTorneoService;
    private final TorneoRepository torneoRepository;
+   private final EquipoTorneoRepository equipoTorneoRepository;
 
    @Autowired
    public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService, UsuarioService usuarioService,
-                           SimularTorneoService simularTorneoService, TorneoRepository torneoRepository) {
+                           SimularTorneoService simularTorneoService, TorneoRepository torneoRepository,
+                           EquipoTorneoRepository equipoTorneoRepository) {
       this.torneoService = torneoService;
       this.equipoTorneoService = equipoTorneoService;
       this.usuarioService = usuarioService;
       this.simularTorneoService = simularTorneoService;
       this.torneoRepository = torneoRepository;
+      this.equipoTorneoRepository = equipoTorneoRepository;
    }
 
 
@@ -168,7 +173,14 @@ public class TorneoController {
               .flatMap(f -> f.getPartidos().stream())
               .collect(Collectors.toList());
 
-      List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos);
+      List<EquipoTorneo> tablaAnterior = equipoTorneoRepository.getAllByTorneoId(torneoId);
+
+      // Agrego este metodo porque me compara con la misma tabla
+      for (EquipoTorneo eq : tablaAnterior) {
+         eq.setPosicionAnterior(eq.getPosicion());
+      }
+
+      List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
       ModelAndView mav = new ModelAndView("tabla-posiciones");
       mav.addObject("tabla", tabla);

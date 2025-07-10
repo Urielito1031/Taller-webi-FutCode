@@ -10,7 +10,7 @@ public interface TorneoService {
    TorneoDTO getById(Long id);
 
    Torneo obtenerTorneoConFechas(Long torneoId);
-   List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos);
+   List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior);
    List<Fecha> generarFechas(List<Equipo> equipos, Torneo torneo);
    void crearFixtureConLasFechas(Long torneoId);
 }

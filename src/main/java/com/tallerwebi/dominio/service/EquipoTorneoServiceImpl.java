@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class EquipoTorneoServiceImpl implements EquipoTorneoService {
-
    public static final int CAPACIDAD_MAXIMA_TORNEO_LIGA = 15;
    public static final int CAPACIDAD_MAXIMA_TORNEO_COPA = 32;
 
@@ -40,7 +39,6 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
 
    @Override
    public List<EquipoTorneoDTO> getAllByTorneoId(Long torneoId){
-
       List<EquipoTorneo> torneoEquipos = repository.getAllByTorneoId(torneoId);
       return torneoEquipos.stream()
         .map(EquipoTorneo::convertToDTO)
@@ -99,4 +97,6 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
              torneoRepository.existsById(torneoId) &&
              equipoRepository.existsById(equipoId);
    }
+
+
 }

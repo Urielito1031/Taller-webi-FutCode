@@ -12,5 +12,6 @@ public interface EquipoTorneoRepository{
 
    void unirEquipoATorneo(Long torneoId, Long equipoId);
 
+   void save(EquipoTorneo equipoTorneo);
 
 }

@@ -27,10 +27,10 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
 
    @Override
    public List<EquipoTorneo> getAllByTorneoId(Long torneoId){
-
       return getSession().createQuery(
-        "FROM EquipoTorneo et " +
-          "WHERE et.torneo.id = :torneoId",
+          "FROM EquipoTorneo et " +
+             "WHERE et.torneo.id = :torneoId " +
+             "ORDER BY et.posicion",
             EquipoTorneo.class
       ).setParameter("torneoId", torneoId).list();
    }
@@ -43,6 +43,11 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
       equipoTorneo.setEquipo(getSession().get(Equipo.class, equipoId));
 
       getSession().save(equipoTorneo);
+   }
+
+   @Override
+   public void save(EquipoTorneo equipoTorneo) {
+      this.getSession().saveOrUpdate(equipoTorneo);
    }
 
    private Session getSession(){

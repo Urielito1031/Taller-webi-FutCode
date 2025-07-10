@@ -16,10 +16,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class TorneoServiceImpl implements TorneoService{
    private final TorneoRepository torneoRepository;
+   private final EquipoTorneoRepository equipoTorneoRepository;
 
    @Autowired
-   public TorneoServiceImpl(TorneoRepository torneoRepository) {
+   public TorneoServiceImpl(TorneoRepository torneoRepository, EquipoTorneoRepository equipoTorneoRepository) {
       this.torneoRepository = torneoRepository;
+       this.equipoTorneoRepository = equipoTorneoRepository;
    }
 
    @Override
@@ -42,34 +44,117 @@ public class TorneoServiceImpl implements TorneoService{
       return torneoRepository.obtenerTorneoConFechas(torneoId);
    }
 
+//   @Override
+//   public List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior){
+//      Map<Long, EquipoTorneo> tablaDePosiciones = new HashMap<>();
+//
+//      // agrego este bucle por que me compara las posiciones en la misma tabla
+//      for (EquipoTorneo equipo : tablaAnterior) {
+//         tablaDePosiciones.put(equipo.getEquipo().getId(), equipo);
+//      }
+//
+//      for (Partido partido : partidos) {
+//         if (partido.getResultado() != ResultadoPartido.PENDIENTE) {
+//            Equipo local = partido.getEquipoLocal();
+//            Equipo visitante = partido.getEquipoVisitante();
+//
+//            // LOCAL
+//            EquipoTorneo equipoLocal = tablaDePosiciones.get(local.getId());
+//            if (equipoLocal == null) {
+//               equipoLocal = new EquipoTorneo();
+//               equipoLocal.setEquipo(local);
+//               equipoLocal.setPosicionAnterior(0);
+//               tablaDePosiciones.put(local.getId(), equipoLocal);
+//            }
+//            equipoLocal.actualizarConPartido(partido, true);
+//
+//            // VISITANTE
+//            EquipoTorneo equipoVisitante = tablaDePosiciones.get(visitante.getId());
+//            if (equipoVisitante == null) {
+//               equipoVisitante = new EquipoTorneo();
+//               equipoVisitante.setEquipo(visitante);
+//               equipoVisitante.setPosicionAnterior(0);
+//               tablaDePosiciones.put(visitante.getId(), equipoVisitante);
+//            }
+//            equipoVisitante.actualizarConPartido(partido, false);
+//         }
+//      }
+//
+//      List<EquipoTorneo> lista = new ArrayList<>(tablaDePosiciones.values());
+//      lista.sort(Comparator.comparingInt(EquipoTorneo::getPuntos).reversed());
+//
+//      // Guardar posición anterior
+//      for (int i = 0; i < lista.size(); i++) {
+//         EquipoTorneo equipo = lista.get(i);
+//         int nuevaPos = i + 1;
+//
+//         if (equipo.getPosicionAnterior() == null || equipo.getPosicionAnterior() == 0) {
+//            equipo.setPosicionAnterior(nuevaPos); // Primera vez
+//         }
+//
+//         equipo.setPosicion(nuevaPos);
+//      }
+//
+//      for (EquipoTorneo equipo : lista) {
+//         equipoTorneoRepository.save(equipo);
+//      }
+//
+//
+//      return lista;
+//   }
+
+
    @Override
-   public List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos){
+   public List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior){
       Map<Long, EquipoTorneo> tablaDePosiciones = new HashMap<>();
 
+      for (EquipoTorneo equipoAnterior : tablaAnterior) {
+         equipoAnterior.setPosicionAnterior(equipoAnterior.getPosicion());
+
+         equipoAnterior.setPuntos(0);
+         equipoAnterior.setPartidosJugados(0);
+         equipoAnterior.setPartidosGanados(0);
+         equipoAnterior.setPartidosEmpatados(0);
+         equipoAnterior.setPartidosPerdidos(0);
+         equipoAnterior.setGolesAFavor(0);
+         equipoAnterior.setGolesEnContra(0);
+
+         tablaDePosiciones.put(equipoAnterior.getEquipo().getId(), equipoAnterior);
+      }
+
       for (Partido partido : partidos) {
-         if(partido.getResultado() != ResultadoPartido.PENDIENTE){
+         if (partido.getResultado() != ResultadoPartido.PENDIENTE) {
             Equipo local = partido.getEquipoLocal();
             Equipo visitante = partido.getEquipoVisitante();
 
-            // putIfAbsent --> Si no se lo agrego previamente se agrega con su id y un EquipoTorneo vacio
-            // asignaciones local
+            // Equipo local
             tablaDePosiciones.putIfAbsent(local.getId(), new EquipoTorneo());
             EquipoTorneo equipoLocal = tablaDePosiciones.get(local.getId());
             if (equipoLocal.getEquipo() == null) equipoLocal.setEquipo(local);
             equipoLocal.actualizarConPartido(partido, true);
 
-            // asignaciones local visitante
+            // Equipo visitante
             tablaDePosiciones.putIfAbsent(visitante.getId(), new EquipoTorneo());
             EquipoTorneo equipoVisitante = tablaDePosiciones.get(visitante.getId());
             if (equipoVisitante.getEquipo() == null) equipoVisitante.setEquipo(visitante);
             equipoVisitante.actualizarConPartido(partido, false);
+
+            equipoTorneoRepository.save(equipoLocal);
+            equipoTorneoRepository.save(equipoVisitante);
          }
       }
 
-      return tablaDePosiciones.values().stream()
-              .sorted(Comparator.comparingInt(EquipoTorneo::getPuntos).reversed())
-              .collect(Collectors.toList());
-   }
+      List<EquipoTorneo> lista = new ArrayList<>(tablaDePosiciones.values());
+      lista.sort(Comparator.comparingInt(EquipoTorneo::getPuntos).reversed());
+
+      for (int i = 0; i < lista.size(); i++) {
+         EquipoTorneo equipo = lista.get(i);
+         int posicionNueva = i + 1;
+         equipo.setPosicion(posicionNueva);
+      }
+
+      return lista;
+}
 
    @Override
    public List<Fecha> generarFechas(List<Equipo> equipos, Torneo torneo) {

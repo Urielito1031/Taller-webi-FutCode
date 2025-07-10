@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -251,6 +252,8 @@ public class TorneoController {
       model.addAttribute("resultado", resultado);
 
       List<Narracion> narraciones = narracionRepository.obtenerPorPartidoId(partidoId);
+
+      Collections.shuffle(narraciones);
 
       model.addAttribute("narraciones", narraciones);
       return "partido-Vista";

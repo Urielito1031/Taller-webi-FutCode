@@ -156,6 +156,15 @@ public class TorneoController {
    @GetMapping("/fechas")
    public ModelAndView mostrarFechas(@RequestParam Long torneoId) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+
+      // Si el torneo no tiene fechas, generarlas y redirigir
+      if (torneo.getFechas() == null || torneo.getFechas().isEmpty()) {
+         // Llama al servicio para generar el fixture
+         torneoService.crearFixtureConLasFechas(torneoId);
+         // Vuelve a cargar el torneo con fechas ya generadas
+         torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+      }
+
       ModelAndView mav = new ModelAndView("simular-fechas");
       mav.addObject("fechas", torneo.getFechas());
       mav.addObject("torneoId", torneoId);
@@ -163,7 +172,7 @@ public class TorneoController {
       return mav;
    }
 
-   @GetMapping("/generar-fixture")
+   @PostMapping("/generar-fixture")
    public String generarFixture(@RequestParam Long torneoId) {
       this.torneoService.crearFixtureConLasFechas(torneoId);
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
@@ -206,26 +215,6 @@ public class TorneoController {
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 
-//
-//    ESTO ANDA
-//   @PostMapping("/simular-fecha")
-//   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
-//      simularTorneoService.simularFecha(torneoId, numeroFecha);
-//
-////      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
-////      if (!fecha.getPartidos().isEmpty()) {
-////         Long primerPartidoId = fecha.getPartidos().get(0).getId();
-////         return "redirect:/torneo/simular-partido?partidoId=" + primerPartidoId;
-////      }
-//
-//      Long partidoId = simularTorneoService.simularFechaYDevolverPrimerPartido(torneoId, numeroFecha);
-//
-//      if (partidoId != null) {
-//         return "redirect:/torneo/simular-partido?partidoId=" + partidoId;
-//      }
-//
-//      return "redirect:/torneo/fechas?torneoId=" + torneoId;
-//   }
 
    @GetMapping("/simular-partido")
    public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model) {

@@ -7,15 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 
 public class EquipoDTO {
    private Long id;
-   @NotBlank(message = "El nombre del equipo no puede estar vacío")
+   @NotNull(message = "El nombre del equipo no puede estar vacío")
    private String nombre;
    private ClubDTO club;
    private List<JugadorDTO> jugadores;
@@ -32,12 +34,13 @@ public class EquipoDTO {
    }
 
 
-   public Double ratingEquipo(List<JugadorDTO> jugadores){
+   public Double getRatingEquipo(List<JugadorDTO> jugadores){
       double total = 0;
 
       for (JugadorDTO j : jugadores) {
          total += j.getRating();
       }
+
       return total/jugadores.size();
    }
 
@@ -98,6 +101,13 @@ public class EquipoDTO {
          esquemaDTO.setId(equipo.getEsquema().getId());
 
          dto.setFormacionActual(esquemaDTO);
+      }
+
+      if (equipo.getJugadores() != null) {
+         List<JugadorDTO> jugadoresDTO = equipo.getJugadores().stream()
+                 .map(jugador -> new JugadorDTO().convertFromEntity(jugador))
+                 .collect(Collectors.toList());
+         dto.setJugadores(jugadoresDTO);
       }
 
       return dto;

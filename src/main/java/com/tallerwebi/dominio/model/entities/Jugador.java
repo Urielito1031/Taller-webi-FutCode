@@ -9,13 +9,16 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
-@Setter
-@Entity
-@Table(name = "jugador")
-public class Jugador{
+   @Setter
+   @Entity
+   @Table(name = "jugador")
+   public class Jugador {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
@@ -77,15 +80,14 @@ public class Jugador{
    @JoinColumn(name = "sobre_id")
    private Sobre sobre;
 
+      public Jugador(String nombre, RarezaJugador rarezaJugador) {
+         this.nombre = nombre;
+         this.rarezaJugador = rarezaJugador;
+      }
 
-   public Jugador(String nombre,RarezaJugador rarezaJugador){
-      this.nombre = nombre;
-      this.rarezaJugador = rarezaJugador;
-   }
+      public Jugador() {
 
-   public Jugador(){
-
-   }
+      }
 
    public static Jugador convertToEntity(JugadorDTO jugadorDTO) {
       if (jugadorDTO == null) {
@@ -116,7 +118,7 @@ public class Jugador{
          Equipo equipo = new Equipo();
          equipo.setId(jugadorDTO.getEquipo().getId());
          equipo.setNombre(jugadorDTO.getEquipo().getNombre());
-         jugador.setEquipo(equipo);
+//         jugador.setEquipo(equipo);
       }
 
 
@@ -141,10 +143,10 @@ public class Jugador{
 
 
 
-      if (this.getEquipo() != null) {
-         EquipoDTO equipoDTO = new EquipoDTO();
-         dto.setEquipo(equipoDTO.convertFromEntity(this.getEquipo()));
-      }
+//      if (this.getEquipo() != null) {
+//         EquipoDTO equipoDTO = new EquipoDTO();
+//         dto.setEquipo(equipoDTO.convertFromEntity(this.getEquipo()));
+//      }
 
       return dto;
    }

@@ -5,7 +5,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Detalle del Torneo</title>
    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
-   <link rel="stylesheet" th:href="@{/css/detalle-torneo.css}">
+   <link rel="stylesheet" th:href="@{/css/torneos/detalle-torneo.css}">
 </head>
 <body>
 <div class="floating-particles">
@@ -103,7 +103,8 @@
                </tr>
                </thead>
                <tbody>
-               <tr th:each="equipo : ${torneoEquipos}">
+               <tr th:each="equipo : ${torneoEquipos}"
+                   th:classappend="${equipo.equipo.usuarioId == usuarioId} ? 'mi-equipo'" >
                   <td th:text="${equipo.posicion}">1</td>
                   <td th:text="${equipo.equipo.nombre}">Equipo 1</td>
                   <td th:text="${equipo.partidosJugados}">0</td>

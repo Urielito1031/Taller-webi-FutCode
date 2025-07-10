@@ -64,22 +64,4 @@ public class SobreServiceImpl implements SobreService {
 
         return sobre;
     }
-
-   @Override
-   public SobreDTO obtenerSobre(TipoSobre tipoSobre){
-      return null;
-   }
-
-    @Override
-    public List<Jugador> getJugadoresPorTipoDeSobre(TipoSobre tipoSobre) {
-        List<Jugador> jugadores = new ArrayList<Jugador>();
-
-        for (int i = 0; i < 5 ; i++){
-            double num = Math.random() * 100;
-
-
-
-        }
-        return jugadores;
-    }
 }

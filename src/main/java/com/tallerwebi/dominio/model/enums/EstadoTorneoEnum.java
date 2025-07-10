@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum EstadoTorneoEnum {
    ABIERTO("Abierto para inscripciones"),
    EN_CURSO("En curso"),
@@ -11,7 +14,4 @@ public enum EstadoTorneoEnum {
       this.descripcion = descripcion;
    }
 
-   public String getDescripcion() {
-      return descripcion;
-   }
 }

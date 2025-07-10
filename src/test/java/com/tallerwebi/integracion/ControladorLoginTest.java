@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
 public class ControladorLoginTest {
 
-	private Usuario usuarioMock;
+	private Usuario usuarioMock; // Este mock no parece usarse en los tests actuales, puedes eliminarlo si no lo necesitas.
 
 	@Autowired
 	private WebApplicationContext wac;
@@ -40,36 +40,36 @@ public class ControladorLoginTest {
 
 	@BeforeEach
 	public void init(){
-		usuarioMock = mock(Usuario.class);
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+		// usuarioMock = mock(Usuario.class); // Eliminar si no se usa
+		// when(usuarioMock.getEmail()).thenReturn("dami@unlam.com"); // Eliminar si no se usa
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 	}
 
 	@Test
 	public void debeRetornarLaPaginaLoginCuandoSeNavegaALaRaiz() throws Exception {
-
 		MvcResult result = this.mockMvc.perform(get("/"))
-				/*.andDo(print())*/
-				.andExpect(status().is3xxRedirection())
-				.andReturn();
+		/*.andDo(print())*/
+		.andExpect(status().is3xxRedirection()) // Espera una redirección
+		.andReturn();
 
 		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
+		assert modelAndView != null;
+		// ¡AHORA ESPERAMOS QUE REDIRIJA A /login!
 		assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
-		assertThat(true, is(modelAndView.getModel().isEmpty()));
+		assertThat(true, is(modelAndView.getModel().isEmpty())); // La redirección no debería añadir nada al modelo
 	}
 
 	@Test
 	public void debeRetornarLaPaginaLoginCuandoSeNavegaALLogin() throws Exception {
-
 		MvcResult result = this.mockMvc.perform(get("/login"))
-				.andExpect(status().isOk())
-				.andReturn();
+		.andExpect(status().isOk()) // Espera un OK 200
+		.andReturn();
 
 		ModelAndView modelAndView = result.getModelAndView();
-        assert modelAndView != null;
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("login"));
+		assert modelAndView != null;
+		// ¡AHORA ESPERAMOS LA VISTA "login"!
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("login"));
+		// Verificar que el modelo contiene "datosLogin"
 		assertThat(modelAndView.getModel().get("datosLogin").toString(),  containsString("com.tallerwebi.presentacion.DatosLogin"));
-
 	}
 }

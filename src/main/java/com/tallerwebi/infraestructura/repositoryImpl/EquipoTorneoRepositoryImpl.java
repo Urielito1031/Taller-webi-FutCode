@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
+@Transactional
 public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
 
 
@@ -26,10 +27,10 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
 
    @Override
    public List<EquipoTorneo> getAllByTorneoId(Long torneoId){
-
       return getSession().createQuery(
-        "FROM EquipoTorneo et " +
-          "WHERE et.torneo.id = :torneoId",
+          "FROM EquipoTorneo et " +
+             "WHERE et.torneo.id = :torneoId " +
+             "ORDER BY et.posicion",
             EquipoTorneo.class
       ).setParameter("torneoId", torneoId).list();
    }
@@ -37,12 +38,16 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
    @Override
    public void unirEquipoATorneo(Long torneoId,Long equipoId){
       EquipoTorneo equipoTorneo = new EquipoTorneo();
+
       equipoTorneo.setTorneo(getSession().get(Torneo.class, torneoId));
       equipoTorneo.setEquipo(getSession().get(Equipo.class, equipoId));
 
-
       getSession().save(equipoTorneo);
+   }
 
+   @Override
+   public void save(EquipoTorneo equipoTorneo) {
+      this.getSession().saveOrUpdate(equipoTorneo);
    }
 
    private Session getSession(){

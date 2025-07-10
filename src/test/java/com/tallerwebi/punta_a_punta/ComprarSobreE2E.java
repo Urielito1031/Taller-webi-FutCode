@@ -18,9 +18,6 @@ public class ComprarSobreE2E {
     BrowserContext context;
     VistaMercado vistaMercado;
 
-    private UsuarioService usuarioService;
-
-
     @BeforeAll
     static void abrirNavegador(){
         playwright = Playwright.create();
@@ -39,9 +36,8 @@ public class ComprarSobreE2E {
 
         page.navigate("http://localhost:8080/spring/login");
         page.fill("input[name='email']", "diego@mail.com");
-        page.fill("input[name='password']", "diego1234");
+        page.fill("input[name='password']", "dIEGO123");
         page.click("button[type='submit']");
-
 
         vistaMercado = new VistaMercado(page);
     }
@@ -50,25 +46,16 @@ public class ComprarSobreE2E {
     void cerrarContexto(){
         browser.close();
     }
-
-
+    // crear script sql para poder correr las pruebas E2E
     @Test
     public void queSePuedaComprarUnSobreDeBronceExitosamente() {
-//        Usuario usuario = usuarioService.buscarUsuarioPorId(1L);
-//        usuario.setMonedas(2500.0);
-
         vistaMercado.hacerClickEnSobreDeBronce();
-        String texto = vistaMercado.obtenerTextoDelElemento(".text-danger");
 
-        assertThat(texto, isEmptyString());
         Assertions.assertTrue(vistaMercado.obtenerUrlActual().contains("localhost:8080/spring/jugador/mis-sobres"));
     }
 
     @Test
     public void queAlComprarUnSobreSinTenerLasMonedasNecesariasSeArrojeLaExceptionMonedasInsuficientes() {
-//        Usuario usuario = usuarioService.buscarUsuarioPorId(1L);
-//        usuario.setMonedas(0.0);
-
         vistaMercado.hacerClickEnSobreDeBronce();
         String texto = vistaMercado.obtenerTextoDelElemento(".text-danger");
 

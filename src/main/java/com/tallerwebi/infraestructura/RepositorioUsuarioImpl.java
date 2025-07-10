@@ -54,7 +54,6 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
 
-    //para evitar instanciar en cada metodo el Session session = sessionFactory.getCurrentSession();
     private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

@@ -1,0 +1,167 @@
+
+aside.sidebar {
+    width: 250px;
+    background-color: #1b263b;
+    padding: 20px;
+    border-right: 1px solid #2a3f5f;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    box-shadow: 0 0 12px rgba(0, 255, 180, 0.1);
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+}
+
+aside.sidebar.active {
+    transform: translateX(0);
+}
+
+.sidebar .sidebar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00ffc3;
+    text-align: center;
+    margin-bottom: 30px;
+    display: block;
+    text-decoration: none;
+}
+
+.sidebar ul {
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 15px;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    color: #00ffc3;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #1c2a3a;
+    color: #00ffc3a7;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+
+.sidebar .badge {
+    background-color: #ff6666;
+    border-radius: 50px;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+}
+
+main.container-principal {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: #0d1a2e;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+.menu-indicator {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 60px;
+    background: linear-gradient(135deg, #1b263b, #2a3f5f);
+    border-radius: 0 15px 15px 0;
+    z-index: 1100;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 2px 0 15px rgba(0, 255, 195, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #00ffc3;
+    border-left: none;
+}
+
+.menu-indicator:hover {
+    width: 40px;
+    background: linear-gradient(135deg, #2a3f5f, #1b263b);
+    box-shadow: 2px 0 20px rgba(0, 255, 195, 0.5);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.menu-indicator i {
+    color: #00ffc3;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.menu-indicator:hover i {
+    transform: scale(1.2);
+}
+
+.sidebar.active ~ .menu-indicator {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-100%);
+}
+
+.contenedor-principal-torneos {
+    background-color: #1e2a3c;
+    border-radius: 12px;
+    padding: 20px 10px;
+    margin-bottom: 50px;
+}
+
+/* Animación del icono del indicador */
+.menu-indicator i {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.active ~ .menu-indicator i {
+    transform: rotate(180deg);
+}
+
+/* Mejoras responsive */
+@media (max-width: 768px) {
+    .menu-indicator {
+        width: 25px;
+        height: 50px;
+        top: 45%;
+    }
+
+    .menu-indicator:hover {
+        width: 35px;
+    }
+
+    .menu-indicator i {
+        font-size: 1rem;
+    }
+
+    aside.sidebar {
+        width: 280px;
+    }
+}

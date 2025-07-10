@@ -19,7 +19,7 @@ public class EventoPartido {
    @javax.validation.constraints.NotNull
    @Lob
    @Column(name = "tipo_evento_partido", nullable = false)
-   private String tipoEventoPartido;
+   private com.tallerwebi.dominio.model.enums.EventoPartido tipoEventoPartido;
 
    @javax.validation.constraints.Size(max = 255)
    @Column(name = "descripcion")
@@ -34,4 +34,24 @@ public class EventoPartido {
    @JoinColumn(name = "partido_id")
    private com.tallerwebi.dominio.model.entities.Partido partido;
 
+   @Column(name = "jugador_id")
+   private Long jugadorId;
+
+   @Column(name = "equipo_id")
+   private Long equipoId;
+
+   public EventoPartido(com.tallerwebi.dominio.model.enums.EventoPartido tipoEvento, String descripcion,
+                        Integer minuto, Partido partidoId, Long jugadorId, Long equipoId) {
+
+      this.tipoEventoPartido = tipoEvento;
+      this.descripcion = descripcion;
+      this.minutoDePartido = minuto;
+      this.partido = partidoId;
+      this.jugadorId = jugadorId;
+      this.equipoId = equipoId;
+   }
+
+   public EventoPartido() {
+
+   }
 }

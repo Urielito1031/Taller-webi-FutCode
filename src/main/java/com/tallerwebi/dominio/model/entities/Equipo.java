@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.model.entities;
 
 import com.tallerwebi.presentacion.dto.ClubDTO;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
+import com.tallerwebi.presentacion.dto.JugadorDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,6 +40,16 @@ public class Equipo {
    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER)
    private List<Jugador> jugadores = new ArrayList<>();
 
+   public Double getRatingEquipo(){
+      double total = 0;
+
+      for (Jugador j : this.jugadores) {
+         total += j.getRating();
+      }
+
+      return total/this.jugadores.size();
+   }
+
    public EquipoDTO convertToDTO() {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(this.id);
@@ -53,6 +64,10 @@ public class Equipo {
          clubDTO.setImagen(this.club.getImagen());
 
          dto.setClub(clubDTO);
+      }
+
+      if (this.usuario != null) {
+         dto.setUsuarioId(this.usuario.getId());
       }
 
       return dto;
@@ -80,8 +95,9 @@ public class Equipo {
 
    public String toString(){
       return "ID: " + this.id + "\n Nombre: " + this.nombre +
-             "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
-             "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
-             "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
+              "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
+              "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
+              "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
    }
+
 }

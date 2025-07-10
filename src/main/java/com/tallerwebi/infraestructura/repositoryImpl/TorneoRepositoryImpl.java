@@ -20,7 +20,6 @@ public class TorneoRepositoryImpl implements TorneoRepository{
    }
 
 
-   //nota, nunca devuelve null, devuelve una lista vacia []
    @Override
    public List<Torneo> findAll() {
       return getSession().createQuery("from Torneo",Torneo.class).list();
@@ -44,5 +43,22 @@ public class TorneoRepositoryImpl implements TorneoRepository{
 
    private Session getSession() {
       return sessionFactory.getCurrentSession();
+   }
+
+
+
+   @Override @Transactional
+   public Torneo obtenerTorneoConFechas(Long torneoId) {
+      String hql = "SELECT DISTINCT t FROM Torneo t " +
+              "LEFT JOIN FETCH t.fechas f " +
+              "LEFT JOIN FETCH f.partidos p " +
+              "LEFT JOIN FETCH p.equipoLocal " +
+              "LEFT JOIN FETCH p.equipoVisitante " +
+              "WHERE t.id = :id";
+
+      return sessionFactory.getCurrentSession()
+              .createQuery(hql, Torneo.class)
+              .setParameter("id", torneoId)
+              .uniqueResult();
    }
 }

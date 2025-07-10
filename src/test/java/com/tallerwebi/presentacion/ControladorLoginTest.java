@@ -72,16 +72,16 @@ public class ControladorLoginTest {
 		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
 	}
 
-	/*@Test
-	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistente {
-
-		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock,resultMock,requestMock);
-
-		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/nuevo-equipo"));
-		verify(servicioLoginMock, times(1)).registrar(usuarioMock);
-	}
+//	@Test
+//	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistente {
+//
+//		// ejecucion
+//		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock,resultMock,requestMock);
+//
+//		// validacion
+//		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/nuevo-equipo"));
+//		verify(servicioLoginMock, times(1)).registrar(usuarioMock);
+//	}
 
 	@Test
 	public void registrarmeSiUsuarioExisteDeberiaVolverAFormularioYMostrarError() throws UsuarioExistente {
@@ -107,5 +107,5 @@ public class ControladorLoginTest {
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
-	}*/
+	}
 }

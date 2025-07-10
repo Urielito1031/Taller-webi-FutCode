@@ -51,8 +51,8 @@ public class EquipoInicialControlador {
                                      HttpSession session,
                                      HttpServletRequest request,BindingResult result, Model model) {
       if (result.hasErrors()) {
-         model.addAttribute("errors", result.getAllErrors()); // Pasar errores al modelo
-         return "creacionEquipo"; // Volver a la vista con los errores
+         model.addAttribute("errors", result.getAllErrors());
+         return "creacionEquipo";
       }
       ModelAndView mav = new ModelAndView("home");
 

@@ -11,4 +11,5 @@ public interface PartidoRepository {
 
     List<Partido>obtenerPartidosPorEquipoId(Long idEquipo);
 
+    List<Partido> obtenerPartidosJugadosPorEquipoId(Long idEquipo);
 }

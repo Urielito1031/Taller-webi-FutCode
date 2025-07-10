@@ -66,7 +66,6 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
    }
 
    private boolean validarEquipoNoUnidoATorneo(Long torneoId,Long equipoId){
-      //aca llamamos al repositorio para verificar si el equipo ya esta unido al torneo
       List<EquipoTorneo> equiposTorneo = repository.getAllByTorneoId(torneoId);
       return equiposTorneo.stream()
         .noneMatch(equipoTorneo ->

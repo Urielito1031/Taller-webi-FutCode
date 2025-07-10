@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.model.entities.FormacionEquipo;
 import com.tallerwebi.dominio.model.entities.Partido;
 import com.tallerwebi.dominio.repository.PartidoRepository;
 import com.tallerwebi.presentacion.dto.PartidoDTO;
+import com.tallerwebi.presentacion.dto.PartidoHistorialDTO;
 import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,19 @@ public class PartidoServiceImpl implements  PartidoService{
          return List.of();
 
       }
-      List<Partido> partidos = this.partidoRepository.obtenerPartidosPorEquipoId(idEquipo);
-      return  partidos.stream().map(PartidoDTO::convertToDTO)
+      return null;
+   }
+
+   @Override
+   public List<PartidoHistorialDTO> obtenerPartidosJugadosPorEquipoId(Long idEquipo){
+      if(!idIsValid(idEquipo)){
+         return List.of();
+      }
+      List<Partido> partidos = this.partidoRepository.obtenerPartidosJugadosPorEquipoId(idEquipo);
+
+      return partidos.stream()
+              .map(partido ->
+                PartidoHistorialDTO.ConvertToPartidoHistorialDTO(partido,idEquipo))
               .collect(Collectors.toList());
    }
 

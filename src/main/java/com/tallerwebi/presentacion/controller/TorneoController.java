@@ -169,61 +169,64 @@ public class TorneoController {
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 
-//   @PostMapping("/simular-fecha")
-//   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha, HttpServletRequest request) {
-//      // 1. Simular toda la fecha
-//      simularTorneoService.simularFecha(torneoId, numeroFecha);
-//
-//      // 2. Obtener usuario y su equipo
-//      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
-//      if (usuarioId == null) {
-//         // No está logueado, redirigir
-//         return "redirect:/login";
-//      }
-//
-//      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
-//      if (usuario == null || usuario.getEquipo() == null) {
-//         // No tiene equipo asignado, redirigir a donde corresponda
-//         return "redirect:/torneo/fechas?torneoId=" + torneoId;
-//      }
-//
-//      Long equipoId = usuario.getEquipo().getId();
-//
-//      // 3. Buscar el partido donde juega el equipo en esa fecha
+   @PostMapping("/simular-fecha")
+   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha, HttpServletRequest request) {
+      // 1. Simular toda la fecha
+      simularTorneoService.simularFecha(torneoId, numeroFecha);
+
+      // 2. Obtener usuario y su equipo
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      if (usuarioId == null) {
+         // No está logueado, redirigir
+         return "redirect:/login";
+      }
+
+      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+      if (usuario == null || usuario.getEquipo() == null) {
+         // No tiene equipo asignado, redirigir a donde corresponda
+         return "redirect:/torneo/fechas?torneoId=" + torneoId;
+      }
+
+      Long equipoId = usuario.getEquipo().getId();
+
+      // 3. Buscar el partido donde juega el equipo en esa fecha
 //      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
-//      if (fecha != null && fecha.getPartidos() != null) {
-//         for (Partido partido : fecha.getPartidos()) {
-//            if (partido.getEquipoLocal().getId().equals(equipoId) || partido.getEquipoVisitante().getId().equals(equipoId)) {
-//               // 4. Redirigir al simulador con ese partido
-//               return "redirect:/torneo/simular-partido?partidoId=" + partido.getId();
-//            }
-//         }
-//      }
-//
-//      // Si no encontró partido del equipo, redirigir a fechas (o donde quieras)
-//      return "redirect:/torneo/fechas?torneoId=" + torneoId;
-//   }
+
+         Fecha fecha = simularTorneoService.obtenerFechaConPartidos(torneoId, numeroFecha);
+
+      if (fecha != null && fecha.getPartidos() != null) {
+         for (Partido partido : fecha.getPartidos()) {
+            if (partido.getEquipoLocal().getId().equals(equipoId) || partido.getEquipoVisitante().getId().equals(equipoId)) {
+               // 4. Redirigir al simulador con ese partido
+               return "redirect:/torneo/simular-partido?partidoId=" + partido.getId();
+            }
+         }
+      }
+
+      // Si no encontró partido del equipo, redirigir a fechas (o donde quieras)
+      return "redirect:/torneo/fechas?torneoId=" + torneoId;
+   }
 
 //
 //    ESTO ANDA
-   @PostMapping("/simular-fecha")
-   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
-      simularTorneoService.simularFecha(torneoId, numeroFecha);
-
-//      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
-//      if (!fecha.getPartidos().isEmpty()) {
-//         Long primerPartidoId = fecha.getPartidos().get(0).getId();
-//         return "redirect:/torneo/simular-partido?partidoId=" + primerPartidoId;
+//   @PostMapping("/simular-fecha")
+//   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
+//      simularTorneoService.simularFecha(torneoId, numeroFecha);
+//
+////      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
+////      if (!fecha.getPartidos().isEmpty()) {
+////         Long primerPartidoId = fecha.getPartidos().get(0).getId();
+////         return "redirect:/torneo/simular-partido?partidoId=" + primerPartidoId;
+////      }
+//
+//      Long partidoId = simularTorneoService.simularFechaYDevolverPrimerPartido(torneoId, numeroFecha);
+//
+//      if (partidoId != null) {
+//         return "redirect:/torneo/simular-partido?partidoId=" + partidoId;
 //      }
-
-      Long partidoId = simularTorneoService.simularFechaYDevolverPrimerPartido(torneoId, numeroFecha);
-
-      if (partidoId != null) {
-         return "redirect:/torneo/simular-partido?partidoId=" + partidoId;
-      }
-
-      return "redirect:/torneo/fechas?torneoId=" + torneoId;
-   }
+//
+//      return "redirect:/torneo/fechas?torneoId=" + torneoId;
+//   }
 
    @GetMapping("/simular-partido")
    public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model) {

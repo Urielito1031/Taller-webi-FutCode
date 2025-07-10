@@ -80,4 +80,10 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
     public Partido obtenerPartidoSimulado(Long partidoId) {
         return partidoRepository.obtenerPartidoPorId(partidoId);
     }
+
+
+    @Override
+    public Fecha obtenerFechaConPartidos(Long torneoId, Long numeroDeFecha) {
+        return fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha);
+    }
 }

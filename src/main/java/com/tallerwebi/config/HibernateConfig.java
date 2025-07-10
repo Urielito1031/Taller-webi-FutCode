@@ -20,8 +20,8 @@ public class HibernateConfig {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
-        String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
-        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_test";
+        String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3307";
+        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
         String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
         String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
 

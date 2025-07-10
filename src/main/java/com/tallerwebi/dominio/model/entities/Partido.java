@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -36,5 +37,8 @@ public class Partido {
    @Enumerated(EnumType.STRING)
    @Column(name = "resultado", nullable = false)
    private ResultadoPartido resultado;
+
+   @Column(name = "fecha_encuentro", nullable = false)
+   private LocalDateTime fechaEncuentro;
 
 }

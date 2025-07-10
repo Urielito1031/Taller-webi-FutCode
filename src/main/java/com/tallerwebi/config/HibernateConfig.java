@@ -23,7 +23,7 @@ public class HibernateConfig {
         String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
         String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
         String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
-        String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
+        String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "root";
 
         String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName +
           "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=30000";
@@ -55,7 +55,7 @@ public class HibernateConfig {
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-      //  properties.setProperty("hibernate.connection.timeout", "30000");
+        properties.setProperty("hibernate.connection.timeout", "30000");
         return properties;
     }
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Partido - FutCode</title>
+    <link rel="stylesheet" th:href="@{/css/partidoStyle.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🏆 SIMULACIÓN DE PARTIDO</h1>
+    </div>
+
+    <div class="match-info">
+        <div class="team">
+            <div class="team-name" id="team1Name">River Plate</div>
+            <div class="team-score" id="team1Score">0</div>
+        </div>
+        <div class="vs">VS</div>
+        <div class="team">
+            <div class="team-name" id="team2Name">Boca Juniors</div>
+            <div class="team-score" id="team2Score">0</div>
+        </div>
+    </div>
+
+    <div class="match-status">
+        <div class="time-display" id="matchTime">0'</div>
+        <div class="status-indicator playing" id="statusIndicator">EN JUEGO</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-primary" id="startBtn">INICIAR PARTIDO</button>
+        <button class="btn btn-secondary" id="pauseBtn">PAUSAR</button>
+        <button class="btn btn-secondary" id="resetBtn">REINICIAR</button>
+    </div>
+
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-title">Goles Total</div>
+            <div class="stat-value" id="totalGoals">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Faltas</div>
+            <div class="stat-value" id="totalFouls">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Tarjetas</div>
+            <div class="stat-value" id="totalCards">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Lesionados</div>
+            <div class="stat-value" id="totalInjuries">0</div>
+        </div>
+    </div>
+
+    <div class="commentary-section scrollbar">
+        <div class="commentary-title">📺 NARRACIÓN EN VIVO</div>
+        <div id="commentaryList">
+            <div class="commentary-item">
+                <span class="commentary-minute">0'</span>
+                ¡Bienvenidos al superclásico argentino! River Plate vs Boca Juniors promete ser un partido épico.
+            </div>
+        </div>
+    </div>
+    <div id="boton-omitir">
+        <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
+    </div>
+
+</div>
+<script src="js.js"></script>
+</body>
+</html>

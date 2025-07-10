@@ -1,0 +1,44 @@
+{
+  "frases": {
+    "GOL": [
+      "¡GOOOOOL de {equipo}! {jugador} marca un golazo que hace explotar al estadio",
+      "¡Increíble gol de {jugador}! {equipo} se pone en ventaja con esta joya",
+      "¡{jugador} la rompe toda! Golazo de {equipo} que desata la locura",
+      "¡Qué golazo, por favor! {jugador} de {equipo} define como los dioses",
+      "¡GOOOOL! {jugador} anota para {equipo} y el estadio tiembla de emoción"
+    ],
+    "TARJETA_AMARILLA": [
+      "¡Tarjeta amarilla! {jugador} de {equipo} ve la cartulina por protestar",
+      "El árbitro saca amarilla para {jugador} ({equipo}) por juego brusco",
+      "¡Tarjeta amarilla! {jugador} de {equipo} se la busca con esa entrada",
+      "El colegiado amonesta a {jugador} de {equipo} con la amarilla"
+    ],
+    "TARJETA_ROJA": [
+      "¡Tarjeta roja! {jugador} de {equipo} se va expulsado del campo",
+      "¡Expulsión! {jugador} de {equipo} ve la roja directa",
+      "¡Se acabó para {jugador}! {equipo} se queda con uno menos"
+    ],
+    "LESION": [
+      "{jugador} de {equipo} se duele en el césped y preocupa a todos",
+      "¡Atención! {jugador} ({equipo}) solicita atención médica urgente",
+      "{jugador} de {equipo} se lesiona y debe ser atendido por los médicos",
+      "Momento de tensión: {jugador} de {equipo} queda tendido en el campo"
+    ],
+    "EXPULSION": [
+      "¡Expulsión! {jugador} de {equipo} abandona el campo",
+      "{jugador} de {equipo} es expulsado por doble amarilla",
+      "¡Se va {jugador}! {equipo} se queda con diez jugadores"
+    ],
+    "GENERAL": [
+      "Gran jugada de {equipo} que llega con peligro al área rival",
+      "{equipo} presiona fuerte y busca el gol con desesperación",
+      "Contraataque fulminante de {equipo} que pone en aprietos a la defensa",
+      "¡Qué ocasión perdida! {equipo} estuvo muy cerca del gol"
+    ]
+  },
+  "metadata": {
+    "version": "1.0",
+    "lastUpdate": "2025-07-9",
+    "placeholders": ["{equipo}", "{jugador}"]
+  }
+}

@@ -128,13 +128,13 @@ public class TorneoServiceImpl implements TorneoService{
                partido.setEquipoLocal(local);
                partido.setEquipoVisitante(visitante);
                partido.setFecha(fecha);
-               LocalDateTime fechaEncuentro = LocalDate.now()
-                       .plusWeeks(ronda)
-                       .with(DayOfWeek.SATURDAY)
-                       .atTime(15, 0); // sábado 15:00 hs
-
-               fechaEncuentro = fechaEncuentro.with(java.time.DayOfWeek.SATURDAY);
-               partido.setFechaEncuentro(fechaEncuentro);
+//               LocalDateTime fechaEncuentro = LocalDate.now()
+//                       .plusWeeks(ronda)
+//                       .with(DayOfWeek.SATURDAY)
+//                       .atTime(15, 0); // sábado 15:00 hs
+//
+//               fechaEncuentro = fechaEncuentro.with(java.time.DayOfWeek.SATURDAY);
+//               partido.setFechaEncuentro(fechaEncuentro);
                partidos.add(partido);
                partido.setResultado(ResultadoPartido.PENDIENTE);
             }

@@ -44,66 +44,6 @@ public class TorneoServiceImpl implements TorneoService{
       return torneoRepository.obtenerTorneoConFechas(torneoId);
    }
 
-//   @Override
-//   public List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior){
-//      Map<Long, EquipoTorneo> tablaDePosiciones = new HashMap<>();
-//
-//      // agrego este bucle por que me compara las posiciones en la misma tabla
-//      for (EquipoTorneo equipo : tablaAnterior) {
-//         tablaDePosiciones.put(equipo.getEquipo().getId(), equipo);
-//      }
-//
-//      for (Partido partido : partidos) {
-//         if (partido.getResultado() != ResultadoPartido.PENDIENTE) {
-//            Equipo local = partido.getEquipoLocal();
-//            Equipo visitante = partido.getEquipoVisitante();
-//
-//            // LOCAL
-//            EquipoTorneo equipoLocal = tablaDePosiciones.get(local.getId());
-//            if (equipoLocal == null) {
-//               equipoLocal = new EquipoTorneo();
-//               equipoLocal.setEquipo(local);
-//               equipoLocal.setPosicionAnterior(0);
-//               tablaDePosiciones.put(local.getId(), equipoLocal);
-//            }
-//            equipoLocal.actualizarConPartido(partido, true);
-//
-//            // VISITANTE
-//            EquipoTorneo equipoVisitante = tablaDePosiciones.get(visitante.getId());
-//            if (equipoVisitante == null) {
-//               equipoVisitante = new EquipoTorneo();
-//               equipoVisitante.setEquipo(visitante);
-//               equipoVisitante.setPosicionAnterior(0);
-//               tablaDePosiciones.put(visitante.getId(), equipoVisitante);
-//            }
-//            equipoVisitante.actualizarConPartido(partido, false);
-//         }
-//      }
-//
-//      List<EquipoTorneo> lista = new ArrayList<>(tablaDePosiciones.values());
-//      lista.sort(Comparator.comparingInt(EquipoTorneo::getPuntos).reversed());
-//
-//      // Guardar posición anterior
-//      for (int i = 0; i < lista.size(); i++) {
-//         EquipoTorneo equipo = lista.get(i);
-//         int nuevaPos = i + 1;
-//
-//         if (equipo.getPosicionAnterior() == null || equipo.getPosicionAnterior() == 0) {
-//            equipo.setPosicionAnterior(nuevaPos); // Primera vez
-//         }
-//
-//         equipo.setPosicion(nuevaPos);
-//      }
-//
-//      for (EquipoTorneo equipo : lista) {
-//         equipoTorneoRepository.save(equipo);
-//      }
-//
-//
-//      return lista;
-//   }
-
-
    @Override
    public List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior){
       Map<Long, EquipoTorneo> tablaDePosiciones = new HashMap<>();

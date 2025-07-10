@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.model.entities;
 
 import com.tallerwebi.presentacion.dto.ClubDTO;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
+import com.tallerwebi.presentacion.dto.JugadorDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,13 +40,15 @@ public class Equipo {
    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER)
    private List<Jugador> jugadores = new ArrayList<>();
 
+   public Double getRatingEquipo(){
+      double total = 0;
 
+      for (Jugador j : this.jugadores) {
+         total += j.getRating();
+      }
 
-
-
-
-
-
+      return total/this.jugadores.size();
+   }
 
    public EquipoDTO convertToDTO() {
       EquipoDTO dto = new EquipoDTO();

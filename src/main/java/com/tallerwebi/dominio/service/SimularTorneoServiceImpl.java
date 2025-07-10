@@ -27,9 +27,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
 
     @Override
     public void simularFecha(Long torneoId, Long numeroDeFecha) {
-        // FALTA HACER ESTE METODO
         Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
-
 
         // SE PUEDE CAMBIAR POR UNA EXCEPTION
         if (torneo == null || torneo.getFechas().isEmpty()) {
@@ -38,10 +36,18 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
 
         Fecha fechaASimular = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha);
 
-
         for (Partido partido : fechaASimular.getPartidos()) {
             int golesLocal = (int) (Math.random() * 5);
             int golesVisitante = (int) (Math.random() * 5);
+
+            // Agrego esta validacion porque no tengo los jugadores cargados en la base de datos
+            if(partido.getEquipoLocal().getJugadores() != null && partido.getEquipoVisitante().getJugadores() != null) {
+                if(partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()){
+                    golesLocal++;
+                }else if(partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante().getRatingEquipo()){
+                    golesVisitante++;
+                }
+            }
 
             partido.setGolesLocal(golesLocal);
             partido.setGolesVisitante(golesVisitante);

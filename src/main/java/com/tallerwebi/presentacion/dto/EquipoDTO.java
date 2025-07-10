@@ -34,12 +34,13 @@ public class EquipoDTO {
    }
 
 
-   public Double ratingEquipo(List<JugadorDTO> jugadores){
+   public Double getRatingEquipo(List<JugadorDTO> jugadores){
       double total = 0;
 
       for (JugadorDTO j : jugadores) {
          total += j.getRating();
       }
+
       return total/jugadores.size();
    }
 

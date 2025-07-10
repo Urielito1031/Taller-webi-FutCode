@@ -156,15 +156,6 @@ public class TorneoController {
    @GetMapping("/fechas")
    public ModelAndView mostrarFechas(@RequestParam Long torneoId) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
-
-      // Si el torneo no tiene fechas, generarlas y redirigir
-      if (torneo.getFechas() == null || torneo.getFechas().isEmpty()) {
-         // Llama al servicio para generar el fixture
-         torneoService.crearFixtureConLasFechas(torneoId);
-         // Vuelve a cargar el torneo con fechas ya generadas
-         torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
-      }
-
       ModelAndView mav = new ModelAndView("simular-fechas");
       mav.addObject("fechas", torneo.getFechas());
       mav.addObject("torneoId", torneoId);

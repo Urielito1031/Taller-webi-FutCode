@@ -318,65 +318,49 @@ main {
     visibility: visible;
     opacity: 1;
 }
-
-
-/*
-body {
-    background-color: #0d1b2a;
-    color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    height: 100vh;
-}
-
 .navbar {
     background-color: #1b263b;
-    padding: 10px;
+    padding: 16px 30px;
+    position: relative;
+    z-index: 1000;
 }
 
 .navbar-brand {
-    color: #00ffc3 !important;
+    font-size: 2rem;
     font-weight: bold;
-    font-size: 1.5rem;
-    text-decoration: none;
+    color: #00ffc3 !important;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0;
 }
 
-:root {
-    --primary-color: #0d6efd;
-    --secondary-color: #6c757d;
-    --success-color: #198754;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-}
-
-.card-hover {
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.card-hover:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-}
-
-.progress {
-    border-radius: 20px;
-    overflow: hidden;
-}
-.progress-bar {
-    font-weight: 500;
-}
-
-.navbar {
-    padding: 0.8rem 0;
-}
-.navbar-brand {
-    font-size: 1.5rem;
+.navbar .container {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
 }
 
 @media (max-width: 768px) {
-    .display-6 {
-        font-size: 1.4rem;
+    .navbar-brand {
+        font-size: 1.5rem;
+        text-align: center;
     }
-    .navbar-nav {
-        margin-top: 1rem;
+
+    .nav-item {
+        margin-left: 20px;
     }
-}*/
+
+    .navbar .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.menu-indicator {
+    position: absolute;
+    left: 10px;
+    top: 18px;
+    font-size: 24px;
+    color: #00ffc3;
+    cursor: pointer;
+    z-index: 1100;
+}

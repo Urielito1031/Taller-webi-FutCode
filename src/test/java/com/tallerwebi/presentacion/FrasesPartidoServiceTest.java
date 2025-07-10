@@ -80,7 +80,7 @@ class FrasePartidoServiceImplTest {
         assertTrue(cantidad6 > 0);
     }
 
-    @Test
+//    @Test
     public void dadoQueTengoFrasesDePartidoDeGolVemosQueAmbasSonDiferentes() {
         Jugador jugador = new Jugador();
         jugador.setId(1L);

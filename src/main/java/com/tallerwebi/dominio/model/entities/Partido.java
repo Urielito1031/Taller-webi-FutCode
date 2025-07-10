@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -40,10 +41,11 @@ public class Partido {
    @Column(name = "resultado", nullable = false)
    private ResultadoPartido resultado;
 
-
    @OneToMany(mappedBy = "partido", cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Narracion> narraciones = new ArrayList<>();
 
+   @Column (name = "fecha_encuentro", nullable = false)
+   private LocalDateTime fechaEncuentro;
 
    public void agregarNarracion(Narracion narracion) {
       this.narraciones.add(narracion);

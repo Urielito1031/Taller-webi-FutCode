@@ -203,7 +203,6 @@ public class TorneoController {
          }
       }
 
-      // Si no encontró partido del equipo, redirigir a fechas (o donde quieras)
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 

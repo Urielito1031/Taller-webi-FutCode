@@ -68,6 +68,7 @@ public class HomeController {
             }
          }
       }
+      model.addAttribute("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(usuarioId).size());
 
       model.addAttribute("torneos", torneos);
       model.addAttribute("torneosUnidos", torneosUnidos);

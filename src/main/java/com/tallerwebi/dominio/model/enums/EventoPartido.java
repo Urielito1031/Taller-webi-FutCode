@@ -5,5 +5,6 @@ public enum EventoPartido {
    TARJETA_ROJA,
    LESION,
    EXPULSION,
-   GOL
+   GOL,
+   GENERAL
 }

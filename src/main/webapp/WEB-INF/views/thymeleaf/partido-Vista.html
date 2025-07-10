@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>🏆 SIMULACIÓN DE PARTIDO</h1>
+        <h1> SIMULACIÓN DE PARTIDO</h1>
     </div>
 
     <div class="match-info">
@@ -55,7 +55,7 @@
     </div>
 
     <div class="commentary-section scrollbar">
-        <div class="commentary-title">📺 NARRACIÓN EN VIVO</div>
+        <div class="commentary-title">NARRACIÓN EN VIVO</div>
         <div id="commentaryList">
             <div th:each="narracion : ${narraciones}"  class="commentary-item">
                 <span class="commentary-minute">0'</span>
@@ -66,6 +66,13 @@
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
     </div>
+
+    <div class="navigation">
+        <a th:href="@{/home}" class="btn btn-home">
+            VOLVER AL INICIO
+        </a>
+    </div>
+
 
 </div>
 <!--<script>-->

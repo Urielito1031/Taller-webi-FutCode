@@ -323,14 +323,16 @@ main {
     padding: 16px 30px;
     position: relative;
     z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbar-brand {
     font-size: 2rem;
     font-weight: bold;
     color: #00ffc3 !important;
-    text-align: center;
-    flex-grow: 1;
+    text-align: left;
     margin: 0;
 }
 

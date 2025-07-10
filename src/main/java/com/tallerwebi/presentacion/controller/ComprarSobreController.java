@@ -94,7 +94,6 @@ public class ComprarSobreController {
             mav.addObject("monedas", usuario.getMonedas());
 
             return mav;
-
         }
 
     }

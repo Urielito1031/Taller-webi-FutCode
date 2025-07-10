@@ -57,9 +57,9 @@
     <div class="commentary-section scrollbar">
         <div class="commentary-title">📺 NARRACIÓN EN VIVO</div>
         <div id="commentaryList">
-            <div class="commentary-item">
+            <div th:each="narracion : ${narraciones}"  class="commentary-item">
                 <span class="commentary-minute">0'</span>
-                ¡Bienvenidos al superclásico argentino! River Plate vs Boca Juniors promete ser un partido épico.
+                <span th:text="${narracion.getTexto()}">Aquí va una frase...</span>
             </div>
         </div>
     </div>

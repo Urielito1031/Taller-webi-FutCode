@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.service;
 
+import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.model.entities.Jugador;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -11,4 +12,6 @@ public interface JugadorService{
    List<JugadorDTO>getAllByEquipoId(Long equipoId);
    List<Jugador> sortearJugadoresIniciales(int cantidad);
    void cargarJugadoresAlEquipo(EquipoDTO equipo);
+
+    void asegurarJugadoresIniciales(Equipo equipo);
 }

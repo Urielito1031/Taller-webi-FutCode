@@ -1,10 +1,7 @@
 package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.entities.*;
-import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
-import com.tallerwebi.dominio.repository.FechaRepository;
-import com.tallerwebi.dominio.repository.PartidoRepository;
-import com.tallerwebi.dominio.repository.TorneoRepository;
+import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
@@ -22,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,13 +33,14 @@ public class TorneoController {
    private final SimularTorneoService simularTorneoService;
    private final TorneoRepository torneoRepository;
    private final EquipoTorneoRepository equipoTorneoRepository;
+   private final NarracionRepository narracionRepository;
    private final PartidoRepository partidoRepository;
    private final FechaRepository fechaRepository;
 
    @Autowired
    public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService, UsuarioService usuarioService,
                            SimularTorneoService simularTorneoService, TorneoRepository torneoRepository,
-                           EquipoTorneoRepository equipoTorneoRepository, PartidoRepository partidoRepository, FechaRepository fechaRepository) {
+                           EquipoTorneoRepository equipoTorneoRepository, PartidoRepository partidoRepository, FechaRepository fechaRepository, NarracionRepository narracionRepository) {
       this.torneoService = torneoService;
       this.equipoTorneoService = equipoTorneoService;
       this.usuarioService = usuarioService;
@@ -50,6 +49,7 @@ public class TorneoController {
       this.equipoTorneoRepository = equipoTorneoRepository;
       this.partidoRepository = partidoRepository;
       this.fechaRepository = fechaRepository;
+      this.narracionRepository = narracionRepository;
    }
 
 
@@ -229,6 +229,12 @@ public class TorneoController {
       }
 
       model.addAttribute("resultado", resultado);
+
+      List<Narracion> narraciones = narracionRepository.obtenerPorPartidoId(partidoId);
+
+      Collections.shuffle(narraciones);
+
+      model.addAttribute("narraciones", narraciones);
       return "partido-Vista";
    }
 

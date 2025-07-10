@@ -50,6 +50,39 @@ public class Equipo {
       return total/this.jugadores.size();
    }
 
+   public void addJugador(Jugador jugador) {
+      if (jugadores == null) {
+         jugadores = new ArrayList<>();
+      }
+      jugadores.add(jugador);
+      jugador.setEquipo(this);
+   }
+
+   // Método helper para remover jugadores de forma segura
+   public void removeJugador(Jugador jugador) {
+      if (jugadores != null) {
+         jugadores.remove(jugador);
+         jugador.setEquipo(null);
+      }
+   }
+
+   // Método para limpiar jugadores de forma segura
+   public void clearJugadores() {
+      if (jugadores != null) {
+         // Desasociar todos los jugadores primero
+         for (Jugador jugador : new ArrayList<>(jugadores)) {
+            jugador.setEquipo(null);
+         }
+         jugadores.clear();
+      }
+   }
+
+
+   // Método para verificar si tiene jugadores
+   public boolean hasJugadores() {
+      return jugadores != null && !jugadores.isEmpty();
+   }
+
    public EquipoDTO convertToDTO() {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(this.id);

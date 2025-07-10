@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,5 +40,14 @@ public class Partido {
    @Column(name = "resultado", nullable = false)
    private ResultadoPartido resultado;
 
+
+   @OneToMany(mappedBy = "partido", cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<Narracion> narraciones = new ArrayList<>();
+
+
+   public void agregarNarracion(Narracion narracion) {
+      this.narraciones.add(narracion);
+      narracion.setPartido(this);
+   }
 
 }

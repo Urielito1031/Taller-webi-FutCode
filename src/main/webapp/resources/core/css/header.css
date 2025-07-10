@@ -1,5 +1,14 @@
 /* ====== Estilos encapsulados para el HEADER ====== */
 
+/* Prevenir scroll horizontal */
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+}
+
 .navbar {
     background-color: #1b263b;
     padding: 16px 30px;
@@ -8,6 +17,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 .navbar-brand, #titulo-nav {

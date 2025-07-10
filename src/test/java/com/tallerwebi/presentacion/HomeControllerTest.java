@@ -1,6 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.dominio.model.entities.Equipo;
 import com.tallerwebi.dominio.service.TorneoService;
+import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.presentacion.controller.HomeController;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +28,9 @@ public class HomeControllerTest {
    @Mock
    private TorneoService torneoService;
 
+   @Mock
+   private UsuarioService usuarioService;
+
    @InjectMocks
    private HomeController homeController;
 
@@ -48,9 +54,14 @@ public class HomeControllerTest {
       List<TorneoDTO> torneos = new ArrayList<>();
       torneos.add(new TorneoDTO());
 
-      when(session.getAttribute("USUARIO_ID")).thenReturn(1L);
+      Usuario usuario = new Usuario();
+      Equipo equipo = new Equipo();
+      equipo.setNombre("Equipo Test");
+      usuario.setEquipo(equipo);
 
+      when(session.getAttribute("USUARIO_ID")).thenReturn(1L);
       when(torneoService.getAll()).thenReturn(torneos);
+      when(usuarioService.buscarUsuarioPorId(1L)).thenReturn(usuario);
 
       // Ejecución
       String vistaHome = homeController.irAHome(model, request);
@@ -58,15 +69,24 @@ public class HomeControllerTest {
       // Verificación
       assertThat(vistaHome, is("home"));
       verify(model).addAttribute("torneos", torneos);
+      verify(model).addAttribute("usuario", usuario);
+      verify(model).addAttribute("equipoNombre", "Equipo Test");
       verify(model, never()).addAttribute(eq("mensajeTorneo"), anyString());
       verify(session).getAttribute("USUARIO_ID");
+      verify(usuarioService).buscarUsuarioPorId(1L);
    }
 
    @Test
    public void deberiaMostrarLaVistaConMensajeTorneoSiLaListaEstaVaciaEnHomeSiUsuarioEstaLogueado() {
       // Preparación
+      Usuario usuario = new Usuario();
+      Equipo equipo = new Equipo();
+      equipo.setNombre("Equipo Test");
+      usuario.setEquipo(equipo);
+
       when(session.getAttribute("USUARIO_ID")).thenReturn(1L);
       when(torneoService.getAll()).thenReturn(new ArrayList<>());
+      when(usuarioService.buscarUsuarioPorId(1L)).thenReturn(usuario);
 
       // Ejecución
       String vistaHome = homeController.irAHome(model, request);
@@ -75,7 +95,10 @@ public class HomeControllerTest {
       assertThat(vistaHome, is("home"));
       verify(model).addAttribute("torneos", new ArrayList<>());
       verify(model).addAttribute("mensajeTorneo", "No hay torneos para mostrar");
+      verify(model).addAttribute("usuario", usuario);
+      verify(model).addAttribute("equipoNombre", "Equipo Test");
       verify(session).getAttribute("USUARIO_ID");
+      verify(usuarioService).buscarUsuarioPorId(1L);
    }
 
    @Test
@@ -90,9 +113,31 @@ public class HomeControllerTest {
       assertThat(redirectPath, is("redirect:/login"));
       verify(session).getAttribute("USUARIO_ID");
       verifyNoInteractions(torneoService);
+      verifyNoInteractions(usuarioService);
       verifyNoInteractions(model);
    }
 
+   @Test
+   public void deberiaMostrarSinEquipoSiUsuarioNoTieneEquipo() {
+      // Preparación
+      Usuario usuario = new Usuario();
+      usuario.setEquipo(null); // Usuario sin equipo
 
+      when(session.getAttribute("USUARIO_ID")).thenReturn(1L);
+      when(torneoService.getAll()).thenReturn(new ArrayList<>());
+      when(usuarioService.buscarUsuarioPorId(1L)).thenReturn(usuario);
+
+      // Ejecución
+      String vistaHome = homeController.irAHome(model, request);
+
+      // Verificación
+      assertThat(vistaHome, is("home"));
+      verify(model).addAttribute("torneos", new ArrayList<>());
+      verify(model).addAttribute("mensajeTorneo", "No hay torneos para mostrar");
+      verify(model).addAttribute("usuario", usuario);
+      verify(model).addAttribute("equipoNombre", "Sin equipo");
+      verify(session).getAttribute("USUARIO_ID");
+      verify(usuarioService).buscarUsuarioPorId(1L);
+   }
 
 }

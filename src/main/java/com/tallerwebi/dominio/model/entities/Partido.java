@@ -38,7 +38,5 @@ public class Partido {
    @Column(name = "resultado", nullable = false)
    private ResultadoPartido resultado;
 
-   @Column(name = "fecha_encuentro", nullable = false)
-   private LocalDateTime fechaEncuentro;
 
 }

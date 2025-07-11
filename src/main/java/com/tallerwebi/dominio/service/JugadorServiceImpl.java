@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class JugadorServiceImpl implements JugadorService{
-
+public class JugadorServiceImpl implements JugadorService {
 
    private final JugadorRepository repository;
    private final EquipoRepository equipoRepository;
@@ -31,62 +30,63 @@ public class JugadorServiceImpl implements JugadorService{
       this.equipoRepository = equipoRepository;
    }
 
-
    @Override
-   public List<JugadorDTO> getAll(){
+   public List<JugadorDTO> getAll() {
 
       List<Jugador> jugadoresEntities = repository.getAll();
 
       return jugadoresEntities.stream()
-        .map(Jugador::convertToDTO)
-        .collect(Collectors.toList());
+            .map(Jugador::convertToDTO)
+            .collect(Collectors.toList());
    }
 
    @Override
-   public List<JugadorDTO> getAllByEquipoId(Long equipoId){
-   List<Jugador> jugadoresEntities = repository.getAllByEquipoId(equipoId);
-   if (jugadoresEntities != null && !jugadoresEntities.isEmpty()) {
-      return jugadoresEntities.stream()
-        .map(Jugador::convertToDTO)
-        .collect(Collectors.toList());
-   }
-      return null;
+   public List<JugadorDTO> getAllByEquipoId(Long equipoId) {
+      List<Jugador> jugadoresEntities = repository.getAllByEquipoId(equipoId);
+      if (jugadoresEntities != null && !jugadoresEntities.isEmpty()) {
+         return jugadoresEntities.stream()
+               .map(Jugador::convertToDTO)
+               .collect(Collectors.toList());
+      }
+      return new ArrayList<>(); // Retornar lista vacía en lugar de null
    }
 
-//   @Override
-//   public void cargarJugadoresAlEquipo(EquipoDTO equipo){
-//      List<Jugador> listaJugadoresEntities = sortearJugadoresIniciales(14);
-//
-//      List<JugadorDTO> listaDeJugadoresDto = new ArrayList<>();
-//
-//      for(Jugador j : listaJugadoresEntities){
-//         listaDeJugadoresDto.add(j.convertToDTO());
-//      }
-//
-//      equipo.setJugadores(listaDeJugadoresDto);
-//   }
+   // @Override
+   // public void cargarJugadoresAlEquipo(EquipoDTO equipo){
+   // List<Jugador> listaJugadoresEntities = sortearJugadoresIniciales(14);
+   //
+   // List<JugadorDTO> listaDeJugadoresDto = new ArrayList<>();
+   //
+   // for(Jugador j : listaJugadoresEntities){
+   // listaDeJugadoresDto.add(j.convertToDTO());
+   // }
+   //
+   // equipo.setJugadores(listaDeJugadoresDto);
+   // }
 
    @Override
-   public List<Jugador> sortearJugadoresIniciales(int cantidad){
+   public List<Jugador> sortearJugadoresIniciales(int cantidad) {
 
       List<Jugador> jugadoresEquipo = new ArrayList<>();
 
       jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.ARQUERO, 2));
-      jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.MEDIOCAMPISTA, 3));
+      jugadoresEquipo
+            .addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.MEDIOCAMPISTA, 3));
       jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.DEFENSOR, 5));
-      jugadoresEquipo.addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.DELANTERO, 4));
+      jugadoresEquipo
+            .addAll(this.repository.sortearJugadoresIniciales(RarezaJugador.NORMAL, PosicionEnum.DELANTERO, 4));
 
       Collections.shuffle(jugadoresEquipo);
       return jugadoresEquipo;
    }
 
    @Override
-   public void cargarJugadoresAlEquipo(EquipoDTO equipo){
+   public void cargarJugadoresAlEquipo(EquipoDTO equipo) {
       List<Jugador> listaJugadoresEntities = sortearJugadoresIniciales(14);
 
       List<JugadorDTO> listaDeJugadoresDto = new ArrayList<>();
 
-      for(Jugador j : listaJugadoresEntities){
+      for (Jugador j : listaJugadoresEntities) {
          listaDeJugadoresDto.add(j.convertToDTO());
       }
 

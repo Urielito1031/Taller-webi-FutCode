@@ -12,12 +12,11 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Getter
-   @Setter
-   @Entity
-   @Table(name = "jugador")
-   public class Jugador {
+@Setter
+@Entity
+@Table(name = "jugador")
+public class Jugador {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +56,6 @@ import java.util.List;
    @Column(name = "estado_fisico", nullable = false, precision = 5, scale = 2)
    private Double estadoFisico;
 
-
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "pais_id")
    private Pais pais;
@@ -72,25 +70,21 @@ import java.util.List;
    @Column(name = "posicion", nullable = false)
    private PosicionEnum posicion;
 
-
-
    @ManyToMany(mappedBy = "jugadores")
    private List<Equipo> equipos = new ArrayList<>();
-
-
 
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "sobre_id")
    private Sobre sobre;
 
-      public Jugador(String nombre, RarezaJugador rarezaJugador) {
-         this.nombre = nombre;
-         this.rarezaJugador = rarezaJugador;
-      }
+   public Jugador(String nombre, RarezaJugador rarezaJugador) {
+      this.nombre = nombre;
+      this.rarezaJugador = rarezaJugador;
+   }
 
-      public Jugador() {
+   public Jugador() {
 
-      }
+   }
 
    public static Jugador convertToEntity(JugadorDTO jugadorDTO) {
       if (jugadorDTO == null) {
@@ -117,13 +111,15 @@ import java.util.List;
          jugador.setPais(pais);
       }
 
-      if (jugadorDTO.getEquipo() != null) {
-         Equipo equipo = new Equipo();
-         equipo.setId(jugadorDTO.getEquipo().getId());
-         equipo.setNombre(jugadorDTO.getEquipo().getNombre());
-//         jugador.setEquipo(equipo);
+      // Manejar la relación Many-to-Many con equipos
+      if (jugadorDTO.getEquipos() != null && !jugadorDTO.getEquipos().isEmpty()) {
+         for (EquipoDTO equipoDTO : jugadorDTO.getEquipos()) {
+            Equipo equipo = new Equipo();
+            equipo.setId(equipoDTO.getId());
+            equipo.setNombre(equipoDTO.getNombre());
+            jugador.getEquipos().add(equipo);
+         }
       }
-
 
       return jugador;
    }
@@ -144,20 +140,18 @@ import java.util.List;
       dto.setRarezaJugador(this.getRarezaJugador());
       dto.setPosicionNatural(this.getPosicion());
 
-
-
-//      if (this.getEquipo() != null) {
-//         EquipoDTO equipoDTO = new EquipoDTO();
-//         dto.setEquipo(equipoDTO.convertFromEntity(this.getEquipo()));
-//      }
+      // Convertir la lista de equipos
+      if (this.getEquipos() != null && !this.getEquipos().isEmpty()) {
+         for (Equipo equipo : this.getEquipos()) {
+            dto.getEquipos().add(equipo.convertToDTO());
+         }
+      }
 
       return dto;
    }
 
-   public String toString(){
-      return "JugadorID: "+ this.id+ "\nNombre: "+ this.nombre;
+   public String toString() {
+      return "JugadorID: " + this.id + "\nNombre: " + this.nombre;
    }
-
-
 
 }

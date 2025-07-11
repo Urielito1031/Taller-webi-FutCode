@@ -63,7 +63,6 @@
                   <h6 th:text="${jugador.nombre} + ' ' + ${jugador.apellido}" class="player-name mb-1"></h6>
                   <div class="player-details">
                      <small th:text="${jugador.posicionNatural}" class="d-block"></small>
-                     <small th:text="${jugador.equipo?.nombre ?: 'Sin club'}" class="d-block"></small>
                      <small th:text="'Estado: ' + ${jugador.estadoFisico} + '%'" class="d-block"></small>
                   </div>
                </div>

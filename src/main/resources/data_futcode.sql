@@ -119,36 +119,54 @@ INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
 INSERT INTO usuario (id, email, password, rol, activo, equipo_id, monedas) VALUES
     (1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1, 40000);
 
--- EQUIPO_TORNEO (depende de equipo y torneo, todos los torneo_id deben ser válidos y no NULL)
-INSERT INTO equipo_torneo (id, equipo_id, posicion, partidos_jugados, partidos_ganados, partidos_empatados, partidos_perdidos, goles_a_favor, goles_en_contra, puntos, torneo_id, posicion_anterior) VALUES
-    (2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (11, 11, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (12, 12, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (13, 13, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0),
-    (32, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (33, 3, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (34, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (35, 5, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (36, 6, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (37, 7, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (38, 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (39, 9, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (41, 11, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (42, 12, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (43, 13, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (44, 14, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0),
-    (45, 15, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0);
+
+-- ------------------------------------------------
+
+-- =============================
+-- DATOS MIGRADOS DE MOVLER
+-- =============================
+
+-- EQUIPOS ARGENTINOS (nuevos)
+INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
+ (1000, 'Boca Juniors', 'https://futcodeequipos.free.nf/equipos/boca_juniors.png', 3),
+(1002, 'River Plate', 'https://futcodeequipos.free.nf/equipos/river_plate.png', 4),
+(1003, 'Racing Club', 'https://futcodeequipos.free.nf/equipos/racing_club.png', 2),
+(1004, 'Independiente', 'https://futcodeequipos.free.nf/equipos/independiente.png', 1),
+(1005, 'San Lorenzo', 'https://futcodeequipos.free.nf/equipos/san_lorenzo.png', 5),
+(1006, 'Vélez Sarsfield', 'https://futcodeequipos.free.nf/equipos/velez_sarsfield.png', 2),
+(1007, 'Newell\s Old Boys', 'https://futcodeequipos.free.nf/equipos/newells_old_boys.png', 3),
+(1008, 'Rosario Central', 'https://futcodeequipos.free.nf/equipos/rosario_central.png', 4),
+(1009, 'Estudiantes', 'https://futcodeequipos.free.nf/equipos/estudiantes.png', 5),
+(1010, 'Gimnasia y Esgrima La Plata', 'https://futcodeequipos.free.nf/equipos/gimnasia_elp.png', 1),
+(1011, 'Banfield', 'https://futcodeequipos.free.nf/equipos/banfield.png', 2),
+(1012, 'Colón', 'https://futcodeequipos.free.nf/equipos/colon.png', 3),
+(1013, 'Argentinos Juniors', 'https://futcodeequipos.free.nf/equipos/argentinos_juniors.png', 4),
+(1014, 'Huracán', 'https://futcodeequipos.free.nf/equipos/huracan.png', 5),
+                                                    (1015, 'Talleres de Córdoba', 'https://futcodeequipos.free.nf/equipos/talleres_cba.png', 1);
+
+
+
+-- EQUIPO_TORNEO para equipos argentinos (nuevos)
+INSERT INTO equipo_torneo (id, goles_a_favor, goles_en_contra, partidos_empatados, partidos_ganados, partidos_jugados, partidos_perdidos, posicion, posicion_anterior, puntos, equipo_id, torneo_id) VALUES
+(1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 1),
+(1002, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1002, 1),
+(1003, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1003, 1),
+(1004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1004, 1),
+(1005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1005, 1),
+(1006, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1006, 1),
+(1007, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1007, 1),
+(1008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1008, 1),
+(1009, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1009, 1),
+(1010, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1010, 1),
+(1011, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1011, 1),
+(1012, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1012, 1),
+(1013, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1013, 1),
+(1014, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1014, 1);
+
+-- LO COMENTO PORQUE EL USUARIO ES EL ULTIMO QUE DEBERIA UNIRSE AL TORNEO
+-- (1015, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1015, 1);
+
+
 
 -- El resto de los inserts de equipo_torneo deben ser revisados y completados con torneo_id válido si se agregan más torneos.
 
@@ -261,44 +279,3 @@ INSERT INTO sobre (id, tipo_sobre, titulo, precio, descripcion, imagen_url, usua
 (13, 'BRONCE', 'Sobre de Bronce', 2500.00, NULL, 'sobreFutCodeBronce.png', 1),
 (14, 'PLATA', 'Sobre de Plata', 5000.00, NULL, 'sobreFutCodePlata.png', 1);
 
--- ------------------------------------------------
-
--- =============================
--- DATOS MIGRADOS DE MOVLER
--- =============================
-
--- EQUIPOS ARGENTINOS (nuevos)
-INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
-    (1000, 'Boca Juniors', 'https://futcodeequipos.free.nf/equipos/boca_juniors.png', 3),
-    (1002, 'River Plate', 'https://futcodeequipos.free.nf/equipos/river_plate.png', 4),
-    (1003, 'Racing Club', 'https://futcodeequipos.free.nf/equipos/racing_club.png', 2),
-    (1004, 'Independiente', 'https://futcodeequipos.free.nf/equipos/independiente.png', 1),
-    (1005, 'San Lorenzo', 'https://futcodeequipos.free.nf/equipos/san_lorenzo.png', 5),
-    (1006, 'Vélez Sarsfield', 'https://futcodeequipos.free.nf/equipos/velez_sarsfield.png', 2),
-    (1007, 'Newell\s Old Boys', 'https://futcodeequipos.free.nf/equipos/newells_old_boys.png', 3),
-    (1008, 'Rosario Central', 'https://futcodeequipos.free.nf/equipos/rosario_central.png', 4),
-    (1009, 'Estudiantes', 'https://futcodeequipos.free.nf/equipos/estudiantes.png', 5),
-    (1010, 'Gimnasia y Esgrima La Plata', 'https://futcodeequipos.free.nf/equipos/gimnasia_elp.png', 1),
-    (1011, 'Banfield', 'https://futcodeequipos.free.nf/equipos/banfield.png', 2),
-    (1012, 'Colón', 'https://futcodeequipos.free.nf/equipos/colon.png', 3),
-    (1013, 'Argentinos Juniors', 'https://futcodeequipos.free.nf/equipos/argentinos_juniors.png', 4),
-    (1014, 'Huracán', 'https://futcodeequipos.free.nf/equipos/huracan.png', 5),
-    (1015, 'Talleres de Córdoba', 'https://futcodeequipos.free.nf/equipos/talleres_cba.png', 1);
-
--- EQUIPO_TORNEO para equipos argentinos (nuevos)
-INSERT INTO equipo_torneo (id, goles_a_favor, goles_en_contra, partidos_empatados, partidos_ganados, partidos_jugados, partidos_perdidos, posicion, posicion_anterior, puntos, equipo_id, torneo_id) VALUES
-    (1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 1),
-    (1002, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1002, 1),
-    (1003, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1003, 1),
-    (1004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1004, 1),
-    (1005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1005, 1),
-    (1006, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1006, 1),
-    (1007, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1007, 1),
-    (1008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1008, 1),
-    (1009, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1009, 1),
-    (1010, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1010, 1),
-    (1011, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1011, 1),
-    (1012, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1012, 1),
-    (1013, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1013, 1),
-    (1014, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1014, 1),
-    (1015, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1015, 1);

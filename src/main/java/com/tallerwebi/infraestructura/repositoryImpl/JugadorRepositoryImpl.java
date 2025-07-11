@@ -46,13 +46,22 @@ public class JugadorRepositoryImpl implements JugadorRepository{
       return jugadores.stream().limit(cantidad).collect(Collectors.toList());
    }
 
+//   @Override comento este metodo porque ahora la relacion de equipo y jugar es N a N
+//   public List<Jugador> getAllByEquipoId(Long equipoId){
+//      return getSession().createQuery(
+//        "select j from Jugador j " +
+//          "where j.equipo.id = :equipoId", Jugador.class)
+//        .setParameter("equipoId", equipoId)
+//        .getResultList();
+//   }
+
+
    @Override
    public List<Jugador> getAllByEquipoId(Long equipoId){
       return getSession().createQuery(
-        "select j from Jugador j " +
-          "where j.equipo.id = :equipoId", Jugador.class)
-        .setParameter("equipoId", equipoId)
-        .getResultList();
+                      "select j from Jugador j join j.equipos e where e.id = :equipoId", Jugador.class)
+              .setParameter("equipoId", equipoId)
+              .getResultList();
    }
 
    @Override

@@ -11,6 +11,9 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.tallerwebi.dominio.model.entities.Jugador.convertToEntity;
 
 @Data
 @Getter
@@ -54,10 +57,21 @@ public class SobreDTO {
         Sobre sobre = SobreFactory.crearSobre(tipoSobre);
 
         sobre.setTitulo(titulo);
-//        sobre.setTipoSobre(tipoSobre);
         sobre.setPrecio(precio);
         sobre.setDescripcion(descripcion);
         sobre.setImagenUrl(imagenUrl);
+
+        // Esto asume que tenés una lista de JugadorDTO en SobreDTO y que podés convertirlos a Jugador
+        if (this.jugadores != null) {
+            List<Jugador> jugadores = this.jugadores.stream()
+                    .map(dto -> convertToEntity(dto))  // o llama al método de quien corresponda
+                    .collect(Collectors.toList());
+            sobre.setJugadores(jugadores);
+        } else {
+            sobre.setJugadores(new ArrayList<>());
+        }
+
+
         System.out.println(sobre);
         return sobre;
     }

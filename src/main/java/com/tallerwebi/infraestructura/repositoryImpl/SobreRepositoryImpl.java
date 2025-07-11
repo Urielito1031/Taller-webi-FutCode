@@ -33,6 +33,4 @@ public class SobreRepositoryImpl implements SobreRepository {
 
         return jugadores;
     }
-
-
 }

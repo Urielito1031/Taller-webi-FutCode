@@ -107,7 +107,7 @@ public class JugadorServiceImpl implements JugadorService{
 
          // Asignar la relación bidireccional
          for (Jugador jugador : nuevosJugadores) {
-            jugador.setEquipo(equipo);
+            jugador.getEquipos().add(equipo);
          }
 
          // IMPORTANTE: Agregar a la lista existente, no reemplazarla
@@ -116,6 +116,18 @@ public class JugadorServiceImpl implements JugadorService{
          // Guardar el equipo
          equipoRepository.save(equipo);
       }
+   }
+
+   @Transactional
+   @Override
+   public void agregarJugadoresDelSobreAlEquipo(Long equipoId, List<Jugador> jugadoresSobre) {
+      Equipo equipo = equipoRepository.getById(equipoId);
+
+      for (Jugador jugador : jugadoresSobre) {
+         equipo.addJugador(jugador);
+      }
+
+      equipoRepository.save(equipo);
    }
 
 }

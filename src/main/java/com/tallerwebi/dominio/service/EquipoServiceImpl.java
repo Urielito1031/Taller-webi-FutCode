@@ -53,7 +53,7 @@ public class EquipoServiceImpl implements EquipoService{
          List<Jugador> jugadores = equipoDTO.getJugadores().stream()
            .map(jugadorDTO -> {
               Jugador jugador = Jugador.convertToEntity(jugadorDTO);
-              jugador.setEquipo(entity);
+              jugador.getEquipos().add(entity);
               return jugador;
            })
            .collect(Collectors.toList());

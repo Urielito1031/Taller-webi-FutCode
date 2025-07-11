@@ -44,6 +44,7 @@ public class JugadorDTO {
       this.paisOrigen = paisOrigen;
       this.rarezaJugador = rarezaJugador;
    }
+
    public Jugador convertToEntity(JugadorDTO dto) {
       Jugador jugador = new Jugador();
       jugador.setId(dto.getId());
@@ -63,7 +64,7 @@ public class JugadorDTO {
       jugador.setPosicion(this.posicionNatural);
 
       if (dto.getEquipo() != null) {
-         jugador.setEquipo(dto.getEquipo().convertToEntity(dto.getEquipo()));
+         jugador.getEquipos().add(dto.getEquipo().convertToEntity(dto.getEquipo()));
       }
 
       return jugador;

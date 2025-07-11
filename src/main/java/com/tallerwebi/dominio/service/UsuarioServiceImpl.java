@@ -38,9 +38,13 @@ public class UsuarioServiceImpl implements  UsuarioService{
         Sobre sobre = sobreDTO.fromEntity();
         sobre.setUsuario(usuario);
 
+        System.out.println("Monedas del usuario: " + usuario.getMonedas());
+        System.out.println("Precio del sobre: " + sobre.getPrecio());
+
+
         validarMonedas(usuario.getMonedas(), sobre.getPrecio());
 
-        // restar monedas en la clase usuario
+//      restar monedas en la clase usuario
         usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);

@@ -72,9 +72,12 @@ import java.util.List;
    @Column(name = "posicion", nullable = false)
    private PosicionEnum posicion;
 
-   @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "equipo_id")
-   private Equipo equipo;
+
+
+   @ManyToMany(mappedBy = "jugadores")
+   private List<Equipo> equipos = new ArrayList<>();
+
+
 
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "sobre_id")

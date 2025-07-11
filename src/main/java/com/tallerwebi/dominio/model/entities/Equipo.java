@@ -25,9 +25,9 @@ public class Equipo {
    @Column(name = "nombre", nullable = false, length = 100)
    private String nombre;
 
-   @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "club_id")
-   private Club club;
+   @javax.validation.constraints.Size(max = 255)
+   @Column(name = "imagen")
+   private String imagen;
 
    @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @JoinColumn(name = "esquema_id", nullable = false)
@@ -37,7 +37,12 @@ public class Equipo {
    @JoinColumn(name = "usuario_id")
    private Usuario usuario;
 
-   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER)
+   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+   @JoinTable(
+           name = "equipo_jugador",
+           joinColumns = @JoinColumn(name = "equipo_id"),
+           inverseJoinColumns = @JoinColumn(name = "jugador_id")
+   )
    private List<Jugador> jugadores = new ArrayList<>();
 
    public Double getRatingEquipo(){
@@ -54,31 +59,12 @@ public class Equipo {
       if (jugadores == null) {
          jugadores = new ArrayList<>();
       }
-      jugadores.add(jugador);
-      jugador.setEquipo(this);
-   }
-
-   // Método helper para remover jugadores de forma segura
-   public void removeJugador(Jugador jugador) {
-      if (jugadores != null) {
-         jugadores.remove(jugador);
-         jugador.setEquipo(null);
+      if (!jugadores.contains(jugador)) { // para evitar tener jugadores repetidos
+         jugadores.add(jugador);
+         jugador.getEquipos().add(this);
       }
    }
 
-   // Método para limpiar jugadores de forma segura
-   public void clearJugadores() {
-      if (jugadores != null) {
-         // Desasociar todos los jugadores primero
-         for (Jugador jugador : new ArrayList<>(jugadores)) {
-            jugador.setEquipo(null);
-         }
-         jugadores.clear();
-      }
-   }
-
-
-   // Método para verificar si tiene jugadores
    public boolean hasJugadores() {
       return jugadores != null && !jugadores.isEmpty();
    }
@@ -87,17 +73,6 @@ public class Equipo {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(this.id);
       dto.setNombre(this.nombre);
-
-
-      if (this.club != null) {
-         ClubDTO clubDTO = new ClubDTO();
-         clubDTO.setId(this.club.getId());
-         clubDTO.setNombre(this.club.getNombre());
-         clubDTO.setPais(this.club.getPais());
-         clubDTO.setImagen(this.club.getImagen());
-
-         dto.setClub(clubDTO);
-      }
 
       if (this.usuario != null) {
          dto.setUsuarioId(this.usuario.getId());
@@ -115,22 +90,6 @@ public class Equipo {
       usuario.setId(dto.getUsuarioId());
       entity.setUsuario(usuario);
 
-      if (dto.getClub() != null) {
-         Club club = new Club();
-         club.setId(dto.getClub().getId());
-         club.setNombre(dto.getClub().getNombre());
-         club.setImagen(dto.getClub().getImagen());
-         entity.setClub(club);
-      }
-
       return entity;
    }
-
-   public String toString(){
-      return "ID: " + this.id + "\n Nombre: " + this.nombre +
-              "\n Club: " + (this.club != null ? this.club.getNombre() : "No asignado") +
-              "\n Esquema: " + (this.esquema != null ? this.esquema.getEsquema() : "No asignado") +
-              "\n Jugadores: " + (this.jugadores != null ? this.jugadores.size() : 0);
-   }
-
 }

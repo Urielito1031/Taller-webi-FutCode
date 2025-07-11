@@ -49,21 +49,18 @@ public class SobreController {
         if (id_usuario == null){
             throw new UsuarioNoEncontrado("El usuario con ID " + id_usuario + " no fue encontrado.");
         }
-        this.usuarioService.borrarSobreAUsuario(id_usuario, sobreParaBorrar.getId());
 
+        this.usuarioService.borrarSobreAUsuario(id_usuario, sobreParaBorrar.getId());
 
         ModelAndView mav = new ModelAndView("sobre");
         mav.addObject("sobre", sobre);
 
         // AGREGAR LOS JUGADORES QUE ESTAN EN EL SOBRE AL USUARIO
         Usuario usuario = this.usuarioService.buscarUsuarioPorId(id_usuario);
-        List<Jugador> jugadores = this.usuarioService.convertirJugadoresDtoToEntity(sobre.getJugadores());
 
-        Equipo equipo = usuario.getEquipo();
-        equipo.getJugadores().addAll(jugadores);
-        EquipoDTO equipoDto = equipo.convertToDTO();
+        List<Jugador> jugadores = sobre.fromEntity().getJugadores();
+        this.jugadorService.agregarJugadoresDelSobreAlEquipo(usuario.getEquipo().getId(), jugadores);
 
-        this.jugadorService.cargarJugadoresAlEquipo(equipoDto);
         return mav;
     }
 

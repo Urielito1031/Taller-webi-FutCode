@@ -1,6 +1,4 @@
 package com.tallerwebi.presentacion.dto;
-
-import com.tallerwebi.dominio.model.entities.Club;
 import com.tallerwebi.dominio.model.entities.Estadio;
 import com.tallerwebi.dominio.model.entities.Pais;
 import lombok.Getter;
@@ -27,23 +25,23 @@ public class ClubDTO {
       this.imagen = imagen;
    }
 
-   public Club convertToEntity(ClubDTO dto){
-      Club entity = new Club();
-      entity.setId(dto.getId());
-      entity.setNombre(dto.getNombre());
-      entity.setPais(dto.getPais());
-      entity.setImagen(dto.getImagen());
-      entity.setEstadio(dto.getEstadio());
-      return entity;
-   }
+//   public Club convertToEntity(ClubDTO dto){
+//      Club entity = new Club();
+//      entity.setId(dto.getId());
+//      entity.setNombre(dto.getNombre());
+//      entity.setPais(dto.getPais());
+//      entity.setImagen(dto.getImagen());
+//      entity.setEstadio(dto.getEstadio());
+//      return entity;
+//   }
 
-   public ClubDTO convertFromEntity(Club club){
-      ClubDTO dto = new ClubDTO();
-      dto.setId(club.getId());
-      dto.setNombre(club.getNombre());
-      dto.setPais(club.getPais());
-      dto.setEstadio(club.getEstadio());
-      dto.setImagen(club.getImagen());
-      return dto;
-   }
+//   public ClubDTO convertFromEntity(Club club){
+//      ClubDTO dto = new ClubDTO();
+//      dto.setId(club.getId());
+//      dto.setNombre(club.getNombre());
+//      dto.setPais(club.getPais());
+//      dto.setEstadio(club.getEstadio());
+//      dto.setImagen(club.getImagen());
+//      return dto;
+//   }
 }

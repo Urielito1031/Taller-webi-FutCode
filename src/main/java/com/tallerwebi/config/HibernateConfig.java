@@ -21,7 +21,7 @@ public class HibernateConfig {
 
         String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
         String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
-        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_test";
+        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
         String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
         String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "root";
 
@@ -30,7 +30,7 @@ public class HibernateConfig {
         System.out.println("Conectando a: " + url + " con usuario: " + dbUser + " y contraseña: " + dbPassword);
         dataSource.setUrl(url);
         dataSource.setUsername(dbUser);
-        dataSource.setPassword(dbPassword);
+//        dataSource.setPassword(dbPassword);
 
         return dataSource;
     }
@@ -55,7 +55,7 @@ public class HibernateConfig {
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.connection.timeout", "30000");
+//        properties.setProperty("hibernate.connection.timeout", "30000");
         return properties;
     }
 }

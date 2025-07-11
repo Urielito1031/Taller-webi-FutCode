@@ -12,6 +12,6 @@ public interface JugadorService{
    List<JugadorDTO>getAllByEquipoId(Long equipoId);
    List<Jugador> sortearJugadoresIniciales(int cantidad);
    void cargarJugadoresAlEquipo(EquipoDTO equipo);
-
-    void asegurarJugadoresIniciales(Equipo equipo);
+   void asegurarJugadoresIniciales(Equipo equipo);
+   void agregarJugadoresDelSobreAlEquipo(Long equipoId, List<Jugador> jugadores);
 }

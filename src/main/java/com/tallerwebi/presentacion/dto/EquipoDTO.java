@@ -66,9 +66,9 @@ public class EquipoDTO {
       equipo.setId(dto.getId());
       equipo.setNombre(dto.getNombre());
 
-      if (dto.getClub() != null) {
-         equipo.setClub(dto.getClub().convertToEntity(dto.getClub()));
-      }
+//      if (dto.getClub() != null) {
+//         equipo.setClub(dto.getClub().convertToEntity(dto.getClub()));
+//      }
 
       if (dto.getFormacionActual() != null && dto.getFormacionActual().getId() != null) {
          Esquema esquema = new Esquema();
@@ -91,10 +91,6 @@ public class EquipoDTO {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(equipo.getId());
       dto.setNombre(equipo.getNombre());
-
-      if (equipo.getClub() != null) {
-         dto.setClub(new ClubDTO().convertFromEntity(equipo.getClub()));
-      }
 
       if (equipo.getEsquema() != null) {
          EsquemaDTO esquemaDTO = new EsquemaDTO();

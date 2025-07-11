@@ -171,8 +171,6 @@ public class TorneoController {
 
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha, HttpServletRequest request) {
-      // 1. Simular toda la fecha
-      simularTorneoService.simularFecha(torneoId, numeroFecha);
 
       // 2. Obtener usuario y su equipo
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
@@ -186,6 +184,13 @@ public class TorneoController {
          // No tiene equipo asignado, redirigir a donde corresponda
          return "redirect:/torneo/fechas?torneoId=" + torneoId;
       }
+
+
+      // 1. Simular toda la fecha
+      simularTorneoService.simularFecha(torneoId, numeroFecha, usuario.getEquipo().getId());
+
+
+
 
       Long equipoId = usuario.getEquipo().getId();
 

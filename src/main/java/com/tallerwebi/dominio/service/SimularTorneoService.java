@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 
 @Service
 public interface SimularTorneoService {
-    void simularFecha(Long torneoId, Long numeroDeFecha);
-    Long simularFechaYDevolverPrimerPartido(Long torneoId, Long numeroDeFecha);
+    void simularFecha(Long torneoId, Long numeroDeFecha, Long idEquipo);
+    //Long simularFechaYDevolverPrimerPartido(Long torneoId, Long numeroDeFecha);
     Partido obtenerPartidoSimulado(Long partidoId);
     Fecha obtenerFechaConPartidos(Long torneoId, Long numeroDeFecha);
 }

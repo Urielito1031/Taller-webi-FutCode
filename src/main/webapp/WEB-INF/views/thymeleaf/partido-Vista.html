@@ -125,6 +125,58 @@
         40% { transform: translateY(-10px); }
         60% { transform: translateY(-5px); }
     }
+    
+    /* Estilos para escudos de equipos */
+    .team-logo {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    
+    .team-escudo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px;
+    }
+    
+    .team-initials {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #00ffc3, #00d4a3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0d1b2a;
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+    }
+    
+    .team {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .team-name {
+        margin: 10px 0 5px 0;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    
+    .team-score {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #00ffc3;
+    }
     </style>
 </head>
 <body>
@@ -135,12 +187,20 @@
 
     <div class="match-info">
         <div class="team">
-            <div class="team-name" id="team1Name" th:text="${equipoLocal}">River Plate</div>
+            <div class="team-logo">
+                <img th:if="${equipoLocal.imagen}" th:src="${equipoLocal.imagen}" alt="Escudo Local" class="team-escudo">
+                <div th:unless="${equipoLocal.imagen}" class="team-initials" th:text="${#strings.substring(equipoLocal.nombre, 0, 2)}">RP</div>
+            </div>
+            <div class="team-name" id="team1Name" th:text="${equipoLocal.nombre}">River Plate</div>
             <div class="team-score" id="team1Score">0</div>
         </div>
         <div class="vs">VS</div>
         <div class="team">
-            <div class="team-name" id="team2Name" th:text="${equipoVisitante}">Boca Juniors</div>
+            <div class="team-logo">
+                <img th:if="${equipoVisitante.imagen}" th:src="${equipoVisitante.imagen}" alt="Escudo Visitante" class="team-escudo">
+                <div th:unless="${equipoVisitante.imagen}" class="team-initials" th:text="${#strings.substring(equipoVisitante.nombre, 0, 2)}">BJ</div>
+            </div>
+            <div class="team-name" id="team2Name" th:text="${equipoVisitante.nombre}">Boca Juniors</div>
             <div class="team-score" id="team2Score">0</div>
         </div>
     </div>

@@ -19,13 +19,12 @@ public class EquipoDTO {
    private Long id;
    @NotNull(message = "El nombre del equipo no puede estar vacío")
    private String nombre;
+   private String imagen;
    private ClubDTO club;
    private List<JugadorDTO> jugadores;
    private Double ratingEquipo;
    private Long usuarioId;
    private EsquemaDTO formacionActual;
-
-
 
    public EquipoDTO() {
       this.jugadores = new ArrayList<>();
@@ -33,28 +32,26 @@ public class EquipoDTO {
       this.formacionActual.setEsquema(FormacionEsquema.CUATRO_CUATRO_DOS);
    }
 
-
-   public Double getRatingEquipo(List<JugadorDTO> jugadores){
+   public Double getRatingEquipo(List<JugadorDTO> jugadores) {
       double total = 0;
 
       for (JugadorDTO j : jugadores) {
          total += j.getRating();
       }
 
-      return total/jugadores.size();
+      return total / jugadores.size();
    }
-
 
    @Override
    public String toString() {
       return "EquipoDTO{" +
-        "id=" + (id != null ? id : "null") +
-        ", nombre='" + (nombre != null ? nombre : "null") + '\'' +
-        ", club=" + (club != null ? club : "null") +
-        ", jugadores=" + (jugadores != null ? jugadores : "null") +
-        ", ratingEquipo=" + (ratingEquipo != null ? ratingEquipo : "null") +
-        ", formacionActual=" + (formacionActual != null ? formacionActual : "null") +
-        '}';
+            "id=" + (id != null ? id : "null") +
+            ", nombre='" + (nombre != null ? nombre : "null") + '\'' +
+            ", club=" + (club != null ? club : "null") +
+            ", jugadores=" + (jugadores != null ? jugadores : "null") +
+            ", ratingEquipo=" + (ratingEquipo != null ? ratingEquipo : "null") +
+            ", formacionActual=" + (formacionActual != null ? formacionActual : "null") +
+            '}';
    }
 
    public Equipo convertToEntity(EquipoDTO dto) {
@@ -65,10 +62,11 @@ public class EquipoDTO {
       Equipo equipo = new Equipo();
       equipo.setId(dto.getId());
       equipo.setNombre(dto.getNombre());
+      equipo.setImagen(dto.getImagen());
 
-//      if (dto.getClub() != null) {
-//         equipo.setClub(dto.getClub().convertToEntity(dto.getClub()));
-//      }
+      // if (dto.getClub() != null) {
+      // equipo.setClub(dto.getClub().convertToEntity(dto.getClub()));
+      // }
 
       if (dto.getFormacionActual() != null && dto.getFormacionActual().getId() != null) {
          Esquema esquema = new Esquema();
@@ -91,6 +89,7 @@ public class EquipoDTO {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(equipo.getId());
       dto.setNombre(equipo.getNombre());
+      dto.setImagen(equipo.getImagen());
 
       if (equipo.getEsquema() != null) {
          EsquemaDTO esquemaDTO = new EsquemaDTO();
@@ -101,8 +100,8 @@ public class EquipoDTO {
 
       if (equipo.getJugadores() != null) {
          List<JugadorDTO> jugadoresDTO = equipo.getJugadores().stream()
-                 .map(jugador -> new JugadorDTO().convertFromEntity(jugador))
-                 .collect(Collectors.toList());
+               .map(jugador -> new JugadorDTO().convertFromEntity(jugador))
+               .collect(Collectors.toList());
          dto.setJugadores(jugadoresDTO);
       }
 

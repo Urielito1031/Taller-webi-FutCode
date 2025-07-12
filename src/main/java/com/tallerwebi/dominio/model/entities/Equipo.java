@@ -37,22 +37,18 @@ public class Equipo {
    @JoinColumn(name = "usuario_id")
    private Usuario usuario;
 
-   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-   @JoinTable(
-           name = "equipo_jugador",
-           joinColumns = @JoinColumn(name = "equipo_id"),
-           inverseJoinColumns = @JoinColumn(name = "jugador_id")
-   )
+   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+   @JoinTable(name = "equipo_jugador", joinColumns = @JoinColumn(name = "equipo_id"), inverseJoinColumns = @JoinColumn(name = "jugador_id"))
    private List<Jugador> jugadores = new ArrayList<>();
 
-   public Double getRatingEquipo(){
+   public Double getRatingEquipo() {
       double total = 0;
 
       for (Jugador j : this.jugadores) {
          total += j.getRating();
       }
 
-      return total/this.jugadores.size();
+      return total / this.jugadores.size();
    }
 
    public void addJugador(Jugador jugador) {
@@ -73,6 +69,7 @@ public class Equipo {
       EquipoDTO dto = new EquipoDTO();
       dto.setId(this.id);
       dto.setNombre(this.nombre);
+      dto.setImagen(this.imagen);
 
       if (this.usuario != null) {
          dto.setUsuarioId(this.usuario.getId());

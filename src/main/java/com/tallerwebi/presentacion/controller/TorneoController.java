@@ -242,8 +242,8 @@ public class TorneoController {
          }
       }
 
-      model.addAttribute("equipoLocal", partido.getEquipoLocal().getNombre());
-      model.addAttribute("equipoVisitante", partido.getEquipoVisitante().getNombre());
+      model.addAttribute("equipoLocal", partido.getEquipoLocal());
+      model.addAttribute("equipoVisitante", partido.getEquipoVisitante());
       model.addAttribute("equipoUsuario", equipoUsuario); // Agregar el equipo del usuario
       model.addAttribute("golesLocal", partido.getGolesLocal());
       model.addAttribute("golesVisitante", partido.getGolesVisitante());
@@ -267,7 +267,7 @@ public class TorneoController {
    }
 
    @GetMapping("/tabla-posiciones")
-   public ModelAndView mostrarTabla(@RequestParam Long torneoId) {
+   public ModelAndView mostrarTabla(@RequestParam Long torneoId, HttpServletRequest request) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
       List<Partido> partidos = torneo.getFechas().stream()
             .flatMap(f -> f.getPartidos().stream())
@@ -282,8 +282,12 @@ public class TorneoController {
 
       List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
+      // Obtener información del usuario para resaltar su equipo
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+
       ModelAndView mav = new ModelAndView("tabla-posiciones");
       mav.addObject("tabla", tabla);
+      mav.addObject("usuarioId", usuarioId);
       return mav;
    }
 

@@ -6,6 +6,43 @@
    <title>Detalle del Torneo</title>
    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
    <link rel="stylesheet" th:href="@{/css/torneos/detalle-torneo.css}">
+   <style>
+        .mi-equipo {
+            background-color: rgba(0, 255, 195, 0.1) !important;
+            border-left: 4px solid #00ffc3 !important;
+        }
+        
+        /* Estilos para escudos de equipos */
+        .team-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .team-logo-table {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+        
+        .team-escudo-table {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .team-initials-table {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 <div class="floating-particles">
@@ -106,7 +143,15 @@
                <tr th:each="equipo : ${torneoEquipos}"
                    th:classappend="${equipo.equipo.usuarioId == usuarioId} ? 'mi-equipo'" >
                   <td th:text="${equipo.posicion}">1</td>
-                  <td th:text="${equipo.equipo.nombre}">Equipo 1</td>
+                  <td>
+                     <div class="team-row">
+                        <div class="team-logo-table">
+                           <img th:if="${equipo.equipo.imagen}" th:src="${equipo.equipo.imagen}" alt="Escudo" class="team-escudo-table">
+                           <div th:unless="${equipo.equipo.imagen}" class="team-initials-table" th:text="${#strings.substring(equipo.equipo.nombre, 0, 2)}">EQ</div>
+                        </div>
+                        <span th:text="${equipo.equipo.nombre}">Equipo 1</span>
+                     </div>
+                  </td>
                   <td th:text="${equipo.partidosJugados}">0</td>
                   <td th:text="${equipo.partidosGanados}">0</td>
                   <td th:text="${equipo.partidosEmpatados}">0</td>

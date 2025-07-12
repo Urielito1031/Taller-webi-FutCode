@@ -241,6 +241,52 @@
             color: #b0b8c1 !important;
         }
 
+        .team-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .team-logo-table {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+
+        .team-escudo-table {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .team-initials-table {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Estilo para resaltar el equipo del usuario */
+        .mi-equipo {
+            background-color: rgba(0, 255, 195, 0.1) !important;
+            border-left: 4px solid #00ffc3 !important;
+        }
+        
+        .mi-equipo:hover {
+            background-color: rgba(0, 255, 195, 0.15) !important;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -309,10 +355,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pos, iterStat : ${tabla}">
+                <tr th:each="pos, iterStat : ${tabla}"
+                    th:classappend="${pos.equipo.usuario != null and pos.equipo.usuario.id == usuarioId} ? 'mi-equipo'">
                     <td>
-                        <span class="position-badge" th:text="${pos.posicion}">1</span>
-                        <span th:text="${pos.equipo.nombre}">Nombre del Equipo</span>
+                        <div class="team-row">
+                            <div class="team-logo-table">
+                                <img th:if="${pos.equipo.imagen}" th:src="${pos.equipo.imagen}" alt="Escudo" class="team-escudo-table">
+                                <div th:unless="${pos.equipo.imagen}" class="team-initials-table" th:text="${#strings.substring(pos.equipo.nombre, 0, 2)}">EQ</div>
+                            </div>
+                            <div class="team-info">
+                                <span class="position-badge" th:text="${pos.posicion}">1</span>
+                                <span th:text="${pos.equipo.nombre}">Nombre del Equipo</span>
+                            </div>
+                        </div>
 
                         <span th:if="${pos.subio}" class="ms-2 text-success" title="Subió de posición">
                             <i class="fas fa-arrow-up"></i>

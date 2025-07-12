@@ -479,7 +479,7 @@ function terminarPartido() {
 }
 
 function mostrarFestejoVictoria() {
-    // Crear modal de victoria elegante
+    //  modal de victoria
     const victoryModal = document.createElement('div');
     victoryModal.className = 'victory-modal';
     victoryModal.innerHTML = `
@@ -490,7 +490,7 @@ function mostrarFestejoVictoria() {
     `;
     document.body.appendChild(victoryModal);
 
-    // Confeti natural mejorado
+    // Confeti
     for (let i = 0; i < 100; i++) {
         setTimeout(() => {
             const confeti = document.createElement('div');

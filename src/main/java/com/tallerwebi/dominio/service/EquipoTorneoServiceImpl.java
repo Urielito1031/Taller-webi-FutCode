@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class EquipoTorneoServiceImpl implements EquipoTorneoService {
-   public static final int CAPACIDAD_MAXIMA_TORNEO_LIGA = 15;
+   public static final int CAPACIDAD_MAXIMA_TORNEO_LIGA = 16;
    public static final int CAPACIDAD_MAXIMA_TORNEO_COPA = 32;
 
    private final EquipoTorneoRepository repository;

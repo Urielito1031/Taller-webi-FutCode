@@ -88,22 +88,22 @@ INSERT INTO torneo (id, nombre, descripcion, formato_torneo_id, estado, torneo_c
 
 -- EQUIPOS ARGENTINOS (nuevos)
 INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
- (1000, 'Boca Juniors', 'https', 3),
-(1002, 'River Plate', 'https:', 4),
-(1003, 'Racing Club', 'https:/', 2),
-(1004, 'Independiente', 'https://.free.nf//.png', 1),
-(1005, 'San Lorenzo', 'https://..nf//.png', 5),
-(1006, 'Vélez Sarsfield', 'https://.free.nf//.png', 2),
-(1007, 'Newell\s Old Boys', '://..nf/equipos/.png', 3),
-(1008, 'Rosario Central', 'https:l.png', 4),
-(1009, 'Estudiantes', 'https://.free.nf/eq', 5),
-(1010, 'Gimnasia y Esgrima La Plata', '://.', 1),
-(1011, 'Banfield', 'https://.free.nf//banfield.png', 2),
-(1012, 'Colón', 'https://.free.nf/equipos/colon.png', 3),
-(1013, 'Argentinos Juniors', 'https:ng', 4),
-(1014, 'Huracán', 'https://.free.nf/equipos/huracan.png', 5),
-(1015, 'Talleres de Córdoba', 'https://.png', 1),
-(1016, 'Platense', 'https://nose', 3);
+ (1000, 'Boca Juniors', 'https://imgur.com/DB9vIuL.png', 3),
+(1002, 'River Plate', 'https://i.imgur.com/wU1slIe.png', 4),
+(1003, 'Racing Club', 'https://i.imgur.com/DaUtieZ.png', 2),
+(1004, 'Independiente', 'https://i.imgur.com/uVSAjum.png', 1),
+(1005, 'San Lorenzo', 'https://i.imgur.com/8m3QOCe.png', 5),
+(1006, 'Vélez Sarsfield', 'https://i.imgur.com/Vhrl2ko.png', 2),
+(1007, 'Newell\s Old Boys', 'https://i.imgur.com/Mqove2Y.png', 3),
+(1008, 'Rosario Central', 'https://i.imgur.com/m1A7188.png', 4),
+(1009, 'Estudiantes', 'https://i.imgur.com/u8PrZAM.png', 5),
+(1010, 'Gimnasia y Esgrima La Plata', 'https://i.imgur.com/YODTRNE.png', 1),
+(1011, 'Banfield', 'https://i.imgur.com/6nmN6HJ.png', 2),
+(1012, 'Colón', 'https://i.imgur.com/efpjd0W.png', 3),
+(1013, 'Argentinos Juniors', 'https://i.imgur.com/kDpyrdm.png', 4),
+(1014, 'Huracán', 'https://i.imgur.com/KgW20xf.png', 5),
+(1015, 'Talleres de Córdoba', 'https://i.imgur.com/7AF8286.png', 1),
+(1016, 'Platense', 'https://i.imgur.com/oPiMZ3M.png', 3);
 
 
 
@@ -142,7 +142,7 @@ INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
 (2026, 'Crystal Palace', 'https://.free.nf//banfield.png', 2),
 (2027, 'West Ham United', 'https://.free.nf/equipos/colon.png', 3),
 (2028, 'Wolverhampton Wanderers', 'https:ng', 4),
-(2029, 'West Ham United', 'https://.free.nf/equipos/huracan.png', 5),
+(2029, 'Newcastle United', 'https://.free.nf/equipos/huracan.png', 5),
 (2030, 'AFC Bournemouth', 'https://.png', 1),
 (2031, 'Tottenham Hotspur', 'https://nose', 3);
 

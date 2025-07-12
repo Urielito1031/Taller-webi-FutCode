@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.model.enums.EventoPartido;
 import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.presentacion.dto.FrasesPartidoDTO;
+import com.tallerwebi.presentacion.dto.NarracionDTO;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -223,6 +224,75 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         } else {
             return partido.getEquipoVisitante().getId();
         }
+    }
+
+    @Override
+    public List<NarracionDTO> generarNarracionesParaPartido(Partido partido) {
+        List<NarracionDTO> narraciones = new ArrayList<>();
+        Random random = new Random();
+        int minutoMax = 90;
+
+        int golesLocal = partido.getGolesLocal();
+        int golesVisitante = partido.getGolesVisitante();
+
+        // Goles local
+        for (int i = 0; i < golesLocal; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GOL,
+                    partido.getEquipoLocal().getId());
+            narraciones.add(new NarracionDTO(frase, minuto, "GOL"));
+        }
+        // Goles visitante
+        for (int i = 0; i < golesVisitante; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GOL,
+                    partido.getEquipoVisitante().getId());
+            narraciones.add(new NarracionDTO(frase, minuto, "GOL"));
+        }
+        // Eventos generales
+        int cantidadEventosGenerales = generarCantidadAleatoria(10);
+        for (int i = 0; i < cantidadEventosGenerales; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GENERAL, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "GENERAL"));
+        }
+        // Tarjetas amarillas
+        int cantidadTarjetas = generarCantidadAleatoria(3);
+        for (int i = 0; i < cantidadTarjetas; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_AMARILLA,
+                    equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_AMARILLA"));
+        }
+        // Tarjetas rojas
+        int cantidadRojas = generarCantidadAleatoria(1);
+        for (int i = 0; i < cantidadRojas; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_ROJA, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_ROJA"));
+        }
+        // Expulsiones
+        int cantidadExpulsados = generarCantidadAleatoria(1);
+        for (int i = 0; i < cantidadExpulsados; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.EXPULSION, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "EXPULSION"));
+        }
+        // Lesiones
+        int cantidadLesiones = generarCantidadAleatoria(2);
+        for (int i = 0; i < cantidadLesiones; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.LESION, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "LESION"));
+        }
+        // Ordenar narraciones por minuto ascendente
+        narraciones.sort((a, b) -> Integer.compare(a.getMinuto(), b.getMinuto()));
+        return narraciones;
     }
 
 }

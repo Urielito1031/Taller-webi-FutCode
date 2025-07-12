@@ -225,14 +225,26 @@ public class TorneoController {
    }
 
    @GetMapping("/simular-partido")
-   public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model) {
+   public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model, HttpServletRequest request) {
       Partido partido = simularTorneoService.obtenerPartidoSimulado(partidoId);
       if (partido == null) {
          return "redirect:/torneo/fechas"; // o página de error
       }
 
+      // Obtener el equipo del usuario
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      String equipoUsuario = null;
+
+      if (usuarioId != null) {
+         Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+         if (usuario != null && usuario.getEquipo() != null) {
+            equipoUsuario = usuario.getEquipo().getNombre();
+         }
+      }
+
       model.addAttribute("equipoLocal", partido.getEquipoLocal().getNombre());
       model.addAttribute("equipoVisitante", partido.getEquipoVisitante().getNombre());
+      model.addAttribute("equipoUsuario", equipoUsuario); // Agregar el equipo del usuario
       model.addAttribute("golesLocal", partido.getGolesLocal());
       model.addAttribute("golesVisitante", partido.getGolesVisitante());
 

@@ -43,6 +43,88 @@
         color: #ff8800;
         font-weight: bold;
     }
+    
+    /* Animación de puntos suspensivos */
+    .loading-dots {
+        display: inline-block;
+        color: #00ffc3;
+        font-weight: bold;
+    }
+    
+    .loading-dots::after {
+        content: '';
+        animation: dots 1.5s infinite;
+    }
+    
+    @keyframes dots {
+        0%, 20% { content: ''; }
+        40% { content: '.'; }
+        60% { content: '..'; }
+        80%, 100% { content: '...'; }
+    }
+    
+    /* Modal de victoria mejorado */
+    .victory-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    .victory-card {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        border: 2px solid #ffd700;
+        border-radius: 20px;
+        padding: 40px 60px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        animation: slideIn 0.6s ease-out;
+        max-width: 500px;
+        width: 90%;
+    }
+
+    .victory-title {
+        color: #ffd700;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .victory-subtitle {
+        color: #ffffff;
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+        from { 
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to { 
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
     </style>
 </head>
 <body>
@@ -94,7 +176,9 @@
     </div>
 
     <div class="commentary-section scrollbar">
-        <div class="commentary-title">NARRACIÓN EN VIVO</div>
+        <div class="commentary-title">
+            NARRACIÓN EN VIVO <span id="loadingDots" class="loading-dots"></span>
+        </div>
         <div id="commentaryList">
             <div th:each="narracion : ${narraciones}"  class="commentary-item"
                  th:attr="data-minuto=${narracion.minuto},data-tipo=${narracion.tipoEvento}">
@@ -102,8 +186,9 @@
                 <span th:text="${narracion.texto}">Aquí va una frase...</span>
             </div>
         </div>
-        <input type="hidden" id="equipoUsuario" th:value="${equipoLocal}" />
-        <input type="hidden" id="equipoRival" th:value="${equipoVisitante}" />
+        <input type="hidden" id="equipoUsuario" th:value="${equipoUsuario}" />
+        <input type="hidden" id="equipoLocal" th:value="${equipoLocal}" />
+        <input type="hidden" id="equipoVisitante" th:value="${equipoVisitante}" />
     </div>
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
@@ -132,6 +217,25 @@ const startBtn = document.getElementById("startBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const resetBtn = document.getElementById("resetBtn");
 const omiteBtn = document.getElementById("omitebtn");
+
+// Obtener el equipo del usuario desde el backend
+const equipoLocal = document.getElementById("equipoLocal").value.trim().toLowerCase();
+const equipoVisitante = document.getElementById("equipoVisitante").value.trim().toLowerCase();
+
+// Determinar cuál es realmente el equipo del usuario
+// Necesitamos verificar si el usuario juega como local o visitante
+const equipoUsuario = document.getElementById("equipoUsuario").value.trim().toLowerCase();
+
+// Determinar cuál es el rival del usuario
+let equipoRival;
+if (equipoUsuario === equipoLocal) {
+    equipoRival = equipoVisitante;
+} else if (equipoUsuario === equipoVisitante) {
+    equipoRival = equipoLocal;
+} else {
+    // Si no coincide con ninguno, asumir que es local
+    equipoRival = equipoVisitante;
+}
 
 // Obtener todas las narraciones enriquecidas
 const narraciones = Array.from(commentaryList.querySelectorAll(".commentary-item"))
@@ -178,6 +282,9 @@ function inicializarPartido() {
     statusIndicator.className = "status-indicator ready";
     startBtn.disabled = false;
     pauseBtn.disabled = true;
+    
+    // Ocultar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'none';
 }
 
 function iniciarPartido() {
@@ -188,6 +295,23 @@ function iniciarPartido() {
     statusIndicator.className = "status-indicator playing";
     startBtn.disabled = true;
     pauseBtn.disabled = false;
+    
+    // Mostrar mensaje de inicio del partido
+    const mensajeInicio = document.createElement('div');
+    mensajeInicio.className = 'commentary-item';
+    mensajeInicio.style.borderLeft = '6px solid #00ffc3';
+    mensajeInicio.style.background = '#1a3a2a';
+    mensajeInicio.style.color = '#00ffc3';
+    mensajeInicio.style.fontWeight = 'bold';
+    mensajeInicio.innerHTML =
+        `<span class="commentary-minute">0'</span>
+<span><strong>¡EL PARTIDO HA COMENZADO!</strong></span>`;
+    commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
+    mensajeInicio.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    // Mostrar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'inline-block';
+    
     if (!intervalo) {
         intervalo = setInterval(actualizarTiempo, velocidadNarracion);
     }
@@ -202,6 +326,9 @@ function pausarPartido() {
     pauseBtn.disabled = true;
     clearInterval(intervalo);
     intervalo = null;
+    
+    // Ocultar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'none';
 }
 
 function reiniciarPartido() {
@@ -210,6 +337,9 @@ function reiniciarPartido() {
     partidoEnCurso = false;
     partidoTerminado = false;
     inicializarPartido();
+    
+    // Ocultar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'none';
 }
 
 function actualizarTiempo() {
@@ -236,26 +366,17 @@ function mostrarNarracion(narracion) {
     const textoNarracion = narracion.texto.toLowerCase();
 
     if (tipoEvento.includes('gol')) {
-        if (
-            textoNarracion.includes('gol de ' + equipoUsuario) ||
-            textoNarracion.includes('goool de ' + equipoUsuario) ||
-            textoNarracion.includes('golazo de ' + equipoUsuario) ||
-            textoNarracion.includes(equipoUsuario + ' marca')
-        ) {
+        // Verificar si el gol es del equipo del usuario
+        if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
             nuevaNarracion.classList.add('gol-favor');
-        } else if (
-            textoNarracion.includes('gol de ' + equipoRival) ||
-            textoNarracion.includes('goool de ' + equipoRival) ||
-            textoNarracion.includes('golazo de ' + equipoRival) ||
-            textoNarracion.includes(equipoRival + ' marca')
-        ) {
+        } else if (textoNarracion.includes(equipoRival.toLowerCase())) {
             nuevaNarracion.classList.add('gol-contra');
         } else {
             // Si no se puede determinar, por defecto gol en contra
             nuevaNarracion.classList.add('gol-contra');
         }
     } else if (tipoEvento.includes('expulsion')) {
-        if (textoNarracion.includes(equipoUsuario)) {
+        if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
             nuevaNarracion.classList.add('expulsion-propia');
         } else {
             nuevaNarracion.classList.add('expulsion-rival');
@@ -328,6 +449,9 @@ function terminarPartido() {
     startBtn.disabled = true;
     pauseBtn.disabled = true;
     
+    // Ocultar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'none';
+    
     // Asegurar que el tiempo muestre 90' al final
     matchTime.textContent = "90'";
     
@@ -355,48 +479,50 @@ function terminarPartido() {
 }
 
 function mostrarFestejoVictoria() {
-    // Mensaje de victoria
-    const victoryMsg = document.createElement('div');
-    victoryMsg.textContent = "¡GANASTE EL PARTIDO!";
-    victoryMsg.style.position = "fixed";
-    victoryMsg.style.top = "35%";
-    victoryMsg.style.left = "50%";
-    victoryMsg.style.transform = "translate(-50%, -50%)";
-    victoryMsg.style.fontSize = "3.5em";
-    victoryMsg.style.color = "#2ecc40";
-    victoryMsg.style.fontWeight = "bold";
-    victoryMsg.style.zIndex = 9999;
-    victoryMsg.style.textShadow = "0 0 30px #fff, 0 0 10px #2ecc40";
-    victoryMsg.style.background = "rgba(255,255,255,0.8)";
-    victoryMsg.style.padding = "30px 60px";
-    victoryMsg.style.borderRadius = "20px";
-    document.body.appendChild(victoryMsg);
+    // Crear modal de victoria elegante
+    const victoryModal = document.createElement('div');
+    victoryModal.className = 'victory-modal';
+    victoryModal.innerHTML = `
+        <div class="victory-card">
+            <div class="victory-title">¡VICTORIA!</div>
+            <div class="victory-subtitle">¡Felicitaciones! Has ganado el partido</div>
+        </div>
+    `;
+    document.body.appendChild(victoryModal);
 
-    // Confeti mejorado
-    for (let i = 0; i < 60; i++) {
-        const confeti = document.createElement('div');
-        confeti.style.position = "fixed";
-        confeti.style.left = Math.random() * 100 + "vw";
-        confeti.style.top = "-40px";
-        confeti.style.width = "16px";
-        confeti.style.height = "32px";
-        confeti.style.background = ["#2ecc40", "#f1c40f", "#e67e22", "#e74c3c", "#3498db", "#9b59b6"][Math.floor(Math.random()*6)];
-        confeti.style.borderRadius = "4px";
-        confeti.style.opacity = 0.85;
-        confeti.style.zIndex = 9999;
-        confeti.style.transform = `rotate(${Math.random()*360}deg)`;
-        confeti.style.transition = "top 2.2s cubic-bezier(.4,1.4,.7,1)";
-        document.body.appendChild(confeti);
+    // Confeti natural mejorado
+    for (let i = 0; i < 100; i++) {
         setTimeout(() => {
-            confeti.style.top = "100vh";
-        }, 10);
-        setTimeout(() => {
-            confeti.remove();
-        }, 2300);
+            const confeti = document.createElement('div');
+            confeti.style.position = "fixed";
+            confeti.style.left = Math.random() * 100 + "vw";
+            confeti.style.top = "-20px";
+            confeti.style.width = Math.random() * 8 + 4 + "px";
+            confeti.style.height = Math.random() * 8 + 4 + "px";
+            confeti.style.background = ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"][Math.floor(Math.random()*6)];
+            confeti.style.borderRadius = "50%";
+            confeti.style.opacity = 0.8;
+            confeti.style.zIndex = 9999;
+            confeti.style.transform = `rotate(${Math.random()*360}deg)`;
+            
+            // Animación natural de caída
+            confeti.style.transition = `top ${Math.random() * 2 + 2}s ease-in, left ${Math.random() * 1 + 0.5}s ease-in-out`;
+            document.body.appendChild(confeti);
+            
+            setTimeout(() => {
+                confeti.style.top = "100vh";
+                confeti.style.left = (parseFloat(confeti.style.left) + (Math.random() - 0.5) * 100) + "vw";
+            }, 10);
+            
+            setTimeout(() => {
+                confeti.remove();
+            }, 4000);
+        }, i * 50);
     }
+    
     setTimeout(() => {
-        victoryMsg.remove();
-    }, 2600);
+        victoryModal.remove();
+    }, 4000);
 }
 
 startBtn.addEventListener("click", iniciarPartido);

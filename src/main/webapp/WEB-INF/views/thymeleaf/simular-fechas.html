@@ -176,6 +176,18 @@
             margin-bottom: 0;
         }
 
+        .mi-equipo {
+            background-color: rgba(0, 255, 200, 0.1);
+            font-weight: bold;
+            border-left: 4px solid #00ffc3;
+            color: #00ffc3;
+        }
+
+        .mi-equipo:hover {
+            background-color: rgba(0, 255, 200, 0.15);
+            transform: translateX(5px);
+        }
+
         .partido-teams {
             display: flex;
             align-items: center;
@@ -401,7 +413,10 @@
                 </div>
 
                 <div th:if="${fecha.partidos != null && !fecha.partidos.empty}">
-                    <div class="partido-item" th:each="partido : ${fecha.partidos}" style="justify-content: center; gap: 8px;">
+                    <div class="partido-item" 
+                         th:each="partido : ${fecha.partidos}" 
+                         th:classappend="${(partido.equipoLocal.id == equipoUsuarioId) or (partido.equipoVisitante.id == equipoUsuarioId) ? 'mi-equipo' : ''}"
+                         style="justify-content: center; gap: 8px;">
                         <span class="equipo-nombre" th:text="${partido.equipoLocal.nombre}">Equipo Local</span>
                         <span class="partido-resultado" style="padding: 0 8px; border-radius: 8px; background: var(--dark-bg); color: var(--text-primary); font-weight: 700; border: 1px solid var(--border-color);">
                         <span th:text="${partido.golesLocal}">0</span> - <span th:text="${partido.golesVisitante}">0</span></span>

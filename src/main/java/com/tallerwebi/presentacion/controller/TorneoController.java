@@ -157,11 +157,24 @@ public class TorneoController {
    }
 
    @GetMapping("/fechas")
-   public ModelAndView mostrarFechas(@RequestParam Long torneoId) {
+   public ModelAndView mostrarFechas(@RequestParam Long torneoId, HttpServletRequest request) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
       ModelAndView mav = new ModelAndView("simular-fechas");
       mav.addObject("fechas", torneo.getFechas());
       mav.addObject("torneoId", torneoId);
+
+      // Obtener información del equipo del usuario
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      Long equipoUsuarioId = null;
+
+      if (usuarioId != null) {
+         Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+         if (usuario != null && usuario.getEquipo() != null) {
+            equipoUsuarioId = usuario.getEquipo().getId();
+         }
+      }
+
+      mav.addObject("equipoUsuarioId", equipoUsuarioId);
 
       return mav;
    }

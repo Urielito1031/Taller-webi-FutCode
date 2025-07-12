@@ -82,6 +82,7 @@
 </div>
 
 <script>
+
     let currentMinute = 0;
     const maxMinute = 90;
 
@@ -94,19 +95,98 @@
     const nombreEquipoLocal = document.getElementById('team1Name').innerText.trim().toLowerCase();
     const nombreEquipoVisitante = document.getElementById('team2Name').innerText.trim().toLowerCase();
 
+    // Función para agregar comentarios especiales (inicio y final)
+    function agregarComentarioEspecial(texto, tipo) {
+        const comentarioEspecial = document.createElement('div');
+        comentarioEspecial.className = 'commentary-item special-comment'; // Agregar clase especial
+        comentarioEspecial.style.display = 'block';
+
+        // Estilos especiales según el tipo
+        if (tipo === 'inicio') {
+            comentarioEspecial.style.borderLeft = '4px solid #00ff88';
+            comentarioEspecial.style.background = 'rgba(0, 255, 136, 0.3)';
+            comentarioEspecial.style.fontWeight = 'bold';
+        } else if (tipo === 'final') {
+            comentarioEspecial.style.borderLeft = '4px solid #ffd700';
+            comentarioEspecial.style.background = 'rgba(255, 215, 0, 0.3)';
+            comentarioEspecial.style.fontWeight = 'bold';
+        }
+
+        comentarioEspecial.innerHTML = `
+        <span class="commentary-minute">${currentMinute}'</span>
+        <span>${texto}</span>
+    `;
+
+        const lista = document.getElementById('commentaryList');
+
+        // Si es comentario de inicio, agregarlo al principio
+        if (tipo === 'inicio') {
+            lista.insertBefore(comentarioEspecial, lista.firstChild);
+        } else {
+            lista.appendChild(comentarioEspecial);
+        }
+
+        // Hacer scroll al comentario
+        comentarioEspecial.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    // Función para inicializar la vista siempre en 0-0
+    function inicializarVista() {
+        // Forzar que siempre muestre 0-0 al cargar
+        document.getElementById('team1Score').innerText = "0";
+        document.getElementById('team2Score').innerText = "0";
+        document.getElementById('totalGoals').innerText = "0";
+        document.getElementById('totalFouls').innerText = "0";
+        document.getElementById('totalCards').innerText = "0";
+        document.getElementById('totalInjuries').innerText = "0";
+        document.getElementById('matchTime').innerText = "0'";
+        document.getElementById('statusIndicator').innerText = 'LISTO PARA COMENZAR';
+        document.getElementById('statusIndicator').style.background = '#6c757d';
+
+        // Resetear variables
+        golesLocal = 0;
+        golesVisitante = 0;
+        totalFaltas = 0;
+        totalTarjetas = 0;
+        totalLesionados = 0;
+        currentMinute = 0;
+
+        // Remover comentarios especiales anteriores
+        document.querySelectorAll('.special-comment').forEach(item => {
+            item.remove();
+        });
+
+        // Ocultar todos los comentarios normales
+        document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
+            item.style.display = 'none';
+            item.style.borderLeft = '4px solid #00ff88';
+            item.style.background = 'rgba(255,255,255,0.1)';
+        });
+    }
+
+    // Inicializar la vista al cargar la página
+    inicializarVista();
+
     // Función mejorada para detectar eventos específicos
     function detectarEvento(texto) {
         const textoLower = texto.toLowerCase();
 
-        // Detectar GOL - Solo frases que confirmen un gol real
+        // Detectar GOL - Basado en las frases exactas del JSON
         const patronesGol = [
             /¡{0,2}goo{2,}l/i,           // ¡GOOOOOL, ¡GOOOOL, etc.
-            /marca un gol/i,             // "marca un gol"
-            /anota para/i,               // "anota para"
-            /gol de/i,                   // "gol de"
-            /encuentra el gol/i,         // "encuentra el gol"
-            /convierte el gol/i,         // "convierte el gol"
-            /define.*gol/i               // "define y marca el gol"
+            /marca un golazo/i,          // "marca un golazo que hace explotar al estadio"
+            /increíble gol/i,            // "¡Increíble gol de {jugador}!"
+            /la rompe toda.*golazo/i,    // "¡{jugador} la rompe toda! Golazo de {equipo}"
+            /qué golazo/i,               // "¡Qué golazo, por favor!"
+            /define como los dioses/i,   // "define como los dioses"
+            /anota para.*tiembla/i,      // "anota para {equipo} y el estadio tiembla"
+            /anota para/i,               // "anota para" (genérico)
+            /gol de/i,                   // "gol de" (genérico)
+            /golazo de/i,                // "golazo de" (genérico)
+            /marca un gol/i,             // "marca un gol" (genérico)
+            /encuentra el gol/i,         // "encuentra el gol" (genérico)
+            /convierte el gol/i,         // "convierte el gol" (genérico)
+            /define.*gol/i               // "define y marca el gol" (genérico)
         ];
 
         // Detectar FALTA - Solo faltas confirmadas
@@ -124,6 +204,18 @@
             /tarjeta\s+(amarilla|roja)/i, // "tarjeta amarilla" o "tarjeta roja"
             /ve\s+la\s+(amarilla|roja)/i, // "ve la amarilla" o "ve la roja"
             /saca\s+(amarilla|roja)/i,    // "saca amarilla" o "saca roja"
+            /ve la cartulina/i,           // "ve la cartulina por protestar"
+            /saca amarilla/i,             // "saca amarilla para"
+            /se la busca.*entrada/i,      // "se la busca con esa entrada"
+            /colegiado amonesta/i,        // "el colegiado amonesta"
+            /tarjeta roja/i,              // "tarjeta roja"
+            /se va expulsado/i,           // "se va expulsado del campo"
+            /expulsión/i,                 // "¡Expulsión!"
+            /ve la roja/i,                // "ve la roja directa"
+            /se acabó.*uno menos/i,       // "se acabó para... se queda con uno menos"
+            /abandona el campo/i,         // "abandona el campo"
+            /expulsado por doble/i,       // "expulsado por doble amarilla"
+            /se va.*diez jugadores/i,     // "se va... se queda con diez jugadores"
             /cartulina/i,                 // "cartulina"
             /amonesta/i,                  // "amonesta"
             /expuls/i                     // "expulsado", "expulsión"
@@ -131,26 +223,33 @@
 
         // Detectar LESIÓN - Solo lesiones confirmadas
         const patronesLesion = [
-            /lesiona/i,                   // "se lesiona", "lesionado"
-            /atención.*médica/i,          // "atención médica"
-            /se.*duele/i,                 // "se duele"
+            /se duele.*césped/i,          // "se duele en el césped y preocupa"
+            /atención.*médica/i,          // "atención médica urgente"
+            /se lesiona.*atendido/i,      // "se lesiona y debe ser atendido"
             /tendido.*campo/i,            // "tendido en el campo"
+            /lesiona/i,                   // "se lesiona", "lesionado"
+            /se.*duele/i,                 // "se duele"
             /solicita.*atención/i,        // "solicita atención"
             /debe.*ser.*atendido/i,       // "debe ser atendido"
-            /se.*retira.*lesion/i         // "se retira lesionado"
+            /se.*retira.*lesion/i,        // "se retira lesionado"
+            /momento.*tensión/i           // "momento de tensión"
         ];
 
-        // Excluir frases que NO son eventos reales
+        // Excluir frases que NO son eventos reales (solo frases GENERAL)
         const patronesExcluir = [
+            /gran jugada.*peligro/i,      // "Gran jugada de {equipo} que llega con peligro"
+            /presiona fuerte.*busca/i,    // "{equipo} presiona fuerte y busca el gol"
+            /contraataque.*aprietos/i,    // "Contraataque fulminante de {equipo}"
+            /qué ocasión.*cerca/i,        // "¡Qué ocasión perdida! {equipo} estuvo muy cerca"
             /casi/i,                      // "casi gol"
             /cerca.*gol/i,                // "cerca del gol"
             /estuvo.*cerca/i,             // "estuvo cerca"
             /por.*poco/i,                 // "por poco"
-            /oportunidad/i,               // "oportunidad perdida"
-            /ocasión/i,                   // "ocasión perdida"
-            /peligro/i,                   // "llega con peligro"
+            /oportunidad.*perdida/i,      // "oportunidad perdida"
+            /ocasión.*perdida/i,          // "ocasión perdida"
+            /llega.*peligro/i,            // "llega con peligro"
             /intenta/i,                   // "intenta"
-            /busca/i,                     // "busca el gol"
+            /busca.*gol/i,                // "busca el gol"
             /podría/i,                    // "podría ser"
             /posible/i                    // "posible"
         ];
@@ -182,30 +281,49 @@
         return null; // No es un evento reconocido
     }
 
-    // Asignar minutos aleatorios
-    document.querySelectorAll('.commentary-item').forEach(item => {
+    // Asignar minutos aleatorios SOLO a comentarios normales
+    document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
         const randomMinute = Math.floor(Math.random() * 91); // 0-90
         item.setAttribute('data-random-minute', randomMinute);
         item.querySelector('.commentary-minute').innerText = randomMinute + "'";
     });
 
-    // Ordenar por minuto
+    // Ordenar por minuto SOLO los comentarios normales
     function ordenarNarracionesPorMinuto() {
         const lista = document.getElementById('commentaryList');
-        const items = Array.from(lista.querySelectorAll('.commentary-item'));
+        const items = Array.from(lista.querySelectorAll('.commentary-item:not(.special-comment)'));
 
         items.sort((a, b) => {
             return parseInt(a.getAttribute('data-random-minute')) - parseInt(b.getAttribute('data-random-minute'));
         });
 
-        lista.innerHTML = "";
-        items.forEach(item => lista.appendChild(item));
+        // Remover solo los comentarios normales y volver a agregarlos ordenados
+        items.forEach(item => item.remove());
+
+        // Agregar los comentarios ordenados después de los especiales
+        const comentariosEspeciales = lista.querySelectorAll('.special-comment');
+        if (comentariosEspeciales.length > 0) {
+            // Insertar después del último comentario especial
+            const ultimoEspecial = comentariosEspeciales[comentariosEspeciales.length - 1];
+            items.forEach(item => {
+                lista.insertBefore(item, ultimoEspecial.nextSibling);
+            });
+        } else {
+            // Si no hay comentarios especiales, agregarlos normalmente
+            items.forEach(item => lista.appendChild(item));
+        }
     }
 
     ordenarNarracionesPorMinuto();
 
     function avanzarTiempo() {
         if (currentMinute > maxMinute) {
+            // Agregar frase de finalización
+            agregarComentarioEspecial(
+                `¡FINAL DEL PARTIDO! ${document.getElementById('team1Name').innerText} ${golesLocal} - ${golesVisitante} ${document.getElementById('team2Name').innerText}. ¡Qué gran encuentro hemos vivido!`,
+                'final'
+            );
+
             document.getElementById('statusIndicator').innerText = 'FINALIZADO';
             document.getElementById('statusIndicator').style.background = '#ff6b6b';
             clearInterval(intervalo);
@@ -215,7 +333,7 @@
 
         document.getElementById('matchTime').innerText = currentMinute + "'";
 
-        document.querySelectorAll('.commentary-item').forEach(item => {
+        document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
             const minuto = parseInt(item.getAttribute('data-random-minute'));
             const yaMostrado = item.style.display === 'block';
 
@@ -285,6 +403,19 @@
 
     document.getElementById('startBtn').addEventListener('click', () => {
         if (!intervalo) {
+            // Asegurar que empezamos desde 0
+            if (currentMinute === 0) {
+                inicializarVista();
+
+                // Agregar frase de inicio
+                setTimeout(() => {
+                    agregarComentarioEspecial(
+                        `¡Comienza el partido! ${document.getElementById('team1Name').innerText} vs ${document.getElementById('team2Name').innerText}. ¡Que empiece el espectáculo!`,
+                        'inicio'
+                    );
+                }, 500);
+            }
+
             intervalo = setInterval(avanzarTiempo, 2000); // 2 segundos = 1' partido
             document.getElementById('statusIndicator').innerText = 'EN JUEGO';
             document.getElementById('statusIndicator').style.background = '#00ff88';
@@ -301,49 +432,1272 @@
     document.getElementById('resetBtn').addEventListener('click', () => {
         clearInterval(intervalo);
         intervalo = null;
-        currentMinute = 0;
 
-        golesLocal = 0;
-        golesVisitante = 0;
-        totalFaltas = 0;
-        totalTarjetas = 0;
-        totalLesionados = 0;
+        // Usar la función de inicialización
+        inicializarVista();
 
-        document.getElementById('matchTime').innerText = "0'";
-        document.getElementById('team1Score').innerText = "0";
-        document.getElementById('team2Score').innerText = "0";
-        document.getElementById('totalGoals').innerText = "0";
-        document.getElementById('totalFouls').innerText = "0";
-        document.getElementById('totalCards').innerText = "0";
-        document.getElementById('totalInjuries').innerText = "0";
-
-        document.getElementById('statusIndicator').innerText = 'EN JUEGO';
-        document.getElementById('statusIndicator').style.background = '#00ff88';
-
-        document.querySelectorAll('.commentary-item').forEach(item => {
-            item.style.display = 'none';
-            item.style.borderLeft = '4px solid #00ff88';
-            item.style.background = 'rgba(255,255,255,0.1)';
+        // Reasignar minutos aleatorios SOLO a comentarios normales
+        document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
+            const randomMinute = Math.floor(Math.random() * 91);
+            item.setAttribute('data-random-minute', randomMinute);
+            item.querySelector('.commentary-minute').innerText = randomMinute + "'";
         });
+
+        // Reordenar comentarios
+        ordenarNarracionesPorMinuto();
     });
 
-    // Función para omitir narración (acelerar tiempo)
+    // Función para omitir narración (acelerar hasta el final)
     document.getElementById('omitebtn').addEventListener('click', () => {
         if (intervalo) {
-            // Acelerar temporalmente
+            // Acelerar hasta el final del partido
             clearInterval(intervalo);
-            intervalo = setInterval(avanzarTiempo, 200); // 0.2 segundos por minuto
+            intervalo = setInterval(avanzarTiempo, 100); // 0.1 segundos por minuto (muy rápido)
 
-            // Volver a velocidad normal después de 10 segundos
-            setTimeout(() => {
-                if (intervalo) {
-                    clearInterval(intervalo);
-                    intervalo = setInterval(avanzarTiempo, 2000);
-                }
-            }, 10000);
+            // Cambiar estado visual
+            document.getElementById('statusIndicator').innerText = 'ACELERANDO...';
+            document.getElementById('statusIndicator').style.background = '#ff4757';
         }
     });
+
+    // let currentMinute = 0;
+    // const maxMinute = 90;
+    //
+    // let golesLocal = 0;
+    // let golesVisitante = 0;
+    // let totalFaltas = 0;
+    // let totalTarjetas = 0;
+    // let totalLesionados = 0;
+    //
+    // const nombreEquipoLocal = document.getElementById('team1Name').innerText.trim().toLowerCase();
+    // const nombreEquipoVisitante = document.getElementById('team2Name').innerText.trim().toLowerCase();
+    //
+    // // Función para agregar comentarios especiales (inicio y final)
+    // function agregarComentarioEspecial(texto, tipo) {
+    //     const comentarioEspecial = document.createElement('div');
+    //     comentarioEspecial.className = 'commentary-item special-comment'; // Agregar clase especial
+    //     comentarioEspecial.style.display = 'block';
+    //
+    //     // Estilos especiales según el tipo
+    //     if (tipo === 'inicio') {
+    //         comentarioEspecial.style.borderLeft = '4px solid #00ff88';
+    //         comentarioEspecial.style.background = 'rgba(0, 255, 136, 0.3)';
+    //         comentarioEspecial.style.fontWeight = 'bold';
+    //     } else if (tipo === 'final') {
+    //         comentarioEspecial.style.borderLeft = '4px solid #ffd700';
+    //         comentarioEspecial.style.background = 'rgba(255, 215, 0, 0.3)';
+    //         comentarioEspecial.style.fontWeight = 'bold';
+    //     }
+    //
+    //     comentarioEspecial.innerHTML = `
+    //     <span class="commentary-minute">${currentMinute}'</span>
+    //     <span>${texto}</span>
+    // `;
+    //
+    //     const lista = document.getElementById('commentaryList');
+    //
+    //     // Si es comentario de inicio, agregarlo al principio
+    //     if (tipo === 'inicio') {
+    //         lista.insertBefore(comentarioEspecial, lista.firstChild);
+    //     } else {
+    //         lista.appendChild(comentarioEspecial);
+    //     }
+    //
+    //     // Hacer scroll al comentario
+    //     comentarioEspecial.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    // }
+    //
+    // // Función para inicializar la vista siempre en 0-0
+    // function inicializarVista() {
+    //     // Forzar que siempre muestre 0-0 al cargar
+    //     document.getElementById('team1Score').innerText = "0";
+    //     document.getElementById('team2Score').innerText = "0";
+    //     document.getElementById('totalGoals').innerText = "0";
+    //     document.getElementById('totalFouls').innerText = "0";
+    //     document.getElementById('totalCards').innerText = "0";
+    //     document.getElementById('totalInjuries').innerText = "0";
+    //     document.getElementById('matchTime').innerText = "0'";
+    //     document.getElementById('statusIndicator').innerText = 'LISTO PARA COMENZAR';
+    //     document.getElementById('statusIndicator').style.background = '#6c757d';
+    //
+    //     // Resetear variables
+    //     golesLocal = 0;
+    //     golesVisitante = 0;
+    //     totalFaltas = 0;
+    //     totalTarjetas = 0;
+    //     totalLesionados = 0;
+    //     currentMinute = 0;
+    //
+    //     // Remover comentarios especiales anteriores
+    //     document.querySelectorAll('.special-comment').forEach(item => {
+    //         item.remove();
+    //     });
+    //
+    //     // Ocultar todos los comentarios normales
+    //     document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
+    //         item.style.display = 'none';
+    //         item.style.borderLeft = '4px solid #00ff88';
+    //         item.style.background = 'rgba(255,255,255,0.1)';
+    //     });
+    // }
+    //
+    // // Inicializar la vista al cargar la página
+    // inicializarVista();
+    //
+    // // Función mejorada para detectar eventos específicos
+    // function detectarEvento(texto) {
+    //     const textoLower = texto.toLowerCase();
+    //
+    //     // Detectar GOL - Solo frases que confirmen un gol real
+    //     const patronesGol = [
+    //         /¡{0,2}goo{2,}l/i,           // ¡GOOOOOL, ¡GOOOOL, etc.
+    //         /marca un gol/i,             // "marca un gol"
+    //         /anota para/i,               // "anota para"
+    //         /gol de/i,                   // "gol de"
+    //         /encuentra el gol/i,         // "encuentra el gol"
+    //         /convierte el gol/i,         // "convierte el gol"
+    //         /define.*gol/i               // "define y marca el gol"
+    //     ];
+    //
+    //     // Detectar FALTA - Solo faltas confirmadas
+    //     const patronesFalta = [
+    //         /¡{0,2}falta!/i,             // ¡Falta!
+    //         /comete.*falta/i,            // "comete una falta"
+    //         /entrada.*dura/i,            // "entrada dura"
+    //         /juego.*brusco/i,            // "juego brusco"
+    //         /infracción/i,               // "infracción"
+    //         /el árbitro.*falta/i         // "el árbitro marca falta"
+    //     ];
+    //
+    //     // Detectar TARJETA - Solo tarjetas mostradas
+    //     const patronesTarjeta = [
+    //         /tarjeta\s+(amarilla|roja)/i, // "tarjeta amarilla" o "tarjeta roja"
+    //         /ve\s+la\s+(amarilla|roja)/i, // "ve la amarilla" o "ve la roja"
+    //         /saca\s+(amarilla|roja)/i,    // "saca amarilla" o "saca roja"
+    //         /cartulina/i,                 // "cartulina"
+    //         /amonesta/i,                  // "amonesta"
+    //         /expuls/i                     // "expulsado", "expulsión"
+    //     ];
+    //
+    //     // Detectar LESIÓN - Solo lesiones confirmadas
+    //     const patronesLesion = [
+    //         /lesiona/i,                   // "se lesiona", "lesionado"
+    //         /atención.*médica/i,          // "atención médica"
+    //         /se.*duele/i,                 // "se duele"
+    //         /tendido.*campo/i,            // "tendido en el campo"
+    //         /solicita.*atención/i,        // "solicita atención"
+    //         /debe.*ser.*atendido/i,       // "debe ser atendido"
+    //         /se.*retira.*lesion/i         // "se retira lesionado"
+    //     ];
+    //
+    //     // Excluir frases que NO son eventos reales
+    //     const patronesExcluir = [
+    //         /casi/i,                      // "casi gol"
+    //         /cerca.*gol/i,                // "cerca del gol"
+    //         /estuvo.*cerca/i,             // "estuvo cerca"
+    //         /por.*poco/i,                 // "por poco"
+    //         /oportunidad/i,               // "oportunidad perdida"
+    //         /ocasión/i,                   // "ocasión perdida"
+    //         /peligro/i,                   // "llega con peligro"
+    //         /intenta/i,                   // "intenta"
+    //         /busca/i,                     // "busca el gol"
+    //         /podría/i,                    // "podría ser"
+    //         /posible/i                    // "posible"
+    //     ];
+    //
+    //     // Primero verificar si debe ser excluido
+    //     for (let patron of patronesExcluir) {
+    //         if (patron.test(textoLower)) {
+    //             return null; // No es un evento real
+    //         }
+    //     }
+    //
+    //     // Detectar tipo de evento
+    //     if (patronesGol.some(patron => patron.test(textoLower))) {
+    //         return 'gol';
+    //     }
+    //
+    //     if (patronesFalta.some(patron => patron.test(textoLower))) {
+    //         return 'falta';
+    //     }
+    //
+    //     if (patronesTarjeta.some(patron => patron.test(textoLower))) {
+    //         return 'tarjeta';
+    //     }
+    //
+    //     if (patronesLesion.some(patron => patron.test(textoLower))) {
+    //         return 'lesion';
+    //     }
+    //
+    //     return null; // No es un evento reconocido
+    // }
+    //
+    // // Asignar minutos aleatorios SOLO a comentarios normales
+    // document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
+    //     const randomMinute = Math.floor(Math.random() * 91); // 0-90
+    //     item.setAttribute('data-random-minute', randomMinute);
+    //     item.querySelector('.commentary-minute').innerText = randomMinute + "'";
+    // });
+    //
+    // // Ordenar por minuto SOLO los comentarios normales
+    // function ordenarNarracionesPorMinuto() {
+    //     const lista = document.getElementById('commentaryList');
+    //     const items = Array.from(lista.querySelectorAll('.commentary-item:not(.special-comment)'));
+    //
+    //     items.sort((a, b) => {
+    //         return parseInt(a.getAttribute('data-random-minute')) - parseInt(b.getAttribute('data-random-minute'));
+    //     });
+    //
+    //     // Remover solo los comentarios normales y volver a agregarlos ordenados
+    //     items.forEach(item => item.remove());
+    //
+    //     // Agregar los comentarios ordenados después de los especiales
+    //     const comentariosEspeciales = lista.querySelectorAll('.special-comment');
+    //     if (comentariosEspeciales.length > 0) {
+    //         // Insertar después del último comentario especial
+    //         const ultimoEspecial = comentariosEspeciales[comentariosEspeciales.length - 1];
+    //         items.forEach(item => {
+    //             lista.insertBefore(item, ultimoEspecial.nextSibling);
+    //         });
+    //     } else {
+    //         // Si no hay comentarios especiales, agregarlos normalmente
+    //         items.forEach(item => lista.appendChild(item));
+    //     }
+    // }
+    //
+    // ordenarNarracionesPorMinuto();
+    //
+    // function avanzarTiempo() {
+    //     if (currentMinute > maxMinute) {
+    //         // Agregar frase de finalización
+    //         agregarComentarioEspecial(
+    //             `¡FINAL DEL PARTIDO! ${document.getElementById('team1Name').innerText} ${golesLocal} - ${golesVisitante} ${document.getElementById('team2Name').innerText}. ¡Qué gran encuentro hemos vivido!`,
+    //             'final'
+    //         );
+    //
+    //         document.getElementById('statusIndicator').innerText = 'FINALIZADO';
+    //         document.getElementById('statusIndicator').style.background = '#ff6b6b';
+    //         clearInterval(intervalo);
+    //         intervalo = null;
+    //         return;
+    //     }
+    //
+    //     document.getElementById('matchTime').innerText = currentMinute + "'";
+    //
+    //     document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
+    //         const minuto = parseInt(item.getAttribute('data-random-minute'));
+    //         const yaMostrado = item.style.display === 'block';
+    //
+    //         if (minuto === currentMinute && !yaMostrado) {
+    //             item.style.display = 'block';
+    //
+    //             // Hacer scroll al comentario más reciente
+    //             item.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    //
+    //             const textoCompleto = item.querySelector('span:last-child').innerText;
+    //             const evento = detectarEvento(textoCompleto);
+    //
+    //             if (evento) {
+    //                 switch (evento) {
+    //                     case 'gol':
+    //                         // Determinar qué equipo marcó basándose en el texto
+    //                         if (textoCompleto.toLowerCase().includes(nombreEquipoLocal)) {
+    //                             golesLocal++;
+    //                             document.getElementById('team1Score').innerText = golesLocal;
+    //                         } else if (textoCompleto.toLowerCase().includes(nombreEquipoVisitante)) {
+    //                             golesVisitante++;
+    //                             document.getElementById('team2Score').innerText = golesVisitante;
+    //                         }
+    //                         document.getElementById('totalGoals').innerText = golesLocal + golesVisitante;
+    //
+    //                         // Efecto visual para gol
+    //                         item.style.borderLeft = '4px solid #ffd700';
+    //                         item.style.background = 'rgba(255, 215, 0, 0.2)';
+    //                         break;
+    //
+    //                     case 'falta':
+    //                         totalFaltas++;
+    //                         document.getElementById('totalFouls').innerText = totalFaltas;
+    //
+    //                         // Efecto visual para falta
+    //                         item.style.borderLeft = '4px solid #ff9800';
+    //                         item.style.background = 'rgba(255, 152, 0, 0.2)';
+    //                         break;
+    //
+    //                     case 'tarjeta':
+    //                         totalTarjetas++;
+    //                         document.getElementById('totalCards').innerText = totalTarjetas;
+    //
+    //                         // Efecto visual para tarjeta
+    //                         const esRoja = textoCompleto.toLowerCase().includes('roja');
+    //                         item.style.borderLeft = esRoja ? '4px solid #f44336' : '4px solid #ffeb3b';
+    //                         item.style.background = esRoja ? 'rgba(244, 67, 54, 0.2)' : 'rgba(255, 235, 59, 0.2)';
+    //                         break;
+    //
+    //                     case 'lesion':
+    //                         totalLesionados++;
+    //                         document.getElementById('totalInjuries').innerText = totalLesionados;
+    //
+    //                         // Efecto visual para lesión
+    //                         item.style.borderLeft = '4px solid #e91e63';
+    //                         item.style.background = 'rgba(233, 30, 99, 0.2)';
+    //                         break;
+    //                 }
+    //             }
+    //         }
+    //     });
+    //
+    //     currentMinute++;
+    // }
+    //
+    // let intervalo = null;
+    //
+    // document.getElementById('startBtn').addEventListener('click', () => {
+    //     if (!intervalo) {
+    //         // Asegurar que empezamos desde 0
+    //         if (currentMinute === 0) {
+    //             inicializarVista();
+    //
+    //             // Agregar frase de inicio
+    //             setTimeout(() => {
+    //                 agregarComentarioEspecial(
+    //                     `¡Comienza el partido! ${document.getElementById('team1Name').innerText} vs ${document.getElementById('team2Name').innerText}. ¡Que empiece el espectáculo!`,
+    //                     'inicio'
+    //                 );
+    //             }, 500);
+    //         }
+    //
+    //         intervalo = setInterval(avanzarTiempo, 2000); // 2 segundos = 1' partido
+    //         document.getElementById('statusIndicator').innerText = 'EN JUEGO';
+    //         document.getElementById('statusIndicator').style.background = '#00ff88';
+    //     }
+    // });
+    //
+    // document.getElementById('pauseBtn').addEventListener('click', () => {
+    //     clearInterval(intervalo);
+    //     intervalo = null;
+    //     document.getElementById('statusIndicator').innerText = 'PAUSADO';
+    //     document.getElementById('statusIndicator').style.background = '#ff9800';
+    // });
+    //
+    // document.getElementById('resetBtn').addEventListener('click', () => {
+    //     clearInterval(intervalo);
+    //     intervalo = null;
+    //
+    //     // Usar la función de inicialización
+    //     inicializarVista();
+    //
+    //     // Reasignar minutos aleatorios SOLO a comentarios normales
+    //     document.querySelectorAll('.commentary-item:not(.special-comment)').forEach(item => {
+    //         const randomMinute = Math.floor(Math.random() * 91);
+    //         item.setAttribute('data-random-minute', randomMinute);
+    //         item.querySelector('.commentary-minute').innerText = randomMinute + "'";
+    //     });
+    //
+    //     // Reordenar comentarios
+    //     ordenarNarracionesPorMinuto();
+    // });
+    //
+    // // Función para omitir narración (acelerar hasta el final)
+    // document.getElementById('omitebtn').addEventListener('click', () => {
+    //     if (intervalo) {
+    //         // Acelerar hasta el final del partido
+    //         clearInterval(intervalo);
+    //         intervalo = setInterval(avanzarTiempo, 100); // 0.1 segundos por minuto (muy rápido)
+    //
+    //         // Cambiar estado visual
+    //         document.getElementById('statusIndicator').innerText = 'ACELERANDO...';
+    //         document.getElementById('statusIndicator').style.background = '#ff4757';
+    //     }
+    // });
 </script>
+
+<!--<script>-->
+<!--    let currentMinute = 0;-->
+<!--    const maxMinute = 90;-->
+
+<!--    let golesLocal = 0;-->
+<!--    let golesVisitante = 0;-->
+<!--    let totalFaltas = 0;-->
+<!--    let totalTarjetas = 0;-->
+<!--    let totalLesionados = 0;-->
+
+<!--    const nombreEquipoLocal = document.getElementById('team1Name').innerText.trim().toLowerCase();-->
+<!--    const nombreEquipoVisitante = document.getElementById('team2Name').innerText.trim().toLowerCase();-->
+
+<!--    // Función para agregar comentarios especiales (inicio y final)-->
+<!--    function agregarComentarioEspecial(texto, tipo) {-->
+<!--        const comentarioEspecial = document.createElement('div');-->
+<!--        comentarioEspecial.className = 'commentary-item';-->
+<!--        comentarioEspecial.style.display = 'block';-->
+
+<!--        // Estilos especiales según el tipo-->
+<!--        if (tipo === 'inicio') {-->
+<!--            comentarioEspecial.style.borderLeft = '4px solid #00ff88';-->
+<!--            comentarioEspecial.style.background = 'rgba(0, 255, 136, 0.3)';-->
+<!--            comentarioEspecial.style.fontWeight = 'bold';-->
+<!--        } else if (tipo === 'final') {-->
+<!--            comentarioEspecial.style.borderLeft = '4px solid #ffd700';-->
+<!--            comentarioEspecial.style.background = 'rgba(255, 215, 0, 0.3)';-->
+<!--            comentarioEspecial.style.fontWeight = 'bold';-->
+<!--        }-->
+
+<!--        comentarioEspecial.innerHTML = `-->
+<!--            <span class="commentary-minute">${currentMinute}'</span>-->
+<!--            <span>${texto}</span>-->
+<!--        `;-->
+
+<!--        const lista = document.getElementById('commentaryList');-->
+<!--        lista.appendChild(comentarioEspecial);-->
+
+<!--        // Hacer scroll al comentario-->
+<!--        comentarioEspecial.scrollIntoView({ behavior: 'smooth', block: 'end' });-->
+<!--    }-->
+
+<!--    // Función para inicializar la vista siempre en 0-0-->
+<!--    function inicializarVista() {-->
+<!--        // Forzar que siempre muestre 0-0 al cargar-->
+<!--        document.getElementById('team1Score').innerText = "0";-->
+<!--        document.getElementById('team2Score').innerText = "0";-->
+<!--        document.getElementById('totalGoals').innerText = "0";-->
+<!--        document.getElementById('totalFouls').innerText = "0";-->
+<!--        document.getElementById('totalCards').innerText = "0";-->
+<!--        document.getElementById('totalInjuries').innerText = "0";-->
+<!--        document.getElementById('matchTime').innerText = "0'";-->
+<!--        document.getElementById('statusIndicator').innerText = 'LISTO PARA COMENZAR';-->
+<!--        document.getElementById('statusIndicator').style.background = '#6c757d';-->
+
+<!--        // Resetear variables-->
+<!--        golesLocal = 0;-->
+<!--        golesVisitante = 0;-->
+<!--        totalFaltas = 0;-->
+<!--        totalTarjetas = 0;-->
+<!--        totalLesionados = 0;-->
+<!--        currentMinute = 0;-->
+
+<!--        // Ocultar todos los comentarios-->
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            item.style.display = 'none';-->
+<!--            item.style.borderLeft = '4px solid #00ff88';-->
+<!--            item.style.background = 'rgba(255,255,255,0.1)';-->
+<!--        });-->
+<!--    }-->
+
+<!--    // Inicializar la vista al cargar la página-->
+<!--    inicializarVista();-->
+
+<!--    // Función mejorada para detectar eventos específicos-->
+<!--    function detectarEvento(texto) {-->
+<!--        const textoLower = texto.toLowerCase();-->
+
+<!--        // Detectar GOL - Solo frases que confirmen un gol real-->
+<!--        const patronesGol = [-->
+<!--            /¡{0,2}goo{2,}l/i,           // ¡GOOOOOL, ¡GOOOOL, etc.-->
+<!--            /marca un gol/i,             // "marca un gol"-->
+<!--            /anota para/i,               // "anota para"-->
+<!--            /gol de/i,                   // "gol de"-->
+<!--            /encuentra el gol/i,         // "encuentra el gol"-->
+<!--            /convierte el gol/i,         // "convierte el gol"-->
+<!--            /define.*gol/i               // "define y marca el gol"-->
+<!--        ];-->
+
+<!--        // Detectar FALTA - Solo faltas confirmadas-->
+<!--        const patronesFalta = [-->
+<!--            /¡{0,2}falta!/i,             // ¡Falta!-->
+<!--            /comete.*falta/i,            // "comete una falta"-->
+<!--            /entrada.*dura/i,            // "entrada dura"-->
+<!--            /juego.*brusco/i,            // "juego brusco"-->
+<!--            /infracción/i,               // "infracción"-->
+<!--            /el árbitro.*falta/i         // "el árbitro marca falta"-->
+<!--        ];-->
+
+<!--        // Detectar TARJETA - Solo tarjetas mostradas-->
+<!--        const patronesTarjeta = [-->
+<!--            /tarjeta\s+(amarilla|roja)/i, // "tarjeta amarilla" o "tarjeta roja"-->
+<!--            /ve\s+la\s+(amarilla|roja)/i, // "ve la amarilla" o "ve la roja"-->
+<!--            /saca\s+(amarilla|roja)/i,    // "saca amarilla" o "saca roja"-->
+<!--            /cartulina/i,                 // "cartulina"-->
+<!--            /amonesta/i,                  // "amonesta"-->
+<!--            /expuls/i                     // "expulsado", "expulsión"-->
+<!--        ];-->
+
+<!--        // Detectar LESIÓN - Solo lesiones confirmadas-->
+<!--        const patronesLesion = [-->
+<!--            /lesiona/i,                   // "se lesiona", "lesionado"-->
+<!--            /atención.*médica/i,          // "atención médica"-->
+<!--            /se.*duele/i,                 // "se duele"-->
+<!--            /tendido.*campo/i,            // "tendido en el campo"-->
+<!--            /solicita.*atención/i,        // "solicita atención"-->
+<!--            /debe.*ser.*atendido/i,       // "debe ser atendido"-->
+<!--            /se.*retira.*lesion/i         // "se retira lesionado"-->
+<!--        ];-->
+
+<!--        // Excluir frases que NO son eventos reales-->
+<!--        const patronesExcluir = [-->
+<!--            /casi/i,                      // "casi gol"-->
+<!--            /cerca.*gol/i,                // "cerca del gol"-->
+<!--            /estuvo.*cerca/i,             // "estuvo cerca"-->
+<!--            /por.*poco/i,                 // "por poco"-->
+<!--            /oportunidad/i,               // "oportunidad perdida"-->
+<!--            /ocasión/i,                   // "ocasión perdida"-->
+<!--            /peligro/i,                   // "llega con peligro"-->
+<!--            /intenta/i,                   // "intenta"-->
+<!--            /busca/i,                     // "busca el gol"-->
+<!--            /podría/i,                    // "podría ser"-->
+<!--            /posible/i                    // "posible"-->
+<!--        ];-->
+
+<!--        // Primero verificar si debe ser excluido-->
+<!--        for (let patron of patronesExcluir) {-->
+<!--            if (patron.test(textoLower)) {-->
+<!--                return null; // No es un evento real-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Detectar tipo de evento-->
+<!--        if (patronesGol.some(patron => patron.test(textoLower))) {-->
+<!--            return 'gol';-->
+<!--        }-->
+
+<!--        if (patronesFalta.some(patron => patron.test(textoLower))) {-->
+<!--            return 'falta';-->
+<!--        }-->
+
+<!--        if (patronesTarjeta.some(patron => patron.test(textoLower))) {-->
+<!--            return 'tarjeta';-->
+<!--        }-->
+
+<!--        if (patronesLesion.some(patron => patron.test(textoLower))) {-->
+<!--            return 'lesion';-->
+<!--        }-->
+
+<!--        return null; // No es un evento reconocido-->
+<!--    }-->
+
+<!--    // Asignar minutos aleatorios-->
+<!--    document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--        const randomMinute = Math.floor(Math.random() * 91); // 0-90-->
+<!--        item.setAttribute('data-random-minute', randomMinute);-->
+<!--        item.querySelector('.commentary-minute').innerText = randomMinute + "'";-->
+<!--    });-->
+
+<!--    // Ordenar por minuto-->
+<!--    function ordenarNarracionesPorMinuto() {-->
+<!--        const lista = document.getElementById('commentaryList');-->
+<!--        const items = Array.from(lista.querySelectorAll('.commentary-item'));-->
+
+<!--        items.sort((a, b) => {-->
+<!--            return parseInt(a.getAttribute('data-random-minute')) - parseInt(b.getAttribute('data-random-minute'));-->
+<!--        });-->
+
+<!--        lista.innerHTML = "";-->
+<!--        items.forEach(item => lista.appendChild(item));-->
+<!--    }-->
+
+<!--    ordenarNarracionesPorMinuto();-->
+
+<!--    function avanzarTiempo() {-->
+<!--        if (currentMinute > maxMinute) {-->
+<!--            // Agregar frase de finalización-->
+<!--            agregarComentarioEspecial(-->
+<!--                `¡FINAL DEL PARTIDO! ${document.getElementById('team1Name').innerText} ${golesLocal} - ${golesVisitante} ${document.getElementById('team2Name').innerText}. ¡Qué gran encuentro hemos vivido!`,-->
+<!--                'final'-->
+<!--            );-->
+
+<!--            document.getElementById('statusIndicator').innerText = 'FINALIZADO';-->
+<!--            document.getElementById('statusIndicator').style.background = '#ff6b6b';-->
+<!--            clearInterval(intervalo);-->
+<!--            intervalo = null;-->
+<!--            return;-->
+<!--        }-->
+
+<!--        document.getElementById('matchTime').innerText = currentMinute + "'";-->
+
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            const minuto = parseInt(item.getAttribute('data-random-minute'));-->
+<!--            const yaMostrado = item.style.display === 'block';-->
+
+<!--            if (minuto === currentMinute && !yaMostrado) {-->
+<!--                item.style.display = 'block';-->
+
+<!--                // Hacer scroll al comentario más reciente-->
+<!--                item.scrollIntoView({ behavior: 'smooth', block: 'end' });-->
+
+<!--                const textoCompleto = item.querySelector('span:last-child').innerText;-->
+<!--                const evento = detectarEvento(textoCompleto);-->
+
+<!--                if (evento) {-->
+<!--                    switch (evento) {-->
+<!--                        case 'gol':-->
+<!--                            // Determinar qué equipo marcó basándose en el texto-->
+<!--                            if (textoCompleto.toLowerCase().includes(nombreEquipoLocal)) {-->
+<!--                                golesLocal++;-->
+<!--                                document.getElementById('team1Score').innerText = golesLocal;-->
+<!--                            } else if (textoCompleto.toLowerCase().includes(nombreEquipoVisitante)) {-->
+<!--                                golesVisitante++;-->
+<!--                                document.getElementById('team2Score').innerText = golesVisitante;-->
+<!--                            }-->
+<!--                            document.getElementById('totalGoals').innerText = golesLocal + golesVisitante;-->
+
+<!--                            // Efecto visual para gol-->
+<!--                            item.style.borderLeft = '4px solid #ffd700';-->
+<!--                            item.style.background = 'rgba(255, 215, 0, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'falta':-->
+<!--                            totalFaltas++;-->
+<!--                            document.getElementById('totalFouls').innerText = totalFaltas;-->
+
+<!--                            // Efecto visual para falta-->
+<!--                            item.style.borderLeft = '4px solid #ff9800';-->
+<!--                            item.style.background = 'rgba(255, 152, 0, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'tarjeta':-->
+<!--                            totalTarjetas++;-->
+<!--                            document.getElementById('totalCards').innerText = totalTarjetas;-->
+
+<!--                            // Efecto visual para tarjeta-->
+<!--                            const esRoja = textoCompleto.toLowerCase().includes('roja');-->
+<!--                            item.style.borderLeft = esRoja ? '4px solid #f44336' : '4px solid #ffeb3b';-->
+<!--                            item.style.background = esRoja ? 'rgba(244, 67, 54, 0.2)' : 'rgba(255, 235, 59, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'lesion':-->
+<!--                            totalLesionados++;-->
+<!--                            document.getElementById('totalInjuries').innerText = totalLesionados;-->
+
+<!--                            // Efecto visual para lesión-->
+<!--                            item.style.borderLeft = '4px solid #e91e63';-->
+<!--                            item.style.background = 'rgba(233, 30, 99, 0.2)';-->
+<!--                            break;-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
+
+<!--        currentMinute++;-->
+<!--    }-->
+
+<!--    let intervalo = null;-->
+
+<!--    document.getElementById('startBtn').addEventListener('click', () => {-->
+<!--        if (!intervalo) {-->
+<!--            // Asegurar que empezamos desde 0-->
+<!--            if (currentMinute === 0) {-->
+<!--                inicializarVista();-->
+
+<!--                // Agregar frase de inicio-->
+<!--                setTimeout(() => {-->
+<!--                    agregarComentarioEspecial(-->
+<!--                        `¡Comienza el partido! ${document.getElementById('team1Name').innerText} vs ${document.getElementById('team2Name').innerText}. ¡Que empiece el espectáculo!`,-->
+<!--                        'inicio'-->
+<!--                    );-->
+<!--                }, 500);-->
+<!--            }-->
+
+<!--            intervalo = setInterval(avanzarTiempo, 2000); // 2 segundos = 1' partido-->
+<!--            document.getElementById('statusIndicator').innerText = 'EN JUEGO';-->
+<!--            document.getElementById('statusIndicator').style.background = '#00ff88';-->
+<!--        }-->
+<!--    });-->
+
+<!--    document.getElementById('pauseBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+<!--        document.getElementById('statusIndicator').innerText = 'PAUSADO';-->
+<!--        document.getElementById('statusIndicator').style.background = '#ff9800';-->
+<!--    });-->
+
+<!--    document.getElementById('resetBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+
+<!--        // Usar la función de inicialización-->
+<!--        inicializarVista();-->
+
+<!--        // Reasignar minutos aleatorios-->
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            const randomMinute = Math.floor(Math.random() * 91);-->
+<!--            item.setAttribute('data-random-minute', randomMinute);-->
+<!--            item.querySelector('.commentary-minute').innerText = randomMinute + "'";-->
+<!--        });-->
+
+<!--        // Reordenar comentarios-->
+<!--        ordenarNarracionesPorMinuto();-->
+<!--    });-->
+
+<!--    // Función para omitir narración (acelerar tiempo)-->
+<!--    document.getElementById('omitebtn').addEventListener('click', () => {-->
+<!--        if (intervalo) {-->
+<!--            // Acelerar temporalmente-->
+<!--            clearInterval(intervalo);-->
+<!--            intervalo = setInterval(avanzarTiempo, 200); // 0.2 segundos por minuto-->
+
+<!--            // Volver a velocidad normal después de 10 segundos-->
+<!--            setTimeout(() => {-->
+<!--                if (intervalo) {-->
+<!--                    clearInterval(intervalo);-->
+<!--                    intervalo = setInterval(avanzarTiempo, 2000);-->
+<!--                }-->
+<!--            }, 10000);-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+
+<!--<script>-->
+<!--    let currentMinute = 0;-->
+<!--    const maxMinute = 90;-->
+
+<!--    let golesLocal = 0;-->
+<!--    let golesVisitante = 0;-->
+<!--    let totalFaltas = 0;-->
+<!--    let totalTarjetas = 0;-->
+<!--    let totalLesionados = 0;-->
+
+<!--    const nombreEquipoLocal = document.getElementById('team1Name').innerText.trim().toLowerCase();-->
+<!--    const nombreEquipoVisitante = document.getElementById('team2Name').innerText.trim().toLowerCase();-->
+
+<!--    // Función para inicializar la vista siempre en 0-0-->
+<!--    function inicializarVista() {-->
+<!--        // Forzar que siempre muestre 0-0 al cargar-->
+<!--        document.getElementById('team1Score').innerText = "0";-->
+<!--        document.getElementById('team2Score').innerText = "0";-->
+<!--        document.getElementById('totalGoals').innerText = "0";-->
+<!--        document.getElementById('totalFouls').innerText = "0";-->
+<!--        document.getElementById('totalCards').innerText = "0";-->
+<!--        document.getElementById('totalInjuries').innerText = "0";-->
+<!--        document.getElementById('matchTime').innerText = "0'";-->
+<!--        document.getElementById('statusIndicator').innerText = 'LISTO PARA COMENZAR';-->
+<!--        document.getElementById('statusIndicator').style.background = '#6c757d';-->
+
+<!--        // Resetear variables-->
+<!--        golesLocal = 0;-->
+<!--        golesVisitante = 0;-->
+<!--        totalFaltas = 0;-->
+<!--        totalTarjetas = 0;-->
+<!--        totalLesionados = 0;-->
+<!--        currentMinute = 0;-->
+
+<!--        // Ocultar todos los comentarios-->
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            item.style.display = 'none';-->
+<!--            item.style.borderLeft = '4px solid #00ff88';-->
+<!--            item.style.background = 'rgba(255,255,255,0.1)';-->
+<!--        });-->
+<!--    }-->
+
+<!--    // Inicializar la vista al cargar la página-->
+<!--    inicializarVista();-->
+
+<!--    // Función mejorada para detectar eventos específicos-->
+<!--    function detectarEvento(texto) {-->
+<!--        const textoLower = texto.toLowerCase();-->
+
+<!--        // Detectar GOL - Solo frases que confirmen un gol real-->
+<!--        const patronesGol = [-->
+<!--            /¡{0,2}goo{2,}l/i,           // ¡GOOOOOL, ¡GOOOOL, etc.-->
+<!--            /marca un gol/i,             // "marca un gol"-->
+<!--            /anota para/i,               // "anota para"-->
+<!--            /gol de/i,                   // "gol de"-->
+<!--            /encuentra el gol/i,         // "encuentra el gol"-->
+<!--            /convierte el gol/i,         // "convierte el gol"-->
+<!--            /define.*gol/i               // "define y marca el gol"-->
+<!--        ];-->
+
+<!--        // Detectar FALTA - Solo faltas confirmadas-->
+<!--        const patronesFalta = [-->
+<!--            /¡{0,2}falta!/i,             // ¡Falta!-->
+<!--            /comete.*falta/i,            // "comete una falta"-->
+<!--            /entrada.*dura/i,            // "entrada dura"-->
+<!--            /juego.*brusco/i,            // "juego brusco"-->
+<!--            /infracción/i,               // "infracción"-->
+<!--            /el árbitro.*falta/i         // "el árbitro marca falta"-->
+<!--        ];-->
+
+<!--        // Detectar TARJETA - Solo tarjetas mostradas-->
+<!--        const patronesTarjeta = [-->
+<!--            /tarjeta\s+(amarilla|roja)/i, // "tarjeta amarilla" o "tarjeta roja"-->
+<!--            /ve\s+la\s+(amarilla|roja)/i, // "ve la amarilla" o "ve la roja"-->
+<!--            /saca\s+(amarilla|roja)/i,    // "saca amarilla" o "saca roja"-->
+<!--            /cartulina/i,                 // "cartulina"-->
+<!--            /amonesta/i,                  // "amonesta"-->
+<!--            /expuls/i                     // "expulsado", "expulsión"-->
+<!--        ];-->
+
+<!--        // Detectar LESIÓN - Solo lesiones confirmadas-->
+<!--        const patronesLesion = [-->
+<!--            /lesiona/i,                   // "se lesiona", "lesionado"-->
+<!--            /atención.*médica/i,          // "atención médica"-->
+<!--            /se.*duele/i,                 // "se duele"-->
+<!--            /tendido.*campo/i,            // "tendido en el campo"-->
+<!--            /solicita.*atención/i,        // "solicita atención"-->
+<!--            /debe.*ser.*atendido/i,       // "debe ser atendido"-->
+<!--            /se.*retira.*lesion/i         // "se retira lesionado"-->
+<!--        ];-->
+
+<!--        // Excluir frases que NO son eventos reales-->
+<!--        const patronesExcluir = [-->
+<!--            /casi/i,                      // "casi gol"-->
+<!--            /cerca.*gol/i,                // "cerca del gol"-->
+<!--            /estuvo.*cerca/i,             // "estuvo cerca"-->
+<!--            /por.*poco/i,                 // "por poco"-->
+<!--            /oportunidad/i,               // "oportunidad perdida"-->
+<!--            /ocasión/i,                   // "ocasión perdida"-->
+<!--            /peligro/i,                   // "llega con peligro"-->
+<!--            /intenta/i,                   // "intenta"-->
+<!--            /busca/i,                     // "busca el gol"-->
+<!--            /podría/i,                    // "podría ser"-->
+<!--            /posible/i                    // "posible"-->
+<!--        ];-->
+
+<!--        // Primero verificar si debe ser excluido-->
+<!--        for (let patron of patronesExcluir) {-->
+<!--            if (patron.test(textoLower)) {-->
+<!--                return null; // No es un evento real-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Detectar tipo de evento-->
+<!--        if (patronesGol.some(patron => patron.test(textoLower))) {-->
+<!--            return 'gol';-->
+<!--        }-->
+
+<!--        if (patronesFalta.some(patron => patron.test(textoLower))) {-->
+<!--            return 'falta';-->
+<!--        }-->
+
+<!--        if (patronesTarjeta.some(patron => patron.test(textoLower))) {-->
+<!--            return 'tarjeta';-->
+<!--        }-->
+
+<!--        if (patronesLesion.some(patron => patron.test(textoLower))) {-->
+<!--            return 'lesion';-->
+<!--        }-->
+
+<!--        return null; // No es un evento reconocido-->
+<!--    }-->
+
+<!--    // Asignar minutos aleatorios-->
+<!--    document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--        const randomMinute = Math.floor(Math.random() * 91); // 0-90-->
+<!--        item.setAttribute('data-random-minute', randomMinute);-->
+<!--        item.querySelector('.commentary-minute').innerText = randomMinute + "'";-->
+<!--    });-->
+
+<!--    // Ordenar por minuto-->
+<!--    function ordenarNarracionesPorMinuto() {-->
+<!--        const lista = document.getElementById('commentaryList');-->
+<!--        const items = Array.from(lista.querySelectorAll('.commentary-item'));-->
+
+<!--        items.sort((a, b) => {-->
+<!--            return parseInt(a.getAttribute('data-random-minute')) - parseInt(b.getAttribute('data-random-minute'));-->
+<!--        });-->
+
+<!--        lista.innerHTML = "";-->
+<!--        items.forEach(item => lista.appendChild(item));-->
+<!--    }-->
+
+<!--    ordenarNarracionesPorMinuto();-->
+
+<!--    function avanzarTiempo() {-->
+<!--        if (currentMinute > maxMinute) {-->
+<!--            document.getElementById('statusIndicator').innerText = 'FINALIZADO';-->
+<!--            document.getElementById('statusIndicator').style.background = '#ff6b6b';-->
+<!--            clearInterval(intervalo);-->
+<!--            intervalo = null;-->
+<!--            return;-->
+<!--        }-->
+
+<!--        document.getElementById('matchTime').innerText = currentMinute + "'";-->
+
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            const minuto = parseInt(item.getAttribute('data-random-minute'));-->
+<!--            const yaMostrado = item.style.display === 'block';-->
+
+<!--            if (minuto === currentMinute && !yaMostrado) {-->
+<!--                item.style.display = 'block';-->
+
+<!--                // Hacer scroll al comentario más reciente-->
+<!--                item.scrollIntoView({ behavior: 'smooth', block: 'end' });-->
+
+<!--                const textoCompleto = item.querySelector('span:last-child').innerText;-->
+<!--                const evento = detectarEvento(textoCompleto);-->
+
+<!--                if (evento) {-->
+<!--                    switch (evento) {-->
+<!--                        case 'gol':-->
+<!--                            // Determinar qué equipo marcó basándose en el texto-->
+<!--                            if (textoCompleto.toLowerCase().includes(nombreEquipoLocal)) {-->
+<!--                                golesLocal++;-->
+<!--                                document.getElementById('team1Score').innerText = golesLocal;-->
+<!--                            } else if (textoCompleto.toLowerCase().includes(nombreEquipoVisitante)) {-->
+<!--                                golesVisitante++;-->
+<!--                                document.getElementById('team2Score').innerText = golesVisitante;-->
+<!--                            }-->
+<!--                            document.getElementById('totalGoals').innerText = golesLocal + golesVisitante;-->
+
+<!--                            // Efecto visual para gol-->
+<!--                            item.style.borderLeft = '4px solid #ffd700';-->
+<!--                            item.style.background = 'rgba(255, 215, 0, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'falta':-->
+<!--                            totalFaltas++;-->
+<!--                            document.getElementById('totalFouls').innerText = totalFaltas;-->
+
+<!--                            // Efecto visual para falta-->
+<!--                            item.style.borderLeft = '4px solid #ff9800';-->
+<!--                            item.style.background = 'rgba(255, 152, 0, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'tarjeta':-->
+<!--                            totalTarjetas++;-->
+<!--                            document.getElementById('totalCards').innerText = totalTarjetas;-->
+
+<!--                            // Efecto visual para tarjeta-->
+<!--                            const esRoja = textoCompleto.toLowerCase().includes('roja');-->
+<!--                            item.style.borderLeft = esRoja ? '4px solid #f44336' : '4px solid #ffeb3b';-->
+<!--                            item.style.background = esRoja ? 'rgba(244, 67, 54, 0.2)' : 'rgba(255, 235, 59, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'lesion':-->
+<!--                            totalLesionados++;-->
+<!--                            document.getElementById('totalInjuries').innerText = totalLesionados;-->
+
+<!--                            // Efecto visual para lesión-->
+<!--                            item.style.borderLeft = '4px solid #e91e63';-->
+<!--                            item.style.background = 'rgba(233, 30, 99, 0.2)';-->
+<!--                            break;-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
+
+<!--        currentMinute++;-->
+<!--    }-->
+
+<!--    let intervalo = null;-->
+
+<!--    document.getElementById('startBtn').addEventListener('click', () => {-->
+<!--        if (!intervalo) {-->
+<!--            // Asegurar que empezamos desde 0-->
+<!--            if (currentMinute === 0) {-->
+<!--                inicializarVista();-->
+<!--            }-->
+
+<!--            intervalo = setInterval(avanzarTiempo, 2000); // 2 segundos = 1' partido-->
+<!--            document.getElementById('statusIndicator').innerText = 'EN JUEGO';-->
+<!--            document.getElementById('statusIndicator').style.background = '#00ff88';-->
+<!--        }-->
+<!--    });-->
+
+<!--    document.getElementById('pauseBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+<!--        document.getElementById('statusIndicator').innerText = 'PAUSADO';-->
+<!--        document.getElementById('statusIndicator').style.background = '#ff9800';-->
+<!--    });-->
+
+<!--    document.getElementById('resetBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+
+<!--        // Usar la función de inicialización-->
+<!--        inicializarVista();-->
+
+<!--        // Reasignar minutos aleatorios-->
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            const randomMinute = Math.floor(Math.random() * 91);-->
+<!--            item.setAttribute('data-random-minute', randomMinute);-->
+<!--            item.querySelector('.commentary-minute').innerText = randomMinute + "'";-->
+<!--        });-->
+
+<!--        // Reordenar comentarios-->
+<!--        ordenarNarracionesPorMinuto();-->
+<!--    });-->
+
+<!--    // Función para omitir narración (acelerar tiempo)-->
+<!--    document.getElementById('omitebtn').addEventListener('click', () => {-->
+<!--        if (intervalo) {-->
+<!--            // Acelerar temporalmente-->
+<!--            clearInterval(intervalo);-->
+<!--            intervalo = setInterval(avanzarTiempo, 200); // 0.2 segundos por minuto-->
+
+<!--            // Volver a velocidad normal después de 10 segundos-->
+<!--            setTimeout(() => {-->
+<!--                if (intervalo) {-->
+<!--                    clearInterval(intervalo);-->
+<!--                    intervalo = setInterval(avanzarTiempo, 2000);-->
+<!--                }-->
+<!--            }, 10000);-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+
+<!--<script>-->
+<!--    let currentMinute = 0;-->
+<!--    const maxMinute = 90;-->
+
+<!--    let golesLocal = 0;-->
+<!--    let golesVisitante = 0;-->
+<!--    let totalFaltas = 0;-->
+<!--    let totalTarjetas = 0;-->
+<!--    let totalLesionados = 0;-->
+
+<!--    const nombreEquipoLocal = document.getElementById('team1Name').innerText.trim().toLowerCase();-->
+<!--    const nombreEquipoVisitante = document.getElementById('team2Name').innerText.trim().toLowerCase();-->
+
+<!--    // Función mejorada para detectar eventos específicos-->
+<!--    function detectarEvento(texto) {-->
+<!--        const textoLower = texto.toLowerCase();-->
+
+<!--        // Detectar GOL - Solo frases que confirmen un gol real-->
+<!--        const patronesGol = [-->
+<!--            /¡{0,2}goo{2,}l/i,           // ¡GOOOOOL, ¡GOOOOL, etc.-->
+<!--            /marca un gol/i,             // "marca un gol"-->
+<!--            /anota para/i,               // "anota para"-->
+<!--            /gol de/i,                   // "gol de"-->
+<!--            /encuentra el gol/i,         // "encuentra el gol"-->
+<!--            /convierte el gol/i,         // "convierte el gol"-->
+<!--            /define.*gol/i               // "define y marca el gol"-->
+<!--        ];-->
+
+<!--        // Detectar FALTA - Solo faltas confirmadas-->
+<!--        const patronesFalta = [-->
+<!--            /¡{0,2}falta!/i,             // ¡Falta!-->
+<!--            /comete.*falta/i,            // "comete una falta"-->
+<!--            /entrada.*dura/i,            // "entrada dura"-->
+<!--            /juego.*brusco/i,            // "juego brusco"-->
+<!--            /infracción/i,               // "infracción"-->
+<!--            /el árbitro.*falta/i         // "el árbitro marca falta"-->
+<!--        ];-->
+
+<!--        // Detectar TARJETA - Solo tarjetas mostradas-->
+<!--        const patronesTarjeta = [-->
+<!--            /tarjeta\s+(amarilla|roja)/i, // "tarjeta amarilla" o "tarjeta roja"-->
+<!--            /ve\s+la\s+(amarilla|roja)/i, // "ve la amarilla" o "ve la roja"-->
+<!--            /saca\s+(amarilla|roja)/i,    // "saca amarilla" o "saca roja"-->
+<!--            /cartulina/i,                 // "cartulina"-->
+<!--            /amonesta/i,                  // "amonesta"-->
+<!--            /expuls/i                     // "expulsado", "expulsión"-->
+<!--        ];-->
+
+<!--        // Detectar LESIÓN - Solo lesiones confirmadas-->
+<!--        const patronesLesion = [-->
+<!--            /lesiona/i,                   // "se lesiona", "lesionado"-->
+<!--            /atención.*médica/i,          // "atención médica"-->
+<!--            /se.*duele/i,                 // "se duele"-->
+<!--            /tendido.*campo/i,            // "tendido en el campo"-->
+<!--            /solicita.*atención/i,        // "solicita atención"-->
+<!--            /debe.*ser.*atendido/i,       // "debe ser atendido"-->
+<!--            /se.*retira.*lesion/i         // "se retira lesionado"-->
+<!--        ];-->
+
+<!--        // Excluir frases que NO son eventos reales-->
+<!--        const patronesExcluir = [-->
+<!--            /casi/i,                      // "casi gol"-->
+<!--            /cerca.*gol/i,                // "cerca del gol"-->
+<!--            /estuvo.*cerca/i,             // "estuvo cerca"-->
+<!--            /por.*poco/i,                 // "por poco"-->
+<!--            /oportunidad/i,               // "oportunidad perdida"-->
+<!--            /ocasión/i,                   // "ocasión perdida"-->
+<!--            /peligro/i,                   // "llega con peligro"-->
+<!--            /intenta/i,                   // "intenta"-->
+<!--            /busca/i,                     // "busca el gol"-->
+<!--            /podría/i,                    // "podría ser"-->
+<!--            /posible/i                    // "posible"-->
+<!--        ];-->
+
+<!--        // Primero verificar si debe ser excluido-->
+<!--        for (let patron of patronesExcluir) {-->
+<!--            if (patron.test(textoLower)) {-->
+<!--                return null; // No es un evento real-->
+<!--            }-->
+<!--        }-->
+
+<!--        // Detectar tipo de evento-->
+<!--        if (patronesGol.some(patron => patron.test(textoLower))) {-->
+<!--            return 'gol';-->
+<!--        }-->
+
+<!--        if (patronesFalta.some(patron => patron.test(textoLower))) {-->
+<!--            return 'falta';-->
+<!--        }-->
+
+<!--        if (patronesTarjeta.some(patron => patron.test(textoLower))) {-->
+<!--            return 'tarjeta';-->
+<!--        }-->
+
+<!--        if (patronesLesion.some(patron => patron.test(textoLower))) {-->
+<!--            return 'lesion';-->
+<!--        }-->
+
+<!--        return null; // No es un evento reconocido-->
+<!--    }-->
+
+<!--    // Asignar minutos aleatorios-->
+<!--    document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--        const randomMinute = Math.floor(Math.random() * 91); // 0-90-->
+<!--        item.setAttribute('data-random-minute', randomMinute);-->
+<!--        item.querySelector('.commentary-minute').innerText = randomMinute + "'";-->
+<!--    });-->
+
+<!--    // Ordenar por minuto-->
+<!--    function ordenarNarracionesPorMinuto() {-->
+<!--        const lista = document.getElementById('commentaryList');-->
+<!--        const items = Array.from(lista.querySelectorAll('.commentary-item'));-->
+
+<!--        items.sort((a, b) => {-->
+<!--            return parseInt(a.getAttribute('data-random-minute')) - parseInt(b.getAttribute('data-random-minute'));-->
+<!--        });-->
+
+<!--        lista.innerHTML = "";-->
+<!--        items.forEach(item => lista.appendChild(item));-->
+<!--    }-->
+
+<!--    ordenarNarracionesPorMinuto();-->
+
+<!--    function avanzarTiempo() {-->
+<!--        if (currentMinute > maxMinute) {-->
+<!--            document.getElementById('statusIndicator').innerText = 'FINALIZADO';-->
+<!--            document.getElementById('statusIndicator').style.background = '#ff6b6b';-->
+<!--            clearInterval(intervalo);-->
+<!--            intervalo = null;-->
+<!--            return;-->
+<!--        }-->
+
+<!--        document.getElementById('matchTime').innerText = currentMinute + "'";-->
+
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            const minuto = parseInt(item.getAttribute('data-random-minute'));-->
+<!--            const yaMostrado = item.style.display === 'block';-->
+
+<!--            if (minuto === currentMinute && !yaMostrado) {-->
+<!--                item.style.display = 'block';-->
+
+<!--                // Hacer scroll al comentario más reciente-->
+<!--                item.scrollIntoView({ behavior: 'smooth', block: 'end' });-->
+
+<!--                const textoCompleto = item.querySelector('span:last-child').innerText;-->
+<!--                const evento = detectarEvento(textoCompleto);-->
+
+<!--                if (evento) {-->
+<!--                    switch (evento) {-->
+<!--                        case 'gol':-->
+<!--                            // Determinar qué equipo marcó basándose en el texto-->
+<!--                            if (textoCompleto.toLowerCase().includes(nombreEquipoLocal)) {-->
+<!--                                golesLocal++;-->
+<!--                                document.getElementById('team1Score').innerText = golesLocal;-->
+<!--                            } else if (textoCompleto.toLowerCase().includes(nombreEquipoVisitante)) {-->
+<!--                                golesVisitante++;-->
+<!--                                document.getElementById('team2Score').innerText = golesVisitante;-->
+<!--                            }-->
+<!--                            document.getElementById('totalGoals').innerText = golesLocal + golesVisitante;-->
+
+<!--                            // Efecto visual para gol-->
+<!--                            item.style.borderLeft = '4px solid #ffd700';-->
+<!--                            item.style.background = 'rgba(255, 215, 0, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'falta':-->
+<!--                            totalFaltas++;-->
+<!--                            document.getElementById('totalFouls').innerText = totalFaltas;-->
+
+<!--                            // Efecto visual para falta-->
+<!--                            item.style.borderLeft = '4px solid #ff9800';-->
+<!--                            item.style.background = 'rgba(255, 152, 0, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'tarjeta':-->
+<!--                            totalTarjetas++;-->
+<!--                            document.getElementById('totalCards').innerText = totalTarjetas;-->
+
+<!--                            // Efecto visual para tarjeta-->
+<!--                            const esRoja = textoCompleto.toLowerCase().includes('roja');-->
+<!--                            item.style.borderLeft = esRoja ? '4px solid #f44336' : '4px solid #ffeb3b';-->
+<!--                            item.style.background = esRoja ? 'rgba(244, 67, 54, 0.2)' : 'rgba(255, 235, 59, 0.2)';-->
+<!--                            break;-->
+
+<!--                        case 'lesion':-->
+<!--                            totalLesionados++;-->
+<!--                            document.getElementById('totalInjuries').innerText = totalLesionados;-->
+
+<!--                            // Efecto visual para lesión-->
+<!--                            item.style.borderLeft = '4px solid #e91e63';-->
+<!--                            item.style.background = 'rgba(233, 30, 99, 0.2)';-->
+<!--                            break;-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
+
+<!--        currentMinute++;-->
+<!--    }-->
+
+<!--    let intervalo = null;-->
+
+<!--    document.getElementById('startBtn').addEventListener('click', () => {-->
+<!--        if (!intervalo) {-->
+<!--            intervalo = setInterval(avanzarTiempo, 2000); // 2 segundos = 1' partido-->
+<!--            document.getElementById('statusIndicator').innerText = 'EN JUEGO';-->
+<!--            document.getElementById('statusIndicator').style.background = '#00ff88';-->
+<!--        }-->
+<!--    });-->
+
+<!--    document.getElementById('pauseBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+<!--        document.getElementById('statusIndicator').innerText = 'PAUSADO';-->
+<!--        document.getElementById('statusIndicator').style.background = '#ff9800';-->
+<!--    });-->
+
+<!--    document.getElementById('resetBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+<!--        currentMinute = 0;-->
+
+<!--        golesLocal = 0;-->
+<!--        golesVisitante = 0;-->
+<!--        totalFaltas = 0;-->
+<!--        totalTarjetas = 0;-->
+<!--        totalLesionados = 0;-->
+
+<!--        document.getElementById('matchTime').innerText = "0'";-->
+<!--        document.getElementById('team1Score').innerText = "0";-->
+<!--        document.getElementById('team2Score').innerText = "0";-->
+<!--        document.getElementById('totalGoals').innerText = "0";-->
+<!--        document.getElementById('totalFouls').innerText = "0";-->
+<!--        document.getElementById('totalCards').innerText = "0";-->
+<!--        document.getElementById('totalInjuries').innerText = "0";-->
+
+<!--        document.getElementById('statusIndicator').innerText = 'EN JUEGO';-->
+<!--        document.getElementById('statusIndicator').style.background = '#00ff88';-->
+
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            item.style.display = 'none';-->
+<!--            item.style.borderLeft = '4px solid #00ff88';-->
+<!--            item.style.background = 'rgba(255,255,255,0.1)';-->
+<!--        });-->
+<!--    });-->
+
+<!--    // Función para omitir narración (acelerar tiempo)-->
+<!--    document.getElementById('omitebtn').addEventListener('click', () => {-->
+<!--        if (intervalo) {-->
+<!--            // Acelerar temporalmente-->
+<!--            clearInterval(intervalo);-->
+<!--            intervalo = setInterval(avanzarTiempo, 200); // 0.2 segundos por minuto-->
+
+<!--            // Volver a velocidad normal después de 10 segundos-->
+<!--            setTimeout(() => {-->
+<!--                if (intervalo) {-->
+<!--                    clearInterval(intervalo);-->
+<!--                    intervalo = setInterval(avanzarTiempo, 2000);-->
+<!--                }-->
+<!--            }, 10000);-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
 
 <!--<script>-->
 <!--    let currentMinute = 0;-->

@@ -57,10 +57,15 @@
     <div class="commentary-section scrollbar">
         <div class="commentary-title">NARRACIÓN EN VIVO</div>
         <div id="commentaryList">
-            <div th:each="narracion : ${narraciones}"  class="commentary-item">
-                <span class="commentary-minute">0'</span>
+            <div th:each="narracion : ${narraciones}" class="commentary-item" style="display: none;">
+                <span class="commentary-minute"></span>
                 <span th:text="${narracion.getTexto()}">Aquí va una frase...</span>
             </div>
+
+            <!--            <div th:each="narracion : ${narraciones}"  class="commentary-item">-->
+<!--                <span class="commentary-minute">0'</span>-->
+<!--                <span th:text="${narracion.getTexto()}">Aquí va una frase...</span>-->
+<!--            </div>-->
         </div>
     </div>
     <div id="boton-omitir">
@@ -75,336 +80,394 @@
 
 
 </div>
+
+<script>
+    let currentMinute = 0;
+    const maxMinute = 90;
+
+    let golesLocal = 0;
+    let golesVisitante = 0;
+    let totalFaltas = 0;
+    let totalTarjetas = 0;
+    let totalLesionados = 0;
+
+    const nombreEquipoLocal = document.getElementById('team1Name').innerText.trim().toLowerCase();
+    const nombreEquipoVisitante = document.getElementById('team2Name').innerText.trim().toLowerCase();
+
+    // Función mejorada para detectar eventos específicos
+    function detectarEvento(texto) {
+        const textoLower = texto.toLowerCase();
+
+        // Detectar GOL - Solo frases que confirmen un gol real
+        const patronesGol = [
+            /¡{0,2}goo{2,}l/i,           // ¡GOOOOOL, ¡GOOOOL, etc.
+            /marca un gol/i,             // "marca un gol"
+            /anota para/i,               // "anota para"
+            /gol de/i,                   // "gol de"
+            /encuentra el gol/i,         // "encuentra el gol"
+            /convierte el gol/i,         // "convierte el gol"
+            /define.*gol/i               // "define y marca el gol"
+        ];
+
+        // Detectar FALTA - Solo faltas confirmadas
+        const patronesFalta = [
+            /¡{0,2}falta!/i,             // ¡Falta!
+            /comete.*falta/i,            // "comete una falta"
+            /entrada.*dura/i,            // "entrada dura"
+            /juego.*brusco/i,            // "juego brusco"
+            /infracción/i,               // "infracción"
+            /el árbitro.*falta/i         // "el árbitro marca falta"
+        ];
+
+        // Detectar TARJETA - Solo tarjetas mostradas
+        const patronesTarjeta = [
+            /tarjeta\s+(amarilla|roja)/i, // "tarjeta amarilla" o "tarjeta roja"
+            /ve\s+la\s+(amarilla|roja)/i, // "ve la amarilla" o "ve la roja"
+            /saca\s+(amarilla|roja)/i,    // "saca amarilla" o "saca roja"
+            /cartulina/i,                 // "cartulina"
+            /amonesta/i,                  // "amonesta"
+            /expuls/i                     // "expulsado", "expulsión"
+        ];
+
+        // Detectar LESIÓN - Solo lesiones confirmadas
+        const patronesLesion = [
+            /lesiona/i,                   // "se lesiona", "lesionado"
+            /atención.*médica/i,          // "atención médica"
+            /se.*duele/i,                 // "se duele"
+            /tendido.*campo/i,            // "tendido en el campo"
+            /solicita.*atención/i,        // "solicita atención"
+            /debe.*ser.*atendido/i,       // "debe ser atendido"
+            /se.*retira.*lesion/i         // "se retira lesionado"
+        ];
+
+        // Excluir frases que NO son eventos reales
+        const patronesExcluir = [
+            /casi/i,                      // "casi gol"
+            /cerca.*gol/i,                // "cerca del gol"
+            /estuvo.*cerca/i,             // "estuvo cerca"
+            /por.*poco/i,                 // "por poco"
+            /oportunidad/i,               // "oportunidad perdida"
+            /ocasión/i,                   // "ocasión perdida"
+            /peligro/i,                   // "llega con peligro"
+            /intenta/i,                   // "intenta"
+            /busca/i,                     // "busca el gol"
+            /podría/i,                    // "podría ser"
+            /posible/i                    // "posible"
+        ];
+
+        // Primero verificar si debe ser excluido
+        for (let patron of patronesExcluir) {
+            if (patron.test(textoLower)) {
+                return null; // No es un evento real
+            }
+        }
+
+        // Detectar tipo de evento
+        if (patronesGol.some(patron => patron.test(textoLower))) {
+            return 'gol';
+        }
+
+        if (patronesFalta.some(patron => patron.test(textoLower))) {
+            return 'falta';
+        }
+
+        if (patronesTarjeta.some(patron => patron.test(textoLower))) {
+            return 'tarjeta';
+        }
+
+        if (patronesLesion.some(patron => patron.test(textoLower))) {
+            return 'lesion';
+        }
+
+        return null; // No es un evento reconocido
+    }
+
+    // Asignar minutos aleatorios
+    document.querySelectorAll('.commentary-item').forEach(item => {
+        const randomMinute = Math.floor(Math.random() * 91); // 0-90
+        item.setAttribute('data-random-minute', randomMinute);
+        item.querySelector('.commentary-minute').innerText = randomMinute + "'";
+    });
+
+    // Ordenar por minuto
+    function ordenarNarracionesPorMinuto() {
+        const lista = document.getElementById('commentaryList');
+        const items = Array.from(lista.querySelectorAll('.commentary-item'));
+
+        items.sort((a, b) => {
+            return parseInt(a.getAttribute('data-random-minute')) - parseInt(b.getAttribute('data-random-minute'));
+        });
+
+        lista.innerHTML = "";
+        items.forEach(item => lista.appendChild(item));
+    }
+
+    ordenarNarracionesPorMinuto();
+
+    function avanzarTiempo() {
+        if (currentMinute > maxMinute) {
+            document.getElementById('statusIndicator').innerText = 'FINALIZADO';
+            document.getElementById('statusIndicator').style.background = '#ff6b6b';
+            clearInterval(intervalo);
+            intervalo = null;
+            return;
+        }
+
+        document.getElementById('matchTime').innerText = currentMinute + "'";
+
+        document.querySelectorAll('.commentary-item').forEach(item => {
+            const minuto = parseInt(item.getAttribute('data-random-minute'));
+            const yaMostrado = item.style.display === 'block';
+
+            if (minuto === currentMinute && !yaMostrado) {
+                item.style.display = 'block';
+
+                // Hacer scroll al comentario más reciente
+                item.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+                const textoCompleto = item.querySelector('span:last-child').innerText;
+                const evento = detectarEvento(textoCompleto);
+
+                if (evento) {
+                    switch (evento) {
+                        case 'gol':
+                            // Determinar qué equipo marcó basándose en el texto
+                            if (textoCompleto.toLowerCase().includes(nombreEquipoLocal)) {
+                                golesLocal++;
+                                document.getElementById('team1Score').innerText = golesLocal;
+                            } else if (textoCompleto.toLowerCase().includes(nombreEquipoVisitante)) {
+                                golesVisitante++;
+                                document.getElementById('team2Score').innerText = golesVisitante;
+                            }
+                            document.getElementById('totalGoals').innerText = golesLocal + golesVisitante;
+
+                            // Efecto visual para gol
+                            item.style.borderLeft = '4px solid #ffd700';
+                            item.style.background = 'rgba(255, 215, 0, 0.2)';
+                            break;
+
+                        case 'falta':
+                            totalFaltas++;
+                            document.getElementById('totalFouls').innerText = totalFaltas;
+
+                            // Efecto visual para falta
+                            item.style.borderLeft = '4px solid #ff9800';
+                            item.style.background = 'rgba(255, 152, 0, 0.2)';
+                            break;
+
+                        case 'tarjeta':
+                            totalTarjetas++;
+                            document.getElementById('totalCards').innerText = totalTarjetas;
+
+                            // Efecto visual para tarjeta
+                            const esRoja = textoCompleto.toLowerCase().includes('roja');
+                            item.style.borderLeft = esRoja ? '4px solid #f44336' : '4px solid #ffeb3b';
+                            item.style.background = esRoja ? 'rgba(244, 67, 54, 0.2)' : 'rgba(255, 235, 59, 0.2)';
+                            break;
+
+                        case 'lesion':
+                            totalLesionados++;
+                            document.getElementById('totalInjuries').innerText = totalLesionados;
+
+                            // Efecto visual para lesión
+                            item.style.borderLeft = '4px solid #e91e63';
+                            item.style.background = 'rgba(233, 30, 99, 0.2)';
+                            break;
+                    }
+                }
+            }
+        });
+
+        currentMinute++;
+    }
+
+    let intervalo = null;
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+        if (!intervalo) {
+            intervalo = setInterval(avanzarTiempo, 2000); // 2 segundos = 1' partido
+            document.getElementById('statusIndicator').innerText = 'EN JUEGO';
+            document.getElementById('statusIndicator').style.background = '#00ff88';
+        }
+    });
+
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+        clearInterval(intervalo);
+        intervalo = null;
+        document.getElementById('statusIndicator').innerText = 'PAUSADO';
+        document.getElementById('statusIndicator').style.background = '#ff9800';
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        clearInterval(intervalo);
+        intervalo = null;
+        currentMinute = 0;
+
+        golesLocal = 0;
+        golesVisitante = 0;
+        totalFaltas = 0;
+        totalTarjetas = 0;
+        totalLesionados = 0;
+
+        document.getElementById('matchTime').innerText = "0'";
+        document.getElementById('team1Score').innerText = "0";
+        document.getElementById('team2Score').innerText = "0";
+        document.getElementById('totalGoals').innerText = "0";
+        document.getElementById('totalFouls').innerText = "0";
+        document.getElementById('totalCards').innerText = "0";
+        document.getElementById('totalInjuries').innerText = "0";
+
+        document.getElementById('statusIndicator').innerText = 'EN JUEGO';
+        document.getElementById('statusIndicator').style.background = '#00ff88';
+
+        document.querySelectorAll('.commentary-item').forEach(item => {
+            item.style.display = 'none';
+            item.style.borderLeft = '4px solid #00ff88';
+            item.style.background = 'rgba(255,255,255,0.1)';
+        });
+    });
+
+    // Función para omitir narración (acelerar tiempo)
+    document.getElementById('omitebtn').addEventListener('click', () => {
+        if (intervalo) {
+            // Acelerar temporalmente
+            clearInterval(intervalo);
+            intervalo = setInterval(avanzarTiempo, 200); // 0.2 segundos por minuto
+
+            // Volver a velocidad normal después de 10 segundos
+            setTimeout(() => {
+                if (intervalo) {
+                    clearInterval(intervalo);
+                    intervalo = setInterval(avanzarTiempo, 2000);
+                }
+            }, 10000);
+        }
+    });
+</script>
+
 <!--<script>-->
-<!--// Elementos del DOM-->
-<!--const matchTime = document.getElementById("matchTime");-->
-<!--const statusIndicator = document.getElementById("statusIndicator");-->
-<!--const team1Score = document.getElementById("team1Score");-->
-<!--const team2Score = document.getElementById("team2Score");-->
-<!--const totalGoals = document.getElementById("totalGoals");-->
-<!--const totalFouls = document.getElementById("totalFouls");-->
-<!--const totalCards = document.getElementById("totalCards");-->
-<!--const totalInjuries = document.getElementById("totalInjuries");-->
-<!--const commentaryList = document.getElementById("commentaryList");-->
-<!--const startBtn = document.getElementById("startBtn");-->
-<!--const pauseBtn = document.getElementById("pauseBtn");-->
-<!--const resetBtn = document.getElementById("resetBtn");-->
-<!--const omiteBtn = document.getElementById("omitebtn");-->
+<!--    let currentMinute = 0;-->
+<!--    const maxMinute = 90;-->
 
-<!--// Variables de estado-->
-<!--let tiempo = 0;-->
-<!--let partidoEnCurso = false;-->
-<!--let partidoTerminado = false;-->
-<!--let intervalo = null;-->
-<!--let narracionIndex = 0;-->
-<!--let velocidadNarracion = 1000; // milisegundos-->
-<!--let omitirNarracion = false;-->
+<!--    let golesLocal = 0;-->
+<!--    let golesVisitante = 0;-->
+<!--    let totalFaltas = 0;-->
+<!--    let totalTarjetas = 0;-->
+<!--    let totalLesionados = 0;-->
 
-<!--// Estadísticas del partido-->
-<!--let stats = {-->
-<!--goles: parseInt(team1Score.textContent) + parseInt(team2Score.textContent),-->
-<!--faltas: 0,-->
-<!--tarjetas: 0,-->
-<!--lesionados: 0-->
-<!--};-->
+<!--    const nombreEquipoLocal = document.getElementById('team1Name').innerText.trim().toLowerCase();-->
+<!--    const nombreEquipoVisitante = document.getElementById('team2Name').innerText.trim().toLowerCase();-->
 
-<!--// Obtener todas las narraciones iniciales-->
-<!--const narracionesOriginales = Array.from(commentaryList.querySelectorAll(".commentary-item"));-->
-<!--let narraciones = [...narracionesOriginales];-->
+<!--    // Asignar minutos aleatorios-->
+<!--    document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--        const randomMinute = Math.floor(Math.random() * 91); // 0-90-->
+<!--        item.setAttribute('data-random-minute', randomMinute);-->
+<!--        item.querySelector('.commentary-minute').innerText = randomMinute + "'";-->
+<!--    });-->
 
-<!--// Función para inicializar el partido-->
-<!--function inicializarPartido() {-->
-<!--// Mezclar narraciones para que aparezcan en orden aleatorio-->
-<!--narraciones = shuffleArray([...narracionesOriginales]);-->
+<!--    // Ordenar por minuto-->
+<!--    function ordenarNarracionesPorMinuto() {-->
+<!--        const lista = document.getElementById('commentaryList');-->
+<!--        const items = Array.from(lista.querySelectorAll('.commentary-item'));-->
 
-<!--// Limpiar el área de comentarios-->
-<!--commentaryList.innerHTML = '';-->
+<!--        items.sort((a, b) => {-->
+<!--            return parseInt(a.getAttribute('data-random-minute')) - parseInt(b.getAttribute('data-random-minute'));-->
+<!--        });-->
 
-<!--// Resetear índice-->
-<!--narracionIndex = 0;-->
+<!--        lista.innerHTML = "";-->
+<!--        items.forEach(item => lista.appendChild(item));-->
+<!--    }-->
 
-<!--// Actualizar estadísticas iniciales-->
-<!--actualizarEstadisticas();-->
-<!--}-->
+<!--    ordenarNarracionesPorMinuto();-->
 
-<!--// Función para mezclar array-->
-<!--function shuffleArray(array) {-->
-<!--const shuffled = [...array];-->
-<!--for (let i = shuffled.length - 1; i > 0; i&#45;&#45;) {-->
-<!--const j = Math.floor(Math.random() * (i + 1));-->
-<!--[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];-->
-<!--}-->
-<!--return shuffled;-->
-<!--}-->
+<!--    function avanzarTiempo() {-->
+<!--        if (currentMinute > maxMinute) return;-->
 
-<!--// Función para iniciar el partido-->
-<!--function iniciarPartido() {-->
-<!--if (partidoEnCurso) return;-->
+<!--        document.getElementById('matchTime').innerText = currentMinute + "'";-->
 
-<!--partidoEnCurso = true;-->
-<!--partidoTerminado = false;-->
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            const minuto = parseInt(item.getAttribute('data-random-minute'));-->
+<!--            const yaMostrado = item.style.display === 'block';-->
 
-<!--// Cambiar estado visual-->
-<!--statusIndicator.textContent = "EN JUEGO";-->
-<!--statusIndicator.className = "status-indicator playing";-->
+<!--            if (minuto === currentMinute && !yaMostrado) {-->
+<!--                item.style.display = 'block';-->
 
-<!--// Deshabilitar botón de inicio-->
-<!--startBtn.disabled = true;-->
-<!--pauseBtn.disabled = false;-->
+<!--                const texto = item.innerText.toLowerCase();-->
 
-<!--// Iniciar cronómetro-->
-<!--if (!intervalo) {-->
-<!--intervalo = setInterval(actualizarTiempo, 1000);-->
-<!--}-->
-<!--}-->
+<!--                // -&#45;&#45; GOL -&#45;&#45;-->
+<!--                if (texto.includes("gol")) {-->
+<!--                    if (texto.includes(nombreEquipoLocal)) {-->
+<!--                        golesLocal++;-->
+<!--                        document.getElementById('team1Score').innerText = golesLocal;-->
+<!--                    } else if (texto.includes(nombreEquipoVisitante)) {-->
+<!--                        golesVisitante++;-->
+<!--                        document.getElementById('team2Score').innerText = golesVisitante;-->
+<!--                    }-->
+<!--                    document.getElementById('totalGoals').innerText = golesLocal + golesVisitante;-->
+<!--                }-->
 
-<!--// Función para pausar el partido-->
-<!--function pausarPartido() {-->
-<!--if (!partidoEnCurso) return;-->
+<!--                // -&#45;&#45; FALTA -&#45;&#45;-->
+<!--                if (texto.includes("foul") || texto.includes("falta")) {-->
+<!--                    totalFaltas++;-->
+<!--                    document.getElementById('totalFouls').innerText = totalFaltas;-->
+<!--                }-->
 
-<!--partidoEnCurso = false;-->
+<!--                // -&#45;&#45; TARJETAS -&#45;&#45;-->
+<!--                if (texto.includes("tarjeta") || texto.includes("amarilla") || texto.includes("roja")) {-->
+<!--                    totalTarjetas++;-->
+<!--                    document.getElementById('totalCards').innerText = totalTarjetas;-->
+<!--                }-->
 
-<!--// Cambiar estado visual-->
-<!--statusIndicator.textContent = "PAUSADO";-->
-<!--statusIndicator.className = "status-indicator paused";-->
+<!--                // -&#45;&#45; LESIÓN -&#45;&#45;-->
+<!--                if (texto.includes("lesionado") || texto.includes("lesión") || texto.includes("se retira lesionado")) {-->
+<!--                    totalLesionados++;-->
+<!--                    document.getElementById('totalInjuries').innerText = totalLesionados;-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
 
-<!--// Habilitar/deshabilitar botones-->
-<!--startBtn.disabled = false;-->
-<!--pauseBtn.disabled = true;-->
+<!--        currentMinute++;-->
+<!--    }-->
 
-<!--// Pausar cronómetro-->
-<!--clearInterval(intervalo);-->
-<!--intervalo = null;-->
-<!--}-->
+<!--    let intervalo = null;-->
 
-<!--// Función para reiniciar el partido-->
-<!--function reiniciarPartido() {-->
-<!--// Detener cronómetro-->
-<!--clearInterval(intervalo);-->
-<!--intervalo = null;-->
+<!--    document.getElementById('startBtn').addEventListener('click', () => {-->
+<!--        if (!intervalo) {-->
+<!--            intervalo = setInterval(avanzarTiempo, 2000); // 2 segundos = 1' partido-->
+<!--        }-->
+<!--    });-->
 
-<!--// Resetear variables-->
-<!--tiempo = 0;-->
-<!--partidoEnCurso = false;-->
-<!--partidoTerminado = false;-->
-<!--narracionIndex = 0;-->
-<!--omitirNarracion = false;-->
+<!--    document.getElementById('pauseBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+<!--    });-->
 
-<!--// Resetear estadísticas-->
-<!--stats = {-->
-<!--goles: parseInt(team1Score.textContent) + parseInt(team2Score.textContent),-->
-<!--faltas: 0,-->
-<!--tarjetas: 0,-->
-<!--lesionados: 0-->
-<!--};-->
+<!--    document.getElementById('resetBtn').addEventListener('click', () => {-->
+<!--        clearInterval(intervalo);-->
+<!--        intervalo = null;-->
+<!--        currentMinute = 0;-->
 
-<!--// Resetear UI-->
-<!--matchTime.textContent = "0'";-->
-<!--statusIndicator.textContent = "LISTO";-->
-<!--statusIndicator.className = "status-indicator ready";-->
+<!--        golesLocal = 0;-->
+<!--        golesVisitante = 0;-->
+<!--        totalFaltas = 0;-->
+<!--        totalTarjetas = 0;-->
+<!--        totalLesionados = 0;-->
 
-<!--// Habilitar/deshabilitar botones-->
-<!--startBtn.disabled = false;-->
-<!--pauseBtn.disabled = true;-->
+<!--        document.getElementById('matchTime').innerText = "0'";-->
+<!--        document.getElementById('team1Score').innerText = "0";-->
+<!--        document.getElementById('team2Score').innerText = "0";-->
+<!--        document.getElementById('totalGoals').innerText = "0";-->
+<!--        document.getElementById('totalFouls').innerText = "0";-->
+<!--        document.getElementById('totalCards').innerText = "0";-->
+<!--        document.getElementById('totalInjuries').innerText = "0";-->
 
-<!--// Reinicializar partido-->
-<!--inicializarPartido();-->
-<!--}-->
-
-<!--// Función para actualizar el tiempo-->
-<!--function actualizarTiempo() {-->
-<!--if (!partidoEnCurso) return;-->
-
-<!--tiempo++;-->
-<!--matchTime.textContent = `${tiempo}'`;-->
-
-<!--// Mostrar narración si no está omitida-->
-<!--if (!omitirNarracion) {-->
-<!--mostrarSiguienteNarracion();-->
-<!--}-->
-
-<!--// Terminar partido a los 90 minutos-->
-<!--if (tiempo >= 90) {-->
-<!--terminarPartido();-->
-<!--}-->
-<!--}-->
-
-<!--// Función para mostrar la siguiente narración-->
-<!--function mostrarSiguienteNarracion() {-->
-<!--// if (narracionIndex >= narraciones.length) {-->
-<!--// // Si se acabaron las narraciones, generar eventos aleatorios-->
-<!--// generarEventoAleatorio();-->
-<!--// return;-->
-<!--}-->
-
-<!--const narracion = narraciones[narracionIndex];-->
-<!--const nuevaNarracion = narracion.cloneNode(true);-->
-
-<!--// Actualizar el minuto-->
-<!--const minuteSpan = nuevaNarracion.querySelector('.commentary-minute');-->
-<!--if (minuteSpan) {-->
-<!--minuteSpan.textContent = `${tiempo}'`;-->
-<!--}-->
-
-<!--// Procesar la narración para estadísticas-->
-<!--procesarNarracion(nuevaNarracion.textContent);-->
-
-<!--// Agregar al inicio de la lista (más reciente arriba)-->
-<!--commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);-->
-
-<!--// Scroll automático para mostrar la narración más reciente-->
-<!--nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });-->
-
-<!--narracionIndex++;-->
-
-<!--// Actualizar estadísticas-->
-<!--actualizarEstadisticas();-->
-<!--}-->
-
-<!--// Función para procesar narración y extraer estadísticas-->
-<!--function procesarNarracion(texto) {-->
-<!--const textoLower = texto.toLowerCase();-->
-
-<!--// Detectar goles-->
-<!--if (textoLower.includes('gol') || textoLower.includes('golazo')) {-->
-<!--stats.goles++;-->
-<!--}-->
-
-<!--// Detectar tarjetas-->
-<!--if (textoLower.includes('amarilla') || textoLower.includes('tarjeta')) {-->
-<!--stats.tarjetas++;-->
-<!--}-->
-
-<!--// Detectar expulsiones-->
-<!--if (textoLower.includes('expuls') || textoLower.includes('roja')) {-->
-<!--stats.tarjetas++;-->
-<!--}-->
-
-<!--// Detectar lesiones-->
-<!--if (textoLower.includes('lesion') || textoLower.includes('duele') || textoLower.includes('dolor')) {-->
-<!--stats.lesionados++;-->
-<!--}-->
-
-<!--// Detectar faltas-->
-<!--if (textoLower.includes('falta') || textoLower.includes('brusco') || textoLower.includes('protestar')) {-->
-<!--stats.faltas++;-->
-<!--}-->
-<!--}-->
-
-<!--// Función para actualizar estadísticas en la UI-->
-<!--function actualizarEstadisticas() {-->
-<!--totalGoals.textContent = stats.goles;-->
-<!--totalFouls.textContent = stats.faltas;-->
-<!--totalCards.textContent = stats.tarjetas;-->
-<!--totalInjuries.textContent = stats.lesionados;-->
-<!--}-->
-
-<!--// // Función para generar eventos aleatorios cuando se acaban las narraciones-->
-<!--// function generarEventoAleatorio() {-->
-<!--// const eventos = [-->
-<!--// "Jugada de peligro que no encuentra definición",-->
-<!--// "El árbitro deja continuar el juego",-->
-<!--// "Intento de jugada que se va desviada",-->
-<!--// "El público se hace sentir en las tribunas",-->
-<!--// "Cambio de ritmo en el mediocampo",-->
-<!--// "Jugada que se corta en el último momento"-->
-<!--// ];-->
-<!--//-->
-<!--// const eventoAleatorio = eventos[Math.floor(Math.random() * eventos.length)];-->
-
-<!--// // Crear elemento de narración-->
-<!--// const nuevaNarracion = document.createElement('div');-->
-<!--// nuevaNarracion.className = 'commentary-item';-->
-<!--// nuevaNarracion.innerHTML = `-->
-<!--// <span class="commentary-minute">${tiempo}'</span>-->
-<!--// <span>${eventoAleatorio}</span>-->
-<!--// `;-->
-<!--//-->
-<!--// commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);-->
-<!--// nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });-->
-<!--// }-->
-
-<!--// Función para terminar el partido-->
-<!--function terminarPartido() {-->
-<!--partidoEnCurso = false;-->
-<!--partidoTerminado = true;-->
-
-<!--// Detener cronómetro-->
-<!--clearInterval(intervalo);-->
-<!--intervalo = null;-->
-
-<!--// Cambiar estado visual-->
-<!--statusIndicator.textContent = "FINALIZADO";-->
-<!--statusIndicator.className = "status-indicator finished";-->
-
-<!--// Deshabilitar botones-->
-<!--startBtn.disabled = true;-->
-<!--pauseBtn.disabled = true;-->
-
-<!--// Agregar narración de final-->
-<!--const narracionFinal = document.createElement('div');-->
-<!--narracionFinal.className = 'commentary-item';-->
-<!--narracionFinal.innerHTML = `-->
-<!--<span class="commentary-minute">90'</span>-->
-<!--<span><strong>¡FINAL DEL PARTIDO!</strong></span>-->
-<!--`;-->
-
-<!--commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);-->
-<!--narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });-->
-<!--}-->
-
-<!--// Función para omitir narración-->
-<!--function omitirNarracion() {-->
-<!--omitirNarracion = !omitirNarracion;-->
-
-<!--if (omitirNarracion) {-->
-<!--omiteBtn.textContent = "ACTIVAR NARRACIÓN";-->
-<!--omiteBtn.classList.add('active');-->
-<!--velocidadNarracion = 100; // Acelerar tiempo-->
-<!--} else {-->
-<!--omiteBtn.textContent = "OMITIR NARRACIÓN";-->
-<!--omiteBtn.classList.remove('active');-->
-<!--velocidadNarracion = 1000; // Velocidad normal-->
-<!--}-->
-
-<!--// Reiniciar intervalo con nueva velocidad-->
-<!--if (partidoEnCurso) {-->
-<!--clearInterval(intervalo);-->
-<!--intervalo = setInterval(actualizarTiempo, velocidadNarracion);-->
-<!--}-->
-<!--}-->
-
-<!--// Event listeners-->
-<!--startBtn.addEventListener("click", iniciarPartido);-->
-<!--pauseBtn.addEventListener("click", pausarPartido);-->
-<!--resetBtn.addEventListener("click", reiniciarPartido);-->
-<!--omiteBtn.addEventListener("click", omitirNarracion);-->
-
-<!--// Teclas de acceso rápido-->
-<!--document.addEventListener('keydown', function(e) {-->
-<!--if (e.code === 'Space') {-->
-<!--e.preventDefault();-->
-<!--if (partidoEnCurso) {-->
-<!--pausarPartido();-->
-<!--} else if (!partidoTerminado) {-->
-<!--iniciarPartido();-->
-<!--}-->
-<!--} else if (e.code === 'KeyR') {-->
-<!--reiniciarPartido();-->
-<!--} else if (e.code === 'KeyO') {-->
-<!--omitirNarracion();-->
-<!--}-->
-<!--});-->
-
-<!--// Inicializar al cargar la página-->
-<!--document.addEventListener('DOMContentLoaded', function() {-->
-<!--inicializarPartido();-->
-
-<!--// Configurar estado inicial-->
-<!--statusIndicator.textContent = "LISTO";-->
-<!--statusIndicator.className = "status-indicator ready";-->
-<!--pauseBtn.disabled = true;-->
-<!--});-->
+<!--        document.querySelectorAll('.commentary-item').forEach(item => {-->
+<!--            item.style.display = 'none';-->
+<!--        });-->
+<!--    });-->
 <!--</script>-->
+
+
+
 </body>
 </html>

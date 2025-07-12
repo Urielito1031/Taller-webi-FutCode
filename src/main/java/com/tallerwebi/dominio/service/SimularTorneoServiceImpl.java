@@ -37,10 +37,6 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         this.jugadorService = jugadorService;
     }
 
-    public void generarFrasesPartidoDeMiEquipo(Long equipoId, Long idTorneo, Long idFecha) {
-
-    }
-
     @Override
     public void simularFecha(Long torneoId, Long numeroDeFecha, Long idEquipo) {
         Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
@@ -68,16 +64,6 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 }
             }
 
-//            if(partido.getEquipoLocal().getJugadores() != null && partido.getEquipoVisitante().getJugadores() != null) {
-//                if(partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()){
-//                    golesLocal++;
-//                }else if(partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante().getRatingEquipo()){
-//                    golesVisitante++;
-//                }
-//            }
-
-            // Generar y guardar frases de goles
-
             // Generar frases de goles solo si hay jugadores y juega con mi equipo
             if(partido.getEquipoLocal().getId().equals(idEquipo) || partido.getEquipoVisitante().getId().equals(idEquipo)) {
                 if (partido.getEquipoLocal().hasJugadores()) {
@@ -85,7 +71,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                         try {
                             String frase = frasePartidoService.generarFraseConJugadorAleatorio(
                                     EventoPartido.GOL, partido.getEquipoLocal().getId());
-                            narracionRepository.guardar(new Narracion(frase, partido));
+                                    narracionRepository.guardar(new Narracion(frase, partido));
                         } catch (Exception e) {
                             // Log error pero continúa la simulación
                             System.err.println("Error generando frase para equipo local: " + e.getMessage());
@@ -105,16 +91,6 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                         }
                     }
                 }
-
-//            for (int i = 0; i < golesLocal; i++) {
-//                String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GOL, partido.getEquipoLocal().getId());
-//                narracionRepository.guardar(new Narracion(frase, partido));
-//            }
-//
-//            for (int i = 0; i < golesVisitante; i++) {
-//                String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GOL, partido.getEquipoVisitante().getId());
-//                narracionRepository.guardar(new Narracion(frase, partido));
-//            }
 
                 int cantidadEventosGenerales = generarCantidadAleatoria(25);
                 int cantidadTarjetas = generarCantidadAleatoria(5);
@@ -192,18 +168,6 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         fechaRepository.save(fechaASimular);
     }
 
-//    @Override
-//    public Long simularFechaYDevolverPrimerPartido(Long torneoId, Long numeroDeFecha) {
-//        simularFecha(torneoId, numeroDeFecha); // Ya lo tenés hecho
-//
-//        Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha);
-//
-//        if (fecha != null && !fecha.getPartidos().isEmpty()) {
-//            return fecha.getPartidos().get(0).getId(); // Primer partido simulado
-//        }
-//
-//        return null;
-//    }
 
     @Override
     public Partido obtenerPartidoSimulado(Long partidoId) {

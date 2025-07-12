@@ -5,6 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulación de Partido - FutCode</title>
     <link rel="stylesheet" th:href="@{/css/partidoStyle.css}">
+    <style>
+    .commentary-item.gol-favor {
+        border-left: 6px solid #2ecc40;
+        background: #193d1c;
+        color: #2ecc40;
+        font-weight: bold;
+    }
+    .commentary-item.gol-contra,
+    .commentary-item.expulsion-propia {
+        border-left: 6px solid #e74c3c;
+        background: #3a1a1a;
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    .commentary-item.expulsion-rival {
+        border-left: 6px solid #2ecc40;
+        background: #193d1c;
+        color: #2ecc40;
+        font-weight: bold;
+    }
+    .commentary-item.tarjeta-amarilla {
+        border-left: 6px solid #ffe066;
+        background: #3a381a;
+        color: #ffe066;
+        font-weight: bold;
+    }
+    .commentary-item.tarjeta-roja {
+        border-left: 6px solid #e74c3c;
+        background: #3a1a1a;
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    .commentary-item.lesion {
+        border-left: 6px solid #ff8800;
+        background: #3a2a1a;
+        color: #ff8800;
+        font-weight: bold;
+    }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -63,6 +102,8 @@
                 <span th:text="${narracion.texto}">Aquí va una frase...</span>
             </div>
         </div>
+        <input type="hidden" id="equipoUsuario" th:value="${equipoLocal}" />
+        <input type="hidden" id="equipoRival" th:value="${equipoVisitante}" />
     </div>
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
@@ -189,6 +230,44 @@ function actualizarTiempo() {
 function mostrarNarracion(narracion) {
     const nuevaNarracion = document.createElement('div');
     nuevaNarracion.className = 'commentary-item';
+
+    // Lógica de color robusta y explícita para goles
+    const tipoEvento = narracion.tipo.toLowerCase();
+    const textoNarracion = narracion.texto.toLowerCase();
+
+    if (tipoEvento.includes('gol')) {
+        if (
+            textoNarracion.includes('gol de ' + equipoUsuario) ||
+            textoNarracion.includes('goool de ' + equipoUsuario) ||
+            textoNarracion.includes('golazo de ' + equipoUsuario) ||
+            textoNarracion.includes(equipoUsuario + ' marca')
+        ) {
+            nuevaNarracion.classList.add('gol-favor');
+        } else if (
+            textoNarracion.includes('gol de ' + equipoRival) ||
+            textoNarracion.includes('goool de ' + equipoRival) ||
+            textoNarracion.includes('golazo de ' + equipoRival) ||
+            textoNarracion.includes(equipoRival + ' marca')
+        ) {
+            nuevaNarracion.classList.add('gol-contra');
+        } else {
+            // Si no se puede determinar, por defecto gol en contra
+            nuevaNarracion.classList.add('gol-contra');
+        }
+    } else if (tipoEvento.includes('expulsion')) {
+        if (textoNarracion.includes(equipoUsuario)) {
+            nuevaNarracion.classList.add('expulsion-propia');
+        } else {
+            nuevaNarracion.classList.add('expulsion-rival');
+        }
+    } else if (tipoEvento.includes('amarilla')) {
+        nuevaNarracion.classList.add('tarjeta-amarilla');
+    } else if (tipoEvento.includes('roja')) {
+        nuevaNarracion.classList.add('tarjeta-roja');
+    } else if (tipoEvento.includes('lesion')) {
+        nuevaNarracion.classList.add('lesion');
+    }
+
     nuevaNarracion.innerHTML = `<span class="commentary-minute">${narracion.minuto}'</span><span>${narracion.texto}</span>`;
     commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);
     nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -260,6 +339,64 @@ function terminarPartido() {
     narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
     commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
     narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Festejo si ganaste (local o visitante)
+    let golesUsuario = 0, golesRival = 0;
+    if (document.getElementById('team1Name').textContent.trim().toLowerCase() === equipoUsuario) {
+        golesUsuario = golesLocal;
+        golesRival = golesVisitante;
+    } else {
+        golesUsuario = golesVisitante;
+        golesRival = golesLocal;
+    }
+    if (golesUsuario > golesRival) {
+        mostrarFestejoVictoria();
+    }
+}
+
+function mostrarFestejoVictoria() {
+    // Mensaje de victoria
+    const victoryMsg = document.createElement('div');
+    victoryMsg.textContent = "¡GANASTE EL PARTIDO!";
+    victoryMsg.style.position = "fixed";
+    victoryMsg.style.top = "35%";
+    victoryMsg.style.left = "50%";
+    victoryMsg.style.transform = "translate(-50%, -50%)";
+    victoryMsg.style.fontSize = "3.5em";
+    victoryMsg.style.color = "#2ecc40";
+    victoryMsg.style.fontWeight = "bold";
+    victoryMsg.style.zIndex = 9999;
+    victoryMsg.style.textShadow = "0 0 30px #fff, 0 0 10px #2ecc40";
+    victoryMsg.style.background = "rgba(255,255,255,0.8)";
+    victoryMsg.style.padding = "30px 60px";
+    victoryMsg.style.borderRadius = "20px";
+    document.body.appendChild(victoryMsg);
+
+    // Confeti mejorado
+    for (let i = 0; i < 60; i++) {
+        const confeti = document.createElement('div');
+        confeti.style.position = "fixed";
+        confeti.style.left = Math.random() * 100 + "vw";
+        confeti.style.top = "-40px";
+        confeti.style.width = "16px";
+        confeti.style.height = "32px";
+        confeti.style.background = ["#2ecc40", "#f1c40f", "#e67e22", "#e74c3c", "#3498db", "#9b59b6"][Math.floor(Math.random()*6)];
+        confeti.style.borderRadius = "4px";
+        confeti.style.opacity = 0.85;
+        confeti.style.zIndex = 9999;
+        confeti.style.transform = `rotate(${Math.random()*360}deg)`;
+        confeti.style.transition = "top 2.2s cubic-bezier(.4,1.4,.7,1)";
+        document.body.appendChild(confeti);
+        setTimeout(() => {
+            confeti.style.top = "100vh";
+        }, 10);
+        setTimeout(() => {
+            confeti.remove();
+        }, 2300);
+    }
+    setTimeout(() => {
+        victoryMsg.remove();
+    }, 2600);
 }
 
 startBtn.addEventListener("click", iniciarPartido);

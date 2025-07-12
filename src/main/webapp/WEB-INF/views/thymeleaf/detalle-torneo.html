@@ -42,6 +42,23 @@
             font-weight: 700;
             color: #333;
         }
+        
+        /* Estilos para indicadores de variación */
+        .text-success {
+            color: #28a745 !important;
+        }
+        
+        .text-danger {
+            color: #dc3545 !important;
+        }
+        
+        .text-muted {
+            color: #6c757d !important;
+        }
+        
+        .ms-2 {
+            margin-left: 0.5rem !important;
+        }
     </style>
 </head>
 <body>
@@ -141,7 +158,7 @@
                </thead>
                <tbody>
                <tr th:each="equipo : ${torneoEquipos}"
-                   th:classappend="${equipo.equipo.usuarioId == usuarioId} ? 'mi-equipo'" >
+                   th:classappend="${equipo.equipo.usuario != null and equipo.equipo.usuario.id == usuarioId} ? 'mi-equipo'" >
                   <td th:text="${equipo.posicion}">1</td>
                   <td>
                      <div class="team-row">
@@ -151,6 +168,20 @@
                         </div>
                         <span th:text="${equipo.equipo.nombre}">Equipo 1</span>
                      </div>
+
+                     <span th:if="${equipo.subio}" class="ms-2 text-success" title="Subió de posición">
+                         <i class="bi bi-arrow-up"></i>
+                         <span th:text="${-equipo.variacionPosicion}"></span>
+                     </span>
+
+                     <span th:if="${equipo.bajo}" class="ms-2 text-danger" title="Bajó de posición">
+                         <i class="bi bi-arrow-down"></i>
+                         <span th:text="${equipo.variacionPosicion}"></span>
+                     </span>
+
+                     <span th:if="${equipo.igual}" class="ms-2 text-muted" title="Se mantuvo">
+                         <i class="bi bi-minus"></i>
+                     </span>
                   </td>
                   <td th:text="${equipo.partidosJugados}">0</td>
                   <td th:text="${equipo.partidosGanados}">0</td>
@@ -192,5 +223,26 @@
       </div>
    </main>
 </div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleString('es-AR', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        // Si hay un elemento con id "current-time", actualizarlo
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000); // Actualizar cada minuto
+</script>
 </body>
 </html>

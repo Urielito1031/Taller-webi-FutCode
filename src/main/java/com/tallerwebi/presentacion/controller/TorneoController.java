@@ -114,13 +114,27 @@ public class TorneoController {
    @GetMapping("/detalle-torneo/{id}")
    public String detalleTorneo(@PathVariable Long id, Model model, HttpServletRequest request) {
       TorneoDTO torneo = torneoService.getById(id);
-      List<EquipoTorneoDTO> torneoEquipos = equipoTorneoService.getAllByTorneoId(id);
+
+      // Usar la misma lógica que tabla-posiciones para obtener datos actualizados
+      Torneo torneoEntity = torneoRepository.obtenerTorneoConFechas(id);
+      List<Partido> partidos = torneoEntity.getFechas().stream()
+            .flatMap(f -> f.getPartidos().stream())
+            .collect(Collectors.toList());
+
+      List<EquipoTorneo> tablaAnterior = equipoTorneoRepository.getAllByTorneoId(id);
+
+      // Agrego este metodo porque me compara con la misma tabla
+      for (EquipoTorneo eq : tablaAnterior) {
+         eq.setPosicionAnterior(eq.getPosicion());
+      }
+
+      List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       model.addAttribute("usuarioId", usuarioId);
 
       model.addAttribute("torneo", torneo);
-      model.addAttribute("torneoEquipos", torneoEquipos);
+      model.addAttribute("torneoEquipos", tabla);
       return "detalle-torneo";
    }
 

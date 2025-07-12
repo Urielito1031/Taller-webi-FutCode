@@ -323,9 +323,19 @@ CREATE TABLE `jugador` (
   `posicion` varchar(255) NOT NULL,
   `rareza_jugador` varchar(255) NOT NULL,
   `rating` double NOT NULL,
-  `equipo_id` bigint(20) DEFAULT NULL,
   `pais_id` bigint(20) DEFAULT NULL,
   `sobre_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `equipo_jugador`
+--
+
+CREATE TABLE `equipo_jugador` (
+  `equipo_id` bigint(20) NOT NULL,
+  `jugador_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -490,6 +500,25 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`id`, `activo`, `email`, `monedas`, `password`, `rol`, `equipo_id`) VALUES
 (1, b'1', 'aaaaa@mail.com', 10000, '$2a$10$48aC.N6QgvolX3Clw4e3lO4f8TfvHC7BQXatsCJ3dEnoC13IqyY9K', 'USER', 1);
 
+-- Datos de prueba para jugadores
+INSERT INTO `jugador` (`id`, `nombre`, `apellido`, `edad`, `numero_camiseta`, `rating`, `lesionado`, `estado_fisico`, `pais_id`, `rareza_jugador`, `posicion`) VALUES
+(1, 'Lionel', 'Messi', 35, 10, 91.0, 0, 95.0, 1, 'LEYENDA', 'DELANTERO'),
+(2, 'Cristiano', 'Ronaldo', 38, 7, 88.0, 0, 92.0, 11, 'LEYENDA', 'DELANTERO'),
+(3, 'Kevin', 'De Bruyne', 32, 17, 89.0, 0, 90.0, 14, 'RARO', 'MEDIOCAMPISTA'),
+(4, 'Virgil', 'van Dijk', 32, 4, 87.0, 0, 88.0, 12, 'RARO', 'DEFENSOR'),
+(5, 'Thibaut', 'Courtois', 31, 1, 86.0, 0, 85.0, 14, 'RARO', 'ARQUERO'),
+(6, 'Erling', 'Haaland', 23, 9, 88.0, 0, 93.0, 5, 'EPICO', 'DELANTERO'),
+(7, 'Kylian', 'Mbappé', 24, 10, 89.0, 0, 94.0, 4, 'EPICO', 'DELANTERO'),
+(8, 'Luka', 'Modric', 38, 10, 85.0, 0, 87.0, 6, 'RARO', 'MEDIOCAMPISTA'),
+(9, 'Mohamed', 'Salah', 31, 11, 87.0, 0, 89.0, 7, 'RARO', 'DELANTERO'),
+(10, 'Robert', 'Lewandowski', 35, 9, 86.0, 0, 88.0, 5, 'RARO', 'DELANTERO');
+
+-- Relaciones equipo-jugador para pruebas
+INSERT INTO `equipo_jugador` (`equipo_id`, `jugador_id`) VALUES
+(1, 1), (1, 3), (1, 5), (1, 8), (1, 10),
+(2, 2), (2, 4), (2, 6), (2, 7), (2, 9),
+(3, 1), (3, 2), (3, 3), (3, 4), (3, 5);
+
 --
 -- Índices para tablas volcadas
 --
@@ -571,7 +600,6 @@ ALTER TABLE `formato_torneo`
 --
 ALTER TABLE `jugador`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `FKcc4h4wqekf4kicyifbrit5sp` (`equipo_id`),
   ADD KEY `FKk6rdacuyy2m6nd0vlxijmft2k` (`pais_id`),
   ADD KEY `FKjosrmdh2ir6p8miuebs52r9ub` (`sobre_id`);
 
@@ -618,6 +646,13 @@ ALTER TABLE `torneo_copa`
 --
 ALTER TABLE `torneo_liga`
   ADD PRIMARY KEY (`torneo_id`);
+
+--
+-- Indices de la tabla `equipo_jugador`
+--
+ALTER TABLE `equipo_jugador`
+  ADD PRIMARY KEY (`equipo_id`,`jugador_id`),
+  ADD KEY `FK_equipo_jugador_jugador` (`jugador_id`);
 
 --
 -- Indices de la tabla `usuario`
@@ -748,10 +783,16 @@ ALTER TABLE `formato_torneo`
   ADD CONSTRAINT `FK7xdytyovowi9r1dp2hoalqpfq` FOREIGN KEY (`fase_id`) REFERENCES `fase` (`id`);
 
 --
+-- Filtros para la tabla `equipo_jugador`
+--
+ALTER TABLE `equipo_jugador`
+  ADD CONSTRAINT `FK_equipo_jugador_equipo` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_equipo_jugador_jugador` FOREIGN KEY (`jugador_id`) REFERENCES `jugador` (`id`) ON DELETE CASCADE;
+
+--
 -- Filtros para la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  ADD CONSTRAINT `FKcc4h4wqekf4kicyifbrit5sp` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`),
   ADD CONSTRAINT `FKjosrmdh2ir6p8miuebs52r9ub` FOREIGN KEY (`sobre_id`) REFERENCES `sobre` (`id`),
   ADD CONSTRAINT `FKk6rdacuyy2m6nd0vlxijmft2k` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`);
 

@@ -36,7 +36,8 @@ public class JugadorRepositoryImpl implements JugadorRepository{
    public List<Jugador> sortearJugadoresIniciales(RarezaJugador rarezaJugador, PosicionEnum posicion, int cantidad) {
       String hql = "FROM Jugador WHERE rarezaJugador = :rareza_Jugador AND posicion = :posicion";
 
-      List<Jugador> jugadores = sessionFactory.getCurrentSession()
+      //ver lista falla
+      List<Jugador> jugadores = getSession()
               .createQuery(hql, Jugador.class)
               .setParameter("rareza_Jugador", rarezaJugador)
               .setParameter("posicion", posicion)

@@ -1,15 +1,17 @@
 -- db_futcodeTest.sql - Refactorizado y Consolidado para todos los tests
 
 -- SECCIÓN DE LIMPIEZA COMPLETA (Orden Inverso de Dependencias de Claves Foráneas)
--- Descomentar si tu estrategia de test requiere limpiar la DB antes de cada run.
+-- Usar IF EXISTS para evitar errores si las tablas no existen
 DELETE FROM formacion_equipo;
+DELETE FROM equipo_jugador;
 DELETE FROM jugador;
 DELETE FROM equipo_torneo;
 DELETE FROM equipo;
-DELETE FROM sobre; -- Si usas la tabla sobre en algún test
+DELETE FROM sobre;
 DELETE FROM usuario;
-DELETE FROM club;
-DELETE FROM pais;
+-- Comentamos las tablas que pueden no existir en la DB de test
+-- DELETE FROM club;
+-- DELETE FROM pais;
 DELETE FROM torneo;
 DELETE FROM formato_torneo;
 DELETE FROM esquema;
@@ -71,34 +73,52 @@ INSERT INTO equipo_torneo (id, equipo_id, torneo_id, posicion) VALUES (4, 204, 1
 INSERT INTO equipo_torneo (id, equipo_id, torneo_id, posicion) VALUES (6, 201, 104, 1);
 
 
--- INSERTS DE JUGADOR Y FORMACION_EQUIPO (Jugador depende de Pais, Equipo, Sobre; Formacion_Equipo depende de Jugador y Equipo)
+-- INSERTS DE JUGADOR Y FORMACION_EQUIPO (Jugador depende de Pais, Sobre; Formacion_Equipo depende de Jugador y Equipo)
 
 -- Jugadores de Prueba para FormacionEquipoRepository (IDs 500-506)
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES (500, 'Jugador FE-A', 'Apellido FE-A', NULL, 25, 1, 80.0, 0, 90.0, 1, 'NORMAL', 'ARQUERO', 100, NULL);
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES (501, 'Jugador FE-B', 'Apellido FE-B', NULL, 26, 2, 75.0, 0, 85.0, 1, 'NORMAL', 'DEFENSOR', 100, NULL);
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES (502, 'Jugador FE-C', 'Apellido FE-C', NULL, 27, 3, 78.0, 0, 88.0, 1, 'NORMAL', 'MEDIOCAMPISTA', 100, NULL);
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES (503, 'Jugador FE-D', 'Apellido FE-D', NULL, 28, 4, 70.0, 0, 80.0, 1, 'NORMAL', 'DELANTERO', 102, NULL);
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES (504, 'Jugador FE-E', 'Apellido FE-E', NULL, 29, 5, 72.0, 0, 82.0, 1, 'NORMAL', 'DEFENSOR', 102, NULL);
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES (505, 'Jugador FE-F', 'Apellido FE-F', NULL, 30, 6, 81.0, 0, 91.0, 1, 'RARO', 'MEDIOCAMPISTA', 103, NULL);
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES (506, 'Jugador FE-G (Sin Equipo)', 'Apellido FE-G', NULL, 24, 7, 70.0, 0, 80.0, 1, 'NORMAL', 'ARQUERO', NULL, NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES (500, 'Jugador FE-A', 'Apellido FE-A', NULL, 25, 1, 80.0, 0, 90.0, 1, 'NORMAL', 'ARQUERO', NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES (501, 'Jugador FE-B', 'Apellido FE-B', NULL, 26, 2, 75.0, 0, 85.0, 1, 'NORMAL', 'DEFENSOR', NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES (502, 'Jugador FE-C', 'Apellido FE-C', NULL, 27, 3, 78.0, 0, 88.0, 1, 'NORMAL', 'MEDIOCAMPISTA', NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES (503, 'Jugador FE-D', 'Apellido FE-D', NULL, 28, 4, 70.0, 0, 80.0, 1, 'NORMAL', 'DELANTERO', NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES (504, 'Jugador FE-E', 'Apellido FE-E', NULL, 29, 5, 72.0, 0, 82.0, 1, 'NORMAL', 'DEFENSOR', NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES (505, 'Jugador FE-F', 'Apellido FE-F', NULL, 30, 6, 81.0, 0, 91.0, 1, 'RARO', 'MEDIOCAMPISTA', NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES (506, 'Jugador FE-G (Sin Equipo)', 'Apellido FE-G', NULL, 24, 7, 70.0, 0, 80.0, 1, 'NORMAL', 'ARQUERO', NULL);
 
 
 -- Jugadores para JugadorRepository (IDs a partir de 5000)
-INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, equipo_id, sobre_id) VALUES
-                                                                                                                                                                        (5000, 'Sortear', 'ArqueroRaro1', NULL, 28, 1, 80.0, 0, 90.00, 1, 'RARO', 'ARQUERO', NULL, NULL),
-                                                                                                                                                                        (5001, 'Sortear', 'ArqueroRaro2', NULL, 29, 12, 81.0, 0, 91.00, 2, 'RARO', 'ARQUERO', NULL, NULL),
-                                                                                                                                                                        (5002, 'Sortear', 'ArqueroRaro3', NULL, 27, 25, 79.0, 0, 89.00, 3, 'RARO', 'ARQUERO', NULL, NULL),
-                                                                                                                                                                        (5003, 'Sortear', 'DelanteroEpico1', NULL, 25, 9, 88.0, 0, 95.00, 1, 'EPICO', 'DELANTERO', NULL, NULL),
-                                                                                                                                                                        (5004, 'Sortear', 'DelanteroEpico2', NULL, 26, 11, 89.0, 0, 96.00, 3, 'EPICO', 'DELANTERO', NULL, NULL),
-                                                                                                                                                                        (5005, 'Sortear', 'DelanteroEpico3', NULL, 24, 10, 87.0, 0, 94.00, 2, 'EPICO', 'DELANTERO', NULL, NULL),
-                                                                                                                                                                        (5006, 'Sortear', 'MedioLeyenda1', NULL, 30, 8, 92.0, 0, 98.00, 1, 'LEYENDA', 'MEDIOCAMPISTA', NULL, NULL),
-                                                                                                                                                                        (5007, 'Sortear', 'MedioLeyenda2', NULL, 31, 6, 93.0, 0, 99.00, 2, 'LEYENDA', 'MEDIOCAMPISTA', NULL, NULL),
-                                                                                                                                                                        (5008, 'EquipoA', 'Jugador1', NULL, 25, 7, 85.0, 0, 90.00, 1, 'NORMAL', 'DELANTERO', 201, NULL),
-                                                                                                                                                                        (5009, 'EquipoA', 'Jugador2', NULL, 26, 8, 86.0, 0, 91.00, 1, 'NORMAL', 'MEDIOCAMPISTA', 201, NULL),
-                                                                                                                                                                        (5010, 'EquipoB', 'Jugador1', NULL, 27, 9, 84.0, 0, 89.00, 2, 'NORMAL', 'DEFENSOR', 202, NULL),
-                                                                                                                                                                        (5011, 'EquipoB', 'Jugador2', NULL, 28, 10, 85.0, 0, 90.00, 2, 'NORMAL', 'ARQUERO', 202, NULL),
-                                                                                                                                                                        (5012, 'Jugador', 'Individual', NULL, 22, 15, 75.0, 0, 85.00, 1, 'NORMAL', 'DEFENSOR', NULL, NULL),
-                                                                                                                                                                        (5013, 'Jugador', 'A Actualizar', NULL, 23, 16, 78.0, 0, 88.00, 1, 'NORMAL', 'DELANTERO', NULL, NULL);
+INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating, lesionado, estado_fisico, pais_id, rareza_jugador, posicion, sobre_id) VALUES
+                                                                                                                                                                        (5000, 'Sortear', 'ArqueroRaro1', NULL, 28, 1, 80.0, 0, 90.00, 1, 'RARO', 'ARQUERO', NULL),
+                                                                                                                                                                        (5001, 'Sortear', 'ArqueroRaro2', NULL, 29, 12, 81.0, 0, 91.00, 2, 'RARO', 'ARQUERO', NULL),
+                                                                                                                                                                        (5002, 'Sortear', 'ArqueroRaro3', NULL, 27, 25, 79.0, 0, 89.00, 3, 'RARO', 'ARQUERO', NULL),
+                                                                                                                                                                        (5003, 'Sortear', 'DelanteroEpico1', NULL, 25, 9, 88.0, 0, 95.00, 1, 'EPICO', 'DELANTERO', NULL),
+                                                                                                                                                                        (5004, 'Sortear', 'DelanteroEpico2', NULL, 26, 11, 89.0, 0, 96.00, 3, 'EPICO', 'DELANTERO', NULL),
+                                                                                                                                                                        (5005, 'Sortear', 'DelanteroEpico3', NULL, 24, 10, 87.0, 0, 94.00, 2, 'EPICO', 'DELANTERO', NULL),
+                                                                                                                                                                        (5006, 'Sortear', 'MedioLeyenda1', NULL, 30, 8, 92.0, 0, 98.00, 1, 'LEYENDA', 'MEDIOCAMPISTA', NULL),
+                                                                                                                                                                        (5007, 'Sortear', 'MedioLeyenda2', NULL, 31, 6, 93.0, 0, 99.00, 2, 'LEYENDA', 'MEDIOCAMPISTA', NULL),
+                                                                                                                                                                        (5008, 'EquipoA', 'Jugador1', NULL, 25, 7, 85.0, 0, 90.00, 1, 'NORMAL', 'DELANTERO', NULL),
+                                                                                                                                                                        (5009, 'EquipoA', 'Jugador2', NULL, 26, 8, 86.0, 0, 91.00, 1, 'NORMAL', 'MEDIOCAMPISTA', NULL),
+                                                                                                                                                                        (5010, 'EquipoB', 'Jugador1', NULL, 27, 9, 84.0, 0, 89.00, 2, 'NORMAL', 'DEFENSOR', NULL),
+                                                                                                                                                                        (5011, 'EquipoB', 'Jugador2', NULL, 28, 10, 85.0, 0, 90.00, 2, 'NORMAL', 'ARQUERO', NULL),
+                                                                                                                                                                        (5012, 'Jugador', 'Individual', NULL, 22, 15, 75.0, 0, 85.00, 1, 'NORMAL', 'DEFENSOR', NULL),
+                                                                                                                                                                        (5013, 'Jugador', 'A Actualizar', NULL, 23, 16, 78.0, 0, 88.00, 1, 'NORMAL', 'DELANTERO', NULL);
+
+-- RELACIONES EQUIPO-JUGADOR (Many-to-Many)
+-- Jugadores del equipo 201 (Los Invencibles)
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (201, 5008);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (201, 5009);
+
+-- Jugadores del equipo 202 (Fuerza Unida)
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (202, 5010);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (202, 5011);
+
+-- Jugadores para FormacionEquipoRepository
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (100, 500);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (100, 501);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (100, 502);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (102, 503);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (102, 504);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (103, 505);
+INSERT INTO equipo_jugador (equipo_id, jugador_id) VALUES (103, 506);
 
 -- Formaciones de Equipo de Prueba (IDs a partir de 1000)
 INSERT INTO formacion_equipo (id, equipo_id, jugador_id, posicion_en_campo) VALUES (1000, 100, 500, 'ARQUERO');

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Escudo - FutCode</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/auth/sesionUsuario.css}"/>
+    <link rel="stylesheet" th:href="@{/css/validation-errors.css}"/>
+    <style>
+        :root {
+            --primary-bg: #0d1b2a;
+            --secondary-bg: #1b263b;
+            --accent-bg: #1c2a3a;
+            --dark-bg: #0d1a2e;
+            --text-primary: #00ffc3;
+            --text-secondary: #ffffff;
+            --text-muted: #b0b8c1;
+            --border-color: #2a3f5f;
+            --hover-bg: #1e3148;
+            --shadow: 0 4px 20px rgba(0, 255, 195, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--dark-bg) 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-secondary);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--text-primary);
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .team-name-display {
+            background: linear-gradient(145deg, rgba(30, 42, 60, 0.9), rgba(46, 61, 79, 0.9));
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 255, 195, 0.2);
+            text-align: center;
+        }
+
+        .team-name-display h2 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: transform 0.5s ease;
+        }
+
+        .shield-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .shield-item.left {
+            transform: scale(0.7) translateX(-80px);
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        .shield-item.center {
+            transform: scale(1.5);
+            opacity: 1;
+            z-index: 3;
+        }
+
+        .shield-item.right {
+            transform: scale(0.7) translateX(80px);
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        .shield-item.hidden {
+            transform: scale(0.4) translateX(-100px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .shield-item.hidden-right {
+            transform: scale(0.4) translateX(100px);
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .shield-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .shield-item.center .shield-image {
+            width: 250px;
+            height: 250px;
+            border-color: var(--text-primary);
+            border-width: 4px;
+            box-shadow: 0 0 40px rgba(0, 255, 195, 0.6);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 40px rgba(0, 255, 195, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(0, 255, 195, 0.8);
+            }
+            100% {
+                box-shadow: 0 0 40px rgba(0, 255, 195, 0.6);
+            }
+        }
+
+        .shield-item:hover .shield-image {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
+        }
+
+        .shield-name {
+            margin-top: 15px;
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .shield-item.center .shield-name {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 255, 195, 0.1);
+            border: 2px solid var(--text-primary);
+            color: var(--text-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(0, 255, 195, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev {
+            left: 20px;
+        }
+
+        .carousel-nav.next {
+            right: 20px;
+        }
+
+        .carousel-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .carousel-nav:disabled:hover {
+            transform: translateY(-50%);
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--text-primary), #00d4a3);
+            color: var(--primary-bg);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 195, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--text-muted), #8a9ba8);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(176, 184, 193, 0.3);
+        }
+
+        .selected-shield {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 255, 195, 0.1);
+            border: 1px solid var(--text-primary);
+            border-radius: 15px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .selected-shield img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .selected-shield p {
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .carousel-container {
+                height: 400px;
+            }
+
+            .shield-image {
+                width: 100px;
+                height: 100px;
+            }
+
+            .shield-item.center .shield-image {
+                width: 180px;
+                height: 180px;
+            }
+
+            .carousel-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+
+            .carousel-nav.prev {
+                left: 15px;
+            }
+
+            .carousel-nav.next {
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .carousel-container {
+                height: 350px;
+            }
+
+            .shield-image {
+                width: 80px;
+                height: 80px;
+            }
+
+            .shield-item.center .shield-image {
+                width: 140px;
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-shield-alt"></i> Seleccionar Escudo</h1>
+            <p>Elige el escudo que representará a tu equipo</p>
+        </div>
+
+        <div class="team-name-display">
+            <h2>Tu equipo: <span th:text="${equipo.nombre}" style="color: var(--text-primary);">Nombre del Equipo</span></h2>
+            <p style="color: var(--text-muted); margin-top: 10px; font-size: 1rem;">
+                <i class="fas fa-info-circle"></i> El escudo del centro será el seleccionado para tu equipo
+            </p>
+        </div>
+
+        <div class="carousel-container">
+            <button class="carousel-nav prev" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Los escudos se cargarán dinámicamente con JavaScript -->
+            </div>
+
+            <button class="carousel-nav next" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="action-buttons">
+            <a th:href="@{/nuevo-equipo}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Volver
+            </a>
+            <button class="btn btn-primary" id="confirmBtn" disabled>
+                <i class="fas fa-check"></i>
+                Confirmar Escudo
+            </button>
+        </div>
+
+        <div class="selected-shield" id="selectedShield" style="display: none;">
+            <img id="selectedShieldImg" src="" alt="Escudo seleccionado">
+            <p id="selectedShieldName">Escudo seleccionado</p>
+        </div>
+    </div>
+
+    <form id="shieldForm" th:action="@{/guardar-escudo}" method="POST" style="display: none;">
+        <input type="hidden" name="escudoSeleccionado" id="escudoSeleccionado">
+    </form>
+
+    <script>
+        // Lista de escudos disponibles
+        const escudos = [
+            // Equipos Argentinos
+            { id: 1000, nombre: "Boca Juniors", imagen: "https://imgur.com/DB9vIuL.png" },
+            { id: 1002, nombre: "River Plate", imagen: "https://i.imgur.com/wU1slIe.png" },
+            { id: 1003, nombre: "Racing Club", imagen: "https://i.imgur.com/DaUtieZ.png" },
+            { id: 1004, nombre: "Independiente", imagen: "https://i.imgur.com/uVSAjum.png" },
+            { id: 1005, nombre: "San Lorenzo", imagen: "https://i.imgur.com/8m3QOCe.png" },
+            { id: 1006, nombre: "Vélez Sarsfield", imagen: "https://i.imgur.com/Vhrl2ko.png" },
+            { id: 1007, nombre: "Newells Old Boys", imagen: "https://i.imgur.com/Mqove2Y.png" },
+            { id: 1008, nombre: "Rosario Central", imagen: "https://i.imgur.com/m1A7188.png" },
+            { id: 1009, nombre: "Estudiantes", imagen: "https://i.imgur.com/u8PrZAM.png" },
+            { id: 1010, nombre: "Gimnasia y Esgrima La Plata", imagen: "https://i.imgur.com/YODTRNE.png" },
+            { id: 1011, nombre: "Banfield", imagen: "https://i.imgur.com/6nmN6HJ.png" },
+            { id: 1012, nombre: "Colón", imagen: "https://i.imgur.com/efpjd0W.png" },
+            { id: 1013, nombre: "Argentinos Juniors", imagen: "https://i.imgur.com/kDpyrdm.png" },
+            { id: 1014, nombre: "Huracán", imagen: "https://i.imgur.com/KgW20xf.png" },
+            { id: 1015, nombre: "Talleres de Córdoba", imagen: "https://i.imgur.com/7AF8286.png" },
+            { id: 1016, nombre: "Platense", imagen: "https://i.imgur.com/oPiMZ3M.png" },
+            
+            // Equipos Brasileños
+            { id: 2000, nombre: "Atlético Mineiro", imagen: "https://i.imgur.com/CiJEwIG.png" },
+            { id: 2001, nombre: "Botafogo", imagen: "https://i.imgur.com/IqLrSgZ.png" },
+            { id: 2002, nombre: "Bahia", imagen: "https://i.imgur.com/ssZZasm.png" },
+            { id: 2003, nombre: "Ceará", imagen: "https://i.imgur.com/QT3ShYy.png" },
+            { id: 2004, nombre: "Corinthians", imagen: "https://i.imgur.com/Bl4KTzA.png" },
+            { id: 2005, nombre: "Cruzeiro", imagen: "https://i.imgur.com/4gULoxz.png" },
+            { id: 2006, nombre: "Flamengo", imagen: "https://i.imgur.com/GNISEB2.png" },
+            { id: 2007, nombre: "Fluminense", imagen: "https://i.imgur.com/TDjuWox.png" },
+            { id: 2008, nombre: "Fortaleza", imagen: "https://i.imgur.com/LIlPGWG.png" },
+            { id: 2009, nombre: "Gremio", imagen: "https://i.imgur.com/PQMHq4K.png" },
+            { id: 2010, nombre: "Internacional", imagen: "https://i.imgur.com/GEcrlln.png" },
+            { id: 2011, nombre: "Sao Paulo", imagen: "https://i.imgur.com/fWuQxyZ.png" },
+            { id: 2012, nombre: "Palmeiras", imagen: "https://i.imgur.com/ey1vG6l.png" },
+            { id: 2013, nombre: "Vitoria", imagen: "https://i.imgur.com/gN4lAZW.png" },
+            { id: 2014, nombre: "Santos", imagen: "https://i.imgur.com/BUlHma9.png" },
+            { id: 2015, nombre: "Vasco da Gama", imagen: "https://i.imgur.com/O63hPDe.png" },
+            
+            // Equipos Premier League
+            { id: 2016, nombre: "Aston Villa", imagen: "https://i.imgur.com/VQza9Gd.png" },
+            { id: 2017, nombre: "Arsenal", imagen: "https://i.imgur.com/l8ct6ZB.png" },
+            { id: 2018, nombre: "Chelsea", imagen: "https://i.imgur.com/6kfAInB.png" },
+            { id: 2019, nombre: "Brighton & Hove Albion", imagen: "https://i.imgur.com/VQza9Gd.png" },
+            { id: 2020, nombre: "Fulham", imagen: "https://i.imgur.com/VKYRir1.png" },
+            { id: 2021, nombre: "Leeds United", imagen: "https://i.imgur.com/f5xD6A3.png" },
+            { id: 2022, nombre: "Everton", imagen: "https://i.imgur.com/uyCFjRl.png" },
+            { id: 2023, nombre: "Liverpool", imagen: "https://i.imgur.com/BaFKXhg.png" },
+            { id: 2024, nombre: "Manchester City", imagen: "https://i.imgur.com/qLJVMaE.png" },
+            { id: 2025, nombre: "Manchester United", imagen: "https://i.imgur.com/UXJXAQb.png" },
+            { id: 2026, nombre: "Crystal Palace", imagen: "https://i.imgur.com/uDdJ3dq.png" },
+            { id: 2027, nombre: "West Ham United", imagen: "https://i.imgur.com/J2c9Ijs.png" },
+            { id: 2028, nombre: "Wolverhampton Wanderers", imagen: "https://i.imgur.com/hAqJyCR.png" },
+            { id: 2029, nombre: "Newcastle United", imagen: "https://i.imgur.com/eYauOnU.png" },
+            { id: 2030, nombre: "AFC Bournemouth", imagen: "https://i.imgur.com/FiIkL7.png" },
+            { id: 2031, nombre: "Tottenham Hotspur", imagen: "https://i.imgur.com/Sxo1Br6.png" },
+            
+            // Equipos La Liga
+            { id: 2032, nombre: "Villarreal", imagen: "https://i.imgur.com/n7eGp7n.png" },
+            { id: 2033, nombre: "Valencia", imagen: "https://i.imgur.com/BFSXscn.png" },
+            { id: 2034, nombre: "Sevilla FC", imagen: "https://i.imgur.com/ouxNdny.png" },
+            { id: 2035, nombre: "Real Madrid", imagen: "https://i.imgur.com/fmeUlB2.png" },
+            { id: 2036, nombre: "Atlético Madrid", imagen: "https://i.imgur.com/otAfGOy.png" },
+            { id: 2037, nombre: "Barcelona", imagen: "https://i.imgur.com/RCRs7Qa.png" },
+            { id: 2038, nombre: "Athletic Club", imagen: "https://i.imgur.com/VnkIVLP.png" },
+            { id: 2039, nombre: "Celta Vigo", imagen: "https://i.imgur.com/p7iNmh6.png" },
+            { id: 2040, nombre: "Real Sociedad", imagen: "https://i.imgur.com/VA77plm.png" },
+            { id: 2041, nombre: "Osasuna", imagen: "https://i.imgur.com/K971SGQ.png" },
+            { id: 2042, nombre: "Espanyol", imagen: "https://i.imgur.com/wIIWGkY.png" },
+            { id: 2043, nombre: "Getafe", imagen: "https://i.imgur.com/3c8YLLC.png" },
+            { id: 2044, nombre: "Levante", imagen: "https://i.imgur.com/rP4YLqL.png" },
+            { id: 2045, nombre: "Real Betis", imagen: "https://i.imgur.com/B8nX1Ja.png" },
+            { id: 2046, nombre: "Elche", imagen: "https://i.imgur.com/qwoe3Bh.png" },
+            { id: 2047, nombre: "Alavés", imagen: "https://i.imgur.com/KMA8fGW.png" }
+        ];
+
+        let currentIndex = 0;
+        let selectedShield = null;
+
+        const carouselTrack = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const selectedShieldDiv = document.getElementById('selectedShield');
+        const selectedShieldImg = document.getElementById('selectedShieldImg');
+        const selectedShieldName = document.getElementById('selectedShieldName');
+        const escudoSeleccionadoInput = document.getElementById('escudoSeleccionado');
+
+        function createShieldElement(escudo, index) {
+            const shieldDiv = document.createElement('div');
+            shieldDiv.className = 'shield-item';
+            shieldDiv.dataset.index = index;
+            
+            const img = document.createElement('img');
+            img.src = escudo.imagen;
+            img.alt = escudo.nombre;
+            img.className = 'shield-image';
+            
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'shield-name';
+            nameDiv.textContent = escudo.nombre;
+            
+            shieldDiv.appendChild(img);
+            shieldDiv.appendChild(nameDiv);
+            
+            shieldDiv.addEventListener('click', () => selectShield(escudo));
+            
+            return shieldDiv;
+        }
+
+        function updateCarousel() {
+            carouselTrack.innerHTML = '';
+            
+            for (let i = 0; i < escudos.length; i++) {
+                const shieldElement = createShieldElement(escudos[i], i);
+                
+                if (i === currentIndex) {
+                    shieldElement.classList.add('center');
+                } else if (i === currentIndex - 1 || (currentIndex === 0 && i === escudos.length - 1)) {
+                    shieldElement.classList.add('left');
+                } else if (i === currentIndex + 1 || (currentIndex === escudos.length - 1 && i === 0)) {
+                    shieldElement.classList.add('right');
+                } else if (i < currentIndex - 1 || (currentIndex === 0 && i < escudos.length - 2)) {
+                    shieldElement.classList.add('hidden');
+                } else if (i > currentIndex + 1 || (currentIndex === escudos.length - 1 && i > 1)) {
+                    shieldElement.classList.add('hidden-right');
+                }
+                
+                carouselTrack.appendChild(shieldElement);
+            }
+            
+            // Seleccionar automáticamente el escudo del centro
+            selectShield(escudos[currentIndex]);
+            
+            updateNavigationButtons();
+        }
+
+        function updateNavigationButtons() {
+            prevBtn.disabled = false;
+            nextBtn.disabled = false;
+        }
+
+        function selectShield(escudo) {
+            selectedShield = escudo;
+            selectedShieldImg.src = escudo.imagen;
+            selectedShieldName.textContent = escudo.nombre;
+            selectedShieldDiv.style.display = 'block';
+            confirmBtn.disabled = false;
+            escudoSeleccionadoInput.value = escudo.imagen;
+            
+            // Agregar efecto visual de selección
+            confirmBtn.style.background = 'linear-gradient(45deg, var(--text-primary), #00d4a3)';
+            confirmBtn.style.transform = 'scale(1.05)';
+        }
+
+        function nextShield() {
+            currentIndex = (currentIndex + 1) % escudos.length;
+            updateCarousel();
+        }
+
+        function prevShield() {
+            currentIndex = (currentIndex - 1 + escudos.length) % escudos.length;
+            updateCarousel();
+        }
+
+        function confirmSelection() {
+            if (selectedShield) {
+                document.getElementById('shieldForm').submit();
+            }
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', prevShield);
+        nextBtn.addEventListener('click', nextShield);
+        confirmBtn.addEventListener('click', confirmSelection);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevShield();
+            } else if (e.key === 'ArrowRight') {
+                nextShield();
+            } else if (e.key === 'Enter' && !confirmBtn.disabled) {
+                confirmSelection();
+            }
+        });
+
+        // Initialize carousel
+        updateCarousel();
+    </script>
+</body>
+</html> 

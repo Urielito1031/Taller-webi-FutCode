@@ -82,6 +82,7 @@ public class Equipo {
       Equipo entity = new Equipo();
       entity.setId(dto.getId());
       entity.setNombre(dto.getNombre());
+      entity.setImagen(dto.getImagen());
 
       Usuario usuario = new Usuario();
       usuario.setId(dto.getUsuarioId());

@@ -6,6 +6,58 @@
    <title>Detalle del Torneo</title>
    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
    <link rel="stylesheet" th:href="@{/css/torneos/detalle-torneo.css}">
+   <style>
+        .mi-equipo {
+            background-color: rgba(0, 255, 195, 0.1) !important;
+            border-left: 4px solid #00ffc3 !important;
+        }
+        
+        /* Estilos para escudos de equipos */
+        .team-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .team-logo-table {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .team-escudo-table {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .team-initials-table {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        /* Estilos para indicadores de variación */
+        .text-success {
+            color: #28a745 !important;
+        }
+        
+        .text-danger {
+            color: #dc3545 !important;
+        }
+        
+        .text-muted {
+            color: #6c757d !important;
+        }
+        
+        .ms-2 {
+            margin-left: 0.5rem !important;
+        }
+    </style>
 </head>
 <body>
 <div class="floating-particles">
@@ -104,9 +156,31 @@
                </thead>
                <tbody>
                <tr th:each="equipo : ${torneoEquipos}"
-                   th:classappend="${equipo.equipo.usuarioId == usuarioId} ? 'mi-equipo'" >
+                   th:classappend="${equipo.equipo.usuario != null and equipo.equipo.usuario.id == usuarioId} ? 'mi-equipo'" >
                   <td th:text="${equipo.posicion}">1</td>
-                  <td th:text="${equipo.equipo.nombre}">Equipo 1</td>
+                  <td>
+                     <div class="team-row">
+                        <div class="team-logo-table">
+                           <img th:if="${equipo.equipo.imagen}" th:src="${equipo.equipo.imagen}" alt="Escudo" class="team-escudo-table">
+                           <div th:unless="${equipo.equipo.imagen}" class="team-initials-table" th:text="${#strings.substring(equipo.equipo.nombre, 0, 2)}">EQ</div>
+                        </div>
+                        <span th:text="${equipo.equipo.nombre}">Equipo 1</span>
+                     </div>
+
+                     <span th:if="${equipo.subio}" class="ms-2 text-success" title="Subió de posición">
+                         <i class="bi bi-arrow-up"></i>
+                         <span th:text="${-equipo.variacionPosicion}"></span>
+                     </span>
+
+                     <span th:if="${equipo.bajo}" class="ms-2 text-danger" title="Bajó de posición">
+                         <i class="bi bi-arrow-down"></i>
+                         <span th:text="${equipo.variacionPosicion}"></span>
+                     </span>
+
+                     <span th:if="${equipo.igual}" class="ms-2 text-muted" title="Se mantuvo">
+                         <i class="bi bi-minus"></i>
+                     </span>
+                  </td>
                   <td th:text="${equipo.partidosJugados}">0</td>
                   <td th:text="${equipo.partidosGanados}">0</td>
                   <td th:text="${equipo.partidosEmpatados}">0</td>
@@ -147,5 +221,26 @@
       </div>
    </main>
 </div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleString('es-AR', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        // Si hay un elemento con id "current-time", actualizarlo
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000); // Actualizar cada minuto
+</script>
 </body>
 </html>

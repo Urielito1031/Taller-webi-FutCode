@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Nuevo Equipo</title>
     <link rel="stylesheet" th:href="@{/css/auth/sesionUsuario.css}"/>
+    <link rel="stylesheet" th:href="@{/css/validation-errors.css}"/>
 </head>
 <body>
 
@@ -24,9 +25,8 @@
                     <hr class="colorgraph"><br>
 
                     <label for="equipoNombre" class="sr-only">Nombre</label>
-                    <input th:field="*{nombre}" id="equipoNombre" type="text" class="form-control"/>
-
-                    <div th:if="${errors}" class="alert alert-danger" th:each="error : ${errors}" th:text="${error.defaultMessage}"></div>
+                    <input th:field="*{nombre}" id="equipoNombre" type="text" class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"/>
+                    <div th:if="${#fields.hasErrors('nombre')}" class="invalid-feedback" th:errors="*{nombre}"></div>
                     <button id="btn-registrarme" class="btn btn-lg btn-primary btn-block" type="submit">Siguiente</button>
                 </form>
             </div>

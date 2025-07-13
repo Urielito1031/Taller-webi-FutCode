@@ -114,13 +114,27 @@ public class TorneoController {
    @GetMapping("/detalle-torneo/{id}")
    public String detalleTorneo(@PathVariable Long id, Model model, HttpServletRequest request) {
       TorneoDTO torneo = torneoService.getById(id);
-      List<EquipoTorneoDTO> torneoEquipos = equipoTorneoService.getAllByTorneoId(id);
+
+      // Usar la misma lógica que tabla-posiciones para obtener datos actualizados
+      Torneo torneoEntity = torneoRepository.obtenerTorneoConFechas(id);
+      List<Partido> partidos = torneoEntity.getFechas().stream()
+            .flatMap(f -> f.getPartidos().stream())
+            .collect(Collectors.toList());
+
+      List<EquipoTorneo> tablaAnterior = equipoTorneoRepository.getAllByTorneoId(id);
+
+      // Agrego este metodo porque me compara con la misma tabla
+      for (EquipoTorneo eq : tablaAnterior) {
+         eq.setPosicionAnterior(eq.getPosicion());
+      }
+
+      List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       model.addAttribute("usuarioId", usuarioId);
 
       model.addAttribute("torneo", torneo);
-      model.addAttribute("torneoEquipos", torneoEquipos);
+      model.addAttribute("torneoEquipos", tabla);
       return "detalle-torneo";
    }
 
@@ -225,14 +239,26 @@ public class TorneoController {
    }
 
    @GetMapping("/simular-partido")
-   public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model) {
+   public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model, HttpServletRequest request) {
       Partido partido = simularTorneoService.obtenerPartidoSimulado(partidoId);
       if (partido == null) {
          return "redirect:/torneo/fechas"; // o página de error
       }
 
-      model.addAttribute("equipoLocal", partido.getEquipoLocal().getNombre());
-      model.addAttribute("equipoVisitante", partido.getEquipoVisitante().getNombre());
+      // Obtener el equipo del usuario
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      String equipoUsuario = null;
+
+      if (usuarioId != null) {
+         Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+         if (usuario != null && usuario.getEquipo() != null) {
+            equipoUsuario = usuario.getEquipo().getNombre();
+         }
+      }
+
+      model.addAttribute("equipoLocal", partido.getEquipoLocal());
+      model.addAttribute("equipoVisitante", partido.getEquipoVisitante());
+      model.addAttribute("equipoUsuario", equipoUsuario); // Agregar el equipo del usuario
       model.addAttribute("golesLocal", partido.getGolesLocal());
       model.addAttribute("golesVisitante", partido.getGolesVisitante());
 
@@ -255,7 +281,7 @@ public class TorneoController {
    }
 
    @GetMapping("/tabla-posiciones")
-   public ModelAndView mostrarTabla(@RequestParam Long torneoId) {
+   public ModelAndView mostrarTabla(@RequestParam Long torneoId, HttpServletRequest request) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
       List<Partido> partidos = torneo.getFechas().stream()
             .flatMap(f -> f.getPartidos().stream())
@@ -270,8 +296,12 @@ public class TorneoController {
 
       List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
+      // Obtener información del usuario para resaltar su equipo
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+
       ModelAndView mav = new ModelAndView("tabla-posiciones");
       mav.addObject("tabla", tabla);
+      mav.addObject("usuarioId", usuarioId);
       return mav;
    }
 

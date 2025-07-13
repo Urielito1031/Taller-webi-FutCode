@@ -74,50 +74,10 @@ INSERT INTO formato_torneo (id, tipo, fase_id) VALUES
 
 -- TORNEO (depende de formato_torneo)
 INSERT INTO torneo (id, nombre, descripcion, formato_torneo_id, estado, torneo_copa_id, torneo_liga_id) VALUES
-    (1, 'Liga Premier', '¡Comienza tu carrera en el fútbol local! En esta liga sencilla, cada equipo se enfrentará al resto una única vez. Asciende posiciones con cada victoria y demuestra quién manda en el barrio. ¡Hay 20.000 monedas en juego para el campeón!', 2, 'ABIERTO', NULL, NULL),
-    (2, 'Desafio semiprofesional', 'Un torneo ideal para forjar rivalidades y amistades. Los equipos jugarán todos contra todos a doble partido (ida y vuelta), sumando puntos para coronarse como el más regular. Prepárate para la gloria y un bote de 15.000 monedas', 2, 'ABIERTO', NULL, NULL),
-    (3, 'Liga Profesional Argentina 2025', 'Competencia de fútbol de primera división en Argentina, con 28 equipos luchando por el campeonato nacional.', 2, 'EN_CURSO', NULL, NULL),
-    (4, 'Torneo Leyendas', 'La élite regional se da cita aquí. Una competición feroz donde la táctica lo es todo. Los equipos se enfrentarán en un formato de liga a doble partido, luchando punto a punto por la supremacía. El vencedor se llevará a casa 40.000 monedas.', 2, 'ABIERTO', NULL, NULL),
-    (5, 'Liga Madero 2025', 'Liga regional en la zona de Buenos Aires, destacando el talento local en un formato de puntos corridos.', 2, 'EN_CURSO', NULL, NULL),
-    (6, 'Copa Sudamericana 2025', 'Competencia internacional de clubes sudamericanos, con equipos argentinos buscando gloria continental.', 2, 'FINALIZADO', NULL, NULL),
-    (7, 'Liga Interior Argentina 2025', 'Torneo de fútbol para equipos del interior de Argentina, promoviendo el talento fuera de las grandes ciudades.', 2, 'ABIERTO', NULL, NULL);
-
--- EQUIPO (depende de esquema)
-INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
-    (1, 'River Plate Titulares', 'https://futcodeequipos.free.nf/equipos/river_plate.png', 1),
-    (2, 'Flamengo Juveniles', 'https://futcodeequipos.free.nf/equipos/flamengo.png', 2),
-    (3, 'Barcelona B', 'https://futcodeequipos.free.nf/equipos/barcelona.png', 3),
-    (4, 'Bayern Múnich Sub-20', 'https://futcodeequipos.free.nf/equipos/bayern.png', 4),
-    (5, 'AC Milan Primavera', 'https://futcodeequipos.free.nf/equipos/milan.png', 5),
-    (6, 'Manchester United U21', 'https://futcodeequipos.free.nf/equipos/manchester_united.png', 4),
-    (7, 'Liverpool Reserves', 'https://futcodeequipos.free.nf/equipos/liverpool.png', 1),
-    (8, 'PSG B', 'https://futcodeequipos.free.nf/equipos/psg.png', 1),
-    (9, 'Juventus U19', 'https://futcodeequipos.free.nf/equipos/juventus.png', 3),
-    (10, 'Chelsea Academy', 'https://futcodeequipos.free.nf/equipos/chelsea.png', 2),
-    (11, 'América Titulares', 'https://futcodeequipos.free.nf/equipos/america.png', 2),
-    (12, 'Peñarol B', 'https://futcodeequipos.free.nf/equipos/penarol.png', 5),
-    (13, 'Colo-Colo Proyección', 'https://futcodeequipos.free.nf/equipos/colo_colo.png', 3),
-    (14, 'Atlético Madrid Juveniles', 'https://futcodeequipos.free.nf/equipos/atletico_madrid.png', 5),
-    (15, 'Borussia Dortmund II', 'https://futcodeequipos.free.nf/equipos/dortmund.png', 4),
-    (16, 'Benfica B', 'https://futcodeequipos.free.nf/equipos/benfica.png', 5),
-    (17, 'Ajax Sub-21', 'https://futcodeequipos.free.nf/equipos/ajax.png', 1),
-    (18, 'Atlanta United B', 'https://futcodeequipos.free.nf/equipos/atlanta_united.png', 1),
-    (19, 'Celtic Youth', 'https://futcodeequipos.free.nf/equipos/celtic.png', 3),
-    (20, 'Anderlecht U21', 'https://futcodeequipos.free.nf/equipos/anderlecht.png', 5),
-    (21, 'Porto B', 'https://futcodeequipos.free.nf/equipos/porto.png', 2),
-    (22, 'PSV U19', 'https://futcodeequipos.free.nf/equipos/psv.png', 4),
-    (23, 'New York City FC II', 'https://futcodeequipos.free.nf/equipos/nycfc.png', 5),
-    (24, 'Rangers Academy', 'https://futcodeequipos.free.nf/equipos/rangers.png', 4),
-    (25, 'Club Brugge Juveniles', 'https://futcodeequipos.free.nf/equipos/brugge.png', 1),
-    (26, 'Benfica Legends', 'https://futcodeequipos.free.nf/equipos/benfica.png', 2),
-    (27, 'Ajax Reservas', 'https://futcodeequipos.free.nf/equipos/ajax.png', 2),
-    (28, 'Anderlecht B', 'https://futcodeequipos.free.nf/equipos/anderlecht.png', 2),
-    (29, 'Celtic Reservas', 'https://futcodeequipos.free.nf/equipos/celtic.png', 3),
-    (30, 'PSV Academy', 'https://futcodeequipos.free.nf/equipos/psv.png', 2);
-
--- USUARIO
-INSERT INTO usuario (id, email, password, rol, activo, equipo_id, monedas) VALUES
-    (1, 'test@unlam.edu.ar', '$2a$10$gDIBmDa5/.1xdxJMV64qzOh44eIaRNBsqLX/z6UpuL//.EoeXANQS', 'ADMIN', 1, 1, 40000);
+(1, 'Liga Argentina', 'Sumergite en la pasión del fútbol local. Competí contra equipos como Boca, River y Racing en una liga desafiante. ¡Demostrá quién manda en casa y llevate 20.000 monedas!', 2, 'ABIERTO', NULL, NULL),
+(2, 'Brasileirao', 'Viví la intensidad del fútbol brasileño enfrentando a Flamengo, Palmeiras y Corinthians. Ida y vuelta, ritmo frenético y 30.000 monedas para el campeón. ¿Te la bancás?', 2, 'ABIERTO', NULL, NULL),
+(3, 'Premier League', 'La liga más exigente del mundo te espera. Enfrentate a gigantes como Manchester City, Chelsea y Liverpool. Jugá al límite por el título y 70.000 monedas.', 2, 'ABIERTO', NULL, NULL),
+(4, 'LaLiga', 'Un clásico europeo: táctica, talento y presión. Medite con Barcelona, Real Madrid y Atlético por el dominio total y un premio de 50.000 monedas.', 2, 'ABIERTO', NULL, NULL);
 
 
 -- ------------------------------------------------
@@ -128,21 +88,87 @@ INSERT INTO usuario (id, email, password, rol, activo, equipo_id, monedas) VALUE
 
 -- EQUIPOS ARGENTINOS (nuevos)
 INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
- (1000, 'Boca Juniors', 'https://futcodeequipos.free.nf/equipos/boca_juniors.png', 3),
-(1002, 'River Plate', 'https://futcodeequipos.free.nf/equipos/river_plate.png', 4),
-(1003, 'Racing Club', 'https://futcodeequipos.free.nf/equipos/racing_club.png', 2),
-(1004, 'Independiente', 'https://futcodeequipos.free.nf/equipos/independiente.png', 1),
-(1005, 'San Lorenzo', 'https://futcodeequipos.free.nf/equipos/san_lorenzo.png', 5),
-(1006, 'Vélez Sarsfield', 'https://futcodeequipos.free.nf/equipos/velez_sarsfield.png', 2),
-(1007, 'Newell\s Old Boys', 'https://futcodeequipos.free.nf/equipos/newells_old_boys.png', 3),
-(1008, 'Rosario Central', 'https://futcodeequipos.free.nf/equipos/rosario_central.png', 4),
-(1009, 'Estudiantes', 'https://futcodeequipos.free.nf/equipos/estudiantes.png', 5),
-(1010, 'Gimnasia y Esgrima La Plata', 'https://futcodeequipos.free.nf/equipos/gimnasia_elp.png', 1),
-(1011, 'Banfield', 'https://futcodeequipos.free.nf/equipos/banfield.png', 2),
-(1012, 'Colón', 'https://futcodeequipos.free.nf/equipos/colon.png', 3),
-(1013, 'Argentinos Juniors', 'https://futcodeequipos.free.nf/equipos/argentinos_juniors.png', 4),
-(1014, 'Huracán', 'https://futcodeequipos.free.nf/equipos/huracan.png', 5),
-                                                    (1015, 'Talleres de Córdoba', 'https://futcodeequipos.free.nf/equipos/talleres_cba.png', 1);
+ (1000, 'Boca Juniors', 'https://imgur.com/DB9vIuL.png', 3),
+(1002, 'River Plate', 'https://i.imgur.com/wU1slIe.png', 4),
+(1003, 'Racing Club', 'https://i.imgur.com/DaUtieZ.png', 2),
+(1004, 'Independiente', 'https://i.imgur.com/uVSAjum.png', 1),
+(1005, 'San Lorenzo', 'https://i.imgur.com/8m3QOCe.png', 5),
+(1006, 'Vélez Sarsfield', 'https://i.imgur.com/Vhrl2ko.png', 2),
+(1007, 'Newells Old Boys', 'https://i.imgur.com/Mqove2Y.png', 3),
+(1008, 'Rosario Central', 'https://i.imgur.com/m1A7188.png', 4),
+(1009, 'Estudiantes', 'https://i.imgur.com/u8PrZAM.png', 5),
+(1010, 'Gimnasia y Esgrima La Plata', 'https://i.imgur.com/YODTRNE.png', 1),
+(1011, 'Banfield', 'https://i.imgur.com/6nmN6HJ.png', 2),
+(1012, 'Colón', 'https://i.imgur.com/efpjd0W.png', 3),
+(1013, 'Argentinos Juniors', 'https://i.imgur.com/kDpyrdm.png', 4),
+(1014, 'Huracán', 'https://i.imgur.com/KgW20xf.png', 5),
+(1015, 'Talleres de Córdoba', 'https://i.imgur.com/7AF8286.png', 1),
+(1016, 'Platense', 'https://i.imgur.com/oPiMZ3M.png', 3);
+
+
+
+-- EQUIPOS BRASILEROS
+INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
+    (2000, 'Atlético Mineiro', 'https://i.imgur.com/CiJEwIG.png', 3),
+    (2001, 'Botafogo', 'https://i.imgur.com/IqLrSgZ.png', 4),
+    (2002, 'Bahia', 'https://i.imgur.com/ssZZasm.png', 2),
+    (2003, 'Ceará', 'https://i.imgur.com/QT3ShYy.png', 1),
+    (2004, 'Corinthians', 'https://i.imgur.com/Bl4KTzA.png', 5),
+    (2005, 'Cruzeiro', 'https://i.imgur.com/4gULoxz.png', 2),
+    (2006, 'Flamengo', 'https://i.imgur.com/GNISEB2.png', 3),
+    (2007, 'Fluminense', 'https://i.imgur.com/TDjuWox.png', 4),
+    (2008, 'Fortaleza', 'https://i.imgur.com/LIlPGWG.png', 5),
+    (2009, 'Gremio', 'https://i.imgur.com/PQMHq4K.png', 1),
+    (2010, 'Internacional', 'https://i.imgur.com/GEcrlln.png', 2),
+    (2011, 'Sao Paulo', 'https://i.imgur.com/fWuQxyZ.png', 3),
+    (2012, 'Palmeiras', 'https://i.imgur.com/ey1vG6l.png', 4),
+    (2013, 'Vitoria', 'https://i.imgur.com/gN4lAZW.png', 5),
+    (2014, 'Santos', 'https://i.imgur.com/BUlHma9.png', 1),
+    (2015, 'Vasco da Gama', 'https://i.imgur.com/O63hPDe.png', 3);
+
+
+-- EQUIPOS PREMIER LEAGUE
+INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
+(2016, 'Aston Villa', 'https://i.imgur.com/VQza9Gd.png', 3),
+(2017, 'Arsenal', 'https://i.imgur.com/l8ct6ZB.png', 4),
+(2018, 'Chelsea', 'https://i.imgur.com/6kfAInB.png', 2),
+(2019, 'Brighton & Hove Albion', 'https://i.imgur.com/VQza9Gd.png', 1),
+(2020, 'Fulham', 'https://i.imgur.com/VKYRir1.png', 5),
+(2021, 'Leeds United', 'https://i.imgur.com/f5xD6A3.png', 2),
+(2022, 'Everton', 'https://i.imgur.com/uyCFjRl.png', 3),
+(2023, 'Liverpool', 'https://i.imgur.com/BaFKXhg.png', 4),
+(2024, 'Manchester City', 'https://i.imgur.com/qLJVMaE.png', 5),
+(2025, 'Manchester United', 'https://i.imgur.com/UXJXAQb.png', 1),
+(2026, 'Crystal Palace', 'https://i.imgur.com/uDdJ3dq.png', 2),
+(2027, 'West Ham United', 'https://i.imgur.com/J2c9Ijs.png', 3),
+(2028, 'Wolverhampton Wanderers', 'https://i.imgur.com/hAqJyCR.png', 4),
+(2029, 'Newcastle United', 'https://i.imgur.com/eYauOnU.png', 5),
+(2030, 'AFC Bournemouth', 'https://i.imgur.com/FiIkLJ7.png', 1),
+(2031, 'Tottenham Hotspur', 'https://i.imgur.com/Sxo1Br6.png', 3);
+
+-- EQUIPOS La liga
+INSERT INTO equipo (id, nombre, imagen, esquema_id) VALUES
+(2032, 'Villarreal', 'https://i.imgur.com/n7eGp7n.png', 3),
+(2033, 'Valencia', 'https://i.imgur.com/BFSXscn.png', 4),
+(2034, 'Sevilla FC', 'https://i.imgur.com/ouxNdny.png', 2),
+(2035, 'Real Madrid', 'https://i.imgur.com/fmeUlB2.png', 1),
+(2036, 'Atlético Madrid', 'https://i.imgur.com/otAfGOy.png', 5),
+(2037, 'Barcelona', 'https://i.imgur.com/RCRs7Qa.png', 2),
+(2038, 'Athletic Club', 'https://i.imgur.com/VnkIVLP.png', 3),
+(2039, 'Celta Vigo', 'https://i.imgur.com/p7iNmh6.png', 4),
+(2040, 'Real Sociedad', 'https://i.imgur.com/VA77plm.png', 5),
+(2041, 'Osasuna', 'https://i.imgur.com/K971SGQ.png', 1),
+(2042, 'Espanyol', 'https://i.imgur.com/wIIWGkY.png', 2),
+(2043, 'Getafe', 'https://i.imgur.com/3c8YLLC.png', 3),
+(2044, 'Levante', 'https://i.imgur.com/rP4YLqL.png', 4),
+(2045, 'Real Betis', 'https://i.imgur.com/B8nX1Ja.png', 5),
+(2046, 'Elche', 'https://i.imgur.com/qwoe3Bh.png', 1),
+(2047, 'Alavés', 'https://i.imgur.com/KMA8fGW.png', 3);
+
+
+
+
+
 
 
 
@@ -161,14 +187,72 @@ INSERT INTO equipo_torneo (id, goles_a_favor, goles_en_contra, partidos_empatado
 (1011, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1011, 1),
 (1012, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1012, 1),
 (1013, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1013, 1),
-(1014, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1014, 1);
-
--- LO COMENTO PORQUE EL USUARIO ES EL ULTIMO QUE DEBERIA UNIRSE AL TORNEO
--- (1015, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1015, 1);
+(1014, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1014, 1),
+(1015, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1015, 1);
 
 
+-- EQUIPO_TORNEO DE EQUIPOS BRASILEROS (nuevos)
+INSERT INTO equipo_torneo (id, goles_a_favor, goles_en_contra, partidos_empatados, partidos_ganados, partidos_jugados, partidos_perdidos, posicion, posicion_anterior, puntos, equipo_id, torneo_id) VALUES
+(1016, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 2),
+(1017, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2002, 2),
+(1018, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2003, 2),
+(1019, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2004, 2),
+(1020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2005, 2),
+(1021, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2006, 2),
+(1022, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2007, 2),
+(1023, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2008, 2),
+(1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2009, 2),
+(1025, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2010, 2),
+(1026, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2011, 2),
+(1027, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2012, 2),
+(1028, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2013, 2),
+(1029, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2014, 2),
+(1030, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2015, 2);
 
--- El resto de los inserts de equipo_torneo deben ser revisados y completados con torneo_id válido si se agregan más torneos.
+
+
+-- EQUIPO_TORNEO DE EQUIPOS INGLESES (nuevos)
+INSERT INTO equipo_torneo (id, goles_a_favor, goles_en_contra, partidos_empatados, partidos_ganados, partidos_jugados, partidos_perdidos, posicion, posicion_anterior, puntos, equipo_id, torneo_id) VALUES
+(1031, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2016, 3),
+(1032, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2017, 3),
+(1033, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2018, 3),
+(1034, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2019, 3),
+(1035, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2020, 3),
+(1036, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2021, 3),
+(1037, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2023, 3),
+(1038, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2024, 3),
+(1039, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2025, 3),
+(1040, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2026, 3),
+(1041, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2027, 3),
+(1042, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2028, 3),
+(1043, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2029, 3),
+(1044, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2030, 3),
+(1045, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2031, 3);
+
+
+
+-- EQUIPO_TORNEO DE EQUIPOS Españoles (nuevos)
+INSERT INTO equipo_torneo (id, goles_a_favor, goles_en_contra, partidos_empatados, partidos_ganados, partidos_jugados, partidos_perdidos, posicion, posicion_anterior, puntos, equipo_id, torneo_id) VALUES
+(1046, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2032, 4),
+(1047, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2033, 4),
+(1048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2034, 4),
+(1049, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2035, 4),
+(1050, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2036, 4),
+(1051, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2037, 4),
+(1052, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2038, 4),
+(1053, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2039, 4),
+(1054, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2040, 4),
+(1055, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2041, 4),
+(1056, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2042, 4),
+(1057, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2043, 4),
+(1058, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2044, 4),
+(1059, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2045, 4),
+(1060, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2046, 4);
+
+
+
+
+
 
 
 -- INSERT JUGADOR
@@ -272,10 +356,4 @@ INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating
     (97, 'Ryan', 'Gravenberch', 'https://tomaszfutcode.free.nf/jugadoresFutcode/99_Ryan_Gravenberch.png', 22, 11, 23.3, 0, 91.40, 12, 'NORMAL', 'MEDIOCAMPISTA', NULL);
 
 
-
-
--- INSERT SOBRE
-INSERT INTO sobre (id, tipo_sobre, titulo, precio, descripcion, imagen_url, usuario_id) VALUES
-(13, 'BRONCE', 'Sobre de Bronce', 2500.00, NULL, 'sobreFutCodeBronce.png', 1),
-(14, 'PLATA', 'Sobre de Plata', 5000.00, NULL, 'sobreFutCodePlata.png', 1);
 

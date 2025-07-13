@@ -23,7 +23,8 @@ public class EquipoInicialControlador {
     private final UsuarioService usuarioService;
     private final EquipoService equipoService;
 
-    public EquipoInicialControlador(JugadorService jugadorService, UsuarioService usuarioService, EquipoService equipoService) {
+    public EquipoInicialControlador(JugadorService jugadorService, UsuarioService usuarioService,
+            EquipoService equipoService) {
         this.jugadorService = jugadorService;
         this.usuarioService = usuarioService;
         this.equipoService = equipoService;
@@ -34,40 +35,34 @@ public class EquipoInicialControlador {
         return new ModelAndView("creacionEquipo").addObject("equipo", new EquipoDTO());
     }
 
-//    @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
-//    public String procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo, HttpSession session) {
-//        ModelAndView mav = new ModelAndView("home");
-//        mav.addObject("nombreEquipo", equipo.getNombre());
-//        mav.addObject("equipo", equipo);
-//
-//        session.setAttribute("equipo", equipo);
-//
-//        return "redirect:/sorteoEquipoInicial";
-//    }
+    // @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
+    // public String procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo,
+    // HttpSession session) {
+    // ModelAndView mav = new ModelAndView("home");
+    // mav.addObject("nombreEquipo", equipo.getNombre());
+    // mav.addObject("equipo", equipo);
+    //
+    // session.setAttribute("equipo", equipo);
+    //
+    // return "redirect:/sorteoEquipoInicial";
+    // }
 
     @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
     public String procesarNuevoEquipo(@Valid @ModelAttribute("equipo") EquipoDTO equipo,
-                                      HttpSession session,
-                                      HttpServletRequest request, BindingResult result, Model model) {
+            BindingResult result, HttpSession session,
+            HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("errors", result.getAllErrors());
             return "creacionEquipo";
         }
-        ModelAndView mav = new ModelAndView("home");
-
-        mav.addObject("nombreEquipo", equipo.getNombre());
-        mav.addObject("equipo", equipo);
 
         Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
         Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
-        mav.addObject("monedas", usuario.getMonedas());
 
         session.setAttribute("equipo", equipo);
         session.setAttribute("MONEDAS", usuario.getMonedas());
 
         return "redirect:/sorteoEquipoInicial";
     }
-
 
     @RequestMapping(path = "/sorteoEquipoInicial", method = RequestMethod.GET)
     public ModelAndView sorteEquipoInicial(HttpSession session) {
@@ -76,6 +71,13 @@ public class EquipoInicialControlador {
 
         if (equipo == null) {
             return new ModelAndView("redirect:/nuevo-equipo");
+        }
+
+        // Validar el equipo antes de procesar
+        if (equipo.getNombre() == null || equipo.getNombre().trim().isEmpty()) {
+            ModelAndView mav = new ModelAndView("redirect:/nuevo-equipo");
+            mav.addObject("error", "El nombre del equipo no puede estar vacío");
+            return mav;
         }
 
         this.jugadorService.cargarJugadoresAlEquipo(equipo);
@@ -91,15 +93,21 @@ public class EquipoInicialControlador {
             throw new IllegalStateException("No se encontró el Usuario con ID: " + usuarioId);
         }
 
-        equipo.setUsuarioId(usuario.getId());
-        this.equipoService.saveBoth(equipo, usuario);
+        try {
+            equipo.setUsuarioId(usuario.getId());
+            this.equipoService.saveBoth(equipo, usuario);
 
-        session.setAttribute("MONEDAS", usuario.getMonedas());
+            session.setAttribute("MONEDAS", usuario.getMonedas());
 
-        ModelAndView mav = new ModelAndView("sorteoEquipo");
-        mav.addObject("equipo", equipo);
-        mav.addObject("nombreEquipo", equipo.getNombre());
-        mav.addObject("monedas", usuario.getMonedas());
-        return mav;
+            ModelAndView mav = new ModelAndView("sorteoEquipo");
+            mav.addObject("equipo", equipo);
+            mav.addObject("nombreEquipo", equipo.getNombre());
+            mav.addObject("monedas", usuario.getMonedas());
+            return mav;
+        } catch (IllegalArgumentException e) {
+            ModelAndView mav = new ModelAndView("redirect:/nuevo-equipo");
+            mav.addObject("error", e.getMessage());
+            return mav;
+        }
     }
 }

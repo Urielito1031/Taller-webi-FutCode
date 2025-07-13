@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class EquipoDTO {
    private Long id;
-   @NotNull(message = "El nombre del equipo no puede estar vacío")
+   @NotBlank(message = "El nombre del equipo no puede estar vacío")
    private String nombre;
    private String imagen;
    private ClubDTO club;

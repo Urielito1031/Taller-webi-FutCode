@@ -59,11 +59,8 @@ public class JugadorDTO {
       jugador.setRating(dto.getRating());
       jugador.setLesionado(dto.getLesionado());
       jugador.setEstadoFisico(dto.getEstadoFisico());
-
       jugador.setPais(dto.getPaisOrigen());
-
       jugador.setRarezaJugador(dto.getRarezaJugador());
-
       jugador.setPosicion(this.posicionNatural);
 
       // Manejar la relación Many-to-Many con equipos

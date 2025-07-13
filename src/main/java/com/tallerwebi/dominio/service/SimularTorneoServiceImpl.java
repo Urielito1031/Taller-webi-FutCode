@@ -26,16 +26,18 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
     private final NarracionRepository narracionRepository;
     private final JugadorService jugadorService;
     private final Random random = new Random();
+    private final UsuarioService usuarioService;
 
     public SimularTorneoServiceImpl(PartidoRepository partidoRepository, TorneoRepository torneoRepository,
-            FechaRepository fechaRepository, FrasePartidoService frasePartidoService,
-            NarracionRepository narracionRepository, JugadorService jugadorService) {
+                                    FechaRepository fechaRepository, FrasePartidoService frasePartidoService,
+                                    NarracionRepository narracionRepository, JugadorService jugadorService, UsuarioService usuarioService) {
         this.partidoRepository = partidoRepository;
         this.torneoRepository = torneoRepository;
         this.fechaRepository = fechaRepository;
         this.frasePartidoService = frasePartidoService;
         this.narracionRepository = narracionRepository;
         this.jugadorService = jugadorService;
+        this.usuarioService = usuarioService;
     }
 
     @Override
@@ -66,17 +68,6 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                     golesVisitante++;
                 }
             }
-
-            // if(partido.getEquipoLocal().getJugadores() != null &&
-            // partido.getEquipoVisitante().getJugadores() != null) {
-            // if(partido.getEquipoLocal().getRatingEquipo() >
-            // partido.getEquipoVisitante().getRatingEquipo()){
-            // golesLocal++;
-            // }else if(partido.getEquipoLocal().getRatingEquipo() <
-            // partido.getEquipoVisitante().getRatingEquipo()){
-            // golesVisitante++;
-            // }
-            // }
 
             // Generar y guardar frases de goles
 
@@ -185,6 +176,8 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             }
 
             partidoRepository.save(partido);
+            usuarioService.sumarPremioMonedas(partido, partido.getResultado());
+
         }
 
         fechaASimular.setSimulada(true);

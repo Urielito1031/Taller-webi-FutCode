@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
 import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.model.entities.*;
+import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -38,13 +39,8 @@ public class UsuarioServiceImpl implements  UsuarioService{
         Sobre sobre = sobreDTO.fromEntity();
         sobre.setUsuario(usuario);
 
-        System.out.println("Monedas del usuario: " + usuario.getMonedas());
-        System.out.println("Precio del sobre: " + sobre.getPrecio());
-
-
         validarMonedas(usuario.getMonedas(), sobre.getPrecio());
 
-//      restar monedas en la clase usuario
         usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);
@@ -76,6 +72,46 @@ public class UsuarioServiceImpl implements  UsuarioService{
     public void borrarSobreAUsuario(Long idUsuario, Long idSobre){
         this.repositorioUsuario.borrarSobreAUsuario(idUsuario, idSobre);
     }
+
+    @Override
+    public void sumarPremioMonedas(Partido partido, ResultadoPartido resultado){
+        Usuario usuarioLocal = partido.getEquipoLocal().getUsuario();
+        Usuario usuarioVisitante = partido.getEquipoVisitante().getUsuario();
+
+        switch (resultado) {
+            case LOCAL_GANA:
+                if (usuarioLocal != null) {
+                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + 1000);
+                    repositorioUsuario.actualizar(usuarioLocal);
+                }
+                if (usuarioVisitante != null) {
+                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + 500);
+                    repositorioUsuario.actualizar(usuarioVisitante);
+                }
+                break;
+            case VISITANTE_GANA:
+                if (usuarioLocal != null) {
+                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + 500);
+                    repositorioUsuario.actualizar(usuarioLocal);
+                }
+                if (usuarioVisitante != null) {
+                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + 1000);
+                    repositorioUsuario.actualizar(usuarioVisitante);
+                }
+                break;
+            case EMPATE:
+                if (usuarioLocal != null) {
+                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + 750);
+                    repositorioUsuario.actualizar(usuarioLocal);
+                }
+                if (usuarioVisitante != null) {
+                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + 750);
+                    repositorioUsuario.actualizar(usuarioVisitante);
+                }
+                break;
+        }
+    }
+
 
     public SobreDTO convertirEntidadADTO(Sobre sobre) {
         TipoSobre tipo;
@@ -143,17 +179,9 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return jugadoresEntidad;
     }
 
-
-
-    //    @Override
-//    public void actualizarUsuario(Usuario usuario) {
-//        getSession().update(usuario);
-//    }
-//
-@Override
-public void actualizar(Usuario usuario) {
+    @Override
+    public void actualizar(Usuario usuario) {
         repositorioUsuario.actualizar(usuario);
     }
-
 
 }

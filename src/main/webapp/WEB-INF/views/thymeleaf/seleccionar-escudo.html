@@ -80,22 +80,32 @@
             margin-bottom: 5px;
         }
 
+        /* Carrusel Bootstrap Style */
         .carousel-container {
             position: relative;
             width: 100%;
             height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             margin: 40px 0;
+            overflow: hidden;
+        }
+
+        .carousel-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
         .carousel-track {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 20px;
-            transition: transform 0.5s ease;
+            height: 100%;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 30px;
+            padding: 0 50px;
+            position: relative;
+            width: max-content;
+            transform: translateX(0);
         }
 
         .shield-item {
@@ -103,132 +113,155 @@
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
+            min-width: 200px;
+            opacity: 0.3;
+            transform: scale(0.7);
+            flex-shrink: 0;
         }
 
-        .shield-item.left {
-            transform: scale(0.7) translateX(-80px);
-            opacity: 0.7;
-            z-index: 1;
-        }
-
-        .shield-item.center {
-            transform: scale(1.5);
+        .shield-item.active {
             opacity: 1;
+            transform: scale(1.3);
+            z-index: 10;
+        }
+
+        .shield-item.prev,
+        .shield-item.next {
+            opacity: 0.6;
+            transform: scale(0.9);
+            z-index: 5;
+        }
+
+        .shield-item.prev2,
+        .shield-item.next2 {
+            opacity: 0.4;
+            transform: scale(0.8);
             z-index: 3;
         }
 
-        .shield-item.right {
-            transform: scale(0.7) translateX(80px);
-            opacity: 0.7;
-            z-index: 1;
-        }
-
-        .shield-item.hidden {
-            transform: scale(0.4) translateX(-100px);
-            opacity: 0.3;
-            z-index: 0;
-        }
-
-        .shield-item.hidden-right {
-            transform: scale(0.4) translateX(100px);
-            opacity: 0.3;
-            z-index: 0;
-        }
-
         .shield-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
+            width: 120px;
+            height: 120px;
             object-fit: cover;
-            border: 3px solid transparent;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 0;
+            background: none;
+            box-shadow: none;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .shield-item.center .shield-image {
-            width: 250px;
-            height: 250px;
-            border-color: var(--text-primary);
-            border-width: 4px;
-            box-shadow: 0 0 40px rgba(0, 255, 195, 0.6);
-            animation: pulse 2s infinite;
+        .shield-item.active .shield-image {
+            width: 200px;
+            height: 200px;
+            background: none;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
         }
 
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 40px rgba(0, 255, 195, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 60px rgba(0, 255, 195, 0.8);
-            }
-            100% {
-                box-shadow: 0 0 40px rgba(0, 255, 195, 0.6);
-            }
+        .shield-item.active::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%, transparent 90%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: backgroundGlow 3s ease-in-out infinite;
+        }
+
+        /* Eliminar animaciones, glow y pseudo-elementos */
+        .shield-item .shield-image::before {
+            display: none !important;
+            content: none !important;
         }
 
         .shield-item:hover .shield-image {
-            border-color: var(--text-primary);
-            box-shadow: 0 0 20px rgba(0, 255, 195, 0.3);
+            border: none;
+            box-shadow: none;
         }
 
-        .shield-name {
-            margin-top: 15px;
-            font-size: 1rem;
-            color: var(--text-muted);
-            text-align: center;
-            font-weight: 500;
+        @keyframes backgroundGlow {
+            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
         }
 
-        .shield-item.center .shield-name {
-            font-size: 1.3rem;
-            color: var(--text-primary);
-            font-weight: 700;
-        }
-
-        .carousel-nav {
+        /* Controles del carrusel */
+        .carousel-control {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 255, 195, 0.1);
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 255, 195, 0.2);
             border: 2px solid var(--text-primary);
-            color: var(--text-primary);
-            width: 50px;
-            height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
-            z-index: 10;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            z-index: 20;
+            box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
         }
 
-        .carousel-nav:hover {
-            background: rgba(0, 255, 195, 0.2);
+        .carousel-control:hover {
+            background: rgba(0, 255, 195, 0.3);
             transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 255, 195, 0.5);
         }
 
-        .carousel-nav.prev {
+        .carousel-control.prev {
             left: 20px;
         }
 
-        .carousel-nav.next {
+        .carousel-control.next {
             right: 20px;
         }
 
-        .carousel-nav:disabled {
+        .carousel-control:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
 
-        .carousel-nav:disabled:hover {
-            transform: translateY(-50%);
+        /* Indicadores */
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 15;
         }
 
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: var(--text-primary);
+            box-shadow: 0 0 10px rgba(0, 255, 195, 0.5);
+        }
+
+        .indicator:hover {
+            background: rgba(0, 255, 195, 0.7);
+        }
+
+        /* Botones de acción */
         .action-buttons {
             text-align: center;
             margin-top: 40px;
@@ -269,31 +302,17 @@
             box-shadow: 0 10px 20px rgba(176, 184, 193, 0.3);
         }
 
-        .selected-shield {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 255, 195, 0.1);
-            border: 1px solid var(--text-primary);
-            border-radius: 15px;
-            padding: 15px;
-            backdrop-filter: blur(10px);
-        }
+        /* Eliminamos el selected-shield de arriba */
 
-        .selected-shield img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .selected-shield p {
-            margin-top: 5px;
-            font-size: 0.8rem;
-            color: var(--text-primary);
+        /* Contador */
+        .position-counter {
             text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 1rem;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -304,27 +323,27 @@
             }
 
             .shield-image {
-                width: 100px;
-                height: 100px;
+                width: 80px;
+                height: 80px;
             }
 
-            .shield-item.center .shield-image {
-                width: 180px;
-                height: 180px;
+            .shield-item.active .shield-image {
+                width: 140px;
+                height: 140px;
             }
 
-            .carousel-nav {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
+            .carousel-control {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
             }
 
-            .carousel-nav.prev {
-                left: 15px;
+            .carousel-control.prev {
+                left: 10px;
             }
 
-            .carousel-nav.next {
-                right: 15px;
+            .carousel-control.next {
+                right: 10px;
             }
         }
 
@@ -342,13 +361,13 @@
             }
 
             .shield-image {
-                width: 80px;
-                height: 80px;
+                width: 60px;
+                height: 60px;
             }
 
-            .shield-item.center .shield-image {
-                width: 140px;
-                height: 140px;
+            .shield-item.active .shield-image {
+                width: 100px;
+                height: 100px;
             }
         }
     </style>
@@ -368,17 +387,27 @@
         </div>
 
         <div class="carousel-container">
-            <button class="carousel-nav prev" id="prevBtn">
+            <div class="carousel-inner">
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Los escudos se cargarán dinámicamente -->
+                </div>
+            </div>
+
+            <button class="carousel-control prev" id="prevBtn">
                 <i class="fas fa-chevron-left"></i>
             </button>
 
-            <div class="carousel-track" id="carouselTrack">
-                <!-- Los escudos se cargarán dinámicamente con JavaScript -->
-            </div>
-
-            <button class="carousel-nav next" id="nextBtn">
+            <button class="carousel-control next" id="nextBtn">
                 <i class="fas fa-chevron-right"></i>
             </button>
+
+            <div class="carousel-indicators" id="indicators">
+                <!-- Los indicadores se generarán dinámicamente -->
+            </div>
+        </div>
+
+        <div class="position-counter">
+            <span id="currentPosition">1</span> de <span id="totalShields">48</span> escudos
         </div>
 
         <div class="action-buttons">
@@ -392,10 +421,7 @@
             </button>
         </div>
 
-        <div class="selected-shield" id="selectedShield" style="display: none;">
-            <img id="selectedShieldImg" src="" alt="Escudo seleccionado">
-            <p id="selectedShieldName">Escudo seleccionado</p>
-        </div>
+
     </div>
 
     <form id="shieldForm" th:action="@{/guardar-escudo}" method="POST" style="display: none;">
@@ -405,90 +431,94 @@
     <script>
         // Lista de escudos disponibles
         const escudos = [
-            // Equipos Argentinos
-            { id: 1000, nombre: "Boca Juniors", imagen: "https://imgur.com/DB9vIuL.png" },
-            { id: 1002, nombre: "River Plate", imagen: "https://i.imgur.com/wU1slIe.png" },
-            { id: 1003, nombre: "Racing Club", imagen: "https://i.imgur.com/DaUtieZ.png" },
-            { id: 1004, nombre: "Independiente", imagen: "https://i.imgur.com/uVSAjum.png" },
-            { id: 1005, nombre: "San Lorenzo", imagen: "https://i.imgur.com/8m3QOCe.png" },
-            { id: 1006, nombre: "Vélez Sarsfield", imagen: "https://i.imgur.com/Vhrl2ko.png" },
-            { id: 1007, nombre: "Newells Old Boys", imagen: "https://i.imgur.com/Mqove2Y.png" },
-            { id: 1008, nombre: "Rosario Central", imagen: "https://i.imgur.com/m1A7188.png" },
-            { id: 1009, nombre: "Estudiantes", imagen: "https://i.imgur.com/u8PrZAM.png" },
-            { id: 1010, nombre: "Gimnasia y Esgrima La Plata", imagen: "https://i.imgur.com/YODTRNE.png" },
-            { id: 1011, nombre: "Banfield", imagen: "https://i.imgur.com/6nmN6HJ.png" },
-            { id: 1012, nombre: "Colón", imagen: "https://i.imgur.com/efpjd0W.png" },
-            { id: 1013, nombre: "Argentinos Juniors", imagen: "https://i.imgur.com/kDpyrdm.png" },
-            { id: 1014, nombre: "Huracán", imagen: "https://i.imgur.com/KgW20xf.png" },
-            { id: 1015, nombre: "Talleres de Córdoba", imagen: "https://i.imgur.com/7AF8286.png" },
-            { id: 1016, nombre: "Platense", imagen: "https://i.imgur.com/oPiMZ3M.png" },
-            
-            // Equipos Brasileños
-            { id: 2000, nombre: "Atlético Mineiro", imagen: "https://i.imgur.com/CiJEwIG.png" },
-            { id: 2001, nombre: "Botafogo", imagen: "https://i.imgur.com/IqLrSgZ.png" },
-            { id: 2002, nombre: "Bahia", imagen: "https://i.imgur.com/ssZZasm.png" },
-            { id: 2003, nombre: "Ceará", imagen: "https://i.imgur.com/QT3ShYy.png" },
-            { id: 2004, nombre: "Corinthians", imagen: "https://i.imgur.com/Bl4KTzA.png" },
-            { id: 2005, nombre: "Cruzeiro", imagen: "https://i.imgur.com/4gULoxz.png" },
-            { id: 2006, nombre: "Flamengo", imagen: "https://i.imgur.com/GNISEB2.png" },
-            { id: 2007, nombre: "Fluminense", imagen: "https://i.imgur.com/TDjuWox.png" },
-            { id: 2008, nombre: "Fortaleza", imagen: "https://i.imgur.com/LIlPGWG.png" },
-            { id: 2009, nombre: "Gremio", imagen: "https://i.imgur.com/PQMHq4K.png" },
-            { id: 2010, nombre: "Internacional", imagen: "https://i.imgur.com/GEcrlln.png" },
-            { id: 2011, nombre: "Sao Paulo", imagen: "https://i.imgur.com/fWuQxyZ.png" },
-            { id: 2012, nombre: "Palmeiras", imagen: "https://i.imgur.com/ey1vG6l.png" },
-            { id: 2013, nombre: "Vitoria", imagen: "https://i.imgur.com/gN4lAZW.png" },
-            { id: 2014, nombre: "Santos", imagen: "https://i.imgur.com/BUlHma9.png" },
-            { id: 2015, nombre: "Vasco da Gama", imagen: "https://i.imgur.com/O63hPDe.png" },
-            
-            // Equipos Premier League
-            { id: 2016, nombre: "Aston Villa", imagen: "https://i.imgur.com/VQza9Gd.png" },
-            { id: 2017, nombre: "Arsenal", imagen: "https://i.imgur.com/l8ct6ZB.png" },
-            { id: 2018, nombre: "Chelsea", imagen: "https://i.imgur.com/6kfAInB.png" },
-            { id: 2019, nombre: "Brighton & Hove Albion", imagen: "https://i.imgur.com/VQza9Gd.png" },
-            { id: 2020, nombre: "Fulham", imagen: "https://i.imgur.com/VKYRir1.png" },
-            { id: 2021, nombre: "Leeds United", imagen: "https://i.imgur.com/f5xD6A3.png" },
-            { id: 2022, nombre: "Everton", imagen: "https://i.imgur.com/uyCFjRl.png" },
-            { id: 2023, nombre: "Liverpool", imagen: "https://i.imgur.com/BaFKXhg.png" },
-            { id: 2024, nombre: "Manchester City", imagen: "https://i.imgur.com/qLJVMaE.png" },
-            { id: 2025, nombre: "Manchester United", imagen: "https://i.imgur.com/UXJXAQb.png" },
-            { id: 2026, nombre: "Crystal Palace", imagen: "https://i.imgur.com/uDdJ3dq.png" },
-            { id: 2027, nombre: "West Ham United", imagen: "https://i.imgur.com/J2c9Ijs.png" },
-            { id: 2028, nombre: "Wolverhampton Wanderers", imagen: "https://i.imgur.com/hAqJyCR.png" },
-            { id: 2029, nombre: "Newcastle United", imagen: "https://i.imgur.com/eYauOnU.png" },
-            { id: 2030, nombre: "AFC Bournemouth", imagen: "https://i.imgur.com/FiIkL7.png" },
-            { id: 2031, nombre: "Tottenham Hotspur", imagen: "https://i.imgur.com/Sxo1Br6.png" },
-            
-            // Equipos La Liga
-            { id: 2032, nombre: "Villarreal", imagen: "https://i.imgur.com/n7eGp7n.png" },
-            { id: 2033, nombre: "Valencia", imagen: "https://i.imgur.com/BFSXscn.png" },
-            { id: 2034, nombre: "Sevilla FC", imagen: "https://i.imgur.com/ouxNdny.png" },
-            { id: 2035, nombre: "Real Madrid", imagen: "https://i.imgur.com/fmeUlB2.png" },
-            { id: 2036, nombre: "Atlético Madrid", imagen: "https://i.imgur.com/otAfGOy.png" },
-            { id: 2037, nombre: "Barcelona", imagen: "https://i.imgur.com/RCRs7Qa.png" },
-            { id: 2038, nombre: "Athletic Club", imagen: "https://i.imgur.com/VnkIVLP.png" },
-            { id: 2039, nombre: "Celta Vigo", imagen: "https://i.imgur.com/p7iNmh6.png" },
-            { id: 2040, nombre: "Real Sociedad", imagen: "https://i.imgur.com/VA77plm.png" },
-            { id: 2041, nombre: "Osasuna", imagen: "https://i.imgur.com/K971SGQ.png" },
-            { id: 2042, nombre: "Espanyol", imagen: "https://i.imgur.com/wIIWGkY.png" },
-            { id: 2043, nombre: "Getafe", imagen: "https://i.imgur.com/3c8YLLC.png" },
-            { id: 2044, nombre: "Levante", imagen: "https://i.imgur.com/rP4YLqL.png" },
-            { id: 2045, nombre: "Real Betis", imagen: "https://i.imgur.com/B8nX1Ja.png" },
-            { id: 2046, nombre: "Elche", imagen: "https://i.imgur.com/qwoe3Bh.png" },
-            { id: 2047, nombre: "Alavés", imagen: "https://i.imgur.com/KMA8fGW.png" }
+            { id: 2, imagen: "https://i.imgur.com/wU1slIe.png" },
+            { id: 3, imagen: "https://i.imgur.com/DaUtieZ.png" },
+            { id: 4, imagen: "https://i.imgur.com/uVSAjum.png" },
+            { id: 5, imagen: "https://i.imgur.com/8m3QOCe.png" },
+            { id: 6, imagen: "https://i.imgur.com/Vhrl2ko.png" },
+            { id: 7, imagen: "https://i.imgur.com/Mqove2Y.png" },
+            { id: 8, imagen: "https://i.imgur.com/m1A7188.png" },
+            { id: 9, imagen: "https://i.imgur.com/u8PrZAM.png" },
+            { id: 10, imagen: "https://i.imgur.com/YODTRNE.png" },
+            { id: 11, imagen: "https://i.imgur.com/6nmN6HJ.png" },
+            { id: 12, imagen: "https://i.imgur.com/efpjd0W.png" },
+            { id: 13, imagen: "https://i.imgur.com/kDpyrdm.png" },
+            { id: 14, imagen: "https://i.imgur.com/KgW20xf.png" },
+            { id: 15, imagen: "https://i.imgur.com/7AF8286.png" },
+            { id: 16, imagen: "https://i.imgur.com/oPiMZ3M.png" },
+            { id: 17, imagen: "https://i.imgur.com/CiJEwIG.png" },
+            { id: 18, imagen: "https://i.imgur.com/IqLrSgZ.png" },
+            { id: 19, imagen: "https://i.imgur.com/ssZZasm.png" },
+            { id: 20, imagen: "https://i.imgur.com/QT3ShYy.png" },
+            { id: 21, imagen: "https://i.imgur.com/Bl4KTzA.png" },
+            { id: 22, imagen: "https://i.imgur.com/4gULoxz.png" },
+            { id: 23, imagen: "https://i.imgur.com/GNISEB2.png" },
+            { id: 24, imagen: "https://i.imgur.com/TDjuWox.png" },
+            { id: 25, imagen: "https://i.imgur.com/LIlPGWG.png" },
+            { id: 26, imagen: "https://i.imgur.com/PQMHq4K.png" },
+            { id: 27, imagen: "https://i.imgur.com/GEcrlln.png" },
+            { id: 28, imagen: "https://i.imgur.com/fWuQxyZ.png" },
+            { id: 29, imagen: "https://i.imgur.com/ey1vG6l.png" },
+            { id: 30, imagen: "https://i.imgur.com/gN4lAZW.png" },
+            { id: 31, imagen: "https://i.imgur.com/BUlHma9.png" },
+            { id: 32, imagen: "https://i.imgur.com/O63hPDe.png" },
+            { id: 33, imagen: "https://i.imgur.com/VQza9Gd.png" },
+            { id: 34, imagen: "https://i.imgur.com/l8ct6ZB.png" },
+            { id: 35, imagen: "https://i.imgur.com/6kfAInB.png" },
+            { id: 36, imagen: "https://i.imgur.com/VQza9Gd.png" },
+            { id: 37, imagen: "https://i.imgur.com/VKYRir1.png" },
+            { id: 38, imagen: "https://i.imgur.com/f5xD6A3.png" },
+            { id: 39, imagen: "https://i.imgur.com/uyCFjRl.png" },
+            { id: 40, imagen: "https://i.imgur.com/BaFKXhg.png" },
+            { id: 41, imagen: "https://i.imgur.com/qLJVMaE.png" },
+            { id: 42, imagen: "https://i.imgur.com/UXJXAQb.png" },
+            { id: 43, imagen: "https://i.imgur.com/uDdJ3dq.png" },
+            { id: 44, imagen: "https://i.imgur.com/J2c9Ijs.png" },
+            { id: 45, imagen: "https://i.imgur.com/hAqJyCR.png" },
+            { id: 46, imagen: "https://i.imgur.com/eYauOnU.png" },
+            { id: 47, imagen: "https://i.imgur.com/FiIkLJ7.png" },
+            { id: 48, imagen: "https://i.imgur.com/Sxo1Br6.png" },
+            { id: 49, imagen: "https://imgur.com/DB9vIuL.png" },
+            { id: 50, imagen: "https://i.imgur.com/n7eGp7n.png" },
+            { id: 51, imagen: "https://i.imgur.com/BFSXscn.png" },
+            { id: 52, imagen: "https://i.imgur.com/ouxNdny.png" },
+            { id: 53, imagen: "https://i.imgur.com/fmeUlB2.png" },
+            { id: 54, imagen: "https://i.imgur.com/otAfGOy.png" },
+            { id: 55, imagen: "https://i.imgur.com/RCRs7Qa.png" },
+            { id: 56, imagen: "https://i.imgur.com/VnkIVLP.png" },
+            { id: 57, imagen: "https://i.imgur.com/p7iNmh6.png" },
+            { id: 58, imagen: "https://i.imgur.com/VA77plm.png" },
+            { id: 59, imagen: "https://i.imgur.com/K971SGQ.png" },
+            { id: 60, imagen: "https://i.imgur.com/wIIWGkY.png" },
+            { id: 61, imagen: "https://i.imgur.com/3c8YLLC.png" },
+            { id: 62, imagen: "https://i.imgur.com/rP4YLqL.png" },
+            { id: 63, imagen: "https://i.imgur.com/B8nX1Ja.png" },
+            { id: 64, imagen: "https://i.imgur.com/qwoe3Bh.png" },
+            { id: 65, imagen: "https://i.imgur.com/KMA8fGW.png" },
+            { id: 66, imagen: "https://i.imgur.com/5ts761P.png" },
+            { id: 67, imagen: "https://i.imgur.com/ICsdecp.png" },
+            { id: 68, imagen: "https://i.imgur.com/SqLqK6R.png" },
+            { id: 69, imagen: "https://i.imgur.com/a0mlOst.png" },
+            { id: 70, imagen: "https://i.imgur.com/6UkieOD.png" },
+            { id: 71, imagen: "https://i.imgur.com/z9eR41R.png" },
+            { id: 72, imagen: "https://i.imgur.com/KkNOfa0.png" },
+            { id: 73, imagen: "https://i.imgur.com/KkNOfa0.png" },
+            { id: 75, imagen: "https://i.imgur.com/CR2rBCL.png" },
+            { id: 76, imagen: "https://i.imgur.com/U5Vy5Rp.png" },
+            { id: 77, imagen: "https://i.imgur.com/72CzDX7.png" }
+
         ];
 
         let currentIndex = 0;
         let selectedShield = null;
+        let shieldWidth = 250; // Ancho de cada escudo incluyendo gap
 
         const carouselTrack = document.getElementById('carouselTrack');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const confirmBtn = document.getElementById('confirmBtn');
-        const selectedShieldDiv = document.getElementById('selectedShield');
-        const selectedShieldImg = document.getElementById('selectedShieldImg');
-        const selectedShieldName = document.getElementById('selectedShieldName');
         const escudoSeleccionadoInput = document.getElementById('escudoSeleccionado');
+        const indicatorsContainer = document.getElementById('indicators');
 
         function createShieldElement(escudo, index) {
             const shieldDiv = document.createElement('div');
@@ -500,71 +530,128 @@
             img.alt = escudo.nombre;
             img.className = 'shield-image';
             
-            const nameDiv = document.createElement('div');
-            nameDiv.className = 'shield-name';
-            nameDiv.textContent = escudo.nombre;
-            
             shieldDiv.appendChild(img);
-            shieldDiv.appendChild(nameDiv);
-            
             shieldDiv.addEventListener('click', () => selectShield(escudo));
             
             return shieldDiv;
         }
 
+        function createIndicator(index) {
+            const indicator = document.createElement('div');
+            indicator.className = 'indicator';
+            indicator.dataset.index = index;
+            indicator.addEventListener('click', () => goToShield(index));
+            return indicator;
+        }
+
         function updateCarousel() {
+            // Limpiar todo
             carouselTrack.innerHTML = '';
+            indicatorsContainer.innerHTML = '';
             
+            // Crear indicadores
             for (let i = 0; i < escudos.length; i++) {
-                const shieldElement = createShieldElement(escudos[i], i);
-                
+                const indicator = createIndicator(i);
                 if (i === currentIndex) {
-                    shieldElement.classList.add('center');
-                } else if (i === currentIndex - 1 || (currentIndex === 0 && i === escudos.length - 1)) {
-                    shieldElement.classList.add('left');
-                } else if (i === currentIndex + 1 || (currentIndex === escudos.length - 1 && i === 0)) {
-                    shieldElement.classList.add('right');
-                } else if (i < currentIndex - 1 || (currentIndex === 0 && i < escudos.length - 2)) {
-                    shieldElement.classList.add('hidden');
-                } else if (i > currentIndex + 1 || (currentIndex === escudos.length - 1 && i > 1)) {
-                    shieldElement.classList.add('hidden-right');
+                    indicator.classList.add('active');
                 }
-                
-                carouselTrack.appendChild(shieldElement);
+                indicatorsContainer.appendChild(indicator);
             }
             
-            // Seleccionar automáticamente el escudo del centro
+            // Mostrar solo los escudos visibles (prev2, prev, active, next, next2)
+            const startIndex = Math.max(0, currentIndex - 2);
+            const endIndex = Math.min(escudos.length, currentIndex + 3);
+            for (let i = startIndex; i < endIndex; i++) {
+                const shieldElement = createShieldElement(escudos[i], i);
+                if (i === currentIndex) {
+                    shieldElement.classList.add('active');
+                } else if (i === currentIndex - 1) {
+                    shieldElement.classList.add('prev');
+                } else if (i === currentIndex + 1) {
+                    shieldElement.classList.add('next');
+                } else if (i === currentIndex - 2) {
+                    shieldElement.classList.add('prev2');
+                } else if (i === currentIndex + 2) {
+                    shieldElement.classList.add('next2');
+                }
+                carouselTrack.appendChild(shieldElement);
+            }
+            // Quitar cualquier desplazamiento
+            carouselTrack.style.transform = 'none';
             selectShield(escudos[currentIndex]);
-            
             updateNavigationButtons();
+            updateCounter();
         }
 
         function updateNavigationButtons() {
-            prevBtn.disabled = false;
-            nextBtn.disabled = false;
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === escudos.length - 1;
+            
+            // Efectos visuales en los botones
+            if (currentIndex === 0) {
+                prevBtn.style.opacity = '0.5';
+                prevBtn.style.cursor = 'not-allowed';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.cursor = 'pointer';
+            }
+            
+            if (currentIndex === escudos.length - 1) {
+                nextBtn.style.opacity = '0.5';
+                nextBtn.style.cursor = 'not-allowed';
+            } else {
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+            }
+        }
+
+        function updateCounter() {
+            document.getElementById('currentPosition').textContent = currentIndex + 1;
+            document.getElementById('totalShields').textContent = escudos.length;
         }
 
         function selectShield(escudo) {
             selectedShield = escudo;
-            selectedShieldImg.src = escudo.imagen;
-            selectedShieldName.textContent = escudo.nombre;
-            selectedShieldDiv.style.display = 'block';
             confirmBtn.disabled = false;
             escudoSeleccionadoInput.value = escudo.imagen;
             
-            // Agregar efecto visual de selección
+            // Efecto visual en el botón
             confirmBtn.style.background = 'linear-gradient(45deg, var(--text-primary), #00d4a3)';
             confirmBtn.style.transform = 'scale(1.05)';
+            confirmBtn.style.boxShadow = '0 0 20px rgba(0, 255, 195, 0.4)';
         }
 
         function nextShield() {
-            currentIndex = (currentIndex + 1) % escudos.length;
-            updateCarousel();
+            if (currentIndex < escudos.length - 1) {
+                nextBtn.style.transform = 'translateY(-50%) scale(1.1)';
+                nextBtn.style.boxShadow = '0 0 15px rgba(0, 255, 195, 0.6)';
+                currentIndex++;
+                setTimeout(() => {
+                    updateCarousel();
+                    nextBtn.style.transform = 'translateY(-50%) scale(1)';
+                    nextBtn.style.boxShadow = '0 0 10px rgba(0, 255, 195, 0.3)';
+                }, 150);
+            }
         }
 
         function prevShield() {
-            currentIndex = (currentIndex - 1 + escudos.length) % escudos.length;
-            updateCarousel();
+            if (currentIndex > 0) {
+                prevBtn.style.transform = 'translateY(-50%) scale(1.1)';
+                prevBtn.style.boxShadow = '0 0 15px rgba(0, 255, 195, 0.6)';
+                currentIndex--;
+                setTimeout(() => {
+                    updateCarousel();
+                    prevBtn.style.transform = 'translateY(-50%) scale(1)';
+                    prevBtn.style.boxShadow = '0 0 10px rgba(0, 255, 195, 0.3)';
+                }, 150);
+            }
+        }
+
+        function goToShield(index) {
+            if (index !== currentIndex) {
+                currentIndex = index;
+                updateCarousel();
+            }
         }
 
         function confirmSelection() {
@@ -573,9 +660,26 @@
             }
         }
 
+        // Mezclar aleatoriamente los escudos cada vez que se carga la página
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        shuffle(escudos);
+
         // Event listeners
-        prevBtn.addEventListener('click', prevShield);
-        nextBtn.addEventListener('click', nextShield);
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            prevShield();
+        });
+        
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            nextShield();
+        });
+        
         confirmBtn.addEventListener('click', confirmSelection);
 
         // Keyboard navigation

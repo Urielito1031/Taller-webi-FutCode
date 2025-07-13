@@ -44,6 +44,9 @@ public class SimularTorneoServiceTest {
   @Mock
   private JugadorService jugadorService;
 
+  @Mock
+  private JugadorRepository jugadorRepository;
+
   @InjectMocks
   private SimularTorneoServiceImpl simularTorneoService;
 
@@ -309,72 +312,75 @@ public class SimularTorneoServiceTest {
     verify(frasePartidoService, atLeastOnce()).generarFraseConJugadorAleatorio(any(), anyLong());
   }
 
-//  @Test
-//  public void deberiaSimularPartidoConResultadoLocalGana() {
-//    // Preparación
-//    Long torneoId = 1L;
-//    Long numeroDeFecha = 1L;
-//
-//    when(torneoRepository.obtenerTorneoConFechas(torneoId)).thenReturn(torneo);
-//    when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fecha);
-//    when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
-//        .thenReturn("Frase de prueba");
-//
-//    // Forzar resultado específico
-//    partido.setGolesLocal(3);
-//    partido.setGolesVisitante(1);
-//
-//    // Ejecución
-//    simularTorneoService.simularFecha(torneoId, numeroDeFecha);
-//
-//    // Verificación
-//    verify(partidoRepository).save(partido);
-//    assertThat(partido.getResultado(), is(ResultadoPartido.LOCAL_GANA));
-//  }
-//
-//  @Test
-//  public void deberiaSimularPartidoConResultadoVisitanteGana() {
-//    // Preparación
-//    Long torneoId = 1L;
-//    Long numeroDeFecha = 1L;
-//
-//    when(torneoRepository.obtenerTorneoConFechas(torneoId)).thenReturn(torneo);
-//    when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fecha);
-//    when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
-//        .thenReturn("Frase de prueba");
-//
-//    // Forzar resultado específico
-//    partido.setGolesLocal(1);
-//    partido.setGolesVisitante(3);
-//
-//    // Ejecución
-//    simularTorneoService.simularFecha(torneoId, numeroDeFecha);
-//
-//    // Verificación
-//    verify(partidoRepository).save(partido);
-//    assertThat(partido.getResultado(), is(ResultadoPartido.VISITANTE_GANA));
-//  }
+  // @Test
+  // public void deberiaSimularPartidoConResultadoLocalGana() {
+  // // Preparación
+  // Long torneoId = 1L;
+  // Long numeroDeFecha = 1L;
+  //
+  // when(torneoRepository.obtenerTorneoConFechas(torneoId)).thenReturn(torneo);
+  // when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId,
+  // numeroDeFecha)).thenReturn(fecha);
+  // when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
+  // .thenReturn("Frase de prueba");
+  //
+  // // Forzar resultado específico
+  // partido.setGolesLocal(3);
+  // partido.setGolesVisitante(1);
+  //
+  // // Ejecución
+  // simularTorneoService.simularFecha(torneoId, numeroDeFecha);
+  //
+  // // Verificación
+  // verify(partidoRepository).save(partido);
+  // assertThat(partido.getResultado(), is(ResultadoPartido.LOCAL_GANA));
+  // }
+  //
+  // @Test
+  // public void deberiaSimularPartidoConResultadoVisitanteGana() {
+  // // Preparación
+  // Long torneoId = 1L;
+  // Long numeroDeFecha = 1L;
+  //
+  // when(torneoRepository.obtenerTorneoConFechas(torneoId)).thenReturn(torneo);
+  // when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId,
+  // numeroDeFecha)).thenReturn(fecha);
+  // when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
+  // .thenReturn("Frase de prueba");
+  //
+  // // Forzar resultado específico
+  // partido.setGolesLocal(1);
+  // partido.setGolesVisitante(3);
+  //
+  // // Ejecución
+  // simularTorneoService.simularFecha(torneoId, numeroDeFecha);
+  //
+  // // Verificación
+  // verify(partidoRepository).save(partido);
+  // assertThat(partido.getResultado(), is(ResultadoPartido.VISITANTE_GANA));
+  // }
 
-//  @Test
-//  public void deberiaSimularPartidoConResultadoEmpate() {
-//    // Preparación
-//    Long torneoId = 1L;
-//    Long numeroDeFecha = 1L;
-//
-//    when(torneoRepository.obtenerTorneoConFechas(torneoId)).thenReturn(torneo);
-//    when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fecha);
-//    when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
-//        .thenReturn("Frase de prueba");
-//
-//    // Forzar resultado específico
-//    partido.setGolesLocal(2);
-//    partido.setGolesVisitante(2);
-//
-//    // Ejecución
-//    simularTorneoService.simularFecha(torneoId, numeroDeFecha);
-//
-//    // Verificación
-//    verify(partidoRepository).save(partido);
-//    assertThat(partido.getResultado(), is(ResultadoPartido.EMPATE));
-//  }
+  // @Test
+  // public void deberiaSimularPartidoConResultadoEmpate() {
+  // // Preparación
+  // Long torneoId = 1L;
+  // Long numeroDeFecha = 1L;
+  //
+  // when(torneoRepository.obtenerTorneoConFechas(torneoId)).thenReturn(torneo);
+  // when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId,
+  // numeroDeFecha)).thenReturn(fecha);
+  // when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
+  // .thenReturn("Frase de prueba");
+  //
+  // // Forzar resultado específico
+  // partido.setGolesLocal(2);
+  // partido.setGolesVisitante(2);
+  //
+  // // Ejecución
+  // simularTorneoService.simularFecha(torneoId, numeroDeFecha);
+  //
+  // // Verificación
+  // verify(partidoRepository).save(partido);
+  // assertThat(partido.getResultado(), is(ResultadoPartido.EMPATE));
+  // }
 }

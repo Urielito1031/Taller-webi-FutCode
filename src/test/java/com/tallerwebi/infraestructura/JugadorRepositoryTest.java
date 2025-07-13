@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
+@ContextConfiguration(classes = { SpringWebTestConfig.class, HibernateTestConfig.class })
 @Transactional
 @Rollback
 @Sql("/db_futcodeTest.sql")
@@ -41,7 +41,6 @@ public class JugadorRepositoryTest {
    @Autowired
    private SessionFactory sessionFactory;
 
-
    @Test
    public void debeObtenerTodosLosJugadoresDeLaBaseDeDatos() {
       List<Jugador> jugadores = jugadorRepository.getAll();
@@ -52,8 +51,9 @@ public class JugadorRepositoryTest {
 
    @Test
    public void debeRetornarListaVaciaSiNoHayJugadores() {
-      sessionFactory.getCurrentSession().createNativeQuery("DELETE FROM formacion_equipo").executeUpdate();
-      sessionFactory.getCurrentSession().createNativeQuery("DELETE FROM jugador").executeUpdate();
+      // Usar HQL en lugar de SQL nativo para evitar problemas de persistencia
+      sessionFactory.getCurrentSession().createQuery("DELETE FROM FormacionEquipo").executeUpdate();
+      sessionFactory.getCurrentSession().createQuery("DELETE FROM Jugador").executeUpdate();
       sessionFactory.getCurrentSession().flush();
       sessionFactory.getCurrentSession().clear();
 
@@ -118,7 +118,9 @@ public class JugadorRepositoryTest {
       assertThat(jugadores, hasSize(2)); // Equipo 201 tiene 2 jugadores (5008, 5009)
       assertThat(jugadores.stream().anyMatch(j -> j.getId().equals(5008L)), is(true));
       assertThat(jugadores.stream().anyMatch(j -> j.getId().equals(5009L)), is(true));
-      assertThat(jugadores, everyItem(hasProperty("equipo", hasProperty("id", is(equipoId)))));
+      // En la relación many-to-many, los jugadores no tienen propiedad "equipo"
+      // directa
+      // Solo verificamos que los jugadores correctos están en la lista
    }
 
    @Test

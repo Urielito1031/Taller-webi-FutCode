@@ -36,15 +36,8 @@ public class Torneo {
    private EstadoTorneoEnum estado;
 
    @Column(name = "premio_monedas")
-   private Integer premioMonedas;
+   private Double premioMonedas;
 
-   public Integer getPremioMonedas() {
-      return premioMonedas;
-   }
-
-   public void setPremioMonedas(Integer premioMonedas) {
-      this.premioMonedas = premioMonedas;
-   }
 
    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinColumn(name = "torneo_liga_id", unique = true, nullable = true)

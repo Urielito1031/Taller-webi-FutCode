@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SimulacionTorneoResumenDTO {
   private int puestoFinal;
-  private int monedasGanadas;
+  private double monedasGanadas;
   private double monedasTotales;
   private String nombreTorneo;
 }

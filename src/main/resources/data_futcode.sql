@@ -73,11 +73,11 @@ INSERT INTO formato_torneo (id, tipo, fase_id) VALUES
 -- =============================
 
 -- TORNEO (depende de formato_torneo)
-INSERT INTO torneo (id, nombre, descripcion, formato_torneo_id, estado, torneo_copa_id, torneo_liga_id) VALUES
-(1, 'Liga Argentina', 'Sumergite en la pasión del fútbol local. Competí contra equipos como Boca, River y Racing en una liga desafiante. ¡Demostrá quién manda en casa y llevate 20.000 monedas!', 2, 'ABIERTO', NULL, NULL),
-(2, 'Brasileirao', 'Viví la intensidad del fútbol brasileño enfrentando a Flamengo, Palmeiras y Corinthians. Ida y vuelta, ritmo frenético y 30.000 monedas para el campeón. ¿Te la bancás?', 2, 'ABIERTO', NULL, NULL),
-(3, 'Premier League', 'La liga más exigente del mundo te espera. Enfrentate a gigantes como Manchester City, Chelsea y Liverpool. Jugá al límite por el título y 70.000 monedas.', 2, 'ABIERTO', NULL, NULL),
-(4, 'LaLiga', 'Un clásico europeo: táctica, talento y presión. Medite con Barcelona, Real Madrid y Atlético por el dominio total y un premio de 50.000 monedas.', 2, 'ABIERTO', NULL, NULL);
+INSERT INTO torneo (id, nombre,premio_monedas, descripcion, formato_torneo_id, estado, torneo_copa_id, torneo_liga_id) VALUES
+(1, 'Liga Argentina',20000, 'Sumergite en la pasión del fútbol local. Competí contra equipos como Boca, River y Racing en una liga desafiante. ¡Demostrá quién manda en casa y llevate 20.000 monedas!', 2, 'ABIERTO', NULL, NULL),
+(2, 'Brasileirao', 30000,'Viví la intensidad del fútbol brasileño enfrentando a Flamengo, Palmeiras y Corinthians. Ida y vuelta, ritmo frenético y 30.000 monedas para el campeón. ¿Te la bancás?', 2, 'ABIERTO', NULL, NULL),
+(3, 'Premier League', 70000,'La liga más exigente del mundo te espera. Enfrentate a gigantes como Manchester City, Chelsea y Liverpool. Jugá al límite por el título y 70.000 monedas.', 2, 'ABIERTO', NULL, NULL),
+(4, 'LaLiga', 50000,'Un clásico europeo: táctica, talento y presión. Medite con Barcelona, Real Madrid y Atlético por el dominio total y un premio de 50.000 monedas.', 2, 'ABIERTO', NULL, NULL);
 
 
 -- ------------------------------------------------

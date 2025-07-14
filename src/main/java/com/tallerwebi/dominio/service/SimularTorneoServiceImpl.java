@@ -310,7 +310,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
         Usuario usuario = null;
         int puestoFinal = -1;
-        int monedasGanadas = 0;
+        double monedasGanadas = 0;
         double monedasTotales = 0;
         String nombreTorneo = torneo.getNombre();
 
@@ -382,7 +382,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             }
         }
 
-        int premioTorneo = torneo.getPremioMonedas() != null ? torneo.getPremioMonedas() : 0;
+        double premioTorneo = torneo.getPremioMonedas() != null ? torneo.getPremioMonedas() : 0.0;
         if (puestoFinal == 1) {
             monedasGanadas = premioTorneo;
         } else if (puestoFinal == 2) {

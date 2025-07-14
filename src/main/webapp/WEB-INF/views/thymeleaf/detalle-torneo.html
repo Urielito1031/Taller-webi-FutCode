@@ -109,6 +109,14 @@
          </div>
       </div>
 
+      <div th:if="${equipoUsuario != null && torneo.estado == 'FINALIZADO'}" class="alert alert-success text-center mt-3">
+         <strong>¡Finalizaste en la posición</strong>
+         <span th:text="${equipoUsuario.posicion}">?</span> 🏅
+         <strong>y ganaste</strong>
+         <span th:text="${equipoUsuario.monedasGanadas}">0</span> monedas 🪙
+      </div>
+
+
       <div class="torneo-info">
          <section class="info-section">
             <h3 class="info-title">

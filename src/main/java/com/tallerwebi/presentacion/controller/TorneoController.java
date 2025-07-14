@@ -133,8 +133,14 @@ public class TorneoController {
       List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
-      model.addAttribute("usuarioId", usuarioId);
 
+      EquipoTorneo equipoUsuario = tabla.stream()
+              .filter(et -> et.getEquipo().getUsuario() != null && et.getEquipo().getUsuario().getId().equals(usuarioId))
+              .findFirst()
+              .orElse(null);
+
+      model.addAttribute("equipoUsuario", equipoUsuario);
+      model.addAttribute("usuarioId", usuarioId);
       model.addAttribute("torneo", torneo);
       model.addAttribute("torneoEquipos", tabla);
       return "detalle-torneo";
@@ -340,7 +346,14 @@ public class TorneoController {
       // Obtener información del usuario para resaltar su equipo
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
 
+      EquipoTorneo equipoUsuario = tabla.stream()
+              .filter(et -> et.getEquipo().getUsuario() != null && et.getEquipo().getUsuario().getId().equals(usuarioId))
+              .findFirst()
+              .orElse(null);
+
+
       ModelAndView mav = new ModelAndView("tabla-posiciones");
+      mav.addObject("equipoUsuario", equipoUsuario);
       mav.addObject("tabla", tabla);
       mav.addObject("usuarioId", usuarioId);
       return mav;

@@ -19,4 +19,6 @@ public interface TorneoService {
    void guardar(Torneo torneo);
 
     void verificarYFinalizarTorneo(Long torneoId);
+
+    void asignarPremiosPorPosicion(Long torneoId);
 }

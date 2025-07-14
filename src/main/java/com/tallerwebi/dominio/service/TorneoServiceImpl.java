@@ -193,8 +193,56 @@ public class TorneoServiceImpl implements TorneoService{
       if (todosJugados && torneo.getEstado() != EstadoTorneoEnum.FINALIZADO) {
          torneo.setEstado(EstadoTorneoEnum.FINALIZADO);
          torneoRepository.save(torneo);
+         asignarPremiosPorPosicion(torneoId);
       }
    }
+
+   @Override
+   public void asignarPremiosPorPosicion(Long torneoId) {
+      Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+
+      if (torneo.getEstado() != EstadoTorneoEnum.FINALIZADO) return;
+
+      List<EquipoTorneo> tabla = equipoTorneoRepository.getAllByTorneoId(torneoId);
+      tabla.sort(Comparator.comparingInt(EquipoTorneo::getPosicion));
+
+      int totalEquipos = tabla.size();
+      int premioTotal = torneo.getPremioTorneo();
+
+      int primerPremio = (int) (premioTotal * 0.5);
+      int segundoPremio = (int) (premioTotal * 0.25);
+      int tercerPremio = (int) (premioTotal * 0.10);
+      int restante = premioTotal - (primerPremio + segundoPremio + tercerPremio);
+
+      int cantidadRestantes = Math.max(0, totalEquipos - 3);
+      int premioRestanteIndividual = cantidadRestantes > 0 ? restante / cantidadRestantes : 0;
+
+      for (int i = 0; i < tabla.size(); i++) {
+         EquipoTorneo equipoTorneo = tabla.get(i);
+         Usuario usuario = equipoTorneo.getEquipo().getUsuario(); // Suponiendo que cada equipo tiene usuario
+
+         int premio = 0;
+         switch (i) {
+            case 0:
+               premio = primerPremio;
+               break;
+            case 1:
+               premio = segundoPremio;
+               break;
+            case 2:
+               premio = tercerPremio;
+               break;
+            default:
+               premio = premioRestanteIndividual;
+               break;
+         }
+
+         if (usuario != null) {
+            usuario.setMonedas(usuario.getMonedas() + premio);
+         }
+      }
+   }
+
 
 
 }

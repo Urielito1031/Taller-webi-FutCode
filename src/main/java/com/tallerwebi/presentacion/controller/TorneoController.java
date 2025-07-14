@@ -218,7 +218,7 @@ public class TorneoController {
 
 
       // 1. Simular toda la fecha
-      simularTorneoService.simularFecha(torneoId, numeroFecha, usuario.getEquipo().getId());
+      simularTorneoService.simularFecha(torneoId, numeroFecha);
 
 
 

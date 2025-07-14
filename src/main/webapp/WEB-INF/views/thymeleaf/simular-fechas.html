@@ -401,6 +401,11 @@
             font-size: 0.8rem;
             text-transform: uppercase;
         }
+        .estado-disponible {
+            background: rgba(0, 123, 255, 0.2);
+            color: #00bfff;
+            border: 1px solid #00bfff;
+        }
     </style>
 </head>
 <body>
@@ -432,15 +437,16 @@
     </div>
 
     <div class="fechas-grid">
-        <div class="fecha-card" th:each="fecha : ${fechas}">
+        <div class="fecha-card" th:each="fecha, iterStat : ${fechas}">
             <div class="fecha-header">
                 <div class="fecha-numero">
                     <i class="fas fa-calendar-day"></i>
                     <span>Fecha <span th:text="${fecha.numeroDeFecha}">1</span></span>
                 </div>
-                <div class="estado-badge" th:classappend="${fecha.simulada ? 'estado-jugada' : 'estado-proximamente'}">
-                    <i th:class="${fecha.simulada ? 'fas fa-check-circle' : 'fas fa-clock'}" class="fas fa-clock"></i>
-                    <span th:text="${fecha.simulada ? 'JUGADA' : 'PRÓXIMAMENTE'}">Estado</span>
+                <div class="estado-badge"
+                     th:classappend="${fecha.simulada ? 'estado-jugada' : (iterStat.index == 0 or (fechas[iterStat.index - 1].simulada)) ? 'estado-disponible' : 'estado-proximamente'}">
+                    <i th:class="${fecha.simulada ? 'fas fa-check-circle' : (iterStat.index == 0 or (fechas[iterStat.index - 1].simulada)) ? 'fas fa-bolt' : 'fas fa-clock'}" class="fas fa-clock"></i>
+                    <span th:text="${fecha.simulada ? 'JUGADA' : (iterStat.index == 0 or (fechas[iterStat.index - 1].simulada)) ? 'DISPONIBLE' : 'PRÓXIMAMENTE'}">Estado</span>
                 </div>
             </div>
 
@@ -480,14 +486,24 @@
                 </div>
             </div>
 
-            <form th:action="@{/torneo/simular-fecha}" method="post" th:if="${!fecha.simulada}">
-                <input type="hidden" name="torneoId" th:value="${torneoId}">
-                <input type="hidden" name="numeroFecha" th:value="${fecha.numeroDeFecha}">
-                <button type="submit" class="simular-btn">
-                    <i class="fas fa-play"></i>
-                    Simular Fecha
-                </button>
-            </form>
+            <!-- Lógica para habilitar el botón solo si la fecha anterior fue jugada o es la primera fecha -->
+            <th:block th:if="${!fecha.simulada}">
+                <th:block th:if="${iterStat.index == 0 or (fechas[iterStat.index - 1].simulada)}">
+                    <form th:action="@{/torneo/simular-fecha}" method="post">
+                        <input type="hidden" name="torneoId" th:value="${torneoId}">
+                        <input type="hidden" name="numeroFecha" th:value="${fecha.numeroDeFecha}">
+                        <button type="submit" class="simular-btn">
+                            <i class="fas fa-play"></i>
+                            Simular Fecha
+                        </button>
+                    </form>
+                </th:block>
+                <th:block th:if="${iterStat.index != 0 and !fechas[iterStat.index - 1].simulada}">
+                    <div class="alert alert-warning mt-3" style="background: rgba(255, 193, 7, 0.1); border: 1px solid var(--warning-color); color: var(--warning-color); text-align: center;">
+                        <i class="fas fa-exclamation-triangle"></i> No disponible. Debes jugar la fecha anterior primero.
+                    </div>
+                </th:block>
+            </th:block>
         </div>
     </div>
 

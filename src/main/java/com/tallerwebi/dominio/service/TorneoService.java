@@ -17,4 +17,6 @@ public interface TorneoService {
     Torneo buscarPorId(Long id);
 
    void guardar(Torneo torneo);
+
+    void verificarYFinalizarTorneo(Long torneoId);
 }

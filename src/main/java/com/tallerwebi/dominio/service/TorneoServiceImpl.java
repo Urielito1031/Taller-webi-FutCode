@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.*;
 
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
@@ -180,5 +181,20 @@ public class TorneoServiceImpl implements TorneoService{
    public void guardar(Torneo torneo) {
       torneoRepository.save(torneo);
    }
+
+   @Override
+   public void verificarYFinalizarTorneo(Long torneoId) {
+      Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+
+      boolean todosJugados = torneo.getFechas().stream()
+              .flatMap(f -> f.getPartidos().stream())
+              .allMatch(p -> p.getResultado() != ResultadoPartido.PENDIENTE);
+
+      if (todosJugados && torneo.getEstado() != EstadoTorneoEnum.FINALIZADO) {
+         torneo.setEstado(EstadoTorneoEnum.FINALIZADO);
+         torneoRepository.save(torneo);
+      }
+   }
+
 
 }

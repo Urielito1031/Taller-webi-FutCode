@@ -104,7 +104,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             int cantidadTarjetas = generarCantidadAleatoria(5);
             int cantidadExpulsados = generarCantidadAleatoria(3);
             int cantidadLesiones = generarCantidadAleatoria(5);
-            ;
+
 
             // GENERAL
             for (int i = 0; i < cantidadEventosGenerales; i++) {

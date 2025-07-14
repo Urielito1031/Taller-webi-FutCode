@@ -171,7 +171,7 @@ public class TorneoController {
 
          if (torneo.getEstado() == EstadoTorneoEnum.ABIERTO && !equiposEnTorneo.isEmpty()) {
             torneo.setEstado(EstadoTorneoEnum.EN_CURSO);
-            torneoService.guardar(torneo); // Asegurate de tener este método implementado
+            torneoService.guardar(torneo);
          }
 
          redirectAttributes.addFlashAttribute("mensajeTorneo", "¡Te uniste al torneo con éxito!");
@@ -215,6 +215,8 @@ public class TorneoController {
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha, HttpServletRequest request) {
       // 1. Simular toda la fecha
       simularTorneoService.simularFecha(torneoId, numeroFecha);
+
+      torneoService.verificarYFinalizarTorneo(torneoId);
 
       // 2. Obtener usuario y su equipo
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");

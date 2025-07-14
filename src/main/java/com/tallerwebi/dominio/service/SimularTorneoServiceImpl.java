@@ -28,16 +28,16 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
     private final Random random = new Random();
     private final UsuarioService usuarioService;
 
-    public SimularTorneoServiceImpl(PartidoRepository partidoRepository, TorneoRepository torneoRepository,
-                                    FechaRepository fechaRepository, FrasePartidoService frasePartidoService,
-                                    NarracionRepository narracionRepository, JugadorService jugadorService, UsuarioService usuarioService) {
+    public SimularTorneoServiceImpl(PartidoRepository partidoRepository,TorneoRepository torneoRepository,
+                                    FechaRepository fechaRepository,FrasePartidoService frasePartidoService,
+                                    NarracionRepository narracionRepository,JugadorService jugadorService,UsuarioService usuarioService,UsuarioService usuarioService1) {
         this.partidoRepository = partidoRepository;
         this.torneoRepository = torneoRepository;
         this.fechaRepository = fechaRepository;
         this.frasePartidoService = frasePartidoService;
         this.narracionRepository = narracionRepository;
         this.jugadorService = jugadorService;
-        this.usuarioService = usuarioService;
+       this.usuarioService = usuarioService1;
     }
 
     @Override
@@ -69,11 +69,17 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 }
             }
 
+//            if(partido.getEquipoLocal().getJugadores() != null && partido.getEquipoVisitante().getJugadores() != null) {
+//                if(partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()){
+//                    golesLocal++;
+//                }else if(partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante().getRatingEquipo()){
+//                    golesVisitante++;
+//                }
+//            }
+
             // Generar y guardar frases de goles
 
             // Generar frases de goles solo si hay jugadores
-
-            System.out.println("antes de la narracion");
             if (partido.getEquipoLocal().hasJugadores()) {
                 for (int i = 0; i < golesLocal; i++) {
                     try {
@@ -87,18 +93,18 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 }
             }
 
-            if (partido.getEquipoVisitante().hasJugadores()) {
-                for (int i = 0; i < golesVisitante; i++) {
-                    try {
-                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(
-                                EventoPartido.GOL, partido.getEquipoVisitante().getId());
-                        narracionRepository.guardar(new Narracion(frase, partido));
-                    } catch (Exception e) {
-                        // Log error pero continúa la simulación
-                        System.err.println("Error generando frase para equipo visitante: " + e.getMessage());
+                if (partido.getEquipoVisitante().hasJugadores()) {
+                    for (int i = 0; i < golesVisitante; i++) {
+                        try {
+                            String frase = frasePartidoService.generarFraseConJugadorAleatorio(
+                                    EventoPartido.GOL, partido.getEquipoVisitante().getId());
+                            narracionRepository.guardar(new Narracion(frase, partido));
+                        } catch (Exception e) {
+                            // Log error pero continúa la simulación
+                            System.err.println("Error generando frase para equipo visitante: " + e.getMessage());
+                        }
                     }
                 }
-            }
 
             int cantidadEventosGenerales = generarCantidadAleatoria(25);
             int cantidadTarjetas = generarCantidadAleatoria(5);

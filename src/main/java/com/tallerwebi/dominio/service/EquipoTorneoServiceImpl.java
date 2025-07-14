@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.*;
 import com.tallerwebi.dominio.model.enums.TipoFormato;
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
 import com.tallerwebi.dominio.repository.TorneoRepository;
@@ -73,6 +74,10 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
 
       if (torneo.getFormatoTorneo().getTipo().equals(TipoFormato.LIGA)) {
          if (cantidadDeEquipos == CAPACIDAD_MAXIMA_TORNEO_LIGA) {
+            // Cambiar estado del torneo de ABIERTO a EN_CURSO
+            torneo.setEstado(EstadoTorneoEnum.EN_CURSO);
+            torneoRepository.save(torneo);
+
             this.torneoService.crearFixtureConLasFechas(torneoId);
          }
 

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 
 @Controller
 @RequestMapping("/torneo")
@@ -248,11 +249,12 @@ public class TorneoController {
       // Obtener el equipo del usuario
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       String equipoUsuario = null;
-
+      Long equipoUsuarioId = null;
       if (usuarioId != null) {
          Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
          if (usuario != null && usuario.getEquipo() != null) {
             equipoUsuario = usuario.getEquipo().getNombre();
+            equipoUsuarioId = usuario.getEquipo().getId();
          }
       }
 
@@ -263,15 +265,39 @@ public class TorneoController {
       model.addAttribute("golesVisitante", partido.getGolesVisitante());
 
       String resultado;
-      if (partido.getGolesLocal() > partido.getGolesVisitante()) {
-         resultado = "Ganó " + partido.getEquipoLocal().getNombre();
-      } else if (partido.getGolesVisitante() > partido.getGolesLocal()) {
-         resultado = "Ganó " + partido.getEquipoVisitante().getNombre();
+      int monedasGanadas = 0;
+      if (equipoUsuarioId != null) {
+         if (partido.getEquipoLocal().getId().equals(equipoUsuarioId)) {
+            if (partido.getGolesLocal() > partido.getGolesVisitante()) {
+               resultado = "Ganaste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_VICTORIA;
+            } else if (partido.getGolesLocal() < partido.getGolesVisitante()) {
+               resultado = "Perdiste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_DERROTA;
+            } else {
+               resultado = "Empataste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_EMPATE;
+            }
+         } else if (partido.getEquipoVisitante().getId().equals(equipoUsuarioId)) {
+            if (partido.getGolesVisitante() > partido.getGolesLocal()) {
+               resultado = "Ganaste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_VICTORIA;
+            } else if (partido.getGolesVisitante() < partido.getGolesLocal()) {
+               resultado = "Perdiste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_DERROTA;
+            } else {
+               resultado = "Empataste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_EMPATE;
+            }
+         } else {
+            resultado = "No jugaste este partido";
+         }
       } else {
-         resultado = "Empate";
+         resultado = "No jugaste este partido";
       }
 
       model.addAttribute("resultado", resultado);
+      model.addAttribute("monedasGanadas", monedasGanadas);
 
       // Generar narraciones enriquecidas usando el servicio
       List<com.tallerwebi.presentacion.dto.NarracionDTO> narraciones = simularTorneoService

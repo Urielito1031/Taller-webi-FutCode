@@ -249,6 +249,7 @@
         <input type="hidden" id="equipoUsuario" th:value="${equipoUsuario}" />
         <input type="hidden" id="equipoLocal" th:value="${equipoLocal}" />
         <input type="hidden" id="equipoVisitante" th:value="${equipoVisitante}" />
+        <input type="hidden" id="monedasGanadas" th:value="${monedasGanadas}" />
     </div>
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
@@ -540,12 +541,16 @@ function terminarPartido() {
 
 function mostrarFestejoVictoria() {
     //  modal de victoria
+    const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
     const victoryModal = document.createElement('div');
     victoryModal.className = 'victory-modal';
     victoryModal.innerHTML = `
         <div class="victory-card">
             <div class="victory-title">¡VICTORIA!</div>
             <div class="victory-subtitle">¡Felicitaciones! Has ganado el partido</div>
+            <div style="margin-top: 20px; font-size: 1.3rem; color: #ffd700; font-weight: bold;">
+                +${monedasGanadas} monedas
+            </div>
         </div>
     `;
     document.body.appendChild(victoryModal);

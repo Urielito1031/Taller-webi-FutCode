@@ -87,7 +87,7 @@
         text-align: center;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         animation: slideIn 0.6s ease-out;
-        max-width: 500px;
+        max-width: 700px;
         width: 90%;
     }
 
@@ -516,12 +516,9 @@ function terminarPartido(motivoOmitir = false) {
     statusIndicator.textContent = "FINALIZADO";
     statusIndicator.className = "status-indicator finished";
     startBtn.disabled = true;
-    // pauseBtn.disabled = true; // Eliminado
-    // resetBtn.disabled = true; // Eliminado
     document.getElementById('loadingDots').style.display = 'none';
     matchTime.textContent = "90'";
 
-    // Insertar narración final si no es omisión
     if (!motivoOmitir) {
         const narracionFinal = document.createElement('div');
         narracionFinal.className = 'commentary-item';
@@ -532,24 +529,38 @@ function terminarPartido(motivoOmitir = false) {
 
     // Calcular resultado y goles
     let golesUsuario = 0, golesRival = 0, resultado = '', color = '', monedasGanadas = parseInt(document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0), bonus = 0;
+    // --- NUEVO: Extraer goles hechos y recibidos de manera robusta ---
     let golesHechos = [], golesRecibidos = [];
-    const nombreLocal = document.getElementById('team1Name').textContent.trim();
-    const nombreVisitante = document.getElementById('team2Name').textContent.trim();
-    const esLocal = equipoUsuario === nombreLocal.toLowerCase();
-    golesUsuario = esLocal ? golesLocal : golesVisitante;
-    golesRival = esLocal ? golesVisitante : golesLocal;
+    const nombreLocal = document.getElementById('nombreLocalFinal').value.trim();
+    const nombreVisitante = document.getElementById('nombreVisitanteFinal').value.trim();
+    const equipoUsuarioNombre = document.getElementById('equipoUsuarioFinal').value.trim().toLowerCase();
+    let esLocal = equipoUsuarioNombre === nombreLocal.toLowerCase();
+    const miEquipo = esLocal ? nombreLocal : nombreVisitante;
+    const rivalEquipo = esLocal ? nombreVisitante : nombreLocal;
 
-    // Recopilar goles
+    // Recorrer todos los .commentary-item con data-tipo="GOL"
     Array.from(commentaryList.querySelectorAll('.commentary-item')).forEach(item => {
-        const texto = item.textContent.toLowerCase();
-        if (texto.includes('gol')) {
-            if (texto.includes(equipoUsuario)) {
-                golesHechos.push(item.textContent);
-            } else if (texto.includes(equipoRival)) {
-                golesRecibidos.push(item.textContent);
+        const tipo = item.getAttribute('data-tipo');
+        if (tipo && tipo.toUpperCase() === 'GOL') {
+            const minuto = item.getAttribute('data-minuto');
+            const texto = item.textContent.trim();
+            // Buscar el nombre del jugador (primeras dos palabras después del minuto)
+            const match = texto.match(/\d+'\s*([A-Za-záéíóúÁÉÍÓÚñÑ]+\s+[A-Za-záéíóúÁÉÍÓÚñÑ]+)/);
+            let nombre = match ? match[1].trim() : '';
+            // Determinar si es gol propio o rival
+            if (texto.toLowerCase().includes(miEquipo.toLowerCase())) {
+                golesHechos.push(`${minuto}' ${nombre}`);
+            } else if (texto.toLowerCase().includes(rivalEquipo.toLowerCase())) {
+                golesRecibidos.push(`${minuto}' ${nombre}`);
             }
         }
     });
+
+    // Obtener goles reales del backend
+    const golesLocal = parseInt(document.getElementById('golesLocalFinal').value);
+    const golesVisitante = parseInt(document.getElementById('golesVisitanteFinal').value);
+    golesUsuario = esLocal ? golesLocal : golesVisitante;
+    golesRival = esLocal ? golesVisitante : golesLocal;
 
     if (golesUsuario > golesRival) {
         resultado = '¡VICTORIA!';
@@ -600,14 +611,17 @@ function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesR
         colorReal = '#b0b0b0';
     }
 
-    // Extraer solo los goles: minuto y nombre
+    // Extraer solo los goles: minuto y nombre completo
     function extraerGoleadores(arr) {
         return arr.map(texto => {
-            const match = texto.match(/(\d+)'[^A-Za-z0-9áéíóúÁÉÍÓÚñÑ]*([A-Za-záéíóúÁÉÍÓÚñÑ ]+)/);
+            // Buscar minuto y nombre (no narración)
+            // Ejemplo de narración: 59' Uriel Gómez presiona fuerte y busca el gol
+            const match = texto.match(/(\d+)'\s+([A-Za-záéíóúÁÉÍÓÚñÑ ]+)/);
             if (match) {
                 const minuto = match[1];
                 let nombre = match[2].trim();
-                nombre = nombre.split(' de ')[0].split(' para ')[0].trim();
+                // Solo el primer nombre y apellido (hasta el primer verbo o palabra no nombre)
+                nombre = nombre.split(' ').slice(0,2).join(' ');
                 return `<b>${minuto}'</b> ${nombre}`;
             }
             return '';
@@ -624,9 +638,9 @@ function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesR
         <div class=\"victory-card\" style=\"border-color: ${colorReal}; background: linear-gradient(135deg, #2d2d2d 0%, ${colorReal}33 100%);\">
             <div class=\"victory-title\" style=\"color: ${colorReal};\">${resultadoTexto}</div>
             <div style=\"margin-top: 20px; font-size: 1.3rem; color: ${colorReal}; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;\">
-                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> +${monedas} monedas${bonus > 0 ? ` <span style='color:#00ffc3;font-size:1rem;'>(+${bonus} bonus por narración completa!)</span>` : ''}
+                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> +${monedas} monedas
             </div>
-            ${golesHtml}
+            ${bonus > 0 ? `<div style=\"color:#00ffc3; font-size:1.1rem; margin-top:10px; font-weight:bold;\">+${bonus} bonus por narración completa!</div>` : ''}
             <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px;\">OK</button>
         </div>
     `;

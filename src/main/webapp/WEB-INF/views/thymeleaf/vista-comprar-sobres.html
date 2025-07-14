@@ -41,12 +41,52 @@
          <p id="parrafo-descripcion">El Starter Pack es perfecto para los nuevos entrenadores que comienzan su camino en FutCode. Su color bronceado refleja humildad, esfuerzo y crecimiento. Contiene 12 artículos básicos con potencial de sorpresa. Ideal para: Principiantes o jugadores que disfrutan del reto de construir desde abajo.</p>
       </aside>
    </section>
-   <div th:if="${mensajeError}">
-      <p th:text="${mensajeError}" class="text-danger"></p>
+
+   <!-- Popup de monedas insuficientes -->
+   <div th:if="${mensajeError}" id="monedas-popup" class="popup-overlay">
+      <div class="popup-content">
+         <div class="popup-header">
+            <div class="popup-icon">
+               <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <h3 class="popup-title">Monedas Insuficientes</h3>
+         </div>
+         <div class="popup-body">
+            <p class="popup-message" th:text="${mensajeError}">Tus monedas son insuficientes para comprar este sobre</p>
+            <p class="popup-suggestion">¡Únete a un torneo y juega partidos para ganar monedas y mejorar tu equipo!</p>
+         </div>
+         <div class="popup-actions">
+            <button class="popup-btn popup-btn-primary" onclick="closePopup()">
+               <i class="bi bi-check-circle"></i>
+               <span>Entendido</span>
+            </button>
+            <a th:href="@{/home}" class="popup-btn popup-btn-secondary">
+               <i class="bi bi-house"></i>
+               <span>Ir al Home</span>
+            </a>
+         </div>
+      </div>
    </div>
 
 </main>
 
 <script th:src="@{/js/script-comprar-sobre.js}"></script>
+<script>
+   function closePopup() {
+      document.getElementById('monedas-popup').style.display = 'none';
+   }
+
+   // Cerrar popup al hacer clic fuera de él
+   document.addEventListener('DOMContentLoaded', function() {
+      const popup = document.getElementById('monedas-popup');
+      if (popup) {
+         popup.addEventListener('click', function(e) {
+            if (e.target === popup) {
+               closePopup();
+            }
+         });
+      }
+   });
+</script>
 </body>
 </html>

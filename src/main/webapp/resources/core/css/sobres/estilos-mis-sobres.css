@@ -295,3 +295,174 @@ main section h2 {
     letter-spacing: 1px;
 }
 
+/* Estilos para el estado vacío */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 30px;
+    max-width: 500px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #1b263b 0%, #1c2a3a 100%);
+    border: 1px solid rgba(0, 255, 195, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 255, 195, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-state::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #00ffc3, #1c2a3a);
+    border-radius: 16px 16px 0 0;
+}
+
+.empty-state:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 255, 195, 0.15);
+    border-color: rgba(0, 255, 195, 0.3);
+}
+
+.empty-icon {
+    background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
+}
+
+.empty-icon i {
+    color: #0d1b2a;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.empty-title {
+    color: #00ffc3;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(0, 255, 195, 0.2);
+}
+
+.empty-message {
+    color: #ffffff;
+    font-family: "Inter", sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 35px;
+    max-width: 400px;
+    opacity: 0.9;
+}
+
+.empty-actions {
+    display: flex;
+    align-items: center;
+}
+
+.market-btn {
+    background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+    color: #0d1b2a;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: "Orbitron", sans-serif;
+}
+
+.market-btn:hover {
+    background: linear-gradient(135deg, #00d4a3 0%, #00ffc3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 195, 0.4);
+    color: #0d1b2a;
+    text-decoration: none;
+}
+
+.market-btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.market-btn:hover i {
+    transform: scale(1.1);
+}
+
+/* Responsive para el estado vacío */
+@media (max-width: 768px) {
+    .empty-state {
+        padding: 40px 20px;
+        margin: 0 15px;
+    }
+    
+    .empty-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .empty-icon i {
+        font-size: 2rem;
+    }
+    
+    .empty-title {
+        font-size: 1.5rem;
+    }
+    
+    .empty-message {
+        font-size: 1rem;
+    }
+    
+    .market-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .empty-state {
+        padding: 30px 15px;
+    }
+    
+    .empty-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .empty-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .empty-title {
+        font-size: 1.3rem;
+    }
+    
+    .empty-message {
+        font-size: 0.9rem;
+    }
+    
+    .market-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}
+

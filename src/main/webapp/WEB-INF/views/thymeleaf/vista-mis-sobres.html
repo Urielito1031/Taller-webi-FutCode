@@ -5,16 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FutCode</title>
     <link th:href="@{/css/sobres/estilos-mis-sobres.css}" rel="stylesheet">
-      <link th:href="@{/css/fragmentos/header.css}" rel="stylesheet">
+    <link th:href="@{/css/fragmentos/header.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
-<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
-<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">-->
-
-<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
-<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">-->
 </head>
 <body>
 
@@ -24,7 +17,24 @@
 
     <section>
         <h2>MIS SOBRES</h2>
-        <div class="sobres">
+        
+        <!-- Mensaje cuando no hay sobres -->
+        <div th:if="${sobres == null or sobres.isEmpty()}" class="empty-state">
+            <div class="empty-icon">
+                <i class="bi bi-archive"></i>
+            </div>
+            <h3 class="empty-title">¡No tienes sobres!</h3>
+            <p class="empty-message">Ve al mercado para obtener más jugadores y mejorar tu equipo</p>
+            <div class="empty-actions">
+                <a th:href="@{/jugador/comprar-sobres}" class="market-btn">
+                    <i class="bi bi-shop"></i>
+                    <span>Ir al Mercado</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Lista de sobres cuando existen -->
+        <div th:if="${sobres != null and !sobres.isEmpty()}" class="sobres">
             <article th:each="sobre : ${sobres}" >
                 <form th:action="@{/sobre}" method="post">
                     <button type="submit">

@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.entities.*;
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.SimularTorneoService;
@@ -164,7 +165,17 @@ public class TorneoController {
          }
 
          equipoTorneoService.unirseTorneo(torneoId, equipoId);
+
+         Torneo torneo = torneoService.buscarPorId(torneoId);
+         List<EquipoTorneo> equiposEnTorneo = equipoTorneoService.obtenerEquiposPorIdTorneo(torneoId);
+
+         if (torneo.getEstado() == EstadoTorneoEnum.ABIERTO && !equiposEnTorneo.isEmpty()) {
+            torneo.setEstado(EstadoTorneoEnum.EN_CURSO);
+            torneoService.guardar(torneo); // Asegurate de tener este método implementado
+         }
+
          redirectAttributes.addFlashAttribute("mensajeTorneo", "¡Te uniste al torneo con éxito!");
+
       } catch (IllegalArgumentException e) {
          redirectAttributes.addFlashAttribute("errorUnirse", e.getMessage());
       }

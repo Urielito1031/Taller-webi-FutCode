@@ -170,4 +170,15 @@ public class TorneoServiceImpl implements TorneoService{
       torneo.getFechas().addAll(fechas);
       torneoRepository.save(torneo);
    }
+
+   @Override
+   public Torneo buscarPorId(Long id) {
+      return torneoRepository.getById(id);
+   }
+
+   @Override
+   public void guardar(Torneo torneo) {
+      torneoRepository.save(torneo);
+   }
+
 }

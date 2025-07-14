@@ -13,4 +13,8 @@ public interface TorneoService {
    List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior);
    List<Fecha> generarFechas(List<Equipo> equipos, Torneo torneo);
    void crearFixtureConLasFechas(Long torneoId);
+
+    Torneo buscarPorId(Long id);
+
+   void guardar(Torneo torneo);
 }

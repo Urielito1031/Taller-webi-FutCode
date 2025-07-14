@@ -134,12 +134,42 @@ public class TorneoController {
 
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
 
-      EquipoTorneo equipoUsuario = tabla.stream()
-              .filter(et -> et.getEquipo().getUsuario() != null && et.getEquipo().getUsuario().getId().equals(usuarioId))
-              .findFirst()
-              .orElse(null);
+      EquipoTorneo equipoUsuario = null;
+      Integer monedasGanadas = null;
 
-      model.addAttribute("equipoUsuario", equipoUsuario);
+      if (usuarioId != null) {
+         equipoUsuario = tabla.stream()
+                 .filter(et -> et.getEquipo().getUsuario() != null && et.getEquipo().getUsuario().getId().equals(usuarioId))
+                 .findFirst()
+                 .orElse(null);
+
+         // Si el torneo está finalizado, calculamos las monedas ganadas
+         if (torneoEntity.getEstado() == EstadoTorneoEnum.FINALIZADO && equipoUsuario != null) {
+            int posicion = equipoUsuario.getPosicion();
+            int totalEquipos = tabla.size();
+            int premioTotal = torneoEntity.getPremioTorneo();
+
+            if (posicion == 1) {
+               monedasGanadas = (int) (premioTotal * 0.50);
+            } else if (posicion == 2) {
+               monedasGanadas = (int) (premioTotal * 0.25);
+            } else if (posicion == 3) {
+               monedasGanadas = (int) (premioTotal * 0.10);
+            } else {
+               int restantes = totalEquipos - 3;
+               if (restantes > 0) {
+                  monedasGanadas = (int) ((premioTotal * 0.15) / restantes);
+               } else {
+                  monedasGanadas = 0;
+               }
+            }
+         }
+
+         model.addAttribute("equipoUsuario", equipoUsuario);
+         model.addAttribute("monedasGanadasEnTorneo", monedasGanadas);
+      }
+
+
       model.addAttribute("usuarioId", usuarioId);
       model.addAttribute("torneo", torneo);
       model.addAttribute("torneoEquipos", tabla);
@@ -239,7 +269,14 @@ public class TorneoController {
 
       simularTorneoService.simularFecha(torneoId, numeroFecha, equipoId);
 
+//      Boolean torneoFinalizado = torneoService.verificarYFinalizarTorneo(torneoId);
+//
+//      if (torneoFinalizado) {
+//         return "redirect:/torneo/resultado-final/" + torneoId;
+//      }
+
       torneoService.verificarYFinalizarTorneo(torneoId);
+
 
       // 3. Buscar el partido donde juega el equipo en esa fecha
       // Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId,
@@ -324,6 +361,10 @@ public class TorneoController {
       List<com.tallerwebi.presentacion.dto.NarracionDTO> narraciones = simularTorneoService
             .generarNarracionesParaPartido(partido);
       model.addAttribute("narraciones", narraciones);
+
+//      boolean torneoFinalizado = torneoService.verificarYFinalizarTorneo(torneoId);
+//      model.addAttribute("torneoFinalizado", torneoFinalizado);
+
       return "partido-Vista";
    }
 
@@ -358,5 +399,38 @@ public class TorneoController {
       mav.addObject("usuarioId", usuarioId);
       return mav;
    }
+
+//   @GetMapping("/resultado-final/{id}")
+//   public String mostrarResultadoFinal(@PathVariable Long id, Model model, HttpServletRequest request) {
+//      Torneo torneo = torneoRepository.obtenerTorneoConFechas(id);
+//
+//      if (torneo == null) {
+//         return "redirect:/error";
+//      }
+//
+//      List<EquipoTorneo> tabla = equipoTorneoRepository.getAllByTorneoId(id);
+//
+//      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+//
+//      EquipoTorneo equipoUsuario = tabla.stream()
+//              .filter(et -> et.getEquipo().getUsuario() != null &&
+//                      et.getEquipo().getUsuario().getId().equals(usuarioId))
+//              .findFirst()
+//              .orElse(null);
+//
+//      int monedasGanadas = torneoService.calcularPremioPorPosicion(
+//              torneo.getPremioTorneo(),
+//              equipoUsuario != null ? equipoUsuario.getPosicion() : 0,
+//              tabla.size()
+//      );
+//
+//      model.addAttribute("torneo", torneo);
+//      model.addAttribute("equipoUsuario", equipoUsuario);
+//      model.addAttribute("torneoEquipos", tabla);
+//      model.addAttribute("monedasGanadasEnTorneo", monedasGanadas);
+//
+//      return "resultado-torneo";
+//   }
+
 
 }

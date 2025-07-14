@@ -21,4 +21,6 @@ public interface TorneoService {
     void verificarYFinalizarTorneo(Long torneoId);
 
     void asignarPremiosPorPosicion(Long torneoId);
+
+    int calcularPremioPorPosicion(int premioTotal, int posicion, int totalEquipos);
 }

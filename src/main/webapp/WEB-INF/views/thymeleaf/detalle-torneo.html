@@ -57,6 +57,35 @@
         .ms-2 {
             margin-left: 0.5rem !important;
         }
+
+        .resumen-final {
+           background: linear-gradient(135deg, #1e2a3a, #0f1419);
+           border-radius: 20px;
+           padding: 30px;
+           color: #e2e8f0;
+           margin-bottom: 30px;
+           border: 1px solid rgba(255,255,255,0.1);
+           box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+           text-align: center;
+        }
+
+        .resumen-titulo {
+           font-size: 1.8rem;
+           font-weight: bold;
+           color: #00ffc3;
+           margin-bottom: 10px;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           gap: 10px;
+        }
+
+        .icono-trophy {
+           font-size: 2.2rem;
+           color: #FFD700;
+           text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
     </style>
 </head>
 <body>
@@ -109,12 +138,25 @@
          </div>
       </div>
 
-      <div th:if="${equipoUsuario != null && torneo.estado == 'FINALIZADO'}" class="alert alert-success text-center mt-3">
-         <strong>¡Finalizaste en la posición</strong>
-         <span th:text="${equipoUsuario.posicion}">?</span> 🏅
-         <strong>y ganaste</strong>
-         <span th:text="${equipoUsuario.monedasGanadas}">0</span> monedas 🪙
+      <div th:if="${equipoUsuario != null && torneo.estado.name() == 'FINALIZADO'}" class="resumen-final shadow-box">
+         <div class="resumen-titulo">
+            <i class="bi bi-trophy-fill icono-trophy"></i>
+            <span>¡Torneo Finalizado!</span>
+         </div>
+         <div class="resumen-detalle">
+            <p>
+               Finalizaste en la <strong>posición <span th:text="${equipoUsuario.posicion}">4</span></strong>
+               y ganaste <strong><span th:text="${monedasGanadasEnTorneo}">230</span> monedas</strong>.
+            </p>
+         </div>
       </div>
+
+<!--      <div th:if="${equipoUsuario != null && torneo.estado.name() == 'FINALIZADO'}" class="alert alert-success text-center mt-3">-->
+<!--         <strong>¡Finalizaste en la posición</strong>-->
+<!--         <span th:text="${equipoUsuario.posicion}">?</span>-->
+<!--         <strong>y ganaste</strong>-->
+<!--         <span th:text="${monedasGanadasEnTorneo}">0</span> monedas-->
+<!--      </div>-->
 
 
       <div class="torneo-info">

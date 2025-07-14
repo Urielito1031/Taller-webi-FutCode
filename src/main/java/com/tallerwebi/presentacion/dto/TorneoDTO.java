@@ -4,7 +4,6 @@ import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import java.util.Objects;
 
 @Getter
@@ -18,12 +17,15 @@ public class TorneoDTO {
 
    private FormatoTorneoDTO formatoTorneo;
    private EstadoTorneoEnum estado;
+   private Double premioMonedas;
+
 
    public TorneoDTO() {
       this.estado = EstadoTorneoEnum.ABIERTO;
 
    }
-   public TorneoDTO(Long id, String nombre,String descripcion, FormatoTorneoDTO formatoTorneo) {
+
+   public TorneoDTO(Long id, String nombre, String descripcion, FormatoTorneoDTO formatoTorneo) {
       this.id = id;
       this.nombre = nombre;
       this.descripcion = descripcion;
@@ -33,14 +35,15 @@ public class TorneoDTO {
    }
 
    @Override
-   public boolean equals(Object o){
-      if(o == null || getClass() != o.getClass()) return false;
+   public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass())
+         return false;
       TorneoDTO torneoDTO = (TorneoDTO) o;
-      return Objects.equals(id,torneoDTO.id) ;
+      return Objects.equals(id, torneoDTO.id);
    }
 
    @Override
-   public int hashCode(){
+   public int hashCode() {
       return Objects.hash(id);
    }
-     }
+}

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.tallerwebi.dominio.service.UsuarioServiceImpl;
+import com.tallerwebi.presentacion.dto.SimulacionTorneoResumenDTO;
 
 @Controller
 @RequestMapping("/torneo")
@@ -191,6 +192,19 @@ public class TorneoController {
 
       mav.addObject("equipoUsuarioId", equipoUsuarioId);
 
+      // Nueva lógica: ¿hay fechas no simuladas?
+      boolean hayFechasNoSimuladas = torneo.getFechas().stream().anyMatch(f -> !f.isSimulada());
+      mav.addObject("hayFechasNoSimuladas", hayFechasNoSimuladas);
+
+      // Verificar si hay resumen en session
+      SimulacionTorneoResumenDTO resumenTorneo = (SimulacionTorneoResumenDTO) request.getSession()
+            .getAttribute("resumenTorneo");
+      if (resumenTorneo != null) {
+         mav.addObject("resumenTorneo", resumenTorneo);
+         // Limpiar el resumen de la session para que no aparezca de nuevo
+         request.getSession().removeAttribute("resumenTorneo");
+      }
+
       return mav;
    }
 
@@ -216,12 +230,8 @@ public class TorneoController {
          return "redirect:/torneo/fechas?torneoId=" + torneoId;
       }
 
-
       // 1. Simular toda la fecha
       simularTorneoService.simularFecha(torneoId, numeroFecha);
-
-
-
 
       Long equipoId = usuario.getEquipo().getId();
 
@@ -241,6 +251,35 @@ public class TorneoController {
          }
       }
 
+      return "redirect:/torneo/fechas?torneoId=" + torneoId;
+   }
+
+   @PostMapping("/simular-torneo")
+   public String simularTorneoCompleto(@RequestParam Long torneoId, HttpServletRequest request,
+         RedirectAttributes redirectAttributes) {
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      if (usuarioId == null) {
+         return "redirect:/login";
+      }
+      Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+      if (usuario == null || usuario.getEquipo() == null) {
+         return "redirect:/torneo/fechas?torneoId=" + torneoId;
+      }
+      if (usuario.getMonedas() == null || usuario.getMonedas() < 12000) {
+         redirectAttributes.addFlashAttribute("mensajeError",
+               "No tienes suficientes monedas para simular el torneo completo (12.000 requeridas).");
+         return "redirect:/torneo/fechas?torneoId=" + torneoId;
+      }
+      // Descontar monedas
+      usuario.setMonedas(usuario.getMonedas() - 12000);
+      usuarioService.actualizar(usuario);
+      // Simular todas las fechas pendientes (rápido, sin narraciones) y obtener
+      // resumen
+      SimulacionTorneoResumenDTO resumen = simularTorneoService.simularTorneoRapido(torneoId, usuarioId);
+
+      // Guardar resumen en session
+      request.getSession().setAttribute("resumenTorneo", resumen);
+      redirectAttributes.addFlashAttribute("mensajeTorneo", "¡El torneo fue simulado completamente!");
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 

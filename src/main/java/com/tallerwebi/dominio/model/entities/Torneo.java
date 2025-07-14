@@ -35,6 +35,17 @@ public class Torneo {
    @Column(name = "estado", nullable = false)
    private EstadoTorneoEnum estado;
 
+   @Column(name = "premio_monedas")
+   private Integer premioMonedas;
+
+   public Integer getPremioMonedas() {
+      return premioMonedas;
+   }
+
+   public void setPremioMonedas(Integer premioMonedas) {
+      this.premioMonedas = premioMonedas;
+   }
+
    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinColumn(name = "torneo_liga_id", unique = true, nullable = true)
    private TorneoLiga torneoLiga;
@@ -50,14 +61,10 @@ public class Torneo {
    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
    private Set<EquipoTorneo> equipos = new HashSet<>();
 
-
-
-
-
-   public String toString(){
-      return "id: "+id+",\n nombre: "+nombre+", \ndescripcion: "+descripcion+ "\nformato: "+formatoTorneo+", \nestado: "+estado;
+   public String toString() {
+      return "id: " + id + ",\n nombre: " + nombre + ", \ndescripcion: " + descripcion + "\nformato: " + formatoTorneo
+            + ", \nestado: " + estado;
    }
-
 
    public TorneoDTO convertToDTO() {
       TorneoDTO dto = new TorneoDTO();

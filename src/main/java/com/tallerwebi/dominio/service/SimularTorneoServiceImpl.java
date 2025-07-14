@@ -14,6 +14,11 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import com.tallerwebi.dominio.model.entities.EquipoTorneo;
+import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.presentacion.dto.SimulacionTorneoResumenDTO;
+import com.tallerwebi.dominio.service.TorneoService;
+import com.tallerwebi.dominio.model.entities.Equipo;
 
 @Service
 @Transactional
@@ -27,17 +32,20 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
     private final JugadorService jugadorService;
     private final Random random = new Random();
     private final UsuarioService usuarioService;
+    private final TorneoService torneoService;
 
-    public SimularTorneoServiceImpl(PartidoRepository partidoRepository,TorneoRepository torneoRepository,
-                                    FechaRepository fechaRepository,FrasePartidoService frasePartidoService,
-                                    NarracionRepository narracionRepository,JugadorService jugadorService,UsuarioService usuarioService,UsuarioService usuarioService1) {
+    public SimularTorneoServiceImpl(PartidoRepository partidoRepository, TorneoRepository torneoRepository,
+            FechaRepository fechaRepository, FrasePartidoService frasePartidoService,
+            NarracionRepository narracionRepository, JugadorService jugadorService, UsuarioService usuarioService,
+            UsuarioService usuarioService1, TorneoService torneoService) {
         this.partidoRepository = partidoRepository;
         this.torneoRepository = torneoRepository;
         this.fechaRepository = fechaRepository;
         this.frasePartidoService = frasePartidoService;
         this.narracionRepository = narracionRepository;
         this.jugadorService = jugadorService;
-       this.usuarioService = usuarioService1;
+        this.usuarioService = usuarioService1;
+        this.torneoService = torneoService;
     }
 
     @Override
@@ -69,13 +77,16 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 }
             }
 
-//            if(partido.getEquipoLocal().getJugadores() != null && partido.getEquipoVisitante().getJugadores() != null) {
-//                if(partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()){
-//                    golesLocal++;
-//                }else if(partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante().getRatingEquipo()){
-//                    golesVisitante++;
-//                }
-//            }
+            // if(partido.getEquipoLocal().getJugadores() != null &&
+            // partido.getEquipoVisitante().getJugadores() != null) {
+            // if(partido.getEquipoLocal().getRatingEquipo() >
+            // partido.getEquipoVisitante().getRatingEquipo()){
+            // golesLocal++;
+            // }else if(partido.getEquipoLocal().getRatingEquipo() <
+            // partido.getEquipoVisitante().getRatingEquipo()){
+            // golesVisitante++;
+            // }
+            // }
 
             // Generar y guardar frases de goles
 
@@ -93,18 +104,18 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 }
             }
 
-                if (partido.getEquipoVisitante().hasJugadores()) {
-                    for (int i = 0; i < golesVisitante; i++) {
-                        try {
-                            String frase = frasePartidoService.generarFraseConJugadorAleatorio(
-                                    EventoPartido.GOL, partido.getEquipoVisitante().getId());
-                            narracionRepository.guardar(new Narracion(frase, partido));
-                        } catch (Exception e) {
-                            // Log error pero continúa la simulación
-                            System.err.println("Error generando frase para equipo visitante: " + e.getMessage());
-                        }
+            if (partido.getEquipoVisitante().hasJugadores()) {
+                for (int i = 0; i < golesVisitante; i++) {
+                    try {
+                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(
+                                EventoPartido.GOL, partido.getEquipoVisitante().getId());
+                        narracionRepository.guardar(new Narracion(frase, partido));
+                    } catch (Exception e) {
+                        // Log error pero continúa la simulación
+                        System.err.println("Error generando frase para equipo visitante: " + e.getMessage());
                     }
                 }
+            }
 
             int cantidadEventosGenerales = generarCantidadAleatoria(25);
             int cantidadTarjetas = generarCantidadAleatoria(5);
@@ -294,4 +305,100 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         return narraciones;
     }
 
+    @Override
+    public SimulacionTorneoResumenDTO simularTorneoRapido(Long torneoId, Long usuarioId) {
+        Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
+        Usuario usuario = null;
+        int puestoFinal = -1;
+        int monedasGanadas = 0;
+        double monedasTotales = 0;
+        String nombreTorneo = torneo.getNombre();
+
+        // Simular fechas pendientes
+        for (Fecha fecha : torneo.getFechas()) {
+            if (!fecha.isSimulada()) {
+                for (Partido partido : fecha.getPartidos()) {
+                    jugadorService.asegurarJugadoresIniciales(partido.getEquipoLocal());
+                    jugadorService.asegurarJugadoresIniciales(partido.getEquipoVisitante());
+
+                    int golesLocal = (int) (Math.random() * 5);
+                    int golesVisitante = (int) (Math.random() * 5);
+
+                    if (partido.getEquipoLocal().hasJugadores() && partido.getEquipoVisitante().hasJugadores()) {
+                        if (partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()) {
+                            golesLocal++;
+                        } else if (partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante().getRatingEquipo()) {
+                            golesVisitante++;
+                        }
+                    }
+
+                    partido.setGolesLocal(golesLocal);
+                    partido.setGolesVisitante(golesVisitante);
+
+                    if (golesLocal > golesVisitante) {
+                        partido.setResultado(ResultadoPartido.LOCAL_GANA);
+                    } else if (golesVisitante > golesLocal) {
+                        partido.setResultado(ResultadoPartido.VISITANTE_GANA);
+                    } else {
+                        partido.setResultado(ResultadoPartido.EMPATE);
+                    }
+
+                    partidoRepository.save(partido);
+                    usuarioService.sumarPremioMonedas(partido, partido.getResultado());
+                }
+                fecha.setSimulada(true);
+                fechaRepository.save(fecha);
+            }
+        }
+
+        // Calcular tabla final
+        List<Partido> partidos = torneo.getFechas().stream()
+                .flatMap(f -> f.getPartidos().stream())
+                .collect(java.util.stream.Collectors.toList());
+
+        // Usar los EquipoTorneo existentes del torneo
+        List<EquipoTorneo> tablaAnterior = new java.util.ArrayList<>(torneo.getEquipos());
+        
+        // Resetear estadísticas para recalcular
+        for (EquipoTorneo et : tablaAnterior) {
+            et.setPosicion(0);
+            et.setPuntos(0);
+            et.setPartidosJugados(0);
+            et.setPartidosGanados(0);
+            et.setPartidosEmpatados(0);
+            et.setPartidosPerdidos(0);
+            et.setGolesAFavor(0);
+            et.setGolesEnContra(0);
+        }
+        
+        List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
+
+        // Buscar el equipo del usuario y su puesto
+        for (EquipoTorneo eq : tabla) {
+            if (eq.getEquipo() != null && eq.getEquipo().getUsuario() != null && eq.getEquipo().getUsuario().getId().equals(usuarioId)) {
+                puestoFinal = eq.getPosicion(); // Usar la posición calculada por el servicio
+                usuario = eq.getEquipo().getUsuario();
+                break;
+            }
+        }
+
+        int premioTorneo = torneo.getPremioMonedas() != null ? torneo.getPremioMonedas() : 0;
+        if (puestoFinal == 1) {
+            monedasGanadas = premioTorneo;
+        } else if (puestoFinal == 2) {
+            monedasGanadas = (int) (premioTorneo * 0.75);
+        } else if (puestoFinal == 3) {
+            monedasGanadas = (int) (premioTorneo * 0.5);
+        } else if (puestoFinal > 0) {
+            monedasGanadas = 3000;
+        }
+        if (usuario != null) {
+            usuario.setMonedas(usuario.getMonedas() + monedasGanadas);
+            usuarioService.actualizar(usuario);
+            monedasTotales = usuario.getMonedas();
+        }
+        return new SimulacionTorneoResumenDTO(puestoFinal, monedasGanadas, monedasTotales, nombreTorneo);
+    }
 }
+     
+

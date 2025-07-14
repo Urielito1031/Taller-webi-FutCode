@@ -413,6 +413,14 @@
     <div class="header">
         <h1><i class="fas fa-calendar-alt"></i> Fechas del Torneo</h1>
         <p>Calendario y resultados del campeonato</p>
+        <th:block th:if="${hayFechasNoSimuladas}">
+            <form th:action="@{/torneo/simular-torneo}" method="post" style="margin-top: 20px;">
+                <input type="hidden" name="torneoId" th:value="${torneoId}" />
+                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #00ffc3, #00bfff); color: #0d1b2a; font-weight: bold; font-size: 1.1rem; border-radius: 25px; padding: 12px 32px; box-shadow: 0 2px 8px rgba(0,255,195,0.15);">
+                    <i class="fas fa-forward"></i> Simular Torneo (12.000 monedas)
+                </button>
+            </form>
+        </th:block>
     </div>
 
     <div class="stats-summary">
@@ -435,6 +443,13 @@
             </div>
         </div>
     </div>
+
+    <th:block th:if="${resumenTorneo != null}">
+        <div class="alert alert-info mt-4" style="background: linear-gradient(90deg, #00ffc3 0%, #00bfff 100%); color: #0d1b2a; font-weight: bold; border-radius: 18px; font-size: 1.2rem; text-align: center;">
+            <i class="fas fa-trophy"></i>
+            <span th:text="'¡Simulación completa! Puesto final: ' + ${resumenTorneo.puestoFinal} + '. Monedas ganadas: ' + ${resumenTorneo.monedasGanadas} + '. Total: ' + ${#numbers.formatDecimal(resumenTorneo.monedasTotales, 0, 0)} + ' monedas.'"></span>
+        </div>
+    </th:block>
 
     <div class="fechas-grid">
         <div class="fecha-card" th:each="fecha, iterStat : ${fechas}">
@@ -513,6 +528,75 @@
     </div>
 </div>
 
+<!-- POPUP DE FESTEJO DE SIMULACIÓN DE TORNEO -->
+<div id="popup-simulacion-torneo" class="victory-modal" th:if="${resumenTorneo != null}" style="display:none;">
+    <div class="victory-card" style="border-color: #00ffc3; background: linear-gradient(135deg, #2d2d2d 0%, #00ffc333 100%);">
+        <div class="victory-title" style="color: #00ffc3; font-size:2.2rem;">¡Simulación completada!</div>
+        <div class="victory-subtitle" style="color:#fff; font-size:1.2rem; margin-bottom:10px;">Resumen de tu torneo</div>
+        <div style="margin: 18px 0 10px 0; font-size:1.3rem; color:#00ffc3; font-weight:bold;">
+            <i class="fas fa-trophy"></i> Puesto final: <span th:text="${resumenTorneo.puestoFinal}"></span>
+        </div>
+        <div style="margin-bottom:10px; color:#ffd700; font-size:1.1rem; font-weight:bold;">
+            <i class="fas fa-coins"></i> Monedas por puesto: <span th:text="${resumenTorneo.monedasGanadas}"></span>
+        </div>
+        <div style="margin-bottom:10px; color:#00ffc3; font-size:1.1rem; font-weight:bold;">
+            <i class="fas fa-wallet"></i> Monedas totales: <span th:text="${#numbers.formatDecimal(resumenTorneo.monedasTotales, 0, 0)}"></span>
+        </div>
+        <div style="margin-bottom:10px; color:#fff; font-size:1.1rem;">
+            <i class="fas fa-trophy"></i> Torneo: <span th:text="${resumenTorneo.nombreTorneo}"></span>
+        </div>
+        <button id="cerrarPopupSimulacion" class="btn btn-primary" style="margin-top: 25px;">OK</button>
+    </div>
+</div>
+
+<style>
+.victory-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.5s ease-in;
+}
+.victory-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border: 2px solid #ffd700;
+    border-radius: 20px;
+    padding: 40px 60px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.6s ease-out;
+    max-width: 500px;
+    width: 90%;
+}
+.victory-title {
+    color: #ffd700;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideIn {
+    from { 
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to { 
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+</style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
     // Calcular estadísticas
@@ -589,6 +673,21 @@
             }
         `;
     document.head.appendChild(style);
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar el popup si hay resumenTorneo
+    var popup = document.getElementById('popup-simulacion-torneo');
+    if (popup) {
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Evita scroll de fondo
+        var btnCerrar = document.getElementById('cerrarPopupSimulacion');
+        btnCerrar.addEventListener('click', function() {
+            popup.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    }
+});
 </script>
 </body>
 </html>

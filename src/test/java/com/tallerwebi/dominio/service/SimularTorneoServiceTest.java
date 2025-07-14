@@ -47,6 +47,9 @@ public class SimularTorneoServiceTest {
   @Mock
   private JugadorRepository jugadorRepository;
 
+  @Mock
+  private UsuarioService usuarioService;
+
   @InjectMocks
   private SimularTorneoServiceImpl simularTorneoService;
 
@@ -107,6 +110,9 @@ public class SimularTorneoServiceTest {
     when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fecha);
     when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
         .thenReturn("Frase de prueba");
+    doNothing().when(jugadorService).asegurarJugadoresIniciales(any());
+    doNothing().when(usuarioService).sumarPremioMonedas(any(), any());
+    doNothing().when(narracionRepository).guardar(any());
 
     // Ejecución
     simularTorneoService.simularFecha(torneoId, numeroDeFecha);
@@ -177,6 +183,9 @@ public class SimularTorneoServiceTest {
     when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fecha);
     when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
         .thenReturn("Frase de prueba");
+    doNothing().when(jugadorService).asegurarJugadoresIniciales(any());
+    doNothing().when(usuarioService).sumarPremioMonedas(any(), any());
+    doNothing().when(narracionRepository).guardar(any());
 
     // Ejecución
     Long resultado = simularTorneoService.simularFechaYDevolverPrimerPartido(torneoId, numeroDeFecha);
@@ -204,6 +213,9 @@ public class SimularTorneoServiceTest {
     when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fechaSinPartidos);
     when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
         .thenReturn("Frase de prueba");
+    doNothing().when(jugadorService).asegurarJugadoresIniciales(any());
+    doNothing().when(usuarioService).sumarPremioMonedas(any(), any());
+    doNothing().when(narracionRepository).guardar(any());
 
     // Ejecución
     Long resultado = simularTorneoService.simularFechaYDevolverPrimerPartido(torneoId, numeroDeFecha);
@@ -266,6 +278,9 @@ public class SimularTorneoServiceTest {
     when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fecha);
     when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
         .thenReturn("Frase de prueba");
+    doNothing().when(jugadorService).asegurarJugadoresIniciales(any());
+    doNothing().when(usuarioService).sumarPremioMonedas(any(), any());
+    doNothing().when(narracionRepository).guardar(any());
 
     // Ejecución
     simularTorneoService.simularFecha(torneoId, numeroDeFecha);
@@ -298,6 +313,9 @@ public class SimularTorneoServiceTest {
     when(fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha)).thenReturn(fecha);
     when(frasePartidoService.generarFraseConJugadorAleatorio(any(), anyLong()))
         .thenThrow(new RuntimeException("Error generando frase"));
+    doNothing().when(jugadorService).asegurarJugadoresIniciales(any());
+    doNothing().when(usuarioService).sumarPremioMonedas(any(), any());
+    doNothing().when(narracionRepository).guardar(any());
 
     // Ejecución (no debe lanzar excepción)
     simularTorneoService.simularFecha(torneoId, numeroDeFecha);

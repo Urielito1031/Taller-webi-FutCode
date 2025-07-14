@@ -7,6 +7,7 @@
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
    <link th:href="@{/css/plantilla/plantilla.css}" rel="stylesheet" />
    <link th:href="@{/css/validation-errors.css}" rel="stylesheet" />
+   <link th:href="@{/css/rareza-jugadores.css}" rel="stylesheet" />
 </head>
 <body th:style="'background: url(' + @{/img/plantilla-fondo.jpg} + ') no-repeat center center fixed; background-size: cover; min-height: 100vh;'">
 
@@ -42,9 +43,7 @@
    <!-- Área del campo -->
    <div class="field-area ratio ratio-16x9 mb-4" id="field"
         th:style="'background: url(' + @{/img/cancha-futbol.jpg} + ') no-repeat center center; background-size: cover;'"
-        th:attr="data-esquema=${formacion.esquema.getFormacionTexto()},
-                  data-equipo-id=${formacion.equipoId},
-                  data-default-img=@{/img/jugadores/futbolista-default.png}">
+        th:attr="data-esquema=${formacion.esquema.getFormacionTexto()},data-equipo-id=${formacion.equipoId},data-default-img=@{/img/jugadores/futbolista-default.png}">
    </div>
 
    <!-- Lista única de jugadores -->
@@ -52,7 +51,22 @@
       <h2 class="section-title">Plantilla del Equipo</h2>
       <div class="player-list d-flex flex-wrap gap-3 py-3">
          <div th:each="jugador : ${jugadores}" class="player-item">
-            <div class="player-card" draggable="true" th:attr="data-player-id=${jugador.id}">
+            <div class="player-card" 
+                 draggable="true" 
+                 th:attr="data-player-id=${jugador.id}"
+                 th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'rareza-normal' :
+                                (${jugador.rarezaJugador.name() == 'RARO'} ? 'rareza-raro' :
+                                (${jugador.rarezaJugador.name() == 'EPICO'} ? 'rareza-epico' : 'rareza-leyenda'))">
+               
+               <!-- Badge de rareza -->
+               <div class="rareza-badge" 
+                    th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'normal' :
+                                   (${jugador.rarezaJugador.name() == 'RARO'} ? 'raro' :
+                                   (${jugador.rarezaJugador.name() == 'EPICO'} ? 'epico' : 'leyenda'))"
+                    th:text="${jugador.rarezaJugador.name()}">
+                   NORMAL
+               </div>
+               
                <div class="player-image">
                   <img th:src="${#uris.escapePath(jugador.imagen)}" alt="Imagen futbolista" class="card-img" />
                </div>

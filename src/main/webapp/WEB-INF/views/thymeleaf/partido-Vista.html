@@ -213,8 +213,8 @@
 
     <div class="controls">
         <button class="btn btn-primary" id="startBtn">INICIAR PARTIDO</button>
-        <button class="btn btn-secondary" id="pauseBtn">PAUSAR</button>
-        <button class="btn btn-secondary" id="resetBtn">REINICIAR</button>
+        <!-- <button class="btn btn-secondary" id="pauseBtn">PAUSAR</button> -->
+        <!-- <button class="btn btn-secondary" id="resetBtn">REINICIAR</button> -->
     </div>
 
     <div class="stats-section">
@@ -251,6 +251,11 @@
         <input type="hidden" id="equipoLocal" th:value="${equipoLocal}" />
         <input type="hidden" id="equipoVisitante" th:value="${equipoVisitante}" />
         <input type="hidden" id="monedasGanadas" th:value="${monedasGanadas}" />
+        <input type="hidden" id="golesLocalFinal" th:value="${golesLocal}" />
+        <input type="hidden" id="golesVisitanteFinal" th:value="${golesVisitante}" />
+        <input type="hidden" id="nombreLocalFinal" th:value="${equipoLocal.nombre}" />
+        <input type="hidden" id="nombreVisitanteFinal" th:value="${equipoVisitante.nombre}" />
+        <input type="hidden" id="equipoUsuarioFinal" th:value="${equipoUsuario}" />
     </div>
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
@@ -276,8 +281,6 @@ const totalCards = document.getElementById("totalCards");
 const totalInjuries = document.getElementById("totalInjuries");
 const commentaryList = document.getElementById("commentaryList");
 const startBtn = document.getElementById("startBtn");
-const pauseBtn = document.getElementById("pauseBtn");
-const resetBtn = document.getElementById("resetBtn");
 const omiteBtn = document.getElementById("omitebtn");
 
 // Obtener el equipo del usuario desde el backend
@@ -318,6 +321,7 @@ let intervalo = null;
 let narracionIndex = 0;
 let velocidadNarracion = 1000;
 let omitirNarracion = false;
+let bonusMonedas = 500;
 
 let stats = {
     goles: 0,
@@ -343,7 +347,8 @@ function inicializarPartido() {
     statusIndicator.textContent = "LISTO";
     statusIndicator.className = "status-indicator ready";
     startBtn.disabled = false;
-    pauseBtn.disabled = true;
+    // pauseBtn.disabled = true; // Eliminado
+    // resetBtn.disabled = true; // Eliminado
     
     // Ocultar animación de puntos suspensivos
     document.getElementById('loadingDots').style.display = 'none';
@@ -356,7 +361,8 @@ function iniciarPartido() {
     statusIndicator.textContent = "EN JUEGO";
     statusIndicator.className = "status-indicator playing";
     startBtn.disabled = true;
-    pauseBtn.disabled = false;
+    // pauseBtn.disabled = false; // Eliminado
+    // resetBtn.disabled = true; // Eliminado
     
     // Mostrar mensaje de inicio del partido
     const mensajeInicio = document.createElement('div');
@@ -385,7 +391,8 @@ function pausarPartido() {
     statusIndicator.textContent = "PAUSADO";
     statusIndicator.className = "status-indicator paused";
     startBtn.disabled = false;
-    pauseBtn.disabled = true;
+    // pauseBtn.disabled = true; // Eliminado
+    // resetBtn.disabled = true; // Eliminado
     clearInterval(intervalo);
     intervalo = null;
     
@@ -501,7 +508,7 @@ function actualizarEstadisticas() {
     totalInjuries.textContent = stats.lesionados;
 }
 
-function terminarPartido() {
+function terminarPartido(motivoOmitir = false) {
     partidoEnCurso = false;
     partidoTerminado = true;
     clearInterval(intervalo);
@@ -509,136 +516,130 @@ function terminarPartido() {
     statusIndicator.textContent = "FINALIZADO";
     statusIndicator.className = "status-indicator finished";
     startBtn.disabled = true;
-    pauseBtn.disabled = true;
-    
-    // Ocultar animación de puntos suspensivos
+    // pauseBtn.disabled = true; // Eliminado
+    // resetBtn.disabled = true; // Eliminado
     document.getElementById('loadingDots').style.display = 'none';
-    
-    // Asegurar que el tiempo muestre 90' al final
     matchTime.textContent = "90'";
-    
-    // Mantener el marcador actual (no lo cambiamos)
-    // El marcador ya está actualizado con los goles que ocurrieron durante la simulación
-    
-    const narracionFinal = document.createElement('div');
-    narracionFinal.className = 'commentary-item';
-    narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
-    commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
-    narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    // Festejo si ganaste (local o visitante)
-    let golesUsuario = 0, golesRival = 0;
-    if (document.getElementById('team1Name').textContent.trim().toLowerCase() === equipoUsuario) {
-        golesUsuario = golesLocal;
-        golesRival = golesVisitante;
-    } else {
-        golesUsuario = golesVisitante;
-        golesRival = golesLocal;
+    // Insertar narración final si no es omisión
+    if (!motivoOmitir) {
+        const narracionFinal = document.createElement('div');
+        narracionFinal.className = 'commentary-item';
+        narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
+        commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
+        narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+    // Calcular resultado y goles
+    let golesUsuario = 0, golesRival = 0, resultado = '', color = '', monedasGanadas = parseInt(document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0), bonus = 0;
+    let golesHechos = [], golesRecibidos = [];
+    const nombreLocal = document.getElementById('team1Name').textContent.trim();
+    const nombreVisitante = document.getElementById('team2Name').textContent.trim();
+    const esLocal = equipoUsuario === nombreLocal.toLowerCase();
+    golesUsuario = esLocal ? golesLocal : golesVisitante;
+    golesRival = esLocal ? golesVisitante : golesLocal;
+
+    // Recopilar goles
+    Array.from(commentaryList.querySelectorAll('.commentary-item')).forEach(item => {
+        const texto = item.textContent.toLowerCase();
+        if (texto.includes('gol')) {
+            if (texto.includes(equipoUsuario)) {
+                golesHechos.push(item.textContent);
+            } else if (texto.includes(equipoRival)) {
+                golesRecibidos.push(item.textContent);
+            }
+        }
+    });
+
     if (golesUsuario > golesRival) {
-        mostrarFestejoVictoria();
+        resultado = '¡VICTORIA!';
+        color = '#ffd700';
     } else if (golesUsuario === golesRival) {
-        mostrarModalEmpate();
+        resultado = 'EMPATE';
+        color = '#b0b0b0';
     } else {
-        mostrarModalDerrota();
+        resultado = 'DERROTA';
+        color = '#e74c3c';
     }
-}
 
-function mostrarFestejoVictoria() {
-    const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
-    const victoryModal = document.createElement('div');
-    victoryModal.className = 'victory-modal';
-    victoryModal.innerHTML = `
-        <div class="victory-card">
-            <div class="victory-title">¡VICTORIA!</div>
-            <div class="victory-subtitle">¡Felicitaciones! Has ganado el partido</div>
-            <div style="margin-top: 20px; font-size: 1.3rem; color: #ffd700; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> +${monedasGanadas} monedas
-            </div>
-        </div>
-    `;
-    document.body.appendChild(victoryModal);
-
-    // Confeti
-    for (let i = 0; i < 100; i++) {
-        setTimeout(() => {
-            const confeti = document.createElement('div');
-            confeti.style.position = "fixed";
-            confeti.style.left = Math.random() * 100 + "vw";
-            confeti.style.top = "-20px";
-            confeti.style.width = Math.random() * 8 + 4 + "px";
-            confeti.style.height = Math.random() * 8 + 4 + "px";
-            confeti.style.background = ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"][Math.floor(Math.random()*6)];
-            confeti.style.borderRadius = "50%";
-            confeti.style.opacity = 0.8;
-            confeti.style.zIndex = 9999;
-            confeti.style.transform = `rotate(${Math.random()*360}deg)`;
-            
-            // Animación natural de caída
-            confeti.style.transition = `top ${Math.random() * 2 + 2}s ease-in, left ${Math.random() * 1 + 0.5}s ease-in-out`;
-            document.body.appendChild(confeti);
-            
-            setTimeout(() => {
-                confeti.style.top = "100vh";
-                confeti.style.left = (parseFloat(confeti.style.left) + (Math.random() - 0.5) * 100) + "vw";
-            }, 10);
-            
-            setTimeout(() => {
-                confeti.remove();
-            }, 4000);
-        }, i * 50);
+    if (!motivoOmitir) {
+        monedasGanadas += bonusMonedas;
+        bonus = bonusMonedas;
     }
-    
-    setTimeout(() => {
-        victoryModal.remove();
-    }, 4000);
+
+    mostrarPopupFinal(resultado, color, monedasGanadas, bonus, golesHechos, golesRecibidos, motivoOmitir);
 }
 
-function mostrarModalEmpate() {
-    const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
-    const empateModal = document.createElement('div');
-    empateModal.className = 'victory-modal';
-    empateModal.innerHTML = `
-        <div class="victory-card" style="border-color: #b0b0b0; background: linear-gradient(135deg, #2d2d2d 0%, #888888 100%);">
-            <div class="victory-title" style="color: #b0b0b0;">EMPATE</div>
-            <div class="victory-subtitle" style="color: #f0f0f0;">¡Has empatado el partido!</div>
-            <div style="margin-top: 20px; font-size: 1.3rem; color: #b0b0b0; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> +${monedasGanadas} monedas
+function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesRecibidos, omitido) {
+    const modal = document.createElement('div');
+    modal.className = 'victory-modal';
+
+    // Obtener datos reales del backend SIEMPRE
+    const golesLocal = parseInt(document.getElementById('golesLocalFinal').value);
+    const golesVisitante = parseInt(document.getElementById('golesVisitanteFinal').value);
+    const nombreLocal = document.getElementById('nombreLocalFinal').value;
+    const nombreVisitante = document.getElementById('nombreVisitanteFinal').value;
+    const equipoUsuarioNombre = document.getElementById('equipoUsuarioFinal').value.trim().toLowerCase();
+    let esLocal = equipoUsuarioNombre === nombreLocal.trim().toLowerCase();
+    let golesUsuario = esLocal ? golesLocal : golesVisitante;
+    let golesRival = esLocal ? golesVisitante : golesLocal;
+    let nombreRival = esLocal ? nombreVisitante : nombreLocal;
+    let nombreUsuario = esLocal ? nombreLocal : nombreVisitante;
+
+    // Determinar resultado real
+    let resultadoTexto = '';
+    let colorReal = '';
+    if (golesUsuario > golesRival) {
+        resultadoTexto = `¡Ganaste ${golesUsuario}-${golesRival} a ${nombreRival}!`;
+        colorReal = '#ffd700';
+    } else if (golesUsuario < golesRival) {
+        resultadoTexto = `Perdiste ${golesUsuario}-${golesRival} contra ${nombreRival}`;
+        colorReal = '#e74c3c';
+    } else {
+        resultadoTexto = `Empataste ${golesUsuario}-${golesRival} con ${nombreRival}`;
+        colorReal = '#b0b0b0';
+    }
+
+    // Extraer solo los goles: minuto y nombre
+    function extraerGoleadores(arr) {
+        return arr.map(texto => {
+            const match = texto.match(/(\d+)'[^A-Za-z0-9áéíóúÁÉÍÓÚñÑ]*([A-Za-záéíóúÁÉÍÓÚñÑ ]+)/);
+            if (match) {
+                const minuto = match[1];
+                let nombre = match[2].trim();
+                nombre = nombre.split(' de ')[0].split(' para ')[0].trim();
+                return `<b>${minuto}'</b> ${nombre}`;
+            }
+            return '';
+        }).filter(Boolean).join('<br>');
+    }
+    let golesHtml = '';
+    if (golesHechos.length > 0) {
+        golesHtml += `<div style=\"margin-top: 10px; color: #00ffc3; font-weight: bold;\">Tus goles:</div><div style='color:#fff;'>${extraerGoleadores(golesHechos)}</div>`;
+    }
+    if (golesRecibidos.length > 0) {
+        golesHtml += `<div style=\"margin-top: 10px; color: #e74c3c; font-weight: bold;\">Goles rivales:</div><div style='color:#fff;'>${extraerGoleadores(golesRecibidos)}</div>`;
+    }
+    modal.innerHTML = `
+        <div class=\"victory-card\" style=\"border-color: ${colorReal}; background: linear-gradient(135deg, #2d2d2d 0%, ${colorReal}33 100%);\">
+            <div class=\"victory-title\" style=\"color: ${colorReal};\">${resultadoTexto}</div>
+            <div style=\"margin-top: 20px; font-size: 1.3rem; color: ${colorReal}; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;\">
+                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> +${monedas} monedas${bonus > 0 ? ` <span style='color:#00ffc3;font-size:1rem;'>(+${bonus} bonus por narración completa!)</span>` : ''}
             </div>
+            ${golesHtml}
+            <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px;\">OK</button>
         </div>
     `;
-    document.body.appendChild(empateModal);
-    setTimeout(() => {
-        empateModal.remove();
-    }, 4000);
+    document.body.appendChild(modal);
+    document.getElementById('cerrarPopupBtn').addEventListener('click', function() {
+        modal.remove();
+    });
 }
 
-function mostrarModalDerrota() {
-    const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
-    const derrotaModal = document.createElement('div');
-    derrotaModal.className = 'victory-modal';
-    derrotaModal.innerHTML = `
-        <div class="victory-card" style="border-color: #e74c3c; background: linear-gradient(135deg, #2d2d2d 0%, #7a2323 100%);">
-            <div class="victory-title" style="color: #e74c3c;">DERROTA</div>
-            <div class="victory-subtitle" style="color: #fff;">Has perdido el partido</div>
-            <div style="margin-top: 20px; font-size: 1.3rem; color: #e74c3c; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> +${monedasGanadas} monedas
-            </div>
-        </div>
-    `;
-    document.body.appendChild(derrotaModal);
-    setTimeout(() => {
-        derrotaModal.remove();
-    }, 4000);
-}
+// Event listeners
+startBtn.addEventListener('click', iniciarPartido);
+omiteBtn.addEventListener('click', () => terminarPartido(true));
 
-startBtn.addEventListener("click", iniciarPartido);
-pauseBtn.addEventListener("click", pausarPartido);
-resetBtn.addEventListener("click", reiniciarPartido);
-
-document.addEventListener('DOMContentLoaded', function() {
-    inicializarPartido();
-});
+// Inicializar el partido al cargar la página
+inicializarPartido();
 </script>
-</body>
-</html>

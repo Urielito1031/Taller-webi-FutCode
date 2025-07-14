@@ -1,11 +1,13 @@
 package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.entities.*;
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
+import com.tallerwebi.dominio.service.FrasePartidoService;
 import com.tallerwebi.infraestructura.repositoryImpl.EquipoTorneoRepositoryImpl;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 
 @Controller
 @RequestMapping("/torneo")
@@ -36,11 +39,15 @@ public class TorneoController {
    private final NarracionRepository narracionRepository;
    private final PartidoRepository partidoRepository;
    private final FechaRepository fechaRepository;
+   private final FrasePartidoService frasePartidoService;
 
    @Autowired
-   public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService, UsuarioService usuarioService,
-                           SimularTorneoService simularTorneoService, TorneoRepository torneoRepository,
-                           EquipoTorneoRepository equipoTorneoRepository, PartidoRepository partidoRepository, FechaRepository fechaRepository, NarracionRepository narracionRepository) {
+   public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService,
+         UsuarioService usuarioService,
+         SimularTorneoService simularTorneoService, TorneoRepository torneoRepository,
+         EquipoTorneoRepository equipoTorneoRepository, PartidoRepository partidoRepository,
+         FechaRepository fechaRepository, NarracionRepository narracionRepository,
+         FrasePartidoService frasePartidoService) {
       this.torneoService = torneoService;
       this.equipoTorneoService = equipoTorneoService;
       this.usuarioService = usuarioService;
@@ -50,84 +57,132 @@ public class TorneoController {
       this.partidoRepository = partidoRepository;
       this.fechaRepository = fechaRepository;
       this.narracionRepository = narracionRepository;
+      this.frasePartidoService = frasePartidoService;
    }
-
 
    @GetMapping(path = "/lista-torneos")
    public String verTorneos(Model model, HttpServletRequest request) {
-   try {
-      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      try {
+         Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
 
-      if (usuarioId == null) {
-         return "redirect:/login";
-      }
+         if (usuarioId == null) {
+            return "redirect:/login";
+         }
 
-      Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
+         Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
 
-      if (usuario == null) {
-         return "redirect:/login";
-      }
+         if (usuario == null) {
+            return "redirect:/login";
+         }
 
-      if (usuario.getEquipo() != null) {
-         model.addAttribute("equipoNombre", usuario.getEquipo().getNombre());
-      } else {
-         model.addAttribute("equipoNombre", "Sin equipo");
-      }
+         if (usuario.getEquipo() != null) {
+            model.addAttribute("equipoNombre", usuario.getEquipo().getNombre());
+         } else {
+            model.addAttribute("equipoNombre", "Sin equipo");
+         }
 
+         List<TorneoDTO> torneos = torneoService.getAll();
+         if (torneos.isEmpty()) {
+            model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
+         }
 
-      List<TorneoDTO> torneos = torneoService.getAll();
-      if (torneos.isEmpty()) {
-         model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
-      }
+         List<TorneoDTO> torneosUnidos = new ArrayList<>();
 
-      List<TorneoDTO> torneosUnidos = new ArrayList<>();
+         for (TorneoDTO torneo : torneos) {
+            List<EquipoTorneoDTO> equiposDelTorneo = this.equipoTorneoService.getAllByTorneoId(torneo.getId());
 
-
-
-      for (TorneoDTO torneo : torneos) {
-         List<EquipoTorneoDTO> equiposDelTorneo = this.equipoTorneoService.getAllByTorneoId(torneo.getId());
-
-         for (EquipoTorneoDTO etdto : equiposDelTorneo) {
-            EquipoDTO equipo = etdto.getEquipo();
-            if (equipo != null && equipo.getUsuarioId() != null && equipo.getUsuarioId().equals(usuarioId)) {
-               torneosUnidos.add(torneo);
-               break;
+            for (EquipoTorneoDTO etdto : equiposDelTorneo) {
+               EquipoDTO equipo = etdto.getEquipo();
+               if (equipo != null && equipo.getUsuarioId() != null && equipo.getUsuarioId().equals(usuarioId)) {
+                  torneosUnidos.add(torneo);
+                  break;
+               }
             }
          }
-      }
 
-      if(torneosUnidos.isEmpty()) {
-         model.addAttribute("mensajeTorneo", "Usted no se ha unido a ningun torneo");
-      }
+         if (torneosUnidos.isEmpty()) {
+            model.addAttribute("mensajeTorneo", "Usted no se ha unido a ningun torneo");
+         }
 
-      model.addAttribute("torneos", torneosUnidos);
-      return "vista-mis-torneos";
-   } catch (Exception e) {
-      model.addAttribute("error", "Error al cargar torneos: " + e.getMessage());
-      e.printStackTrace();
-      return "error"; //
-   }
+         model.addAttribute("torneos", torneosUnidos);
+         return "vista-mis-torneos";
+      } catch (Exception e) {
+         model.addAttribute("error", "Error al cargar torneos: " + e.getMessage());
+         e.printStackTrace();
+         return "error"; //
+      }
    }
 
    @GetMapping("/detalle-torneo/{id}")
    public String detalleTorneo(@PathVariable Long id, Model model, HttpServletRequest request) {
       TorneoDTO torneo = torneoService.getById(id);
-      List<EquipoTorneoDTO> torneoEquipos = equipoTorneoService.getAllByTorneoId(id);
+
+      // Usar la misma lógica que tabla-posiciones para obtener datos actualizados
+      Torneo torneoEntity = torneoRepository.obtenerTorneoConFechas(id);
+      List<Partido> partidos = torneoEntity.getFechas().stream()
+            .flatMap(f -> f.getPartidos().stream())
+            .collect(Collectors.toList());
+
+      List<EquipoTorneo> tablaAnterior = equipoTorneoRepository.getAllByTorneoId(id);
+
+      // Agrego este metodo porque me compara con la misma tabla
+      for (EquipoTorneo eq : tablaAnterior) {
+         eq.setPosicionAnterior(eq.getPosicion());
+      }
+
+      List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
-      model.addAttribute("usuarioId", usuarioId);
 
+      EquipoTorneo equipoUsuario = null;
+      Integer monedasGanadas = null;
+
+      if (usuarioId != null) {
+         equipoUsuario = tabla.stream()
+                 .filter(et -> et.getEquipo().getUsuario() != null && et.getEquipo().getUsuario().getId().equals(usuarioId))
+                 .findFirst()
+                 .orElse(null);
+
+         // Si el torneo está finalizado, calculamos las monedas ganadas
+         if (torneoEntity.getEstado() == EstadoTorneoEnum.FINALIZADO && equipoUsuario != null) {
+            int posicion = equipoUsuario.getPosicion();
+            int totalEquipos = tabla.size();
+            int premioTotal = torneoEntity.getPremioTorneo();
+
+            if (posicion == 1) {
+               monedasGanadas = (int) (premioTotal * 0.50);
+            } else if (posicion == 2) {
+               monedasGanadas = (int) (premioTotal * 0.25);
+            } else if (posicion == 3) {
+               monedasGanadas = (int) (premioTotal * 0.10);
+            } else {
+               int restantes = totalEquipos - 3;
+               if (restantes > 0) {
+                  monedasGanadas = (int) ((premioTotal * 0.15) / restantes);
+               } else {
+                  monedasGanadas = 0;
+               }
+            }
+         }
+
+         model.addAttribute("equipoUsuario", equipoUsuario);
+         model.addAttribute("monedasGanadasEnTorneo", monedasGanadas);
+      }
+
+
+      model.addAttribute("usuarioId", usuarioId);
       model.addAttribute("torneo", torneo);
-      model.addAttribute("torneoEquipos", torneoEquipos);
+      model.addAttribute("torneoEquipos", tabla);
       return "detalle-torneo";
    }
 
    @PostMapping("/{id}/unirse")
-   public String unirseATorneo(@PathVariable("id") Long torneoId, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+   public String unirseATorneo(@PathVariable("id") Long torneoId, RedirectAttributes redirectAttributes,
+         HttpServletRequest request) {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       if (usuarioId == null) {
          redirectAttributes.addFlashAttribute("errorUnirse", "No estás autenticado. Por favor, inicia sesión.");
-         return "redirect:/torneo/detalle-torneo/" + torneoId  ;
+         return "redirect:/torneo/detalle-torneo/" + torneoId;
       }
 
       try {
@@ -140,30 +195,53 @@ public class TorneoController {
 
          Long equipoId = usuario.getEquipo() != null ? usuario.getEquipo().getId() : null;
          if (equipoId == null) {
-            redirectAttributes.addFlashAttribute("errorUnirse", "No tienes un equipo asignado. Crea un equipo primero.");
+            redirectAttributes.addFlashAttribute("errorUnirse",
+                  "No tienes un equipo asignado. Crea un equipo primero.");
             return "redirect:/torneo/nuevo-equipo";
          }
 
          equipoTorneoService.unirseTorneo(torneoId, equipoId);
+
+         Torneo torneo = torneoService.buscarPorId(torneoId);
+         List<EquipoTorneo> equiposEnTorneo = equipoTorneoService.obtenerEquiposPorIdTorneo(torneoId);
+
+         if (torneo.getEstado() == EstadoTorneoEnum.ABIERTO && !equiposEnTorneo.isEmpty()) {
+            torneo.setEstado(EstadoTorneoEnum.EN_CURSO);
+            torneoService.guardar(torneo);
+         }
+
          redirectAttributes.addFlashAttribute("mensajeTorneo", "¡Te uniste al torneo con éxito!");
+
       } catch (IllegalArgumentException e) {
          redirectAttributes.addFlashAttribute("errorUnirse", e.getMessage());
       }
       return "redirect:/torneo/detalle-torneo/" + torneoId;
    }
 
-
    @GetMapping("/fechas")
-   public ModelAndView mostrarFechas(@RequestParam Long torneoId) {
+   public ModelAndView mostrarFechas(@RequestParam Long torneoId, HttpServletRequest request) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
       ModelAndView mav = new ModelAndView("simular-fechas");
       mav.addObject("fechas", torneo.getFechas());
       mav.addObject("torneoId", torneoId);
 
+      // Obtener información del equipo del usuario
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      Long equipoUsuarioId = null;
+
+      if (usuarioId != null) {
+         Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+         if (usuario != null && usuario.getEquipo() != null) {
+            equipoUsuarioId = usuario.getEquipo().getId();
+         }
+      }
+
+      mav.addObject("equipoUsuarioId", equipoUsuarioId);
+
       return mav;
    }
 
-   @GetMapping("/generar-fixture")
+   @PostMapping("/generar-fixture")
    public String generarFixture(@RequestParam Long torneoId) {
       this.torneoService.crearFixtureConLasFechas(torneoId);
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
@@ -171,6 +249,8 @@ public class TorneoController {
 
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha, HttpServletRequest request) {
+      // 1. Simular toda la fecha
+
 
       // 2. Obtener usuario y su equipo
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
@@ -185,92 +265,115 @@ public class TorneoController {
          return "redirect:/torneo/fechas?torneoId=" + torneoId;
       }
 
-
-      // 1. Simular toda la fecha
-      simularTorneoService.simularFecha(torneoId, numeroFecha, usuario.getEquipo().getId());
-
-
-
-
       Long equipoId = usuario.getEquipo().getId();
 
-      // 3. Buscar el partido donde juega el equipo en esa fecha
-//      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
+      simularTorneoService.simularFecha(torneoId, numeroFecha, equipoId);
 
-         Fecha fecha = simularTorneoService.obtenerFechaConPartidos(torneoId, numeroFecha);
+//      Boolean torneoFinalizado = torneoService.verificarYFinalizarTorneo(torneoId);
+//
+//      if (torneoFinalizado) {
+//         return "redirect:/torneo/resultado-final/" + torneoId;
+//      }
+
+      torneoService.verificarYFinalizarTorneo(torneoId);
+
+
+      // 3. Buscar el partido donde juega el equipo en esa fecha
+      // Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId,
+      // numeroFecha);
+
+      Fecha fecha = simularTorneoService.obtenerFechaConPartidos(torneoId, numeroFecha);
 
       if (fecha != null && fecha.getPartidos() != null) {
          for (Partido partido : fecha.getPartidos()) {
-            if (partido.getEquipoLocal().getId().equals(equipoId) || partido.getEquipoVisitante().getId().equals(equipoId)) {
+            if (partido.getEquipoLocal().getId().equals(equipoId)
+                  || partido.getEquipoVisitante().getId().equals(equipoId)) {
                // 4. Redirigir al simulador con ese partido
                return "redirect:/torneo/simular-partido?partidoId=" + partido.getId();
             }
          }
       }
 
-      // Si no encontró partido del equipo, redirigir a fechas (o donde quieras)
       return "redirect:/torneo/fechas?torneoId=" + torneoId;
    }
 
-//
-//    ESTO ANDA
-//   @PostMapping("/simular-fecha")
-//   public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha) {
-//      simularTorneoService.simularFecha(torneoId, numeroFecha);
-//
-////      Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
-////      if (!fecha.getPartidos().isEmpty()) {
-////         Long primerPartidoId = fecha.getPartidos().get(0).getId();
-////         return "redirect:/torneo/simular-partido?partidoId=" + primerPartidoId;
-////      }
-//
-//      Long partidoId = simularTorneoService.simularFechaYDevolverPrimerPartido(torneoId, numeroFecha);
-//
-//      if (partidoId != null) {
-//         return "redirect:/torneo/simular-partido?partidoId=" + partidoId;
-//      }
-//
-//      return "redirect:/torneo/fechas?torneoId=" + torneoId;
-//   }
-
    @GetMapping("/simular-partido")
-   public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model) {
+   public String mostrarSimuladorDePartido(@RequestParam Long partidoId, Model model, HttpServletRequest request) {
       Partido partido = simularTorneoService.obtenerPartidoSimulado(partidoId);
       if (partido == null) {
          return "redirect:/torneo/fechas"; // o página de error
       }
 
-      model.addAttribute("equipoLocal", partido.getEquipoLocal().getNombre());
-      model.addAttribute("equipoVisitante", partido.getEquipoVisitante().getNombre());
+      // Obtener el equipo del usuario
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      String equipoUsuario = null;
+      Long equipoUsuarioId = null;
+      if (usuarioId != null) {
+         Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+         if (usuario != null && usuario.getEquipo() != null) {
+            equipoUsuario = usuario.getEquipo().getNombre();
+            equipoUsuarioId = usuario.getEquipo().getId();
+         }
+      }
+
+      model.addAttribute("equipoLocal", partido.getEquipoLocal());
+      model.addAttribute("equipoVisitante", partido.getEquipoVisitante());
+      model.addAttribute("equipoUsuario", equipoUsuario); // Agregar el equipo del usuario
       model.addAttribute("golesLocal", partido.getGolesLocal());
       model.addAttribute("golesVisitante", partido.getGolesVisitante());
 
       String resultado;
-      if (partido.getGolesLocal() > partido.getGolesVisitante()) {
-         resultado = "Ganó " + partido.getEquipoLocal().getNombre();
-      } else if (partido.getGolesVisitante() > partido.getGolesLocal()) {
-         resultado = "Ganó " + partido.getEquipoVisitante().getNombre();
+      int monedasGanadas = 0;
+      if (equipoUsuarioId != null) {
+         if (partido.getEquipoLocal().getId().equals(equipoUsuarioId)) {
+            if (partido.getGolesLocal() > partido.getGolesVisitante()) {
+               resultado = "Ganaste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_VICTORIA;
+            } else if (partido.getGolesLocal() < partido.getGolesVisitante()) {
+               resultado = "Perdiste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_DERROTA;
+            } else {
+               resultado = "Empataste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_EMPATE;
+            }
+         } else if (partido.getEquipoVisitante().getId().equals(equipoUsuarioId)) {
+            if (partido.getGolesVisitante() > partido.getGolesLocal()) {
+               resultado = "Ganaste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_VICTORIA;
+            } else if (partido.getGolesVisitante() < partido.getGolesLocal()) {
+               resultado = "Perdiste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_DERROTA;
+            } else {
+               resultado = "Empataste";
+               monedasGanadas = UsuarioServiceImpl.MONEDAS_EMPATE;
+            }
+         } else {
+            resultado = "No jugaste este partido";
+         }
       } else {
-         resultado = "Empate";
+         resultado = "No jugaste este partido";
       }
 
       model.addAttribute("resultado", resultado);
+      model.addAttribute("monedasGanadas", monedasGanadas);
 
-      List<Narracion> narraciones = narracionRepository.obtenerPorPartidoId(partidoId);
-
-      Collections.shuffle(narraciones);
-
+      // Generar narraciones enriquecidas usando el servicio
+      List<com.tallerwebi.presentacion.dto.NarracionDTO> narraciones = simularTorneoService
+            .generarNarracionesParaPartido(partido);
       model.addAttribute("narraciones", narraciones);
+
+//      boolean torneoFinalizado = torneoService.verificarYFinalizarTorneo(torneoId);
+//      model.addAttribute("torneoFinalizado", torneoFinalizado);
+
       return "partido-Vista";
    }
 
-
    @GetMapping("/tabla-posiciones")
-   public ModelAndView mostrarTabla(@RequestParam Long torneoId) {
+   public ModelAndView mostrarTabla(@RequestParam Long torneoId, HttpServletRequest request) {
       Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
       List<Partido> partidos = torneo.getFechas().stream()
-              .flatMap(f -> f.getPartidos().stream())
-              .collect(Collectors.toList());
+            .flatMap(f -> f.getPartidos().stream())
+            .collect(Collectors.toList());
 
       List<EquipoTorneo> tablaAnterior = equipoTorneoRepository.getAllByTorneoId(torneoId);
 
@@ -281,9 +384,53 @@ public class TorneoController {
 
       List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
+      // Obtener información del usuario para resaltar su equipo
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+
+      EquipoTorneo equipoUsuario = tabla.stream()
+              .filter(et -> et.getEquipo().getUsuario() != null && et.getEquipo().getUsuario().getId().equals(usuarioId))
+              .findFirst()
+              .orElse(null);
+
+
       ModelAndView mav = new ModelAndView("tabla-posiciones");
+      mav.addObject("equipoUsuario", equipoUsuario);
       mav.addObject("tabla", tabla);
+      mav.addObject("usuarioId", usuarioId);
       return mav;
    }
+
+//   @GetMapping("/resultado-final/{id}")
+//   public String mostrarResultadoFinal(@PathVariable Long id, Model model, HttpServletRequest request) {
+//      Torneo torneo = torneoRepository.obtenerTorneoConFechas(id);
+//
+//      if (torneo == null) {
+//         return "redirect:/error";
+//      }
+//
+//      List<EquipoTorneo> tabla = equipoTorneoRepository.getAllByTorneoId(id);
+//
+//      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+//
+//      EquipoTorneo equipoUsuario = tabla.stream()
+//              .filter(et -> et.getEquipo().getUsuario() != null &&
+//                      et.getEquipo().getUsuario().getId().equals(usuarioId))
+//              .findFirst()
+//              .orElse(null);
+//
+//      int monedasGanadas = torneoService.calcularPremioPorPosicion(
+//              torneo.getPremioTorneo(),
+//              equipoUsuario != null ? equipoUsuario.getPosicion() : 0,
+//              tabla.size()
+//      );
+//
+//      model.addAttribute("torneo", torneo);
+//      model.addAttribute("equipoUsuario", equipoUsuario);
+//      model.addAttribute("torneoEquipos", tabla);
+//      model.addAttribute("monedasGanadasEnTorneo", monedasGanadas);
+//
+//      return "resultado-torneo";
+//   }
+
 
 }

@@ -1,7 +1,9 @@
 package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.Jugador;
+import com.tallerwebi.dominio.model.entities.Partido;
 import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
 import com.tallerwebi.presentacion.dto.SobreDTO;
 
@@ -16,6 +18,8 @@ public interface UsuarioService{
     List<SobreDTO> obtenerSobresDelUsuario(Long id);
 
     void borrarSobreAUsuario(Long idUsuario, Long idSobre);
+
+    void sumarPremioMonedas(Partido partido, ResultadoPartido resultado);
 
     List<JugadorDTO> convertirJugadoresEntidad(List<Jugador> jugadores);
 

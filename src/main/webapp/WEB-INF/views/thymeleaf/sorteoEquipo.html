@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Equipo nuevo</title>
      <link rel="stylesheet" th:href="@{/css/equipo/equipoSorteadoStyle.css(v=${T(java.lang.System).currentTimeMillis()})}"/>
+     <link th:href="@{/css/rareza-jugadores.css}" rel="stylesheet" />
 </head>
 <body>
 
@@ -18,8 +19,19 @@
 <div id="contenedor-principal">
   <div id="subContenedor">
     <ul class="container">
-      <li class="contenedor-jugador" th:each="jugador : ${equipo.jugadores}"
-          th:style="'background-image: url(' + ${jugador.imagen} + ');'">
+      <li class="contenedor-jugador jugador-card" th:each="jugador : ${equipo.jugadores}"
+          th:style="'background-image: url(' + ${jugador.imagen} + ');'"
+          th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'rareza-normal' :
+          (${jugador.rarezaJugador.name() == 'RARO'} ? 'rareza-raro' :
+          (${jugador.rarezaJugador.name() == 'EPICO'} ? 'rareza-epico' : 'rareza-leyenda'))">
+          
+          <div class="rareza-badge"
+               th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'normal' :
+               (${jugador.rarezaJugador.name() == 'RARO'} ? 'raro' :
+               (${jugador.rarezaJugador.name() == 'EPICO'} ? 'epico' : 'leyenda'))"
+               th:text="${jugador.rarezaJugador.name()}">
+          </div>
+          
         <div class="overlay">
         <h3>Jugador</h3>
         <span th:text="${jugador.nombre} + ' ' + ${jugador.apellido}"></span>

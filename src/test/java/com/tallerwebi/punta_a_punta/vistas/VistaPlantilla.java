@@ -9,7 +9,7 @@ public class VistaPlantilla extends VistaWeb{
 
    public VistaPlantilla(Page page){
       super(page);
-      page.navigate("http://localhost:8080/spring/plantilla");
+      page.navigate("http://localhost:8080/plantilla");
    }
 
    public void hacerClickLimpiarCampo() {
@@ -33,7 +33,8 @@ public class VistaPlantilla extends VistaWeb{
 
    public void arrastrarYSoltarJugador(String playerId, String markerId) {
       page.evaluate(
-        "([pid, mid]) => window.ForzarAsignacionDeMarcadores(pid, mid)",
+
+        "([pid, mid]) => ForzarAsignacionDeMarcadores(pid, mid)",
         new Object[]{playerId, markerId}
       );
 

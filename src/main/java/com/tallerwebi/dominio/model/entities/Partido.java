@@ -40,12 +40,11 @@ public class Partido {
    @Column(name = "resultado", nullable = false)
    private ResultadoPartido resultado;
 
-   @Column(name = "fecha_encuentro", nullable = false)
-   private LocalDateTime fechaEncuentro;
-
    @OneToMany(mappedBy = "partido", cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Narracion> narraciones = new ArrayList<>();
 
+   @Column (name = "fecha_encuentro", nullable = false)
+   private LocalDateTime fechaEncuentro;
 
    public void agregarNarracion(Narracion narracion) {
       this.narraciones.add(narracion);

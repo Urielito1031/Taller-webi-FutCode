@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.entities.Usuario;
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
@@ -61,13 +62,14 @@ public class HomeController {
 
             for (EquipoTorneoDTO etdto : equiposDelTorneo) {
                EquipoDTO equipo = etdto.getEquipo();
-               if (equipo != null && equipo.getUsuarioId() != null && equipo.getUsuarioId().equals(usuarioId)) {
+               if (equipo != null && equipo.getUsuarioId() != null && equipo.getUsuarioId().equals(usuarioId) && torneo.getEstado() != EstadoTorneoEnum.FINALIZADO) {
                   torneosUnidos.add(torneo);
                   break;
                }
             }
          }
       }
+      model.addAttribute("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(usuarioId).size());
 
       model.addAttribute("torneos", torneos);
       model.addAttribute("torneosUnidos", torneosUnidos);

@@ -35,13 +35,13 @@ public class ComprarSobreController {
 
     @GetMapping("/comprar-sobres")
     public ModelAndView mostrarVistaComprarSobres(HttpServletRequest request){
+        Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
+        Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
         List<SobreDTO> sobres = this.sobreService.obtenerSobresDTO();
         ModelAndView mav = new ModelAndView("vista-comprar-sobres");
         mav.addObject("sobres", sobres);
-        mav.addObject("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(1L).size());
+        mav.addObject("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(id).size());
 
-        Long id = (Long) request.getSession().getAttribute("USUARIO_ID");
-        Usuario usuario = this.usuarioService.buscarUsuarioPorId(id);
 
         if (usuario.getEquipo() != null) {
             mav.addObject("equipoNombre", usuario.getEquipo().getNombre());
@@ -94,7 +94,6 @@ public class ComprarSobreController {
             mav.addObject("monedas", usuario.getMonedas());
 
             return mav;
-
         }
 
     }

@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/equipo/equipoSorteadoStyle.css(v=${T(java.lang.System).currentTimeMillis()})}"/>
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link th:href="@{/css/rareza-jugadores.css}" rel="stylesheet" />
 </head>
 <body>
     <h1 class="text-center">JUGADORES OBTENIDOS</h1>
@@ -15,7 +16,20 @@
     <div id="contenedor-principal">
         <div id="subContenedor">
             <ul class="container">
-                <li class="contenedor-jugador animate__animated animate__backInLeft" th:each="jugador : ${sobre.jugadores}" th:style="'background-image: url(' + ${jugador.imagen} + ');'">
+                <li class="contenedor-jugador animate__animated animate__backInLeft jugador-card" 
+                    th:each="jugador : ${sobre.jugadores}" 
+                    th:style="'background-image: url(' + ${jugador.imagen} + ');'"
+                    th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'rareza-normal' :
+                    (${jugador.rarezaJugador.name() == 'RARO'} ? 'rareza-raro' :
+                    (${jugador.rarezaJugador.name() == 'EPICO'} ? 'rareza-epico' : 'rareza-leyenda'))">
+                    
+                    <div class="rareza-badge"
+                         th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'normal' :
+                         (${jugador.rarezaJugador.name() == 'RARO'} ? 'raro' :
+                         (${jugador.rarezaJugador.name() == 'EPICO'} ? 'epico' : 'leyenda'))"
+                         th:text="${jugador.rarezaJugador.name()}">
+                    </div>
+                    
                     <div class="overlay">
                         <h3>Jugador</h3>
                         <span th:text="${jugador.nombre} + ' ' + ${jugador.apellido}"></span>

@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.JugadorRepository;
 import com.tallerwebi.presentacion.dto.FrasesPartidoDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,13 +17,13 @@ import java.util.List;
 import java.util.Random;
 
 @Service
+@Transactional
 public class FrasePartidoServiceImpl implements FrasePartidoService {
 
     private final FrasesPartidoDTO frasesPartido;
     private final JugadorRepository jugadorRepository;
     private final EquipoRepository equipoRepository;
     private final Random random = new Random();
-
 
     public FrasePartidoServiceImpl(JugadorRepository jugadorRepository, EquipoRepository equipoRepository) {
         this.frasesPartido = cargarFrasesDesdeJson();
@@ -50,12 +51,12 @@ public class FrasePartidoServiceImpl implements FrasePartidoService {
     public String generarFrase(EventoPartido tipoEvento, Long jugadorId, Long equipoId) {
         // Obtener datos del jugador y equipo
         Jugador jugador = jugadorRepository.getById(jugadorId);
-        if(jugador == null){
+        if (jugador == null) {
             throw new RuntimeException("Jugador no encontrado");
         }
 
         Equipo equipo = equipoRepository.getById(equipoId);
-        if(equipo == null){
+        if (equipo == null) {
             throw new RuntimeException("Equipo no encontrado");
         }
 
@@ -103,4 +104,4 @@ public class FrasePartidoServiceImpl implements FrasePartidoService {
         return frasesPartido.getFrasesPorTipo(tipoEvento).size();
     }
 
-    }
+}

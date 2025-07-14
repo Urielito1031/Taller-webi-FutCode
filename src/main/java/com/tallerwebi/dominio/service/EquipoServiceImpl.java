@@ -14,22 +14,23 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class EquipoServiceImpl implements EquipoService{
+public class EquipoServiceImpl implements EquipoService {
 
    private final FormacionEquipoRepository formacionEquipoRepository;
    private final EquipoRepository repository;
    private final UsuarioService usuarioService;
 
    @Autowired
-   public EquipoServiceImpl(EquipoRepository repository, UsuarioService usuarioService, FormacionEquipoRepository formacionEquipoRepository) {
+   public EquipoServiceImpl(EquipoRepository repository, UsuarioService usuarioService,
+         FormacionEquipoRepository formacionEquipoRepository) {
       this.repository = repository;
       this.usuarioService = usuarioService;
       this.formacionEquipoRepository = formacionEquipoRepository;
    }
 
    @Override
-   public void save(EquipoDTO dto){
-      if(!isValid(dto)){
+   public void save(EquipoDTO dto) {
+      if (!isValid(dto)) {
          throw new IllegalArgumentException("El nombre no puede ser vacio");
       }
       Equipo entity = Equipo.convertToEntity(dto);
@@ -51,12 +52,12 @@ public class EquipoServiceImpl implements EquipoService{
 
       if (equipoDTO.getJugadores() != null && !equipoDTO.getJugadores().isEmpty()) {
          List<Jugador> jugadores = equipoDTO.getJugadores().stream()
-           .map(jugadorDTO -> {
-              Jugador jugador = Jugador.convertToEntity(jugadorDTO);
-              jugador.setEquipo(entity);
-              return jugador;
-           })
-           .collect(Collectors.toList());
+               .map(jugadorDTO -> {
+                  Jugador jugador = Jugador.convertToEntity(jugadorDTO);
+                  jugador.getEquipos().add(entity);
+                  return jugador;
+               })
+               .collect(Collectors.toList());
          entity.setJugadores(jugadores);
       }
 
@@ -66,44 +67,42 @@ public class EquipoServiceImpl implements EquipoService{
       usuarioService.actualizar(usuario);
    }
 
-   private List<Jugador> obtenerPlantilla(Equipo equipo){
+   private List<Jugador> obtenerPlantilla(Equipo equipo) {
       List<FormacionEquipo> formacionesDelEquipo = this.formacionEquipoRepository.findByEquipoId(equipo.getId());
       List<Jugador> jugadoresPlantillaEquipo = new ArrayList<>();
-      for(FormacionEquipo fe : formacionesDelEquipo){
+      for (FormacionEquipo fe : formacionesDelEquipo) {
          jugadoresPlantillaEquipo.add(fe.getJugador());
       }
       return jugadoresPlantillaEquipo;
    }
 
    @Override
-   public Double calcularRatingEquipo(Equipo equipo){
+   public Double calcularRatingEquipo(Equipo equipo) {
       Double rating = 0d;
 
       List<Jugador> jugadoresPlantilla = obtenerPlantilla(equipo);
 
-      for(Jugador j : jugadoresPlantilla){
+      for (Jugador j : jugadoresPlantilla) {
          rating += j.getRating();
       }
       return rating / jugadoresPlantilla.size();
    }
 
-
-   private boolean isValid(EquipoDTO equipo){
-      return !equipo.getNombre().trim().isEmpty();
+   private boolean isValid(EquipoDTO equipo) {
+      return equipo.getNombre() != null && !equipo.getNombre().trim().isEmpty();
 
    }
 
    @Override
-   public List<EquipoDTO> getAll(){
-      List<Equipo>equipos = repository.getAll();
+   public List<EquipoDTO> getAll() {
+      List<Equipo> equipos = repository.getAll();
       return equipos.stream().map(Equipo::convertToDTO).collect(Collectors.toList());
    }
 
-
    @Override
-   public EquipoDTO getById(Long id){
+   public EquipoDTO getById(Long id) {
       Equipo equipo = repository.getById(id);
-      if(equipo == null){
+      if (equipo == null) {
          return null;
       }
 
@@ -111,19 +110,18 @@ public class EquipoServiceImpl implements EquipoService{
    }
 
    @Override
-   public EquipoDTO getByNombre(String nombre){
+   public EquipoDTO getByNombre(String nombre) {
 
       return null;
    }
 
-
    @Override
-   public void update(EquipoDTO equipo){
+   public void update(EquipoDTO equipo) {
 
    }
 
    @Override
-   public void delete(Long id){
+   public void delete(Long id) {
 
    }
 

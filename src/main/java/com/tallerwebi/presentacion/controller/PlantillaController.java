@@ -32,9 +32,8 @@ public class PlantillaController {
    private final JugadorService jugadorService;
    private final UsuarioService usuarioService;
 
-
    @Autowired
-   public PlantillaController(PlantillaService service,JugadorService jugadorService,UsuarioService usuarioService) {
+   public PlantillaController(PlantillaService service, JugadorService jugadorService, UsuarioService usuarioService) {
       this.service = service;
       this.jugadorService = jugadorService;
       this.usuarioService = usuarioService;
@@ -71,9 +70,8 @@ public class PlantillaController {
 
       EsquemaDTO formacion = service.getFormacionPorEquipoId(equipoId);
 
-
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
-      model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
+      model.addAttribute("jugadores", jugadores);
 
       model.addAttribute("formacion", formacion);
 
@@ -84,7 +82,8 @@ public class PlantillaController {
    }
 
    @GetMapping("/formacion-inicial")
-   public String cambiarFormacion(@RequestParam("esquema") String esquemaTexto,Model model,HttpServletRequest request) {
+   public String cambiarFormacion(@RequestParam("esquema") String esquemaTexto, Model model,
+         HttpServletRequest request) {
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
       Long equipoId = usuario.getEquipo().getId();
@@ -97,10 +96,8 @@ public class PlantillaController {
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
 
-
-      List<JugadorDTO> jugadores  = jugadorService.getAllByEquipoId(formacion.getEquipoId());
+      List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
-
 
       return "vista-plantilla";
    }
@@ -108,11 +105,10 @@ public class PlantillaController {
    @PostMapping("/guardar-formacion")
    public String guardarFormacion(@Valid @ModelAttribute EsquemaDTO formacion, BindingResult result, Model model) {
 
-
       if (result.hasErrors()) {
          model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
          List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
-         model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
+         model.addAttribute("jugadores", jugadores);
          return prepararErrorRespuesta(model, result);
       }
 
@@ -120,7 +116,7 @@ public class PlantillaController {
          model.addAttribute("formacion", formacion);
          model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
          List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
-         model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
+         model.addAttribute("jugadores", jugadores);
          model.addAttribute("error", "La formación debe contener exactamente 11 jugadores.");
          return "vista-plantilla";
       }
@@ -129,7 +125,7 @@ public class PlantillaController {
       if (!guardadoExitoso) {
          model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
          List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
-         model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
+         model.addAttribute("jugadores", jugadores);
          model.addAttribute("error", "Error al guardar la formación.");
          return "vista-plantilla";
       }
@@ -137,12 +133,12 @@ public class PlantillaController {
       // Cargar la formación guardada usando el equipoId de la formación
 
       EsquemaDTO formacionGuardada = service.getFormacionPorEquipoId(formacion.getEquipoId());
-      //esto se guarda bien con estos datos, pero no se muestra en la vista
+      // esto se guarda bien con estos datos, pero no se muestra en la vista
       model.addAttribute("formacion", formacionGuardada);
 
       // Cargar la lista de jugadores del equipo
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
-      model.addAttribute("jugadores", jugadores != null ? jugadores : new ArrayList<>());
+      model.addAttribute("jugadores", jugadores);
 
       model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
       model.addAttribute("message", "Formación guardada con éxito!");
@@ -156,7 +152,5 @@ public class PlantillaController {
       model.addAttribute("error", Objects.requireNonNull(result.getFieldError()).getDefaultMessage());
       return "vista-plantilla";
    }
-
-
 
 }

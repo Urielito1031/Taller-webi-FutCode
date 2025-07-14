@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.excepcion.MonedasInsuficientes;
 import com.tallerwebi.dominio.excepcion.TipoDeSobreDesconocido;
 import com.tallerwebi.dominio.excepcion.UsuarioNoEncontrado;
 import com.tallerwebi.dominio.model.entities.*;
+import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.model.enums.TipoSobre;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.presentacion.dto.JugadorDTO;
@@ -19,9 +20,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class UsuarioServiceImpl implements  UsuarioService{
+public class UsuarioServiceImpl implements UsuarioService {
 
     private final RepositorioUsuarioImpl repositorioUsuario;
+
+    public static final int MONEDAS_VICTORIA = 2000;
+    public static final int MONEDAS_EMPATE = 1000;
+    public static final int MONEDAS_DERROTA = 250;
 
     @Autowired
     public UsuarioServiceImpl(RepositorioUsuarioImpl repositorioUsuario) {
@@ -33,14 +38,14 @@ public class UsuarioServiceImpl implements  UsuarioService{
     public Boolean agregarSobreAJugador(Long idUsuario, SobreDTO sobreDTO) {
         Usuario usuario = this.buscarUsuarioPorId(idUsuario);
 
-        if(usuario == null) throw new UsuarioNoEncontrado("El usuario con ID " + idUsuario + " no fue encontrado.");
+        if (usuario == null)
+            throw new UsuarioNoEncontrado("El usuario con ID " + idUsuario + " no fue encontrado.");
 
         Sobre sobre = sobreDTO.fromEntity();
         sobre.setUsuario(usuario);
 
         validarMonedas(usuario.getMonedas(), sobre.getPrecio());
 
-        // restar monedas en la clase usuario
         usuario.setMonedas(usuario.getMonedas() - sobre.getPrecio());
 
         Boolean agregado = usuario.getSobres().add(sobre);
@@ -51,8 +56,8 @@ public class UsuarioServiceImpl implements  UsuarioService{
     }
 
     // llevar a la clase usuario
-    private void validarMonedas(Double monedasUsuario, Double precioSobre){
-        if(monedasUsuario < precioSobre){
+    private void validarMonedas(Double monedasUsuario, Double precioSobre) {
+        if (monedasUsuario < precioSobre) {
             throw new MonedasInsuficientes();
         }
     }
@@ -69,8 +74,47 @@ public class UsuarioServiceImpl implements  UsuarioService{
     }
 
     @Override
-    public void borrarSobreAUsuario(Long idUsuario, Long idSobre){
+    public void borrarSobreAUsuario(Long idUsuario, Long idSobre) {
         this.repositorioUsuario.borrarSobreAUsuario(idUsuario, idSobre);
+    }
+
+    @Override
+    public void sumarPremioMonedas(Partido partido, ResultadoPartido resultado) {
+        Usuario usuarioLocal = partido.getEquipoLocal().getUsuario();
+        Usuario usuarioVisitante = partido.getEquipoVisitante().getUsuario();
+
+        switch (resultado) {
+            case LOCAL_GANA:
+                if (usuarioLocal != null) {
+                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + MONEDAS_VICTORIA);
+                    repositorioUsuario.actualizar(usuarioLocal);
+                }
+                if (usuarioVisitante != null) {
+                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + MONEDAS_DERROTA);
+                    repositorioUsuario.actualizar(usuarioVisitante);
+                }
+                break;
+            case VISITANTE_GANA:
+                if (usuarioLocal != null) {
+                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + MONEDAS_DERROTA);
+                    repositorioUsuario.actualizar(usuarioLocal);
+                }
+                if (usuarioVisitante != null) {
+                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + MONEDAS_VICTORIA);
+                    repositorioUsuario.actualizar(usuarioVisitante);
+                }
+                break;
+            case EMPATE:
+                if (usuarioLocal != null) {
+                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + MONEDAS_EMPATE);
+                    repositorioUsuario.actualizar(usuarioLocal);
+                }
+                if (usuarioVisitante != null) {
+                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + MONEDAS_EMPATE);
+                    repositorioUsuario.actualizar(usuarioVisitante);
+                }
+                break;
+        }
     }
 
     public SobreDTO convertirEntidadADTO(Sobre sobre) {
@@ -96,9 +140,9 @@ public class UsuarioServiceImpl implements  UsuarioService{
 
         sobreDTO.setId(sobre.getId());
 
-//      convertir jugadores del sobre JugadorDTO tambien
+        // convertir jugadores del sobre JugadorDTO tambien
         if (sobre.getJugadores() != null && !sobre.getJugadores().isEmpty()) {
-             sobreDTO.setJugadores(convertirJugadoresEntidad(sobre.getJugadores()));
+            sobreDTO.setJugadores(convertirJugadoresEntidad(sobre.getJugadores()));
         }
 
         return sobreDTO;
@@ -139,17 +183,9 @@ public class UsuarioServiceImpl implements  UsuarioService{
         return jugadoresEntidad;
     }
 
-
-
-    //    @Override
-//    public void actualizarUsuario(Usuario usuario) {
-//        getSession().update(usuario);
-//    }
-//
-@Override
-public void actualizar(Usuario usuario) {
+    @Override
+    public void actualizar(Usuario usuario) {
         repositorioUsuario.actualizar(usuario);
     }
-
 
 }

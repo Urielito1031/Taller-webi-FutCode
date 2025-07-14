@@ -176,6 +176,18 @@
             margin-bottom: 0;
         }
 
+        .mi-equipo {
+            background-color: rgba(0, 255, 200, 0.1);
+            font-weight: bold;
+            border-left: 4px solid #00ffc3;
+            color: #00ffc3;
+        }
+
+        .mi-equipo:hover {
+            background-color: rgba(0, 255, 200, 0.15);
+            transform: translateX(5px);
+        }
+
         .partido-teams {
             display: flex;
             align-items: center;
@@ -351,6 +363,44 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* Estilos para escudos de equipos */
+        .team-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .team-logo-small {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .team-escudo-small {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3px;
+        }
+        
+        .team-initials-small {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--text-primary), rgba(0, 255, 195, 0.8));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-bg);
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -401,11 +451,26 @@
                 </div>
 
                 <div th:if="${fecha.partidos != null && !fecha.partidos.empty}">
-                    <div class="partido-item" th:each="partido : ${fecha.partidos}" style="justify-content: center; gap: 8px;">
-                        <span class="equipo-nombre" th:text="${partido.equipoLocal.nombre}">Equipo Local</span>
+                    <div class="partido-item" 
+                         th:each="partido : ${fecha.partidos}" 
+                         th:classappend="${(partido.equipoLocal.id == equipoUsuarioId) or (partido.equipoVisitante.id == equipoUsuarioId) ? 'mi-equipo' : ''}"
+                         style="justify-content: center; gap: 8px;">
+                        <div class="team-display">
+                            <div class="team-logo-small">
+                                <img th:if="${partido.equipoLocal.imagen}" th:src="${partido.equipoLocal.imagen}" alt="Escudo Local" class="team-escudo-small">
+                                <div th:unless="${partido.equipoLocal.imagen}" class="team-initials-small" th:text="${#strings.substring(partido.equipoLocal.nombre, 0, 2)}">EL</div>
+                            </div>
+                            <span class="equipo-nombre" th:text="${partido.equipoLocal.nombre}">Equipo Local</span>
+                        </div>
                         <span class="partido-resultado" style="padding: 0 8px; border-radius: 8px; background: var(--dark-bg); color: var(--text-primary); font-weight: 700; border: 1px solid var(--border-color);">
                         <span th:text="${partido.golesLocal}">0</span> - <span th:text="${partido.golesVisitante}">0</span></span>
-                        <span class="equipo-nombre" th:text="${partido.equipoVisitante.nombre}">Equipo Visitante</span>
+                        <div class="team-display">
+                            <div class="team-logo-small">
+                                <img th:if="${partido.equipoVisitante.imagen}" th:src="${partido.equipoVisitante.imagen}" alt="Escudo Visitante" class="team-escudo-small">
+                                <div th:unless="${partido.equipoVisitante.imagen}" class="team-initials-small" th:text="${#strings.substring(partido.equipoVisitante.nombre, 0, 2)}">EV</div>
+                            </div>
+                            <span class="equipo-nombre" th:text="${partido.equipoVisitante.nombre}">Equipo Visitante</span>
+                        </div>
                     </div>
                 </div>
 

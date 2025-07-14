@@ -14,26 +14,38 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HibernateConfig {
 
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-
-        String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
-        String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3307";
-        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "db_futcode";
-        String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
-        String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
-
-        String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName +
-          "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=30000";
-        System.out.println("Conectando a: " + url + " con usuario: " + dbUser + " y contraseña: " + dbPassword);
-        dataSource.setUrl(url);
-        dataSource.setUsername(dbUser);
-        dataSource.setPassword(dbPassword);
-
+        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+        dataSource.setUrl("jdbc:hsqldb:file:target/hsqldb/db_");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
         return dataSource;
     }
+
+
+//        @Bean
+//    public DataSource dataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//
+//        String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+//        String dbPort = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "3306";
+//        String dbName = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "data_futcode";
+//        String dbUser = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "root";
+//        String dbPassword = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
+//
+//        String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName +
+//          "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&connectTimeout=30000";
+//        System.out.println("Conectando a: " + url + " con usuario: " + dbUser + " y contraseña: " + dbPassword);
+//        dataSource.setUrl(url);
+//        dataSource.setUsername(dbUser);
+//        dataSource.setPassword(dbPassword);
+//
+//        return dataSource;
+//    }
     @Bean
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -50,12 +62,10 @@ public class HibernateConfig {
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        // Usa el dialecto correcto para MySQL 5.7
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-      //  properties.setProperty("hibernate.connection.timeout", "30000");
+        properties.setProperty("hibernate.hbm2ddl.auto", "create");
         return properties;
     }
 }

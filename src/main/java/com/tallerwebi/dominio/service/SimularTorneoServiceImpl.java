@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.model.enums.EventoPartido;
 import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.presentacion.dto.FrasesPartidoDTO;
+import com.tallerwebi.presentacion.dto.NarracionDTO;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -25,20 +26,22 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
     private final NarracionRepository narracionRepository;
     private final JugadorService jugadorService;
     private final Random random = new Random();
+    private final UsuarioService usuarioService;
 
     public SimularTorneoServiceImpl(PartidoRepository partidoRepository, TorneoRepository torneoRepository,
                                     FechaRepository fechaRepository, FrasePartidoService frasePartidoService,
-                                    NarracionRepository narracionRepository, JugadorService jugadorService) {
+                                    NarracionRepository narracionRepository, JugadorService jugadorService, UsuarioService usuarioService) {
         this.partidoRepository = partidoRepository;
         this.torneoRepository = torneoRepository;
         this.fechaRepository = fechaRepository;
         this.frasePartidoService = frasePartidoService;
         this.narracionRepository = narracionRepository;
         this.jugadorService = jugadorService;
+        this.usuarioService = usuarioService;
     }
 
     @Override
-    public void simularFecha(Long torneoId, Long numeroDeFecha, Long idEquipo) {
+    public void simularFecha(Long torneoId, Long numeroDeFecha, Long miEquipoId) {
         Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
 
         // SE PUEDE CAMBIAR POR UNA EXCEPTION
@@ -55,23 +58,31 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             int golesLocal = (int) (Math.random() * 5);
             int golesVisitante = (int) (Math.random() * 5);
 
-            // Agrego esta validacion porque no tengo los jugadores cargados en la base de datos
-            if(partido.getEquipoLocal().hasJugadores()  && partido.getEquipoVisitante().hasJugadores()) {
-                if(partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()){
+            // Agrego esta validacion porque no tengo los jugadores cargados en la base de
+            // datos
+            if (partido.getEquipoLocal().hasJugadores() && partido.getEquipoVisitante().hasJugadores()) {
+                if (partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()) {
                     golesLocal++;
-                }else if(partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante().getRatingEquipo()){
+                } else if (partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante()
+                        .getRatingEquipo()) {
                     golesVisitante++;
                 }
             }
 
-            // Generar frases de goles solo si hay jugadores y juega con mi equipo
-            if(partido.getEquipoLocal().getId().equals(idEquipo) || partido.getEquipoVisitante().getId().equals(idEquipo)) {
+            // Generar y guardar frases de goles
+
+            // Generar frases de goles solo si hay jugadores
+
+            if(partido.getEquipoLocal().getId().equals(miEquipoId) || partido.getEquipoVisitante().getId().equals(miEquipoId)) {
+
+
+                System.out.println("antes de la narracion");
                 if (partido.getEquipoLocal().hasJugadores()) {
                     for (int i = 0; i < golesLocal; i++) {
                         try {
                             String frase = frasePartidoService.generarFraseConJugadorAleatorio(
                                     EventoPartido.GOL, partido.getEquipoLocal().getId());
-                                    narracionRepository.guardar(new Narracion(frase, partido));
+                            narracionRepository.guardar(new Narracion(frase, partido));
                         } catch (Exception e) {
                             // Log error pero continúa la simulación
                             System.err.println("Error generando frase para equipo local: " + e.getMessage());
@@ -96,9 +107,9 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 int cantidadTarjetas = generarCantidadAleatoria(5);
                 int cantidadExpulsados = generarCantidadAleatoria(3);
                 int cantidadLesiones = generarCantidadAleatoria(5);
-                ;
 
-// GENERAL
+
+                // GENERAL
                 for (int i = 0; i < cantidadEventosGenerales; i++) {
                     try {
                         Long equipoId = randomEquipo(partido);
@@ -109,11 +120,12 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                     }
                 }
 
-// TARJETA_AMARILLA
+                // TARJETA_AMARILLA
                 for (int i = 0; i < cantidadTarjetas; i++) {
                     try {
                         Long equipoId = randomEquipo(partido);
-                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_AMARILLA, equipoId);
+                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_AMARILLA,
+                                equipoId);
                         narracionRepository.guardar(new Narracion(frase, partido));
                     } catch (Exception e) {
                         System.err.println("Error generando frase AMARILLA: " + e.getMessage());
@@ -124,7 +136,8 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 for (int i = 0; i < cantidadTarjetas; i++) {
                     try {
                         Long equipoId = randomEquipo(partido);
-                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_ROJA, equipoId);
+                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_ROJA,
+                                equipoId);
                         narracionRepository.guardar(new Narracion(frase, partido));
                     } catch (Exception e) {
                         System.err.println("Error generando frase ROJA: " + e.getMessage());
@@ -135,14 +148,15 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 for (int i = 0; i < cantidadExpulsados; i++) {
                     try {
                         Long equipoId = randomEquipo(partido);
-                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.EXPULSION, equipoId);
+                        String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.EXPULSION,
+                                equipoId);
                         narracionRepository.guardar(new Narracion(frase, partido));
                     } catch (Exception e) {
                         System.err.println("Error generando frase EXPULSION: " + e.getMessage());
                     }
                 }
 
-// LESION
+                // LESION
                 for (int i = 0; i < cantidadLesiones; i++) {
                     try {
                         Long equipoId = randomEquipo(partido);
@@ -157,23 +171,40 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             partido.setGolesLocal(golesLocal);
             partido.setGolesVisitante(golesVisitante);
 
-            if (golesLocal > golesVisitante) { partido.setResultado(ResultadoPartido.LOCAL_GANA); }
-            else if (golesVisitante > golesLocal) { partido.setResultado(ResultadoPartido.VISITANTE_GANA); }
-            else { partido.setResultado(ResultadoPartido.EMPATE); }
+            if (golesLocal > golesVisitante) {
+                partido.setResultado(ResultadoPartido.LOCAL_GANA);
+            } else if (golesVisitante > golesLocal) {
+                partido.setResultado(ResultadoPartido.VISITANTE_GANA);
+            } else {
+                partido.setResultado(ResultadoPartido.EMPATE);
+            }
 
             partidoRepository.save(partido);
+            usuarioService.sumarPremioMonedas(partido, partido.getResultado());
+
         }
 
         fechaASimular.setSimulada(true);
         fechaRepository.save(fechaASimular);
     }
 
+//    @Override
+//    public Long simularFechaYDevolverPrimerPartido(Long torneoId, Long numeroDeFecha) {
+//        simularFecha(torneoId, numeroDeFecha); // Ya lo tenés hecho
+//
+//        Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha);
+//
+//        if (fecha != null && !fecha.getPartidos().isEmpty()) {
+//            return fecha.getPartidos().get(0).getId(); // Primer partido simulado
+//        }
+//
+//        return null;
+//    }
 
     @Override
     public Partido obtenerPartidoSimulado(Long partidoId) {
         return partidoRepository.obtenerPartidoPorId(partidoId);
     }
-
 
     @Override
     public Fecha obtenerFechaConPartidos(Long torneoId, Long numeroDeFecha) {
@@ -190,6 +221,75 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         } else {
             return partido.getEquipoVisitante().getId();
         }
+    }
+
+    @Override
+    public List<NarracionDTO> generarNarracionesParaPartido(Partido partido) {
+        List<NarracionDTO> narraciones = new ArrayList<>();
+        Random random = new Random();
+        int minutoMax = 90;
+
+        int golesLocal = partido.getGolesLocal();
+        int golesVisitante = partido.getGolesVisitante();
+
+        // Goles local
+        for (int i = 0; i < golesLocal; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GOL,
+                    partido.getEquipoLocal().getId());
+            narraciones.add(new NarracionDTO(frase, minuto, "GOL"));
+        }
+        // Goles visitante
+        for (int i = 0; i < golesVisitante; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GOL,
+                    partido.getEquipoVisitante().getId());
+            narraciones.add(new NarracionDTO(frase, minuto, "GOL"));
+        }
+        // Eventos generales
+        int cantidadEventosGenerales = generarCantidadAleatoria(10);
+        for (int i = 0; i < cantidadEventosGenerales; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.GENERAL, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "GENERAL"));
+        }
+        // Tarjetas amarillas
+        int cantidadTarjetas = generarCantidadAleatoria(3);
+        for (int i = 0; i < cantidadTarjetas; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_AMARILLA,
+                    equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_AMARILLA"));
+        }
+        // Tarjetas rojas
+        int cantidadRojas = generarCantidadAleatoria(1);
+        for (int i = 0; i < cantidadRojas; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.TARJETA_ROJA, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_ROJA"));
+        }
+        // Expulsiones
+        int cantidadExpulsados = generarCantidadAleatoria(1);
+        for (int i = 0; i < cantidadExpulsados; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.EXPULSION, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "EXPULSION"));
+        }
+        // Lesiones
+        int cantidadLesiones = generarCantidadAleatoria(2);
+        for (int i = 0; i < cantidadLesiones; i++) {
+            int minuto = 1 + random.nextInt(minutoMax);
+            Long equipoId = randomEquipo(partido);
+            String frase = frasePartidoService.generarFraseConJugadorAleatorio(EventoPartido.LESION, equipoId);
+            narraciones.add(new NarracionDTO(frase, minuto, "LESION"));
+        }
+        // Ordenar narraciones por minuto ascendente
+        narraciones.sort((a, b) -> Integer.compare(a.getMinuto(), b.getMinuto()));
+        return narraciones;
     }
 
 }

@@ -5,7 +5,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="tallerwebi-base" value="6f3bc7f9-b273-46e8-aa35-80dc53bbcc02" />
+          <factory-entry name="tallerwebi-base" value="8d8cabce-8a6c-47a1-aba9-a98a7e66a104" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

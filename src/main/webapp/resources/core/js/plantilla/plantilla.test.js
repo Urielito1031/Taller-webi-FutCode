@@ -27,7 +27,7 @@ describe("FutCode", function() {
       `);
 
       //me pide inicializarlo por usar el metodo TeamFormation.initializeField(); pero no lo necesito
-      window.alineacionPersistida = [
+      alineacionPersistida = [
          { jugadorId: "1" }, { jugadorId: "2" }, { jugadorId: "3" }, { jugadorId: "4" }, { jugadorId: "5" },
          { jugadorId: "6" }, { jugadorId: "7" }, { jugadorId: "8" }, { jugadorId: "9" }, { jugadorId: "10" },
          { jugadorId: "11" },
@@ -40,11 +40,11 @@ describe("FutCode", function() {
             '<div class="marker-rating"></div>' +
             '<div class="marker-name">(apellido + numeroCamiseta)</div>');
 
-      window.FutCode.setPlayersOnField(0);
+     FutCode.setPlayersOnField(0);
 
-      window.FutCode.PlayerInteraction.setupPlayerData();
-      window.FutCode.PlayerInteraction.setupDraggablePlayers();
-      window.FutCode.PlayerInteraction.setupDroppableField();
+     FutCode.PlayerInteraction.setupPlayerData();
+      FutCode.PlayerInteraction.setupDraggablePlayers();
+      FutCode.PlayerInteraction.setupDroppableField();
 
 
    });
@@ -53,7 +53,7 @@ describe("FutCode", function() {
       $("#field").remove();
       $(".player-list").remove();
       $("#form").remove();
-      window.FutCode.setPlayersOnField(0);
+      FutCode.setPlayersOnField(0);
    });
 
    it("Valida la configuracion de los draggable de plantilla.js de forma correcta", function() {
@@ -65,15 +65,16 @@ describe("FutCode", function() {
       expect(opcionesArrastrable.zIndex).toBe(100);
    });
    it("debe validar que la formación tiene exactamente 10 jugadores de campo", function() {
-      const resultado = window.FutCode.TeamFormation.validateFormation(4, 3, 3);
-      expect(resultado).toBe(true);
-      const resultadoInvalido = window.FutCode.TeamFormation.validateFormation(4, 3, 4);
-      expect(resultadoInvalido).toBe(false);
+      const formacionValida = FutCode.TeamFormation.validateFormation(4, 3, 3);
+      expect(formacionValida).toBe(true);
+      const formacionInvalida = FutCode.TeamFormation.validateFormation(4, 3, 4);
+      expect(formacionInvalida).toBe(false);
    });
 
    it("debe asignar un jugador a un marcador y actualizar clases y datos", function() {
       $field.append($marker);
-      window.FutCode.PlayerInteraction.assignPlayer($marker, $card);
+
+      FutCode.PlayerInteraction.assignPlayer($marker, $card);
 
       //previamente debe estar cargado el jugador para que no se rompa (cargado en beforeEach())
       expect($marker.hasClass("occupied")).toBe(true);
@@ -84,16 +85,16 @@ describe("FutCode", function() {
       expect($marker.find(".marker-name").text()).toBe("Messi 10");
       expect($marker.find(".marker-img").hasClass("custom-image")).toBe(true);
       expect($card.hasClass("disabled-card")).toBe(true);
-      expect(window.FutCode.getPlayersOnField()).toBe(1);
+      expect(FutCode.getPlayersOnField()).toBe(1);
    });
 
 
    it("debe remover un jugador de un marcador y restaurar la tarjeta", function() {
       $field.append($marker);
-      window.FutCode.PlayerInteraction.assignPlayer($marker, $card);
+      FutCode.PlayerInteraction.assignPlayer($marker, $card);
 
-      spyOn(window.FutCode.MarkerFactory, "resetPlayerCard").and.callThrough();
-      window.FutCode.MarkerFactory.removePlayerFromMarker($marker);
+      spyOn(FutCode.MarkerFactory, "resetPlayerCard").and.callThrough();
+      FutCode.MarkerFactory.removePlayerFromMarker($marker);
 
       expect($marker.hasClass("occupied")).toBe(false);
       expect($marker.data("occupied")).toBe(false);
@@ -102,17 +103,17 @@ describe("FutCode", function() {
       expect($marker.find(".marker-rating").text()).toBe("");
       expect($marker.find(".marker-name").text()).toBe("");
       expect($marker.find(".marker-img").hasClass("custom-image")).toBe(false);
-      expect(window.FutCode.MarkerFactory.resetPlayerCard).toHaveBeenCalled();
-      expect(window.FutCode.getPlayersOnField()).toBe(0);
+      expect(FutCode.MarkerFactory.resetPlayerCard).toHaveBeenCalled();
+      expect(FutCode.getPlayersOnField()).toBe(0);
    });
 
 
 
    it("debe generar los inputs correctos al guardar una formación completa", function() {
       $field.append($marker);
-      window.FutCode.PlayerInteraction.assignPlayer($marker, $card);
+      FutCode.PlayerInteraction.assignPlayer($marker, $card);
 
-      window.FutCode.PlayerInteraction.setupFieldFormation();
+     FutCode.PlayerInteraction.setupFieldFormation();
 
       spyOn(HTMLFormElement.prototype, "submit").and.callFake(function() {});
 
@@ -137,10 +138,10 @@ describe("FutCode", function() {
          `);
       }
 
-      window.FutCode.PlayerInteraction.setupPlayerData();
-      window.FutCode.PlayerInteraction.setupDraggablePlayers();
+      FutCode.PlayerInteraction.setupPlayerData();
+      FutCode.PlayerInteraction.setupDraggablePlayers();
 
-      window.FutCode.TeamFormation.initializeField();
+      FutCode.TeamFormation.initializeField();
 
       const marcadores = $field.find(".position-marker");
       expect(marcadores.length).toBe(11);
@@ -148,7 +149,7 @@ describe("FutCode", function() {
       //este da error
       expect(marcadores.filter(".occupied").length).toBe(11);
 
-      expect(window.FutCode.getPlayersOnField()).toBe(11);
+      expect(FutCode.getPlayersOnField()).toBe(11);
 
       // el disabled-card valida que no se puede seleccionar debido a que las tenemos en los marcadores
       expect($(".player-card.disabled-card").length).toBe(11);

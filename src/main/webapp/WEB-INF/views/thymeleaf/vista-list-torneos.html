@@ -46,8 +46,7 @@
                         </div>
                      </div>
                   </th:block>
-                  <a th:if="${torneo.estado.name() == 'ABIERTO'}"
-                     th:href="@{/torneo/detalle-torneo/{id}(id=${torneo.id})}"
+                  <a th:href="@{/torneo/detalle-torneo/{id}(id=${torneo.id})}"
                      class="btn btn-primary w-100 mt-3">
                      Ver detalle
                      <i class="bi bi-arrow-right ms-2"></i>

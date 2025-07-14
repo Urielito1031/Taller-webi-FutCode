@@ -1,0 +1,110 @@
+/* ====== ESTILOS DE RAREZA PARA JUGADORES ====== */
+
+/* Colores base para cada rareza */
+.rareza-normal {
+    border: 3px solid #808080 !important; /* Gris */
+    box-shadow: 0 0 10px rgba(128, 128, 128, 0.3) !important;
+}
+
+.rareza-raro {
+    border: 3px solid #0066cc !important; /* Azul */
+    box-shadow: 0 0 15px rgba(0, 102, 204, 0.4) !important;
+}
+
+.rareza-epico {
+    border: 3px solid #ff9900 !important; /* Amarillo anaranjado */
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.5) !important;
+}
+
+.rareza-leyenda {
+    border: 3px solid #9933cc !important; /* Violeta */
+    box-shadow: 0 0 25px rgba(153, 51, 204, 0.6) !important;
+    animation: leyendaGlow 2s ease-in-out infinite alternate !important;
+}
+
+/* Animación especial para leyendas */
+@keyframes leyendaGlow {
+    0% {
+        box-shadow: 0 0 25px rgba(153, 51, 204, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 35px rgba(153, 51, 204, 0.8), 0 0 45px rgba(153, 51, 204, 0.4);
+    }
+}
+
+/* Badges de rareza - POSICIONAMIENTO CORREGIDO */
+.rareza-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    z-index: 10;
+}
+
+.rareza-badge.normal {
+    background: linear-gradient(135deg, #808080, #a0a0a0);
+}
+
+.rareza-badge.raro {
+    background: linear-gradient(135deg, #0066cc, #0088ff);
+}
+
+.rareza-badge.epico {
+    background: linear-gradient(135deg, #ff9900, #ffcc00);
+}
+
+.rareza-badge.leyenda {
+    background: linear-gradient(135deg, #9933cc, #cc66ff);
+    animation: badgeGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes badgeGlow {
+    0% {
+        box-shadow: 0 0 5px rgba(153, 51, 204, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(153, 51, 204, 0.8);
+    }
+}
+
+
+
+/* Hover effects */
+.rareza-normal:hover {
+    box-shadow: 0 0 15px rgba(128, 128, 128, 0.5) !important;
+    transform: translateY(-2px);
+}
+
+.rareza-raro:hover {
+    box-shadow: 0 0 20px rgba(0, 102, 204, 0.6) !important;
+    transform: translateY(-2px);
+}
+
+.rareza-epico:hover {
+    box-shadow: 0 0 25px rgba(255, 153, 0, 0.7) !important;
+    transform: translateY(-2px);
+}
+
+.rareza-leyenda:hover {
+    box-shadow: 0 0 30px rgba(153, 51, 204, 0.8) !important;
+    transform: translateY(-3px);
+}
+
+/* Transiciones suaves */
+.jugador-card, .contenedor-jugador, .player-card {
+    transition: all 0.3s ease;
+    position: relative; /* IMPORTANTE: Para que el badge se posicione correctamente */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rareza-badge {
+        font-size: 0.6rem;
+        padding: 3px 6px;
+    }
+} 

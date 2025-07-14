@@ -50,6 +50,8 @@ public class Torneo {
    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
    private Set<EquipoTorneo> equipos = new HashSet<>();
 
+   @Column(nullable = false)
+   private int premioTorneo;
 
 
 

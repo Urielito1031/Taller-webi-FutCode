@@ -22,6 +22,8 @@ import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -38,6 +40,27 @@ public class TorneoControllerTest {
    @Mock
    private UsuarioService usuarioService;
 
+   @Mock
+   private com.tallerwebi.dominio.service.SimularTorneoService simularTorneoService;
+
+   @Mock
+   private com.tallerwebi.dominio.repository.TorneoRepository torneoRepository;
+
+   @Mock
+   private com.tallerwebi.dominio.repository.EquipoTorneoRepository equipoTorneoRepository;
+
+   @Mock
+   private com.tallerwebi.dominio.repository.PartidoRepository partidoRepository;
+
+   @Mock
+   private com.tallerwebi.dominio.repository.FechaRepository fechaRepository;
+
+   @Mock
+   private com.tallerwebi.dominio.repository.NarracionRepository narracionRepository;
+
+   @Mock
+   private com.tallerwebi.dominio.service.FrasePartidoService frasePartidoService;
+
    @InjectMocks
    private TorneoController torneoController;
 
@@ -50,7 +73,6 @@ public class TorneoControllerTest {
    private HttpSession session;
    @Mock
    private RedirectAttributes redirectAttributes;
-
 
    @BeforeEach
    public void setUp() {
@@ -65,21 +87,24 @@ public class TorneoControllerTest {
       TorneoDTO torneo = new TorneoDTO();
       torneo.setId(idTorneo);
 
-      HttpServletRequest request = mock(HttpServletRequest.class);
-      HttpSession session = mock(HttpSession.class);
-
-
       when(request.getSession()).thenReturn(session);
       when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
 
       when(torneoService.getById(idTorneo)).thenReturn(torneo);
 
+      // Mockear un Torneo con fechas vacías
+      com.tallerwebi.dominio.model.entities.Torneo torneoEntity = mock(
+            com.tallerwebi.dominio.model.entities.Torneo.class);
+      when(torneoRepository.obtenerTorneoConFechas(idTorneo)).thenReturn(torneoEntity);
+      when(torneoEntity.getFechas()).thenReturn(new HashSet<>());
+
+      when(equipoTorneoRepository.getAllByTorneoId(idTorneo)).thenReturn(new ArrayList<>());
+
       String vistaDetalleTorneo = torneoController.detalleTorneo(idTorneo, model, request);
 
       verify(torneoService).getById(idTorneo);
       verify(model).addAttribute("torneo", torneo);
-      verify(equipoTorneoService).getAllByTorneoId(idTorneo);
-      verify(model).addAttribute(eq("torneoEquipos"), anyList());
+      verify(model).addAttribute("usuarioId", usuarioId);
 
       assertThat(vistaDetalleTorneo, is("detalle-torneo"));
    }
@@ -89,26 +114,28 @@ public class TorneoControllerTest {
       Long torneoId = 1L;
       Long usuarioId = 2L;
       TorneoDTO torneo = new TorneoDTO();
-      List<EquipoTorneoDTO> equipoTorneoList = new ArrayList<>();
-      equipoTorneoList.add(new EquipoTorneoDTO());
-
-      HttpServletRequest request = mock(HttpServletRequest.class);
-      HttpSession session = mock(HttpSession.class);
+      torneo.setId(torneoId);
 
       when(request.getSession()).thenReturn(session);
       when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
 
       when(torneoService.getById(torneoId)).thenReturn(torneo);
-      when(equipoTorneoService.getAllByTorneoId(torneoId)).thenReturn(equipoTorneoList);
+
+      // Mockear un Torneo con fechas vacías
+      com.tallerwebi.dominio.model.entities.Torneo torneoEntity = mock(
+            com.tallerwebi.dominio.model.entities.Torneo.class);
+      when(torneoRepository.obtenerTorneoConFechas(torneoId)).thenReturn(torneoEntity);
+      when(torneoEntity.getFechas()).thenReturn(new HashSet<>());
+
+      when(equipoTorneoRepository.getAllByTorneoId(torneoId)).thenReturn(new ArrayList<>());
 
       String vistaDetalleTorneo = torneoController.detalleTorneo(torneoId, model, request);
 
       assertThat(vistaDetalleTorneo, is("detalle-torneo"));
 
       verify(model).addAttribute("torneo", torneo);
-      verify(model).addAttribute("torneoEquipos", equipoTorneoList);
+      verify(model).addAttribute("usuarioId", usuarioId);
       verify(torneoService).getById(torneoId);
-      verify(equipoTorneoService).getAllByTorneoId(torneoId);
    }
 
    @Test
@@ -116,22 +143,23 @@ public class TorneoControllerTest {
       Long usuarioId = 2L;
       Long idInexistente = 99L;
 
-
-      HttpServletRequest request = mock(HttpServletRequest.class);
-      HttpSession session = mock(HttpSession.class);
-
       when(request.getSession()).thenReturn(session);
       when(session.getAttribute("USUARIO_ID")).thenReturn(usuarioId);
 
       when(torneoService.getById(idInexistente)).thenReturn(null);
-      when(equipoTorneoService.getAllByTorneoId(idInexistente)).thenReturn(new ArrayList<>());
+
+      // Mockear un Torneo con fechas vacías
+      com.tallerwebi.dominio.model.entities.Torneo torneoEntity = mock(
+            com.tallerwebi.dominio.model.entities.Torneo.class);
+      when(torneoRepository.obtenerTorneoConFechas(idInexistente)).thenReturn(torneoEntity);
+      when(torneoEntity.getFechas()).thenReturn(new HashSet<>());
+
+      when(equipoTorneoRepository.getAllByTorneoId(idInexistente)).thenReturn(new ArrayList<>());
 
       String vistaDetalle = torneoController.detalleTorneo(idInexistente, model, request);
 
       verify(torneoService).getById(idInexistente);
-      verify(equipoTorneoService).getAllByTorneoId(idInexistente);
-      verify(model).addAttribute(eq("torneo"), isNull());
-      verify(model).addAttribute(eq("torneoEquipos"), anyList());
+      verify(model).addAttribute("usuarioId", usuarioId);
 
       assertThat(vistaDetalle, is("detalle-torneo"));
    }
@@ -149,7 +177,8 @@ public class TorneoControllerTest {
       // Verificación
       assertThat(result, is("redirect:/torneo/detalle-torneo/" + torneoId));
       verify(redirectAttributes).addFlashAttribute("errorUnirse", "No estás autenticado. Por favor, inicia sesión.");
-      // Asegurar que no se interactúa con los servicios después de la validación de autenticación
+      // Asegurar que no se interactúa con los servicios después de la validación de
+      // autenticación
       verifyNoInteractions(usuarioService);
       verifyNoInteractions(equipoTorneoService);
    }
@@ -189,7 +218,8 @@ public class TorneoControllerTest {
 
       // Verificación
       assertThat(result, is("redirect:/torneo/nuevo-equipo"));
-      verify(redirectAttributes).addFlashAttribute("errorUnirse", "No tienes un equipo asignado. Crea un equipo primero.");
+      verify(redirectAttributes).addFlashAttribute("errorUnirse",
+            "No tienes un equipo asignado. Crea un equipo primero.");
       verify(usuarioService).buscarUsuarioPorId(usuarioId);
       verifyNoInteractions(equipoTorneoService);
    }

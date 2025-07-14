@@ -89,16 +89,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                     usuarioLocal.setMonedas(usuarioLocal.getMonedas() + MONEDAS_VICTORIA);
                     repositorioUsuario.actualizar(usuarioLocal);
                 }
-                if (usuarioVisitante != null) {
-                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + MONEDAS_DERROTA);
-                    repositorioUsuario.actualizar(usuarioVisitante);
-                }
+                // El visitante pierde, NO suma monedas
                 break;
             case VISITANTE_GANA:
-                if (usuarioLocal != null) {
-                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + MONEDAS_DERROTA);
-                    repositorioUsuario.actualizar(usuarioLocal);
-                }
+                // El local pierde, NO suma monedas
                 if (usuarioVisitante != null) {
                     usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + MONEDAS_VICTORIA);
                     repositorioUsuario.actualizar(usuarioVisitante);

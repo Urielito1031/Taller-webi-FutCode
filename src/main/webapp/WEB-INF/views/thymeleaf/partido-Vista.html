@@ -638,9 +638,10 @@ function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesR
         <div class=\"victory-card\" style=\"border-color: ${colorReal}; background: linear-gradient(135deg, #2d2d2d 0%, ${colorReal}33 100%);\">
             <div class=\"victory-title\" style=\"color: ${colorReal};\">${resultadoTexto}</div>
             <div style=\"margin-top: 20px; font-size: 1.3rem; color: ${colorReal}; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;\">
-                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> +${monedas} monedas
+                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> 
+                ${golesUsuario < golesRival ? '<span style=\"color:#e74c3c;\">No ganaste monedas</span>' : `+${monedas} monedas`}
             </div>
-            ${bonus > 0 ? `<div style=\"color:#00ffc3; font-size:1.1rem; margin-top:10px; font-weight:bold;\">+${bonus} bonus por narración completa!</div>` : ''}
+            ${bonus > 0 && golesUsuario >= golesRival ? `<div style=\"color:#00ffc3; font-size:1.1rem; margin-top:10px; font-weight:bold;\">+${bonus} bonus por narración completa!</div>` : ''}
             <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px;\">OK</button>
         </div>
     `;

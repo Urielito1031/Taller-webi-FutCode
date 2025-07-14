@@ -264,287 +264,361 @@
 
 </div>
 <script>
-// Elementos del DOM
-const matchTime = document.getElementById("matchTime");
-const statusIndicator = document.getElementById("statusIndicator");
-const team1Score = document.getElementById("team1Score");
-const team2Score = document.getElementById("team2Score");
-const totalGoals = document.getElementById("totalGoals");
-const totalFouls = document.getElementById("totalFouls");
-const totalCards = document.getElementById("totalCards");
-const totalInjuries = document.getElementById("totalInjuries");
-const commentaryList = document.getElementById("commentaryList");
-const startBtn = document.getElementById("startBtn");
-const pauseBtn = document.getElementById("pauseBtn");
-const resetBtn = document.getElementById("resetBtn");
-const omiteBtn = document.getElementById("omitebtn");
 
-// Obtener el equipo del usuario desde el backend
-const equipoLocal = document.getElementById("equipoLocal").value.trim().toLowerCase();
-const equipoVisitante = document.getElementById("equipoVisitante").value.trim().toLowerCase();
+    // Elementos del DOM
+    const matchTime = document.getElementById("matchTime");
+    const statusIndicator = document.getElementById("statusIndicator");
+    const team1Score = document.getElementById("team1Score");
+    const team2Score = document.getElementById("team2Score");
+    const totalGoals = document.getElementById("totalGoals");
+    const totalFouls = document.getElementById("totalFouls");
+    const totalCards = document.getElementById("totalCards");
+    const totalInjuries = document.getElementById("totalInjuries");
+    const commentaryList = document.getElementById("commentaryList");
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const omiteBtn = document.getElementById("omitebtn");
+    const volverInicioBtn = document.querySelector(".btn-home");
 
-// Determinar cuál es realmente el equipo del usuario
-// Necesitamos verificar si el usuario juega como local o visitante
-const equipoUsuario = document.getElementById("equipoUsuario").value.trim().toLowerCase();
+    // Obtener el equipo del usuario desde el backend
+    const equipoLocal = document.getElementById("equipoLocal").value.trim().toLowerCase();
+    const equipoVisitante = document.getElementById("equipoVisitante").value.trim().toLowerCase();
 
-// Determinar cuál es el rival del usuario
-let equipoRival;
-if (equipoUsuario === equipoLocal) {
-    equipoRival = equipoVisitante;
-} else if (equipoUsuario === equipoVisitante) {
-    equipoRival = equipoLocal;
-} else {
-    // Si no coincide con ninguno, asumir que es local
-    equipoRival = equipoVisitante;
-}
+    // Determinar cuál es realmente el equipo del usuario
+    // Necesitamos verificar si el usuario juega como local o visitante
+    const equipoUsuario = document.getElementById("equipoUsuario").value.trim().toLowerCase();
 
-// Obtener todas las narraciones enriquecidas
-const narraciones = Array.from(commentaryList.querySelectorAll(".commentary-item"))
-    .map(item => ({
-        minuto: parseInt(item.getAttribute("data-minuto")),
-        tipo: item.getAttribute("data-tipo"),
-        texto: item.querySelector("span:nth-child(2)").textContent,
-        node: item
-    }));
+    // Determinar cuál es el rival del usuario
+    let equipoRival;
+    if (equipoUsuario === equipoLocal) {
+        equipoRival = equipoVisitante;
+    } else if (equipoUsuario === equipoVisitante) {
+        equipoRival = equipoLocal;
+    } else {
+        // Si no coincide con ninguno, asumir que es local
+        equipoRival = equipoVisitante;
+    }
 
-narraciones.sort((a, b) => a.minuto - b.minuto);
+    // Obtener todas las narraciones enriquecidas
+    const narraciones = Array.from(commentaryList.querySelectorAll(".commentary-item"))
+        .map(item => ({
+            minuto: parseInt(item.getAttribute("data-minuto")),
+            tipo: item.getAttribute("data-tipo"),
+            texto: item.querySelector("span:nth-child(2)").textContent,
+            node: item
+        }));
 
-// Estado
-let tiempo = 0;
-let partidoEnCurso = false;
-let partidoTerminado = false;
-let intervalo = null;
-let narracionIndex = 0;
-let velocidadNarracion = 1000;
-let omitirNarracion = false;
+    narraciones.sort((a, b) => a.minuto - b.minuto);
 
-let stats = {
-    goles: 0,
-    faltas: 0,
-    tarjetas: 0,
-    lesionados: 0
-};
+    // Estado
+    let tiempo = 0;
+    let partidoEnCurso = false;
+    let partidoTerminado = false;
+    let intervalo = null;
+    let narracionIndex = 0;
+    let velocidadNarracion = 1000;
+    let omitirNarracion = false;
 
-// Variables para rastrear goles por equipo
-let golesLocal = 0;
-let golesVisitante = 0;
+    let stats = {
+        goles: 0,
+        faltas: 0,
+        tarjetas: 0,
+        lesionados: 0
+    };
 
-function inicializarPartido() {
-    commentaryList.innerHTML = '';
-    narracionIndex = 0;
-    tiempo = 0;
-    stats = {goles: 0, faltas: 0, tarjetas: 0, lesionados: 0};
-    golesLocal = 0;
-    golesVisitante = 0;
-    actualizarEstadisticas();
-    actualizarMarcador();
-    matchTime.textContent = "0'";
-    statusIndicator.textContent = "LISTO";
-    statusIndicator.className = "status-indicator ready";
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-    
-    // Ocultar animación de puntos suspensivos
-    document.getElementById('loadingDots').style.display = 'none';
-}
+    // Variables para rastrear goles por equipo
+    let golesLocal = 0;
+    let golesVisitante = 0;
 
-function iniciarPartido() {
-    if (partidoEnCurso) return;
-    partidoEnCurso = true;
-    partidoTerminado = false;
-    statusIndicator.textContent = "EN JUEGO";
-    statusIndicator.className = "status-indicator playing";
-    startBtn.disabled = true;
-    pauseBtn.disabled = false;
-    
-    // Mostrar mensaje de inicio del partido
-    const mensajeInicio = document.createElement('div');
-    mensajeInicio.className = 'commentary-item';
-    mensajeInicio.style.borderLeft = '6px solid #00ffc3';
-    mensajeInicio.style.background = '#1a3a2a';
-    mensajeInicio.style.color = '#00ffc3';
-    mensajeInicio.style.fontWeight = 'bold';
-    mensajeInicio.innerHTML =
-        `<span class="commentary-minute">0'</span>
+    function inicializarPartido() {
+        commentaryList.innerHTML = '';
+        narracionIndex = 0;
+        tiempo = 0;
+        stats = {goles: 0, faltas: 0, tarjetas: 0, lesionados: 0};
+        golesLocal = 0;
+        golesVisitante = 0;
+        omitirNarracion = false;
+        actualizarEstadisticas();
+        actualizarMarcador();
+        matchTime.textContent = "0'";
+        statusIndicator.textContent = "LISTO";
+        statusIndicator.className = "status-indicator ready";
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        omiteBtn.disabled = true;
+        volverInicioBtn.disabled = false;
+        volverInicioBtn.style.opacity = "1";
+        volverInicioBtn.style.pointerEvents = "auto";
+
+        // Ocultar animación de puntos suspensivos
+        document.getElementById('loadingDots').style.display = 'none';
+    }
+
+    function iniciarPartido() {
+        if (partidoEnCurso) return;
+        partidoEnCurso = true;
+        partidoTerminado = false;
+        statusIndicator.textContent = "EN JUEGO";
+        statusIndicator.className = "status-indicator playing";
+        startBtn.disabled = true;
+        pauseBtn.disabled = false;
+        omiteBtn.disabled = false;
+
+        // Deshabilitar botón de volver al inicio durante el partido
+        volverInicioBtn.disabled = true;
+        volverInicioBtn.style.opacity = "0.5";
+        volverInicioBtn.style.pointerEvents = "none";
+
+        // Mostrar mensaje de inicio del partido
+        const mensajeInicio = document.createElement('div');
+        mensajeInicio.className = 'commentary-item';
+        mensajeInicio.style.borderLeft = '6px solid #00ffc3';
+        mensajeInicio.style.background = '#1a3a2a';
+        mensajeInicio.style.color = '#00ffc3';
+        mensajeInicio.style.fontWeight = 'bold';
+        mensajeInicio.innerHTML =
+            `<span class="commentary-minute">0'</span>
 <span><strong>¡EL PARTIDO HA COMENZADO!</strong></span>`;
-    commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
-    mensajeInicio.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    
-    // Mostrar animación de puntos suspensivos
-    document.getElementById('loadingDots').style.display = 'inline-block';
-    
-    if (!intervalo) {
-        intervalo = setInterval(actualizarTiempo, velocidadNarracion);
-    }
-}
+        commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
+        mensajeInicio.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-function pausarPartido() {
-    if (!partidoEnCurso) return;
-    partidoEnCurso = false;
-    statusIndicator.textContent = "PAUSADO";
-    statusIndicator.className = "status-indicator paused";
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-    clearInterval(intervalo);
-    intervalo = null;
-    
-    // Ocultar animación de puntos suspensivos
-    document.getElementById('loadingDots').style.display = 'none';
-}
+        // Mostrar animación de puntos suspensivos
+        document.getElementById('loadingDots').style.display = 'inline-block';
 
-function reiniciarPartido() {
-    clearInterval(intervalo);
-    intervalo = null;
-    partidoEnCurso = false;
-    partidoTerminado = false;
-    inicializarPartido();
-    
-    // Ocultar animación de puntos suspensivos
-    document.getElementById('loadingDots').style.display = 'none';
-}
-
-function actualizarTiempo() {
-    if (!partidoEnCurso) return;
-    tiempo++;
-    matchTime.textContent = `${tiempo}'`;
-    // Mostrar todas las narraciones de este minuto
-    while (narracionIndex < narraciones.length && narraciones[narracionIndex].minuto === tiempo) {
-        mostrarNarracion(narraciones[narracionIndex]);
-        narracionIndex++;
-    }
-    // Solo terminar cuando llegue a los 90 minutos
-    if (tiempo >= 90) {
-        terminarPartido();
-    }
-}
-
-function mostrarNarracion(narracion) {
-    const nuevaNarracion = document.createElement('div');
-    nuevaNarracion.className = 'commentary-item';
-
-    // Lógica de color robusta y explícita para goles
-    const tipoEvento = narracion.tipo.toLowerCase();
-    const textoNarracion = narracion.texto.toLowerCase();
-
-    if (tipoEvento.includes('gol')) {
-        // Verificar si el gol es del equipo del usuario
-        if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
-            nuevaNarracion.classList.add('gol-favor');
-        } else if (textoNarracion.includes(equipoRival.toLowerCase())) {
-            nuevaNarracion.classList.add('gol-contra');
-        } else {
-            // Si no se puede determinar, por defecto gol en contra
-            nuevaNarracion.classList.add('gol-contra');
+        if (!intervalo) {
+            intervalo = setInterval(actualizarTiempo, omitirNarracion ? 100 : velocidadNarracion);
         }
-    } else if (tipoEvento.includes('expulsion')) {
-        if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
-            nuevaNarracion.classList.add('expulsion-propia');
-        } else {
-            nuevaNarracion.classList.add('expulsion-rival');
-        }
-    } else if (tipoEvento.includes('amarilla')) {
-        nuevaNarracion.classList.add('tarjeta-amarilla');
-    } else if (tipoEvento.includes('roja')) {
-        nuevaNarracion.classList.add('tarjeta-roja');
-    } else if (tipoEvento.includes('lesion')) {
-        nuevaNarracion.classList.add('lesion');
     }
 
-    nuevaNarracion.innerHTML = `<span class="commentary-minute">${narracion.minuto}'</span><span>${narracion.texto}</span>`;
-    commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);
-    nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    procesarNarracion(narracion.tipo, narracion.texto);
-    actualizarEstadisticas();
-}
+    function pausarPartido() {
+        if (!partidoEnCurso) return;
+        partidoEnCurso = false;
+        statusIndicator.textContent = "PAUSADO";
+        statusIndicator.className = "status-indicator paused";
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        omiteBtn.disabled = true;
+        clearInterval(intervalo);
+        intervalo = null;
 
-function procesarNarracion(tipo, texto) {
-    switch(tipo) {
-        case 'GOL': 
-            stats.goles++; 
-            // Determinar qué equipo marcó basándose en el texto de la narración
-            const equipoLocal = document.getElementById('team1Name').textContent;
-            const equipoVisitante = document.getElementById('team2Name').textContent;
-            
-            if (texto.includes(equipoLocal)) {
-                golesLocal++;
-            } else if (texto.includes(equipoVisitante)) {
-                golesVisitante++;
+        // Ocultar animación de puntos suspensivos
+        document.getElementById('loadingDots').style.display = 'none';
+    }
+
+    function reiniciarPartido() {
+        clearInterval(intervalo);
+        intervalo = null;
+        partidoEnCurso = false;
+        partidoTerminado = false;
+        inicializarPartido();
+
+        // Ocultar animación de puntos suspensivos
+        document.getElementById('loadingDots').style.display = 'none';
+    }
+
+    function omitirNarracionRapida() {
+        if (!partidoEnCurso && !partidoTerminado) {
+            omitirNarracion = !omitirNarracion;
+
+            if (omitirNarracion) {
+                omiteBtn.textContent = "NARRACIÓN NORMAL";
+                omiteBtn.style.background = "#e74c3c";
+
+                // Acelerar la simulación
+                if (intervalo) {
+                    clearInterval(intervalo);
+                    intervalo = setInterval(actualizarTiempo, 100);
+                }
             } else {
-                // Si no se puede determinar, alternar
-                if (stats.goles % 2 === 1) {
-                    golesLocal++;
-                } else {
-                    golesVisitante++;
+                omiteBtn.textContent = "OMITIR NARRACIÓN";
+                omiteBtn.style.background = "#007acc";
+
+                // Volver a velocidad normal
+                if (intervalo) {
+                    clearInterval(intervalo);
+                    intervalo = setInterval(actualizarTiempo, velocidadNarracion);
                 }
             }
-            actualizarMarcador();
-            break;
-        case 'TARJETA_AMARILLA':
-        case 'TARJETA_ROJA':
-        case 'EXPULSION': stats.tarjetas++; break;
-        case 'LESION': stats.lesionados++; break;
-        case 'GENERAL': break;
-        default: break;
+        } else if (partidoEnCurso) {
+            // Si el partido está en curso, cambiar velocidad inmediatamente
+            omitirNarracion = !omitirNarracion;
+
+            if (omitirNarracion) {
+                omiteBtn.textContent = "NARRACIÓN NORMAL";
+                omiteBtn.style.background = "#e74c3c";
+
+                // Acelerar la simulación
+                clearInterval(intervalo);
+                intervalo = setInterval(actualizarTiempo, 100);
+            } else {
+                omiteBtn.textContent = "OMITIR NARRACIÓN";
+                omiteBtn.style.background = "#007acc";
+
+                // Volver a velocidad normal
+                clearInterval(intervalo);
+                intervalo = setInterval(actualizarTiempo, velocidadNarracion);
+            }
+        }
     }
-}
 
-function actualizarMarcador() {
-    team1Score.textContent = golesLocal;
-    team2Score.textContent = golesVisitante;
-}
+    function actualizarTiempo() {
+        if (!partidoEnCurso) return;
+        tiempo++;
+        matchTime.textContent = `${tiempo}'`;
 
-function actualizarEstadisticas() {
-    totalGoals.textContent = stats.goles;
-    totalFouls.textContent = stats.faltas;
-    totalCards.textContent = stats.tarjetas;
-    totalInjuries.textContent = stats.lesionados;
-}
+        // Mostrar todas las narraciones de este minuto
+        while (narracionIndex < narraciones.length && narraciones[narracionIndex].minuto === tiempo) {
+            if (!omitirNarracion) {
+                mostrarNarracion(narraciones[narracionIndex]);
+            } else {
+                // Si está omitiendo, solo procesar estadísticas sin mostrar narración
+                procesarNarracion(narraciones[narracionIndex].tipo, narraciones[narracionIndex].texto);
+            }
+            narracionIndex++;
+        }
 
-function terminarPartido() {
-    partidoEnCurso = false;
-    partidoTerminado = true;
-    clearInterval(intervalo);
-    intervalo = null;
-    statusIndicator.textContent = "FINALIZADO";
-    statusIndicator.className = "status-indicator finished";
-    startBtn.disabled = true;
-    pauseBtn.disabled = true;
-    
-    // Ocultar animación de puntos suspensivos
-    document.getElementById('loadingDots').style.display = 'none';
-    
-    // Asegurar que el tiempo muestre 90' al final
-    matchTime.textContent = "90'";
-    
-    // Mantener el marcador actual (no lo cambiamos)
-    // El marcador ya está actualizado con los goles que ocurrieron durante la simulación
-    
-    const narracionFinal = document.createElement('div');
-    narracionFinal.className = 'commentary-item';
-    narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
-    commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
-    narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Actualizar estadísticas
+        actualizarEstadisticas();
 
-    // Festejo si ganaste (local o visitante)
-    let golesUsuario = 0, golesRival = 0;
-    if (document.getElementById('team1Name').textContent.trim().toLowerCase() === equipoUsuario) {
-        golesUsuario = golesLocal;
-        golesRival = golesVisitante;
-    } else {
-        golesUsuario = golesVisitante;
-        golesRival = golesLocal;
+        // Solo terminar cuando llegue a los 90 minutos
+        if (tiempo >= 90) {
+            terminarPartido();
+        }
     }
-    if (golesUsuario > golesRival) {
-        mostrarFestejoVictoria();
-    }
-}
 
-function mostrarFestejoVictoria() {
-    //  modal de victoria
-    const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
-    const victoryModal = document.createElement('div');
-    victoryModal.className = 'victory-modal';
-    victoryModal.innerHTML = `
+    function mostrarNarracion(narracion) {
+        const nuevaNarracion = document.createElement('div');
+        nuevaNarracion.className = 'commentary-item';
+
+        // Lógica de color robusta y explícita para goles
+        const tipoEvento = narracion.tipo.toLowerCase();
+        const textoNarracion = narracion.texto.toLowerCase();
+
+        if (tipoEvento.includes('gol')) {
+            // Verificar si el gol es del equipo del usuario
+            if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+                nuevaNarracion.classList.add('gol-favor');
+            } else if (textoNarracion.includes(equipoRival.toLowerCase())) {
+                nuevaNarracion.classList.add('gol-contra');
+            } else {
+                // Si no se puede determinar, por defecto gol en contra
+                nuevaNarracion.classList.add('gol-contra');
+            }
+        } else if (tipoEvento.includes('expulsion')) {
+            if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+                nuevaNarracion.classList.add('expulsion-propia');
+            } else {
+                nuevaNarracion.classList.add('expulsion-rival');
+            }
+        } else if (tipoEvento.includes('amarilla')) {
+            nuevaNarracion.classList.add('tarjeta-amarilla');
+        } else if (tipoEvento.includes('roja')) {
+            nuevaNarracion.classList.add('tarjeta-roja');
+        } else if (tipoEvento.includes('lesion')) {
+            nuevaNarracion.classList.add('lesion');
+        }
+
+        nuevaNarracion.innerHTML = `<span class="commentary-minute">${narracion.minuto}'</span><span>${narracion.texto}</span>`;
+        commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);
+        nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        procesarNarracion(narracion.tipo, narracion.texto);
+    }
+
+    function procesarNarracion(tipo, texto) {
+        switch(tipo) {
+            case 'GOL':
+                stats.goles++;
+                // Determinar qué equipo marcó basándose en el texto de la narración
+                const equipoLocal = document.getElementById('team1Name').textContent;
+                const equipoVisitante = document.getElementById('team2Name').textContent;
+
+                if (texto.includes(equipoLocal)) {
+                    golesLocal++;
+                } else if (texto.includes(equipoVisitante)) {
+                    golesVisitante++;
+                } else {
+                    // Si no se puede determinar, alternar
+                    if (stats.goles % 2 === 1) {
+                        golesLocal++;
+                    } else {
+                        golesVisitante++;
+                    }
+                }
+                actualizarMarcador();
+                break;
+            case 'TARJETA_AMARILLA':
+            case 'TARJETA_ROJA':
+            case 'EXPULSION': stats.tarjetas++; break;
+            case 'LESION': stats.lesionados++; break;
+            case 'GENERAL': break;
+            default: break;
+        }
+    }
+
+    function actualizarMarcador() {
+        team1Score.textContent = golesLocal;
+        team2Score.textContent = golesVisitante;
+    }
+
+    function actualizarEstadisticas() {
+        totalGoals.textContent = stats.goles;
+        totalFouls.textContent = stats.faltas;
+        totalCards.textContent = stats.tarjetas;
+        totalInjuries.textContent = stats.lesionados;
+    }
+
+    function terminarPartido() {
+        partidoEnCurso = false;
+        partidoTerminado = true;
+        clearInterval(intervalo);
+        intervalo = null;
+        statusIndicator.textContent = "FINALIZADO";
+        statusIndicator.className = "status-indicator finished";
+        startBtn.disabled = true;
+        pauseBtn.disabled = true;
+        omiteBtn.disabled = true;
+
+        // Restaurar botón de volver al inicio
+        volverInicioBtn.disabled = false;
+        volverInicioBtn.style.opacity = "1";
+        volverInicioBtn.style.pointerEvents = "auto";
+
+        // Ocultar animación de puntos suspensivos
+        document.getElementById('loadingDots').style.display = 'none';
+
+        // Asegurar que el tiempo muestre 90' al final
+        matchTime.textContent = "90'";
+
+        // Mantener el marcador actual (no lo cambiamos)
+        // El marcador ya está actualizado con los goles que ocurrieron durante la simulación
+
+        const narracionFinal = document.createElement('div');
+        narracionFinal.className = 'commentary-item';
+        narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
+        commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
+        narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Festejo si ganaste (local o visitante)
+        let golesUsuario = 0, golesRival = 0;
+        if (document.getElementById('team1Name').textContent.trim().toLowerCase() === equipoUsuario) {
+            golesUsuario = golesLocal;
+            golesRival = golesVisitante;
+        } else {
+            golesUsuario = golesVisitante;
+            golesRival = golesLocal;
+        }
+        if (golesUsuario > golesRival) {
+            mostrarFestejoVictoria();
+        }
+    }
+
+    function mostrarFestejoVictoria() {
+        // Modal de victoria
+        const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
+        const victoryModal = document.createElement('div');
+        victoryModal.className = 'victory-modal';
+        victoryModal.innerHTML = `
         <div class="victory-card">
             <div class="victory-title">¡VICTORIA!</div>
             <div class="victory-subtitle">¡Felicitaciones! Has ganado el partido</div>
@@ -553,50 +627,386 @@ function mostrarFestejoVictoria() {
             </div>
         </div>
     `;
-    document.body.appendChild(victoryModal);
+        document.body.appendChild(victoryModal);
 
-    // Confeti
-    for (let i = 0; i < 100; i++) {
+        // Confeti
+        for (let i = 0; i < 100; i++) {
+            setTimeout(() => {
+                const confeti = document.createElement('div');
+                confeti.style.position = "fixed";
+                confeti.style.left = Math.random() * 100 + "vw";
+                confeti.style.top = "-20px";
+                confeti.style.width = Math.random() * 8 + 4 + "px";
+                confeti.style.height = Math.random() * 8 + 4 + "px";
+                confeti.style.background = ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"][Math.floor(Math.random()*6)];
+                confeti.style.borderRadius = "50%";
+                confeti.style.opacity = 0.8;
+                confeti.style.zIndex = 9999;
+                confeti.style.transform = `rotate(${Math.random()*360}deg)`;
+
+                // Animación natural de caída
+                confeti.style.transition = `top ${Math.random() * 2 + 2}s ease-in, left ${Math.random() * 1 + 0.5}s ease-in-out`;
+                document.body.appendChild(confeti);
+
+                setTimeout(() => {
+                    confeti.style.top = "100vh";
+                    confeti.style.left = (parseFloat(confeti.style.left) + (Math.random() - 0.5) * 100) + "vw";
+                }, 10);
+
+                setTimeout(() => {
+                    confeti.remove();
+                }, 4000);
+            }, i * 50);
+        }
+
         setTimeout(() => {
-            const confeti = document.createElement('div');
-            confeti.style.position = "fixed";
-            confeti.style.left = Math.random() * 100 + "vw";
-            confeti.style.top = "-20px";
-            confeti.style.width = Math.random() * 8 + 4 + "px";
-            confeti.style.height = Math.random() * 8 + 4 + "px";
-            confeti.style.background = ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"][Math.floor(Math.random()*6)];
-            confeti.style.borderRadius = "50%";
-            confeti.style.opacity = 0.8;
-            confeti.style.zIndex = 9999;
-            confeti.style.transform = `rotate(${Math.random()*360}deg)`;
-            
-            // Animación natural de caída
-            confeti.style.transition = `top ${Math.random() * 2 + 2}s ease-in, left ${Math.random() * 1 + 0.5}s ease-in-out`;
-            document.body.appendChild(confeti);
-            
-            setTimeout(() => {
-                confeti.style.top = "100vh";
-                confeti.style.left = (parseFloat(confeti.style.left) + (Math.random() - 0.5) * 100) + "vw";
-            }, 10);
-            
-            setTimeout(() => {
-                confeti.remove();
-            }, 4000);
-        }, i * 50);
+            victoryModal.remove();
+        }, 4000);
     }
-    
-    setTimeout(() => {
-        victoryModal.remove();
-    }, 4000);
-}
 
-startBtn.addEventListener("click", iniciarPartido);
-pauseBtn.addEventListener("click", pausarPartido);
-resetBtn.addEventListener("click", reiniciarPartido);
+    // Event listeners
+    startBtn.addEventListener("click", iniciarPartido);
+    pauseBtn.addEventListener("click", pausarPartido);
+    resetBtn.addEventListener("click", reiniciarPartido);
+    omiteBtn.addEventListener("click", omitirNarracionRapida);
 
-document.addEventListener('DOMContentLoaded', function() {
-    inicializarPartido();
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        inicializarPartido();
+    });
+
+// // Elementos del DOM
+// const matchTime = document.getElementById("matchTime");
+// const statusIndicator = document.getElementById("statusIndicator");
+// const team1Score = document.getElementById("team1Score");
+// const team2Score = document.getElementById("team2Score");
+// const totalGoals = document.getElementById("totalGoals");
+// const totalFouls = document.getElementById("totalFouls");
+// const totalCards = document.getElementById("totalCards");
+// const totalInjuries = document.getElementById("totalInjuries");
+// const commentaryList = document.getElementById("commentaryList");
+// const startBtn = document.getElementById("startBtn");
+// const pauseBtn = document.getElementById("pauseBtn");
+// const resetBtn = document.getElementById("resetBtn");
+// const omiteBtn = document.getElementById("omitebtn");
+//
+// // Obtener el equipo del usuario desde el backend
+// const equipoLocal = document.getElementById("equipoLocal").value.trim().toLowerCase();
+// const equipoVisitante = document.getElementById("equipoVisitante").value.trim().toLowerCase();
+//
+// // Determinar cuál es realmente el equipo del usuario
+// // Necesitamos verificar si el usuario juega como local o visitante
+// const equipoUsuario = document.getElementById("equipoUsuario").value.trim().toLowerCase();
+//
+// // Determinar cuál es el rival del usuario
+// let equipoRival;
+// if (equipoUsuario === equipoLocal) {
+//     equipoRival = equipoVisitante;
+// } else if (equipoUsuario === equipoVisitante) {
+//     equipoRival = equipoLocal;
+// } else {
+//     // Si no coincide con ninguno, asumir que es local
+//     equipoRival = equipoVisitante;
+// }
+//
+// // Obtener todas las narraciones enriquecidas
+// const narraciones = Array.from(commentaryList.querySelectorAll(".commentary-item"))
+//     .map(item => ({
+//         minuto: parseInt(item.getAttribute("data-minuto")),
+//         tipo: item.getAttribute("data-tipo"),
+//         texto: item.querySelector("span:nth-child(2)").textContent,
+//         node: item
+//     }));
+//
+// narraciones.sort((a, b) => a.minuto - b.minuto);
+//
+// // Estado
+// let tiempo = 0;
+// let partidoEnCurso = false;
+// let partidoTerminado = false;
+// let intervalo = null;
+// let narracionIndex = 0;
+// let velocidadNarracion = 1000;
+// let omitirNarracion = false;
+//
+// let stats = {
+//     goles: 0,
+//     faltas: 0,
+//     tarjetas: 0,
+//     lesionados: 0
+// };
+//
+// // Variables para rastrear goles por equipo
+// let golesLocal = 0;
+// let golesVisitante = 0;
+//
+// function inicializarPartido() {
+//     commentaryList.innerHTML = '';
+//     narracionIndex = 0;
+//     tiempo = 0;
+//     stats = {goles: 0, faltas: 0, tarjetas: 0, lesionados: 0};
+//     golesLocal = 0;
+//     golesVisitante = 0;
+//     actualizarEstadisticas();
+//     actualizarMarcador();
+//     matchTime.textContent = "0'";
+//     statusIndicator.textContent = "LISTO";
+//     statusIndicator.className = "status-indicator ready";
+//     startBtn.disabled = false;
+//     pauseBtn.disabled = true;
+//
+//     // Ocultar animación de puntos suspensivos
+//     document.getElementById('loadingDots').style.display = 'none';
+// }
+//
+// function iniciarPartido() {
+//     if (partidoEnCurso) return;
+//     partidoEnCurso = true;
+//     partidoTerminado = false;
+//     statusIndicator.textContent = "EN JUEGO";
+//     statusIndicator.className = "status-indicator playing";
+//     startBtn.disabled = true;
+//     pauseBtn.disabled = false;
+//
+//     // Mostrar mensaje de inicio del partido
+//     const mensajeInicio = document.createElement('div');
+//     mensajeInicio.className = 'commentary-item';
+//     mensajeInicio.style.borderLeft = '6px solid #00ffc3';
+//     mensajeInicio.style.background = '#1a3a2a';
+//     mensajeInicio.style.color = '#00ffc3';
+//     mensajeInicio.style.fontWeight = 'bold';
+//     mensajeInicio.innerHTML =
+//         `<span class="commentary-minute">0'</span>
+// <span><strong>¡EL PARTIDO HA COMENZADO!</strong></span>`;
+//     commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
+//     mensajeInicio.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+//
+//     // Mostrar animación de puntos suspensivos
+//     document.getElementById('loadingDots').style.display = 'inline-block';
+//
+//     if (!intervalo) {
+//         intervalo = setInterval(actualizarTiempo, velocidadNarracion);
+//     }
+// }
+//
+// function pausarPartido() {
+//     if (!partidoEnCurso) return;
+//     partidoEnCurso = false;
+//     statusIndicator.textContent = "PAUSADO";
+//     statusIndicator.className = "status-indicator paused";
+//     startBtn.disabled = false;
+//     pauseBtn.disabled = true;
+//     clearInterval(intervalo);
+//     intervalo = null;
+//
+//     // Ocultar animación de puntos suspensivos
+//     document.getElementById('loadingDots').style.display = 'none';
+// }
+//
+// function reiniciarPartido() {
+//     clearInterval(intervalo);
+//     intervalo = null;
+//     partidoEnCurso = false;
+//     partidoTerminado = false;
+//     inicializarPartido();
+//
+//     // Ocultar animación de puntos suspensivos
+//     document.getElementById('loadingDots').style.display = 'none';
+// }
+//
+// function actualizarTiempo() {
+//     if (!partidoEnCurso) return;
+//     tiempo++;
+//     matchTime.textContent = `${tiempo}'`;
+//     // Mostrar todas las narraciones de este minuto
+//     while (narracionIndex < narraciones.length && narraciones[narracionIndex].minuto === tiempo) {
+//         mostrarNarracion(narraciones[narracionIndex]);
+//         narracionIndex++;
+//     }
+//     // Solo terminar cuando llegue a los 90 minutos
+//     if (tiempo >= 90) {
+//         terminarPartido();
+//     }
+// }
+//
+// function mostrarNarracion(narracion) {
+//     const nuevaNarracion = document.createElement('div');
+//     nuevaNarracion.className = 'commentary-item';
+//
+//     // Lógica de color robusta y explícita para goles
+//     const tipoEvento = narracion.tipo.toLowerCase();
+//     const textoNarracion = narracion.texto.toLowerCase();
+//
+//     if (tipoEvento.includes('gol')) {
+//         // Verificar si el gol es del equipo del usuario
+//         if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+//             nuevaNarracion.classList.add('gol-favor');
+//         } else if (textoNarracion.includes(equipoRival.toLowerCase())) {
+//             nuevaNarracion.classList.add('gol-contra');
+//         } else {
+//             // Si no se puede determinar, por defecto gol en contra
+//             nuevaNarracion.classList.add('gol-contra');
+//         }
+//     } else if (tipoEvento.includes('expulsion')) {
+//         if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+//             nuevaNarracion.classList.add('expulsion-propia');
+//         } else {
+//             nuevaNarracion.classList.add('expulsion-rival');
+//         }
+//     } else if (tipoEvento.includes('amarilla')) {
+//         nuevaNarracion.classList.add('tarjeta-amarilla');
+//     } else if (tipoEvento.includes('roja')) {
+//         nuevaNarracion.classList.add('tarjeta-roja');
+//     } else if (tipoEvento.includes('lesion')) {
+//         nuevaNarracion.classList.add('lesion');
+//     }
+//
+//     nuevaNarracion.innerHTML = `<span class="commentary-minute">${narracion.minuto}'</span><span>${narracion.texto}</span>`;
+//     commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);
+//     nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+//     procesarNarracion(narracion.tipo, narracion.texto);
+//     actualizarEstadisticas();
+// }
+//
+// function procesarNarracion(tipo, texto) {
+//     switch(tipo) {
+//         case 'GOL':
+//             stats.goles++;
+//             // Determinar qué equipo marcó basándose en el texto de la narración
+//             const equipoLocal = document.getElementById('team1Name').textContent;
+//             const equipoVisitante = document.getElementById('team2Name').textContent;
+//
+//             if (texto.includes(equipoLocal)) {
+//                 golesLocal++;
+//             } else if (texto.includes(equipoVisitante)) {
+//                 golesVisitante++;
+//             } else {
+//                 // Si no se puede determinar, alternar
+//                 if (stats.goles % 2 === 1) {
+//                     golesLocal++;
+//                 } else {
+//                     golesVisitante++;
+//                 }
+//             }
+//             actualizarMarcador();
+//             break;
+//         case 'TARJETA_AMARILLA':
+//         case 'TARJETA_ROJA':
+//         case 'EXPULSION': stats.tarjetas++; break;
+//         case 'LESION': stats.lesionados++; break;
+//         case 'GENERAL': break;
+//         default: break;
+//     }
+// }
+//
+// function actualizarMarcador() {
+//     team1Score.textContent = golesLocal;
+//     team2Score.textContent = golesVisitante;
+// }
+//
+// function actualizarEstadisticas() {
+//     totalGoals.textContent = stats.goles;
+//     totalFouls.textContent = stats.faltas;
+//     totalCards.textContent = stats.tarjetas;
+//     totalInjuries.textContent = stats.lesionados;
+// }
+//
+// function terminarPartido() {
+//     partidoEnCurso = false;
+//     partidoTerminado = true;
+//     clearInterval(intervalo);
+//     intervalo = null;
+//     statusIndicator.textContent = "FINALIZADO";
+//     statusIndicator.className = "status-indicator finished";
+//     startBtn.disabled = true;
+//     pauseBtn.disabled = true;
+//
+//     // Ocultar animación de puntos suspensivos
+//     document.getElementById('loadingDots').style.display = 'none';
+//
+//     // Asegurar que el tiempo muestre 90' al final
+//     matchTime.textContent = "90'";
+//
+//     // Mantener el marcador actual (no lo cambiamos)
+//     // El marcador ya está actualizado con los goles que ocurrieron durante la simulación
+//
+//     const narracionFinal = document.createElement('div');
+//     narracionFinal.className = 'commentary-item';
+//     narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
+//     commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
+//     narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+//
+//     // Festejo si ganaste (local o visitante)
+//     let golesUsuario = 0, golesRival = 0;
+//     if (document.getElementById('team1Name').textContent.trim().toLowerCase() === equipoUsuario) {
+//         golesUsuario = golesLocal;
+//         golesRival = golesVisitante;
+//     } else {
+//         golesUsuario = golesVisitante;
+//         golesRival = golesLocal;
+//     }
+//     if (golesUsuario > golesRival) {
+//         mostrarFestejoVictoria();
+//     }
+// }
+//
+// function mostrarFestejoVictoria() {
+//     //  modal de victoria
+//     const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
+//     const victoryModal = document.createElement('div');
+//     victoryModal.className = 'victory-modal';
+//     victoryModal.innerHTML = `
+//         <div class="victory-card">
+//             <div class="victory-title">¡VICTORIA!</div>
+//             <div class="victory-subtitle">¡Felicitaciones! Has ganado el partido</div>
+//             <div style="margin-top: 20px; font-size: 1.3rem; color: #ffd700; font-weight: bold;">
+//                 +${monedasGanadas} monedas
+//             </div>
+//         </div>
+//     `;
+//     document.body.appendChild(victoryModal);
+//
+//     // Confeti
+//     for (let i = 0; i < 100; i++) {
+//         setTimeout(() => {
+//             const confeti = document.createElement('div');
+//             confeti.style.position = "fixed";
+//             confeti.style.left = Math.random() * 100 + "vw";
+//             confeti.style.top = "-20px";
+//             confeti.style.width = Math.random() * 8 + 4 + "px";
+//             confeti.style.height = Math.random() * 8 + 4 + "px";
+//             confeti.style.background = ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"][Math.floor(Math.random()*6)];
+//             confeti.style.borderRadius = "50%";
+//             confeti.style.opacity = 0.8;
+//             confeti.style.zIndex = 9999;
+//             confeti.style.transform = `rotate(${Math.random()*360}deg)`;
+//
+//             // Animación natural de caída
+//             confeti.style.transition = `top ${Math.random() * 2 + 2}s ease-in, left ${Math.random() * 1 + 0.5}s ease-in-out`;
+//             document.body.appendChild(confeti);
+//
+//             setTimeout(() => {
+//                 confeti.style.top = "100vh";
+//                 confeti.style.left = (parseFloat(confeti.style.left) + (Math.random() - 0.5) * 100) + "vw";
+//             }, 10);
+//
+//             setTimeout(() => {
+//                 confeti.remove();
+//             }, 4000);
+//         }, i * 50);
+//     }
+//
+//     setTimeout(() => {
+//         victoryModal.remove();
+//     }, 4000);
+// }
+//
+// startBtn.addEventListener("click", iniciarPartido);
+// pauseBtn.addEventListener("click", pausarPartido);
+// resetBtn.addEventListener("click", reiniciarPartido);
+//
+// document.addEventListener('DOMContentLoaded', function() {
+//     inicializarPartido();
+// });
 </script>
 </body>
 </html>

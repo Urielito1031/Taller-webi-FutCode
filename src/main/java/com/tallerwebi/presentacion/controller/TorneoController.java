@@ -214,9 +214,7 @@ public class TorneoController {
    @PostMapping("/simular-fecha")
    public String simularFecha(@RequestParam Long torneoId, @RequestParam Long numeroFecha, HttpServletRequest request) {
       // 1. Simular toda la fecha
-      simularTorneoService.simularFecha(torneoId, numeroFecha);
 
-      torneoService.verificarYFinalizarTorneo(torneoId);
 
       // 2. Obtener usuario y su equipo
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
@@ -232,6 +230,10 @@ public class TorneoController {
       }
 
       Long equipoId = usuario.getEquipo().getId();
+
+      simularTorneoService.simularFecha(torneoId, numeroFecha, equipoId);
+
+      torneoService.verificarYFinalizarTorneo(torneoId);
 
       // 3. Buscar el partido donde juega el equipo en esa fecha
       // Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId,

@@ -45,9 +45,20 @@
       </li>
     </ul>
   </div>
-  <form th:action="@{/home}" method="get">
-    <button type="submit">Continuar</button>
-  </form>
+  <div style="display: flex; justify-content: center; padding-bottom: 40px; margin-top: 32px;">
+    <form th:action="@{/home}" method="get">
+      <button type="submit">Continuar</button>
+    </form>
+  </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.contenedor-jugador');
+    cards.forEach((card, i) => {
+      card.style.animationDelay = `${i * 0.12}s`;
+    });
+  });
+</script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.model.enums.FormacionEsquema;
 import com.tallerwebi.dominio.model.enums.PosicionEnum;
 import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.FormacionEquipoRepository;
+import com.tallerwebi.dominio.repository.JugadorRepository;
 import com.tallerwebi.presentacion.dto.EsquemaDTO;
 import com.tallerwebi.presentacion.dto.PosicionJugadorDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,9 @@ public class PlantillaServiceTest {
   @Mock
   private EquipoRepository equipoRepository;
 
+  @Mock
+  private JugadorRepository jugadorRepository;
+
   @InjectMocks
   private PlantillaServiceImpl plantillaService;
 
@@ -42,11 +46,14 @@ public class PlantillaServiceTest {
   @BeforeEach
   public void setUp() {
     MockitoAnnotations.openMocks(this);
-
+    formacionEquipoRepository = mock(FormacionEquipoRepository.class);
+    equipoRepository = mock(EquipoRepository.class);
+    jugadorRepository = mock(JugadorRepository.class);
+    plantillaService = new PlantillaServiceImpl(formacionEquipoRepository, equipoRepository, jugadorRepository);
     equipoId = 1L;
-    formaciones = new ArrayList<>();
     esquemaDTO = new EsquemaDTO();
     esquemaDTO.setEquipoId(equipoId);
+    esquemaDTO.setAlineacion(crearAlineacionDePrueba());
   }
 
   @Test
@@ -86,7 +93,6 @@ public class PlantillaServiceTest {
   @Test
   public void deberiaGuardarFormacionExitosamente() {
     // Preparación
-    esquemaDTO.setAlineacion(crearAlineacionDePrueba());
     when(equipoRepository.existsById(equipoId)).thenReturn(true);
     doNothing().when(formacionEquipoRepository).save(any(FormacionEquipo.class));
 

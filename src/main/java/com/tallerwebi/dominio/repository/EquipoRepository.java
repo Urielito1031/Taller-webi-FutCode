@@ -13,4 +13,6 @@ public interface EquipoRepository {
    Boolean existsById(Long equipoId);
 
    void saveAndFlush(Equipo equipo);
+
+   Equipo getEquipoConFormacion(Long id);
 }

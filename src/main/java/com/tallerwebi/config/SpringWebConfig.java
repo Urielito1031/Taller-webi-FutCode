@@ -1,10 +1,12 @@
 package com.tallerwebi.config;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,9 +17,10 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+
 @EnableWebMvc
 @Configuration
-@ComponentScan({"com.tallerwebi.presentacion", "com.tallerwebi.dominio", "com.tallerwebi.infraestructura"})
+@ComponentScan({ "com.tallerwebi.presentacion", "com.tallerwebi.dominio", "com.tallerwebi.infraestructura" })
 public class SpringWebConfig implements WebMvcConfigurer {
 
     // Spring + Thymeleaf need this
@@ -31,6 +34,9 @@ public class SpringWebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/img/**").addResourceLocations("/resources/core/img/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
     }
+
+    // Eliminado el método configureMessageConverters porque no es necesario para
+    // este caso.
 
     // https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html
     // Spring + Thymeleaf
@@ -65,6 +71,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
     }
+
     // Spring + Thymeleaf
     // Configure Thymeleaf View Resolver
     @Bean
@@ -74,15 +81,27 @@ public class SpringWebConfig implements WebMvcConfigurer {
         return viewResolver;
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginInterceptor())
-//          .addPathPatterns("/**")
-//          .excludePathPatterns("/login", "/validar-login", "/nuevo-usuario", "/nuevo-equipo","/registrarme", "/css/**", "/js/**", "/img/**"); // excepciones
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+          .addPathPatterns("/**")
+          .excludePathPatterns(
+            "/login",
+            "/validar-login",
+            "/nuevo-usuario",
+            "/nuevo-equipo",
+            "/seleccionar-escudo",
+            "/registrarme",
+            "/css/**",
+            "/js/**",
+            "/img/**",
+            "/resources/**",
+            "/webjars/**"
+          );
+    }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

@@ -35,6 +35,12 @@ public class Torneo {
    @Column(name = "estado", nullable = false)
    private EstadoTorneoEnum estado;
 
+   @Column(name = "premio_monedas")
+   private Double premioMonedas;
+
+   @Column(name = "capacidad_maxima")
+   private Integer capacidadMaxima;
+
    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinColumn(name = "torneo_liga_id", unique = true, nullable = true)
    private TorneoLiga torneoLiga;
@@ -50,16 +56,10 @@ public class Torneo {
    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
    private Set<EquipoTorneo> equipos = new HashSet<>();
 
-   @Column(nullable = false)
-   private int premioTorneo;
-
-
-
-
-   public String toString(){
-      return "id: "+id+",\n nombre: "+nombre+", \ndescripcion: "+descripcion+ "\nformato: "+formatoTorneo+", \nestado: "+estado;
+   public String toString() {
+      return "id: " + id + ",\n nombre: " + nombre + ", \ndescripcion: " + descripcion + "\nformato: " + formatoTorneo
+            + ", \nestado: " + estado;
    }
-
 
    public TorneoDTO convertToDTO() {
       TorneoDTO dto = new TorneoDTO();
@@ -67,12 +67,15 @@ public class Torneo {
       dto.setNombre(this.getNombre());
       dto.setEstado(this.getEstado());
       dto.setDescripcion(this.getDescripcion());
+      dto.setCapacidadMaxima(this.getCapacidadMaxima());
 
-      FormatoTorneoDTO formatoDTO = new FormatoTorneoDTO();
       FormatoTorneo formato = this.getFormatoTorneo();
-      formatoDTO.setTipo(formato.getTipo());
-      dto.setFormatoTorneo(formatoDTO);
-
+      if (formato != null) {
+         FormatoTorneoDTO formatoDTO = new FormatoTorneoDTO();
+         formatoDTO.setTipo(formato.getTipo());
+         dto.setFormatoTorneo(formatoDTO);
+      }
+      // Si formato es null, no lo setea
       return dto;
    }
 }

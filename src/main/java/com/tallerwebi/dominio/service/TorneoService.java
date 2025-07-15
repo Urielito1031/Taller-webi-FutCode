@@ -2,25 +2,24 @@ package com.tallerwebi.dominio.service;
 
 import com.tallerwebi.dominio.model.entities.*;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
+import com.tallerwebi.presentacion.dto.CrearTorneoDTO;
 
 import java.util.List;
 
 public interface TorneoService {
    List<TorneoDTO> getAll();
+
    TorneoDTO getById(Long id);
 
    Torneo obtenerTorneoConFechas(Long torneoId);
+
    List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior);
+
    List<Fecha> generarFechas(List<Equipo> equipos, Torneo torneo);
+
    void crearFixtureConLasFechas(Long torneoId);
 
-    Torneo buscarPorId(Long id);
+   void crearTorneoPersonalizado(CrearTorneoDTO crearTorneoDTO);
 
-   void guardar(Torneo torneo);
-
-    void verificarYFinalizarTorneo(Long torneoId);
-
-    void asignarPremiosPorPosicion(Long torneoId);
-
-    int calcularPremioPorPosicion(int premioTotal, int posicion, int totalEquipos);
+   List<TorneoDTO> getAllByFormato(com.tallerwebi.dominio.model.enums.TipoFormato tipoFormato);
 }

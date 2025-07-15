@@ -2,7 +2,8 @@ package com.tallerwebi.dominio.model.enums;
 
 public enum TipoFormato {
    LIGA("Liga"),
-   COPA("Copa");
+   COPA("Copa"),
+   PARTIDO_UNICO("Partido Único");
 
    private final String nombre;
 

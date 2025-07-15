@@ -107,7 +107,10 @@
    </nav>
 
    <header class="main-header">
-      <h1 class="page-title">Detalle del Torneo</h1>
+      <h1 class="page-title"
+          th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Detalle de Partido</h1>
+      <h1 class="page-title"
+          th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Detalle del Torneo</h1>
       <p class="subtitle">Información completa y opciones de participación</p>
    </header>
    <th:block th:if="${errorUnirse}">
@@ -130,10 +133,12 @@
          <h2 class="torneo-name" th:text="*{nombre}">Nombre del Torneo</h2>
          <div class="estado-badge"
               th:classappend="${torneo.estado.name() == 'ABIERTO'} ? 'estado-abierto' :
-                                          (${torneo.estado.name() == 'CERRADO'} ? 'estado-cerrado' : 'estado-en-curso')">
+                                          (${torneo.estado.name() == 'CERRADO'} ? 'estado-cerrado' :
+                                          (${torneo.estado.name() == 'FINALIZADO'} ? 'estado-finalizado' : 'estado-en-curso'))">
             <i class="bi"
                th:classappend="${torneo.estado.name() == 'ABIERTO'} ? 'bi-door-open' :
-                                            (${torneo.estado.name() == 'CERRADO'} ? 'bi-door-closed' : 'bi-play-circle')"></i>
+                                            (${torneo.estado.name() == 'CERRADO'} ? 'bi-door-closed' :
+                                            (${torneo.estado.name() == 'FINALIZADO'} ? 'bi-trophy' : 'bi-play-circle'))"></i>
             <span th:text="*{estado}">Estado</span>
          </div>
       </div>
@@ -172,22 +177,19 @@
             </div>
          </section>
 
+         <!-- Eliminar sección Información General -->
+         <!--
          <section class="info-section">
-            <h3 class="info-title">
-               <i class="bi bi-calendar-event decorative-icon"></i>
-               Información General
-            </h3>
-            <div class="info-content">
-               <p><strong>ID del Torneo:</strong> <span th:text="*{id}">1</span></p>
-               <p><strong>Estado Actual:</strong> <span th:text="*{estado}">Abierto</span></p>
-            </div>
+            ...
          </section>
+         -->
       </div>
 
       <section class="info-section" th:if="${not #lists.isEmpty(torneoEquipos)}">
          <h3 class="info-title">
             <i class="bi bi-people decorative-icon"></i>
-            Equipos Participantes (<span th:text="${torneoEquipos.size()}">0</span>)
+            <span th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Participantes del Partido (<span th:text="${torneoEquipos.size()}">0</span>)</span>
+            <span th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Equipos Participantes (<span th:text="${torneoEquipos.size()}">0</span>)</span>
          </h3>
          <div class="table-container">
             <table class="equipos-table">
@@ -247,25 +249,27 @@
       <section class="info-section" th:unless="${not #lists.isEmpty(torneoEquipos)}">
          <div class="no-equipos">
             <i class="bi bi-trophy" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i>
-            No hay equipos registrados en este torneo aún.
+            <span th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Aún no hay participantes en este partido. ¡Únete y espera a tu rival!</span>
+            <span th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">No hay equipos registrados en este torneo aún.</span>
          </div>
       </section>
 
       <div class="action-section">
-         <th:block th:if="${torneo.estado.name() == 'ABIERTO'}">
+         <th:block th:if="${torneo.estado.name() == 'ABIERTO' and !usuarioYaUnido}">
             <form th:action="@{/torneo/{id}/unirse(id=${torneo.id})}" method="POST">
                <button type="submit" class="btn-join">
                   <i class="bi bi-trophy"></i>
-                  Unirse al Torneo
+                  <span th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Unirse al Partido</span>
+                  <span th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Unirse al Torneo</span>
                   <i class="bi bi-arrow-right"></i>
                </button>
             </form>
          </th:block>
-
-         <th:block th:unless="${torneo.estado.name() == 'ABIERTO'}">
+         <th:block th:unless="${torneo.estado.name() == 'ABIERTO' and !usuarioYaUnido}">
             <div class="btn-join btn-disabled">
                <i class="bi bi-lock"></i>
-               Torneo no disponible
+               <span th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Partido no disponible</span>
+               <span th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Torneo no disponible</span>
             </div>
          </th:block>
       </div>

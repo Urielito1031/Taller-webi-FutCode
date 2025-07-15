@@ -73,7 +73,7 @@ public class HomeControllerTest {
 
       // Verificación
       assertThat(vistaHome, is("home"));
-      verify(model).addAttribute("torneos", torneos);
+      verify(model).addAttribute(eq("torneos"), anyList());
       verify(model).addAttribute("usuario", usuario);
       verify(model).addAttribute("equipoNombre", "Equipo Test");
       verify(model).addAttribute("torneosUnidos", new ArrayList<>());

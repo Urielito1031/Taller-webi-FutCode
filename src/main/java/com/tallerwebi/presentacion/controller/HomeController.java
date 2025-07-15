@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
+import com.tallerwebi.dominio.model.enums.TipoFormato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -54,6 +56,16 @@ public class HomeController {
          model.addAttribute("mensajeTorneo", "No hay torneos para mostrar");
       }
 
+      // Filtrar torneos LIGA y COPA
+      List<TorneoDTO> torneosLigaCopa = torneos.stream()
+            .filter(t -> t.getFormatoTorneo() != null &&
+                  (t.getFormatoTorneo().getTipo() == TipoFormato.LIGA
+                        || t.getFormatoTorneo().getTipo() == TipoFormato.COPA))
+            .collect(Collectors.toList());
+
+      // Obtener torneos de formato PARTIDO_UNICO
+      List<TorneoDTO> torneosUnicos = torneoService.getAllByFormato(TipoFormato.PARTIDO_UNICO);
+
       // Obtener torneos a los que está unido el usuario
       List<TorneoDTO> torneosUnidos = new ArrayList<>();
       if (usuario.getEquipo() != null) {
@@ -71,8 +83,9 @@ public class HomeController {
       }
       model.addAttribute("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(usuarioId).size());
 
-      model.addAttribute("torneos", torneos);
+      model.addAttribute("torneos", torneosLigaCopa);
       model.addAttribute("torneosUnidos", torneosUnidos);
+      model.addAttribute("torneosUnicos", torneosUnicos);
       return "home";
    }
 

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import com.tallerwebi.dominio.model.enums.TipoFormato;
+
 @Repository
-public class TorneoRepositoryImpl implements TorneoRepository{
+public class TorneoRepositoryImpl implements TorneoRepository {
 
    private final SessionFactory sessionFactory;
 
@@ -19,10 +21,9 @@ public class TorneoRepositoryImpl implements TorneoRepository{
       this.sessionFactory = sessionFactory;
    }
 
-
    @Override
    public List<Torneo> findAll() {
-      return getSession().createQuery("from Torneo",Torneo.class).list();
+      return getSession().createQuery("from Torneo", Torneo.class).list();
    }
 
    @Override
@@ -31,13 +32,13 @@ public class TorneoRepositoryImpl implements TorneoRepository{
    }
 
    @Override
-   public Torneo getById(Long id){
+   public Torneo getById(Long id) {
 
-      return getSession().get(Torneo.class,id);
+      return getSession().get(Torneo.class, id);
    }
 
    @Override
-   public boolean existsById(Long torneoId){
+   public boolean existsById(Long torneoId) {
       return this.getById(torneoId) != null;
    }
 
@@ -45,20 +46,27 @@ public class TorneoRepositoryImpl implements TorneoRepository{
       return sessionFactory.getCurrentSession();
    }
 
-
-
-   @Override @Transactional
+   @Override
+   @Transactional
    public Torneo obtenerTorneoConFechas(Long torneoId) {
       String hql = "SELECT DISTINCT t FROM Torneo t " +
-              "LEFT JOIN FETCH t.fechas f " +
-              "LEFT JOIN FETCH f.partidos p " +
-              "LEFT JOIN FETCH p.equipoLocal " +
-              "LEFT JOIN FETCH p.equipoVisitante " +
-              "WHERE t.id = :id";
+            "LEFT JOIN FETCH t.fechas f " +
+            "LEFT JOIN FETCH f.partidos p " +
+            "LEFT JOIN FETCH p.equipoLocal " +
+            "LEFT JOIN FETCH p.equipoVisitante " +
+            "WHERE t.id = :id";
 
       return sessionFactory.getCurrentSession()
-              .createQuery(hql, Torneo.class)
-              .setParameter("id", torneoId)
-              .uniqueResult();
+            .createQuery(hql, Torneo.class)
+            .setParameter("id", torneoId)
+            .uniqueResult();
+   }
+
+   @Override
+   public List<Torneo> findAllByFormato(TipoFormato tipoFormato) {
+      String hql = "FROM Torneo t WHERE t.formatoTorneo.tipo = :tipoFormato";
+      return getSession().createQuery(hql, Torneo.class)
+            .setParameter("tipoFormato", tipoFormato)
+            .list();
    }
 }

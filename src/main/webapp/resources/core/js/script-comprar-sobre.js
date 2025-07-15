@@ -1,8 +1,9 @@
+// Archivo en UTF-8. Todos los textos están correctamente escritos en español.
 let descripciones = {
-    descripcionBronce : 'El Starter Pack es perfecto para los nuevos entrenadores que comienzan su camino en FutCode. Su color bronceado refleja humildad, esfuerzo y crecimiento. Contiene 12 artículos básicos con potencial de sorpresa. Ideal para: Principiantes o jugadores que disfrutan del reto de construir desde abajo.',
-    descripcionPlata : 'Este sobre de acabado metálico en plata ofrece una selección sólida de 12 artículos, pensados para jugadores que están en plena evolución. Con un diseño moderno y pulido, el Pro Pack simboliza progreso y consistencia. Ideal para: Quienes buscan equilibrio entre valor y rendimiento en sus recompensas.',
-    descripcionOro : 'Un sobre brillante y elegante, reservado para los verdaderos estrategas del juego. El Elite Pack contiene 12 artículos cuidadosamente seleccionados, incluyendo jugadores y mejoras clave para tu equipo. Su diseño dorado representa poder, rendimiento y alto valor. Ideal para: Usuarios que buscan potenciar su plantilla con jugadores de alto nivel.',
-    descripcionEspecial : 'Exclusivo, lujoso y deslumbrante. El Legendary Pack está incrustado con rubíes y diamantes, reflejando su rareza y prestigio. Incluye 12 artículos premium con alta probabilidad de contenido épico. Su fondo cristalizado lo distingue del resto. Ideal para: Coleccionistas, competidores de élite o jugadores en busca de cartas únicas.'
+    descripcionBronce : 'El Sobre de Bronce es la puerta de entrada a FutCode. Su color representa humildad y el espiritu de superacion. Incluye 5 cartas de rareza <span class="rareza-comun">Comun</span>, ideales para comenzar a construir tu equipo y dar tus primeros pasos en la competencia.<br><small>Ideal para: Quienes disfrutan el desafio de crecer desde abajo y sorprenderse con cada avance.</small>',
+    descripcionPlata : 'El Sobre de Plata simboliza progreso y constancia. Contiene 5 cartas de rareza <span class="rareza-raro">Rara</span>, perfectas para fortalecer tu plantilla y mantenerte competitivo en cada partido.<br><small>Ideal para: Jugadores que buscan equilibrio entre progreso y estabilidad en su equipo.</small>',
+    descripcionOro : 'El Sobre de Oro es para los que buscan dar un salto de calidad. Su brillo dorado refleja ambicion y alto rendimiento. Incluye 5 cartas de rareza <span class="rareza-epico">Epica</span>, con chances de obtener jugadores destacados y mejoras clave para tu club.<br><small>Ideal para: Usuarios que quieren potenciar su plantilla y dominar la cancha con talento de elite.</small>',
+    descripcionEspecial : 'El Sobre Especial es el mas codiciado de FutCode. Su diseño exclusivo y detalles brillantes lo distinguen del resto. Contiene 3 cartas de rareza <span class="rareza-legendario">Legendaria</span>, con grandes probabilidades de conseguir leyendas y contenido epico.<br><small>Ideal para: Coleccionistas, competidores top o quienes buscan diferenciarse con cartas unicas e irrepetibles.</small>'
 }
 
 let tituloDescripcion = document.getElementById('titulo-descripcion')
@@ -20,19 +21,19 @@ if (sobresContainer) {
         tituloDescripcion.textContent = titulo;
         switch (titulo) {
             case 'Sobre de Bronce':
-                parrafoDescripcion.textContent = descripciones.descripcionBronce;
+                parrafoDescripcion.innerHTML = descripciones.descripcionBronce;
             break;
             case 'Sobre de Plata':
-                parrafoDescripcion.textContent = descripciones.descripcionPlata;
+                parrafoDescripcion.innerHTML = descripciones.descripcionPlata;
             break;
             case 'Sobre de Oro':
-                parrafoDescripcion.textContent = descripciones.descripcionOro;
+                parrafoDescripcion.innerHTML = descripciones.descripcionOro;
             break;
             case 'Sobre Especial':
-                parrafoDescripcion.textContent = descripciones.descripcionEspecial;
+                parrafoDescripcion.innerHTML = descripciones.descripcionEspecial;
             break;
             default:
-                parrafoDescripcion.textContent = '';
+                parrafoDescripcion.innerHTML = '';
         }
     });
 }

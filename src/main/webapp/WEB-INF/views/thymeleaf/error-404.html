@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Página no encontrada - FutCode</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/resources/core/css/main.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .error-404-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+        .error-404-icon {
+            font-size: 7rem;
+            color: #00ffc3;
+            margin-bottom: 20px;
+        }
+        .error-404-title {
+            font-size: 3rem;
+            color: #00ffc3;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .error-404-message {
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .error-404-btn {
+            background-color: #00ffc3;
+            color: #0d1b2a;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 38px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(0,255,195,0.08);
+            margin-top: 10px;
+        }
+        .error-404-btn:hover {
+            background-color: #00bfa3;
+            box-shadow: 0 6px 24px rgba(0,255,195,0.18);
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragmento/header :: navbar('')"></div>
+    <main>
+        <div class="error-404-container">
+            <div class="error-404-icon">
+                <i class="bi bi-emoji-frown"></i>
+            </div>
+            <div class="error-404-title">¡Ups! Página no encontrada</div>
+            <div class="error-404-message">
+                La página que buscas no existe o fue movida.<br>
+                Si crees que esto es un error, por favor revisa la URL o vuelve al inicio.
+            </div>
+            <a th:href="@{/home}" class="error-404-btn"><i class="bi bi-house-door"></i> Volver al inicio</a>
+        </div>
+    </main>
+</body>
+</html> 

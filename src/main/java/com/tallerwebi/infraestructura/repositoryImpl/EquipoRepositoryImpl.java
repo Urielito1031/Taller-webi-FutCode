@@ -48,6 +48,15 @@ public class EquipoRepositoryImpl implements EquipoRepository{
       current.flush(); // ← fuerza escritura en la DB, genera el ID
    }
 
+   @Override
+   public Equipo getEquipoConFormacion(Long id) {
+      return getSession()
+              .createQuery(" SELECT e FROM Equipo e LEFT JOIN FETCH e.formacion WHERE e.id = :id ", Equipo.class)
+              .setParameter("id", id)
+              .uniqueResult();
+   }
+
+
 
    private Session getSession() {
       return session.getCurrentSession();

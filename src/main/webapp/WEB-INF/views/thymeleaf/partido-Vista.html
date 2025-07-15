@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulación de Partido - FutCode</title>
     <link rel="stylesheet" th:href="@{/css/partidoStyle.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
     .commentary-item.gol-favor {
         border-left: 6px solid #2ecc40;
@@ -86,7 +87,7 @@
         text-align: center;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         animation: slideIn 0.6s ease-out;
-        max-width: 500px;
+        max-width: 700px;
         width: 90%;
     }
 
@@ -177,13 +178,17 @@
         font-weight: bold;
         color: #00ffc3;
     }
-
-
-
     </style>
 </head>
 <body>
 <div class="container">
+    <!-- Botón de volver -->
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/home}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> VOLVER
+        </a>
+    </div>
+    
     <div class="header">
         <h1> SIMULACIÓN DE PARTIDO</h1>
     </div>
@@ -215,8 +220,8 @@
 
     <div class="controls">
         <button class="btn btn-primary" id="startBtn">INICIAR PARTIDO</button>
-        <button class="btn btn-secondary" id="pauseBtn">PAUSAR</button>
-        <button class="btn btn-secondary" id="resetBtn">REINICIAR</button>
+        <!-- <button class="btn btn-secondary" id="pauseBtn">PAUSAR</button> -->
+        <!-- <button class="btn btn-secondary" id="resetBtn">REINICIAR</button> -->
     </div>
 
     <div class="stats-section">
@@ -225,7 +230,7 @@
             <div class="stat-value" id="totalGoals">0</div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">Expulsados</div>
+            <div class="stat-title">Faltas</div>
             <div class="stat-value" id="totalFouls">0</div>
         </div>
         <div class="stat-card">
@@ -253,433 +258,404 @@
         <input type="hidden" id="equipoLocal" th:value="${equipoLocal}" />
         <input type="hidden" id="equipoVisitante" th:value="${equipoVisitante}" />
         <input type="hidden" id="monedasGanadas" th:value="${monedasGanadas}" />
+        <input type="hidden" id="golesLocalFinal" th:value="${golesLocal}" />
+        <input type="hidden" id="golesVisitanteFinal" th:value="${golesVisitante}" />
+        <input type="hidden" id="nombreLocalFinal" th:value="${equipoLocal.nombre}" />
+        <input type="hidden" id="nombreVisitanteFinal" th:value="${equipoVisitante.nombre}" />
+        <input type="hidden" id="equipoUsuarioFinal" th:value="${equipoUsuario}" />
     </div>
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
     </div>
 
-    <div class="navigation">
-        <a th:href="@{/home}" class="btn btn-home">
-            VOLVER AL INICIO
-        </a>
-    </div>
-
 
 </div>
 <script>
+// Elementos del DOM
+const matchTime = document.getElementById("matchTime");
+const statusIndicator = document.getElementById("statusIndicator");
+const team1Score = document.getElementById("team1Score");
+const team2Score = document.getElementById("team2Score");
+const totalGoals = document.getElementById("totalGoals");
+const totalFouls = document.getElementById("totalFouls");
+const totalCards = document.getElementById("totalCards");
+const totalInjuries = document.getElementById("totalInjuries");
+const commentaryList = document.getElementById("commentaryList");
+const startBtn = document.getElementById("startBtn");
+const omiteBtn = document.getElementById("omitebtn");
 
- // Elementos del DOM
- const matchTime = document.getElementById("matchTime");
- const statusIndicator = document.getElementById("statusIndicator");
- const team1Score = document.getElementById("team1Score");
- const team2Score = document.getElementById("team2Score");
- const totalGoals = document.getElementById("totalGoals");
- const totalFouls = document.getElementById("totalFouls");
- const totalCards = document.getElementById("totalCards");
- const totalInjuries = document.getElementById("totalInjuries");
- const commentaryList = document.getElementById("commentaryList");
- const startBtn = document.getElementById("startBtn");
- const pauseBtn = document.getElementById("pauseBtn");
- const resetBtn = document.getElementById("resetBtn");
- const omiteBtn = document.getElementById("omitebtn");
+// Obtener el equipo del usuario desde el backend
+const equipoLocal = document.getElementById("equipoLocal").value.trim().toLowerCase();
+const equipoVisitante = document.getElementById("equipoVisitante").value.trim().toLowerCase();
 
- // Obtener el equipo del usuario desde el backend
- const equipoLocal = document.getElementById("equipoLocal").value.trim().toLowerCase();
- const equipoVisitante = document.getElementById("equipoVisitante").value.trim().toLowerCase();
+// Determinar cuál es realmente el equipo del usuario
+// Necesitamos verificar si el usuario juega como local o visitante
+const equipoUsuario = document.getElementById("equipoUsuario").value.trim().toLowerCase();
 
- // Determinar cuál es realmente el equipo del usuario
- // Necesitamos verificar si el usuario juega como local o visitante
- const equipoUsuario = document.getElementById("equipoUsuario").value.trim().toLowerCase();
+// Determinar cuál es el rival del usuario
+let equipoRival;
+if (equipoUsuario === equipoLocal) {
+    equipoRival = equipoVisitante;
+} else if (equipoUsuario === equipoVisitante) {
+    equipoRival = equipoLocal;
+} else {
+    // Si no coincide con ninguno, asumir que es local
+    equipoRival = equipoVisitante;
+}
 
- // Determinar cuál es el rival del usuario
- let equipoRival;
- if (equipoUsuario === equipoLocal) {
-     equipoRival = equipoVisitante;
- } else if (equipoUsuario === equipoVisitante) {
-     equipoRival = equipoLocal;
- } else {
-     // Si no coincide con ninguno, asumir que es local
-     equipoRival = equipoVisitante;
- }
+// Obtener todas las narraciones enriquecidas
+const narraciones = Array.from(commentaryList.querySelectorAll(".commentary-item"))
+    .map(item => ({
+        minuto: parseInt(item.getAttribute("data-minuto")),
+        tipo: item.getAttribute("data-tipo"),
+        texto: item.querySelector("span:nth-child(2)").textContent,
+        node: item
+    }));
 
- // Obtener todas las narraciones enriquecidas
- const narraciones = Array.from(commentaryList.querySelectorAll(".commentary-item"))
-     .map(item => ({
-         minuto: parseInt(item.getAttribute("data-minuto")),
-         tipo: item.getAttribute("data-tipo"),
-         texto: item.querySelector("span:nth-child(2)").textContent,
-         node: item
-     }));
+narraciones.sort((a, b) => a.minuto - b.minuto);
 
- narraciones.sort((a, b) => a.minuto - b.minuto);
+// Estado
+let tiempo = 0;
+let partidoEnCurso = false;
+let partidoTerminado = false;
+let intervalo = null;
+let narracionIndex = 0;
+let velocidadNarracion = 1000;
+let omitirNarracion = false;
+let bonusMonedas = 500;
 
- // Estado
- let tiempo = 0;
- let partidoEnCurso = false;
- let partidoTerminado = false;
- let intervalo = null;
- let narracionIndex = 0;
- let velocidadNarracion = 1000;
- let omitirNarracion = false;
+let stats = {
+    goles: 0,
+    faltas: 0,
+    tarjetas: 0,
+    lesionados: 0
+};
 
- let stats = {
-     goles: 0,
-     faltas: 0,
-     tarjetas: 0,
-     lesionados: 0
- };
+// Variables para rastrear goles por equipo
+let golesLocal = 0;
+let golesVisitante = 0;
 
- // Variables para rastrear goles por equipo
- let golesLocal = 0;
- let golesVisitante = 0;
+function inicializarPartido() {
+    commentaryList.innerHTML = '';
+    narracionIndex = 0;
+    tiempo = 0;
+    stats = {goles: 0, faltas: 0, tarjetas: 0, lesionados: 0};
+    golesLocal = 0;
+    golesVisitante = 0;
+    actualizarEstadisticas();
+    actualizarMarcador();
+    matchTime.textContent = "0'";
+    statusIndicator.textContent = "LISTO";
+    statusIndicator.className = "status-indicator ready";
+    startBtn.disabled = false;
+    // pauseBtn.disabled = true; // Eliminado
+    // resetBtn.disabled = true; // Eliminado
+    
+    // Ocultar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'none';
+}
 
- function inicializarPartido() {
-     commentaryList.innerHTML = '';
-     narracionIndex = 0;
-     tiempo = 0;
-     stats = {goles: 0, faltas: 0, tarjetas: 0, lesionados: 0};
-     golesLocal = 0;
-     golesVisitante = 0;
-     actualizarEstadisticas();
-     actualizarMarcador();
-     matchTime.textContent = "0'";
-     statusIndicator.textContent = "LISTO";
-     statusIndicator.className = "status-indicator ready";
-     startBtn.disabled = false;
-     pauseBtn.disabled = true;
+function iniciarPartido() {
+    if (partidoEnCurso) return;
+    partidoEnCurso = true;
+    partidoTerminado = false;
+    statusIndicator.textContent = "EN JUEGO";
+    statusIndicator.className = "status-indicator playing";
+    startBtn.disabled = true;
+    // pauseBtn.disabled = false; // Eliminado
+    // resetBtn.disabled = true; // Eliminado
+    
+    // Mostrar mensaje de inicio del partido
+    const mensajeInicio = document.createElement('div');
+    mensajeInicio.className = 'commentary-item';
+    mensajeInicio.style.borderLeft = '6px solid #00ffc3';
+    mensajeInicio.style.background = '#1a3a2a';
+    mensajeInicio.style.color = '#00ffc3';
+    mensajeInicio.style.fontWeight = 'bold';
+    mensajeInicio.innerHTML =
+        `<span class="commentary-minute">0'</span>
+<span><strong>¡EL PARTIDO HA COMENZADO!</strong></span>`;
+    commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
+    mensajeInicio.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    // Mostrar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'inline-block';
+    
+    if (!intervalo) {
+        intervalo = setInterval(actualizarTiempo, velocidadNarracion);
+    }
+}
 
-     // Ocultar animación de puntos suspensivos
-     document.getElementById('loadingDots').style.display = 'none';
- }
+function pausarPartido() {
+    if (!partidoEnCurso) return;
+    partidoEnCurso = false;
+    statusIndicator.textContent = "PAUSADO";
+    statusIndicator.className = "status-indicator paused";
+    startBtn.disabled = false;
+    // pauseBtn.disabled = true; // Eliminado
+    // resetBtn.disabled = true; // Eliminado
+    clearInterval(intervalo);
+    intervalo = null;
+    
+    // Ocultar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'none';
+}
 
- let yaEmpezo = false;
+function reiniciarPartido() {
+    clearInterval(intervalo);
+    intervalo = null;
+    partidoEnCurso = false;
+    partidoTerminado = false;
+    inicializarPartido();
+    
+    // Ocultar animación de puntos suspensivos
+    document.getElementById('loadingDots').style.display = 'none';
+}
 
- function iniciarPartido() {
-     if (partidoEnCurso) return;
-     partidoEnCurso = true;
-     partidoTerminado = false;
-     statusIndicator.textContent = "EN JUEGO";
-     statusIndicator.className = "status-indicator playing";
-     startBtn.disabled = true;
-     pauseBtn.disabled = false;
-     if(!yaEmpezo) {
-         // Mostrar mensaje de inicio del partido
-         yaEmpezo = true;
-         const mensajeInicio = document.createElement('div');
-         mensajeInicio.className = 'commentary-item';
-         mensajeInicio.style.borderLeft = '6px solid #00ffc3';
-         mensajeInicio.style.background = '#1a3a2a';
-         mensajeInicio.style.color = '#00ffc3';
-         mensajeInicio.style.fontWeight = 'bold';
+function actualizarTiempo() {
+    if (!partidoEnCurso) return;
+    tiempo++;
+    matchTime.textContent = `${tiempo}'`;
+    // Mostrar todas las narraciones de este minuto
+    while (narracionIndex < narraciones.length && narraciones[narracionIndex].minuto === tiempo) {
+        mostrarNarracion(narraciones[narracionIndex]);
+        narracionIndex++;
+    }
+    // Solo terminar cuando llegue a los 90 minutos
+    if (tiempo >= 90) {
+        terminarPartido();
+    }
+}
 
-         mensajeInicio.innerHTML =
-             `<span class="commentary-minute">0'</span>
- <span><strong>¡EL PARTIDO HA COMENZADO!</strong></span>`;
-         commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
-         mensajeInicio.scrollIntoView({behavior: 'smooth', block: 'nearest'});
-     }
-     // Mostrar animación de puntos suspensivos
-     document.getElementById('loadingDots').style.display = 'inline-block';
+function mostrarNarracion(narracion) {
+    const nuevaNarracion = document.createElement('div');
+    nuevaNarracion.className = 'commentary-item';
 
-     if (!intervalo) {
-         intervalo = setInterval(actualizarTiempo, velocidadNarracion);
-     }
- }
+    // Lógica de color robusta y explícita para goles
+    const tipoEvento = narracion.tipo.toLowerCase();
+    const textoNarracion = narracion.texto.toLowerCase();
 
- function pausarPartido() {
-     if (!partidoEnCurso) return;
-     partidoEnCurso = false;
-     statusIndicator.textContent = "PAUSADO";
-     statusIndicator.className = "status-indicator paused";
-     startBtn.disabled = false;
-     pauseBtn.disabled = true;
-     clearInterval(intervalo);
-     intervalo = null;
+    if (tipoEvento.includes('gol')) {
+        // Verificar si el gol es del equipo del usuario
+        if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+            nuevaNarracion.classList.add('gol-favor');
+        } else if (textoNarracion.includes(equipoRival.toLowerCase())) {
+            nuevaNarracion.classList.add('gol-contra');
+        } else {
+            // Si no se puede determinar, por defecto gol en contra
+            nuevaNarracion.classList.add('gol-contra');
+        }
+    } else if (tipoEvento.includes('expulsion')) {
+        if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+            nuevaNarracion.classList.add('expulsion-propia');
+        } else {
+            nuevaNarracion.classList.add('expulsion-rival');
+        }
+    } else if (tipoEvento.includes('amarilla')) {
+        nuevaNarracion.classList.add('tarjeta-amarilla');
+    } else if (tipoEvento.includes('roja')) {
+        nuevaNarracion.classList.add('tarjeta-roja');
+    } else if (tipoEvento.includes('lesion')) {
+        nuevaNarracion.classList.add('lesion');
+    }
 
-     // Ocultar animación de puntos suspensivos
-     document.getElementById('loadingDots').style.display = 'none';
- }
+    nuevaNarracion.innerHTML = `<span class="commentary-minute">${narracion.minuto}'</span><span>${narracion.texto}</span>`;
+    commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);
+    nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    procesarNarracion(narracion.tipo, narracion.texto);
+    actualizarEstadisticas();
+}
 
- function reiniciarPartido() {
-     clearInterval(intervalo);
-     intervalo = null;
-     partidoEnCurso = false;
-     partidoTerminado = false;
-     inicializarPartido();
-     yaEmpezo = false;
-     omitirNarracion = false;
+function procesarNarracion(tipo, texto) {
+    switch(tipo) {
+        case 'GOL': 
+            stats.goles++; 
+            // Determinar qué equipo marcó basándose en el texto de la narración
+            const equipoLocal = document.getElementById('team1Name').textContent;
+            const equipoVisitante = document.getElementById('team2Name').textContent;
+            
+            if (texto.includes(equipoLocal)) {
+                golesLocal++;
+            } else if (texto.includes(equipoVisitante)) {
+                golesVisitante++;
+            } else {
+                // Si no se puede determinar, alternar
+                if (stats.goles % 2 === 1) {
+                    golesLocal++;
+                } else {
+                    golesVisitante++;
+                }
+            }
+            actualizarMarcador();
+            break;
+        case 'TARJETA_AMARILLA':
+        case 'TARJETA_ROJA':
+        case 'EXPULSION': stats.tarjetas++; break;
+        case 'LESION': stats.lesionados++; break;
+        case 'GENERAL': break;
+        default: break;
+    }
+}
 
-     // Ocultar animación de puntos suspensivos
-     document.getElementById('loadingDots').style.display = 'none';
- }
+function actualizarMarcador() {
+    team1Score.textContent = golesLocal;
+    team2Score.textContent = golesVisitante;
+}
 
- function actualizarTiempo() {
-     if (!partidoEnCurso) return;
-     tiempo++;
-     matchTime.textContent = `${tiempo}'`;
-     // Mostrar todas las narraciones de este minuto
+function actualizarEstadisticas() {
+    totalGoals.textContent = stats.goles;
+    totalFouls.textContent = stats.faltas;
+    totalCards.textContent = stats.tarjetas;
+    totalInjuries.textContent = stats.lesionados;
+}
 
-     if (omitirNarracion) {
-         // Mostrar todas las narraciones restantes de golpe
-         while (narracionIndex < narraciones.length) {
-             mostrarNarracion(narraciones[narracionIndex]);
-             narracionIndex++;
-         }
-         tiempo = 90; // Forzamos el final del partido
-         terminarPartido();
-         return;
-     }
+function terminarPartido(motivoOmitir = false) {
+    partidoEnCurso = false;
+    partidoTerminado = true;
+    clearInterval(intervalo);
+    intervalo = null;
+    statusIndicator.textContent = "FINALIZADO";
+    statusIndicator.className = "status-indicator finished";
+    startBtn.disabled = true;
+    document.getElementById('loadingDots').style.display = 'none';
+    matchTime.textContent = "90'";
 
-// Si no se omite, mostrar las narraciones normales del minuto actual
-     while (narracionIndex < narraciones.length && narraciones[narracionIndex].minuto === tiempo) {
-         mostrarNarracion(narraciones[narracionIndex]);
-         narracionIndex++;
-     }
+    if (!motivoOmitir) {
+        const narracionFinal = document.createElement('div');
+        narracionFinal.className = 'commentary-item';
+        narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
+        commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
+        narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-     // while (narracionIndex < narraciones.length && narraciones[narracionIndex].minuto === tiempo) {
-     //     mostrarNarracion(narraciones[narracionIndex]);
-     //     narracionIndex++;
-     // }
-     // Solo terminar cuando llegue a los 90 minutos
-     if (tiempo >= 90) {
-         terminarPartido();
-     }
- }
+    // Calcular resultado y goles
+    let golesUsuario = 0, golesRival = 0, resultado = '', color = '', monedasGanadas = parseInt(document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0), bonus = 0;
+    // --- NUEVO: Extraer goles hechos y recibidos de manera robusta ---
+    let golesHechos = [], golesRecibidos = [];
+    const nombreLocal = document.getElementById('nombreLocalFinal').value.trim();
+    const nombreVisitante = document.getElementById('nombreVisitanteFinal').value.trim();
+    const equipoUsuarioNombre = document.getElementById('equipoUsuarioFinal').value.trim().toLowerCase();
+    let esLocal = equipoUsuarioNombre === nombreLocal.toLowerCase();
+    const miEquipo = esLocal ? nombreLocal : nombreVisitante;
+    const rivalEquipo = esLocal ? nombreVisitante : nombreLocal;
 
- function mostrarNarracion(narracion) {
-     const nuevaNarracion = document.createElement('div');
-     nuevaNarracion.className = 'commentary-item';
+    // Recorrer todos los .commentary-item con data-tipo="GOL"
+    Array.from(commentaryList.querySelectorAll('.commentary-item')).forEach(item => {
+        const tipo = item.getAttribute('data-tipo');
+        if (tipo && tipo.toUpperCase() === 'GOL') {
+            const minuto = item.getAttribute('data-minuto');
+            const texto = item.textContent.trim();
+            // Buscar el nombre del jugador (primeras dos palabras después del minuto)
+            const match = texto.match(/\d+'\s*([A-Za-záéíóúÁÉÍÓÚñÑ]+\s+[A-Za-záéíóúÁÉÍÓÚñÑ]+)/);
+            let nombre = match ? match[1].trim() : '';
+            // Determinar si es gol propio o rival
+            if (texto.toLowerCase().includes(miEquipo.toLowerCase())) {
+                golesHechos.push(`${minuto}' ${nombre}`);
+            } else if (texto.toLowerCase().includes(rivalEquipo.toLowerCase())) {
+                golesRecibidos.push(`${minuto}' ${nombre}`);
+            }
+        }
+    });
 
-     // Lógica de color robusta y explícita para goles
-     const tipoEvento = narracion.tipo.toLowerCase();
-     const textoNarracion = narracion.texto.toLowerCase();
+    // Obtener goles reales del backend
+    const golesLocal = parseInt(document.getElementById('golesLocalFinal').value);
+    const golesVisitante = parseInt(document.getElementById('golesVisitanteFinal').value);
+    golesUsuario = esLocal ? golesLocal : golesVisitante;
+    golesRival = esLocal ? golesVisitante : golesLocal;
 
-     if (tipoEvento.includes('gol')) {
-         // Verificar si el gol es del equipo del usuario
-         if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
-             nuevaNarracion.classList.add('gol-favor');
-         } else if (textoNarracion.includes(equipoRival.toLowerCase())) {
-             nuevaNarracion.classList.add('gol-contra');
-         } else {
-             // Si no se puede determinar, por defecto gol en contra
-             nuevaNarracion.classList.add('gol-contra');
-         }
-     } else if (tipoEvento.includes('expulsion')) {
-         if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
-             nuevaNarracion.classList.add('expulsion-propia');
-         } else {
-             nuevaNarracion.classList.add('expulsion-rival');
-         }
-     } else if (tipoEvento.includes('amarilla')) {
-         nuevaNarracion.classList.add('tarjeta-amarilla');
-     } else if (tipoEvento.includes('roja')) {
-         nuevaNarracion.classList.add('tarjeta-roja');
-     } else if (tipoEvento.includes('lesion')) {
-         nuevaNarracion.classList.add('lesion');
-     }
+    if (golesUsuario > golesRival) {
+        resultado = '¡VICTORIA!';
+        color = '#ffd700';
+    } else if (golesUsuario === golesRival) {
+        resultado = 'EMPATE';
+        color = '#b0b0b0';
+    } else {
+        resultado = 'DERROTA';
+        color = '#e74c3c';
+    }
 
-     nuevaNarracion.innerHTML = `<span class="commentary-minute">${narracion.minuto}'</span><span>${narracion.texto}</span>`;
-     commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);
-     nuevaNarracion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-     procesarNarracion(narracion.tipo, narracion.texto);
-     actualizarEstadisticas();
- }
+    if (!motivoOmitir) {
+        monedasGanadas += bonusMonedas;
+        bonus = bonusMonedas;
+    }
 
- function procesarNarracion(tipo, texto) {
-     switch(tipo) {
-         case 'GOL':
-             stats.goles++;
-             // Determinar qué equipo marcó basándose en el texto de la narración
-             const equipoLocal = document.getElementById('team1Name').textContent;
-             const equipoVisitante = document.getElementById('team2Name').textContent;
+    mostrarPopupFinal(resultado, color, monedasGanadas, bonus, golesHechos, golesRecibidos, motivoOmitir);
+}
 
-             if (texto.includes(equipoLocal)) {
-                 golesLocal++;
-             } else if (texto.includes(equipoVisitante)) {
-                 golesVisitante++;
-             } else {
-                 // Si no se puede determinar, alternar
-                 if (stats.goles % 2 === 1) {
-                     golesLocal++;
-                 } else {
-                     golesVisitante++;
-                 }
-             }
-             actualizarMarcador();
-             break;
-         case 'TARJETA_AMARILLA': stats.tarjetas++; break;
-         case 'TARJETA_ROJA': stats.tarjetas++; stats.faltas++; break;
-         case 'EXPULSION': stats.faltas++; break;
-         case 'LESION': stats.lesionados++; break;
-         case 'GENERAL': break;
-         default: break;
-     }
- }
+function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesRecibidos, omitido) {
+    const modal = document.createElement('div');
+    modal.className = 'victory-modal';
 
- function actualizarMarcador() {
-     team1Score.textContent = golesLocal;
-     team2Score.textContent = golesVisitante;
- }
+    // Obtener datos reales del backend SIEMPRE
+    const golesLocal = parseInt(document.getElementById('golesLocalFinal').value);
+    const golesVisitante = parseInt(document.getElementById('golesVisitanteFinal').value);
+    const nombreLocal = document.getElementById('nombreLocalFinal').value;
+    const nombreVisitante = document.getElementById('nombreVisitanteFinal').value;
+    const equipoUsuarioNombre = document.getElementById('equipoUsuarioFinal').value.trim().toLowerCase();
+    let esLocal = equipoUsuarioNombre === nombreLocal.trim().toLowerCase();
+    let golesUsuario = esLocal ? golesLocal : golesVisitante;
+    let golesRival = esLocal ? golesVisitante : golesLocal;
+    let nombreRival = esLocal ? nombreVisitante : nombreLocal;
+    let nombreUsuario = esLocal ? nombreLocal : nombreVisitante;
 
- function actualizarEstadisticas() {
-     totalGoals.textContent = stats.goles;
-     totalFouls.textContent = stats.faltas;
-     totalCards.textContent = stats.tarjetas;
-     totalInjuries.textContent = stats.lesionados;
- }
+    // Determinar resultado real
+    let resultadoTexto = '';
+    let colorReal = '';
+    if (golesUsuario > golesRival) {
+        resultadoTexto = `¡Ganaste ${golesUsuario}-${golesRival} a ${nombreRival}!`;
+        colorReal = '#ffd700';
+    } else if (golesUsuario < golesRival) {
+        resultadoTexto = `Perdiste ${golesUsuario}-${golesRival} contra ${nombreRival}`;
+        colorReal = '#e74c3c';
+    } else {
+        resultadoTexto = `Empataste ${golesUsuario}-${golesRival} con ${nombreRival}`;
+        colorReal = '#b0b0b0';
+    }
 
- function terminarPartido() {
-     partidoEnCurso = false;
-     partidoTerminado = true;
-     clearInterval(intervalo);
-     intervalo = null;
-     statusIndicator.textContent = "FINALIZADO";
-     statusIndicator.className = "status-indicator finished";
-     startBtn.disabled = true;
-     pauseBtn.disabled = true;
+    // Extraer solo los goles: minuto y nombre completo
+    function extraerGoleadores(arr) {
+        return arr.map(texto => {
+            // Buscar minuto y nombre (no narración)
+            // Ejemplo de narración: 59' Uriel Gómez presiona fuerte y busca el gol
+            const match = texto.match(/(\d+)'\s+([A-Za-záéíóúÁÉÍÓÚñÑ ]+)/);
+            if (match) {
+                const minuto = match[1];
+                let nombre = match[2].trim();
+                // Solo el primer nombre y apellido (hasta el primer verbo o palabra no nombre)
+                nombre = nombre.split(' ').slice(0,2).join(' ');
+                return `<b>${minuto}'</b> ${nombre}`;
+            }
+            return '';
+        }).filter(Boolean).join('<br>');
+    }
+    let golesHtml = '';
+    if (golesHechos.length > 0) {
+        golesHtml += `<div style=\"margin-top: 10px; color: #00ffc3; font-weight: bold;\">Tus goles:</div><div style='color:#fff;'>${extraerGoleadores(golesHechos)}</div>`;
+    }
+    if (golesRecibidos.length > 0) {
+        golesHtml += `<div style=\"margin-top: 10px; color: #e74c3c; font-weight: bold;\">Goles rivales:</div><div style='color:#fff;'>${extraerGoleadores(golesRecibidos)}</div>`;
+    }
+    modal.innerHTML = `
+        <div class=\"victory-card\" style=\"border-color: ${colorReal}; background: linear-gradient(135deg, #2d2d2d 0%, ${colorReal}33 100%);\">
+            <div class=\"victory-title\" style=\"color: ${colorReal};\">${resultadoTexto}</div>
+            <div style=\"margin-top: 20px; font-size: 1.3rem; color: ${colorReal}; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;\">
+                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> 
+                ${golesUsuario < golesRival ? '<span style=\"color:#e74c3c;\">No ganaste monedas</span>' : `+${monedas} monedas`}
+            </div>
+            ${bonus > 0 && golesUsuario >= golesRival ? `<div style=\"color:#00ffc3; font-size:1.1rem; margin-top:10px; font-weight:bold;\">+${bonus} bonus por narración completa!</div>` : ''}
+            <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px;\">OK</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.getElementById('cerrarPopupBtn').addEventListener('click', function() {
+        modal.remove();
+    });
+}
 
-     // Ocultar animación de puntos suspensivos
-     document.getElementById('loadingDots').style.display = 'none';
+// Event listeners
+startBtn.addEventListener('click', iniciarPartido);
+omiteBtn.addEventListener('click', () => terminarPartido(true));
 
-     // Asegurar que el tiempo muestre 90' al final
-     matchTime.textContent = "90'";
-
-     // Mantener el marcador actual (no lo cambiamos)
-     // El marcador ya está actualizado con los goles que ocurrieron durante la simulación
-
-     const narracionFinal = document.createElement('div');
-     narracionFinal.className = 'commentary-item';
-     narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
-     commentaryList.insertBefore(narracionFinal, commentaryList.firstChild);
-     narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-     // Festejo si ganaste (local o visitante)
-     let golesUsuario = 0, golesRival = 0;
-     if (document.getElementById('team1Name').textContent.trim().toLowerCase() === equipoUsuario) {
-         golesUsuario = golesLocal;
-         golesRival = golesVisitante;
-     } else {
-         golesUsuario = golesVisitante;
-         golesRival = golesLocal;
-     }
-     if (golesUsuario > golesRival) {
-         mostrarFestejoVictoria();
-     }
-
-     else if(golesUsuario === golesRival){
-         mostrarFestejoEmpate();
-     }
-
-     else {
-         mostrarFestejoDerrota();
-     }
- }
-
- function mostrarFestejoEmpate() {
-
-     const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
-     const victoryModal = document.createElement('div');
-     victoryModal.className = 'victory-modal';
-     victoryModal.innerHTML = `
-         <div class="victory-card">
-             <div class="victory-title">¡EMPATE!</div>
-             <div class="victory-subtitle">Has empatado el partido</div>
-             <div style="margin-top: 20px; font-size: 1.3rem; color: #ff8c00; font-weight: bold;">
-                 +${monedasGanadas} monedas
-             </div>
-         </div>
-     `;
-     document.body.appendChild(victoryModal);
-
-     setTimeout(() => {
-         victoryModal.remove();
-     }, 4000);
- }
-
- function mostrarFestejoDerrota() {
-
-     const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
-     const victoryModal = document.createElement('div');
-     victoryModal.className = 'victory-modal';
-     victoryModal.innerHTML = `
-         <div class="victory-card">
-             <div class="victory-title">¡DERROTA!</div>
-             <div class="victory-subtitle">Has perdido el partido</div>
-             <div style="margin-top: 20px; font-size: 1.3rem; color: #ff1500; font-weight: bold;">
-                 +${monedasGanadas} monedas
-             </div>
-         </div>
-     `;
-     document.body.appendChild(victoryModal);
-
-     setTimeout(() => {
-         victoryModal.remove();
-     }, 4000);
- }
-
-
- function mostrarFestejoVictoria() {
-     //  modal de victoria
-     const monedasGanadas = document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0;
-     const victoryModal = document.createElement('div');
-     victoryModal.className = 'victory-modal';
-     victoryModal.innerHTML = `
-         <div class="victory-card">
-             <div class="victory-title">¡VICTORIA!</div>
-             <div class="victory-subtitle">¡Felicitaciones! Has ganado el partido</div>
-             <div style="margin-top: 20px; font-size: 1.3rem; color: #ddff00; font-weight: bold;">
-                 +${monedasGanadas} monedas
-             </div>
-         </div>
-     `;
-     document.body.appendChild(victoryModal);
-
-     // Confeti
-     for (let i = 0; i < 100; i++) {
-         setTimeout(() => {
-             const confeti = document.createElement('div');
-             confeti.style.position = "fixed";
-             confeti.style.left = Math.random() * 100 + "vw";
-             confeti.style.top = "-20px";
-             confeti.style.width = Math.random() * 8 + 4 + "px";
-             confeti.style.height = Math.random() * 8 + 4 + "px";
-             confeti.style.background = ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"][Math.floor(Math.random()*6)];
-             confeti.style.borderRadius = "50%";
-             confeti.style.opacity = 0.8;
-             confeti.style.zIndex = 9999;
-             confeti.style.transform = `rotate(${Math.random()*360}deg)`;
-
-             // Animación natural de caída
-             confeti.style.transition = `top ${Math.random() * 2 + 2}s ease-in, left ${Math.random() * 1 + 0.5}s ease-in-out`;
-             document.body.appendChild(confeti);
-
-             setTimeout(() => {
-                 confeti.style.top = "100vh";
-                 confeti.style.left = (parseFloat(confeti.style.left) + (Math.random() - 0.5) * 100) + "vw";
-             }, 10);
-
-             setTimeout(() => {
-                 confeti.remove();
-             }, 4000);
-         }, i * 50);
-     }
-
-     setTimeout(() => {
-         victoryModal.remove();
-     }, 4000);
- }
-
- startBtn.addEventListener("click", iniciarPartido);
- pauseBtn.addEventListener("click", pausarPartido);
- resetBtn.addEventListener("click", reiniciarPartido);
- omiteBtn.addEventListener("click", () => {
-     omitirNarracion = true;
- });
-
- document.addEventListener('DOMContentLoaded', function() {
-     inicializarPartido();
- });
-
+// Inicializar el partido al cargar la página
+inicializarPartido();
 </script>
-</body>
-</html>

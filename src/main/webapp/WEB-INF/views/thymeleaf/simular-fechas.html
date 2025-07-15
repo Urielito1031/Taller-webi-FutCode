@@ -706,17 +706,52 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Mostrar el popup si hay resumenTorneo
-    var popup = document.getElementById('popup-simulacion-torneo');
+    let popup = document.getElementById('popup-simulacion-torneo');
     if (popup) {
         popup.style.display = 'flex';
         document.body.style.overflow = 'hidden'; // Evita scroll de fondo
-        var btnCerrar = document.getElementById('cerrarPopupSimulacion');
+        let btnCerrar = document.getElementById('cerrarPopupSimulacion');
         btnCerrar.addEventListener('click', function() {
             popup.style.display = 'none';
             document.body.style.overflow = '';
         });
     }
 });
+</script>
+
+<!-- Modal de error para mensajes como falta de monedas -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" th:if="${mensajeError}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--secondary-bg, #1b263b); color: var(--danger-color, #dc3545); border-radius: 18px; border: 2px solid var(--danger-color, #dc3545);">
+      <div class="modal-header" style="border-bottom: none;">
+        <h5 class="modal-title" id="errorModalLabel" style="color: var(--danger-color, #dc3545); font-weight: bold;"><i class="fas fa-exclamation-triangle"></i> Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" style="filter: invert(1);"></button>
+      </div>
+      <div class="modal-body" style="font-size: 1.15rem; text-align: center;">
+        <span th:text="${mensajeError}"></span>
+      </div>
+      <div class="modal-footer" style="border-top: none; justify-content: center;">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #00ffc3, #00bfff); color: #0d1b2a; border-radius: 25px; font-weight: bold; padding: 8px 32px;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    /* Mostrar el modal de error si existe mensajeError y Bootstrap está cargado */
+    /* Usar la sintaxis correcta para Thymeleaf inline JS */
+    /* Solo mostrar si mensajeError no es null */
+    /* Evitar errores de sintaxis JS */
+    /* El valor será true o false */
+    let showErrorModal = /*[[${mensajeError != null}]]*/ false;
+    if (showErrorModal && bootstrap) {
+        document.addEventListener('DOMContentLoaded', function() {
+            let errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+            errorModal.show();
+        });
+    }
+/*]]>*/
 </script>
 </body>
 </html>

@@ -115,7 +115,7 @@
 </main>
 
 <!-- Sección de Partidos Únicos -->
-<main class="contenedor-principal-torneos">
+<main class="contenedor-principal-torneos" th:if="${torneosUnicos != null and !torneosUnicos.isEmpty()}">
     <h1>Partidos Únicos</h1>
     <div class="contenedores row">
         <section class="contenedor-torneo col-12 col-md-6 col-lg-4 mb-4" th:each="torneo : ${torneosUnicos}">

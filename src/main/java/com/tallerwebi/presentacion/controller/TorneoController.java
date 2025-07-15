@@ -105,6 +105,7 @@ public class TorneoController {
          }
 
          model.addAttribute("torneos", torneosUnidos);
+         model.addAttribute("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(usuarioId).size());
          return "vista-mis-torneos";
       } catch (Exception e) {
          model.addAttribute("error", "Error al cargar torneos: " + e.getMessage());

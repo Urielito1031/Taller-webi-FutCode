@@ -19,9 +19,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class EquipoTorneoServiceImpl implements EquipoTorneoService {
-   public static final int CAPACIDAD_MAXIMA_TORNEO_LIGA = 16;
-   public static final int CAPACIDAD_MAXIMA_TORNEO_COPA = 32;
-
    private final EquipoTorneoRepository repository;
 
    private final TorneoRepository torneoRepository;
@@ -57,10 +54,21 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
          throw new IllegalArgumentException("El equipo ya se encuentra unido al torneo");
       }
 
-      repository.unirEquipoATorneo(torneoId, equipoId); // <-- PRIMERO UNIR
-
       Torneo torneo = torneoRepository.getById(torneoId);
-      verificarFormatoTorneoParaValidarCapacidadMaxima(torneoId, torneo); // <-- LUEGO VERIFICAR Y GENERAR FIXTURE
+      Integer capacidadMaxima = torneo.getCapacidadMaxima();
+      if (capacidadMaxima == null) {
+         throw new IllegalArgumentException("El torneo no tiene definida una capacidad máxima");
+      }
+      int cantidadDeEquipos = repository.getAllByTorneoId(torneoId).size();
+      if (cantidadDeEquipos >= capacidadMaxima) {
+         throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
+      }
+
+      // Si hay cupo, unir el equipo
+      repository.unirEquipoATorneo(torneoId, equipoId);
+
+      // Luego, verificar si hay que cambiar estado/generar fixture
+      verificarCapacidadMaximaYActualizarEstado(torneoId, torneo);
    }
 
    private boolean validarEquipoNoUnidoATorneo(Long torneoId, Long equipoId) {
@@ -69,27 +77,20 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
             .noneMatch(equipoTorneo -> equipoTorneo.getEquipo().getId().equals(equipoId));
    }
 
-   private void verificarFormatoTorneoParaValidarCapacidadMaxima(Long torneoId, Torneo torneo) {
+   private void verificarCapacidadMaximaYActualizarEstado(Long torneoId, Torneo torneo) {
       int cantidadDeEquipos = repository.getAllByTorneoId(torneoId).size();
-
-      if (torneo.getFormatoTorneo().getTipo().equals(TipoFormato.LIGA)) {
-         if (cantidadDeEquipos == CAPACIDAD_MAXIMA_TORNEO_LIGA) {
-            // Cambiar estado del torneo de ABIERTO a EN_CURSO
-            torneo.setEstado(EstadoTorneoEnum.EN_CURSO);
-            torneoRepository.save(torneo);
-
-            this.torneoService.crearFixtureConLasFechas(torneoId);
-         }
-
-         if (cantidadDeEquipos > CAPACIDAD_MAXIMA_TORNEO_LIGA) {
-            throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
-         }
+      Integer capacidadMaxima = torneo.getCapacidadMaxima();
+      if (capacidadMaxima == null) {
+         throw new IllegalArgumentException("El torneo no tiene definida una capacidad máxima");
       }
-
-      if (torneo.getFormatoTorneo().getTipo().equals(TipoFormato.COPA)) {
-         if (repository.getAllByTorneoId(torneoId).size() >= CAPACIDAD_MAXIMA_TORNEO_COPA) {
-            throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
-         }
+      if (cantidadDeEquipos == capacidadMaxima) {
+         // Cambiar estado del torneo a EN_CURSO y generar fixture
+         torneo.setEstado(EstadoTorneoEnum.EN_CURSO);
+         torneoRepository.save(torneo);
+         this.torneoService.crearFixtureConLasFechas(torneoId);
+      }
+      if (cantidadDeEquipos > capacidadMaxima) {
+         throw new IllegalArgumentException("El torneo ya tiene el maximo de equipos permitidos");
       }
    }
 

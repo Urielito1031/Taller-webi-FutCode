@@ -18,7 +18,7 @@ public class TorneoDTO {
    private FormatoTorneoDTO formatoTorneo;
    private EstadoTorneoEnum estado;
    private Double premioMonedas;
-
+   private Integer capacidadMaxima;
 
    public TorneoDTO() {
       this.estado = EstadoTorneoEnum.ABIERTO;

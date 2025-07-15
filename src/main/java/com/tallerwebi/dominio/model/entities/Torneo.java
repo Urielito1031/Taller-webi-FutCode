@@ -38,6 +38,9 @@ public class Torneo {
    @Column(name = "premio_monedas")
    private Double premioMonedas;
 
+   @Column(name = "capacidad_maxima")
+   private Integer capacidadMaxima;
+
    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinColumn(name = "torneo_liga_id", unique = true, nullable = true)
    private TorneoLiga torneoLiga;
@@ -64,6 +67,7 @@ public class Torneo {
       dto.setNombre(this.getNombre());
       dto.setEstado(this.getEstado());
       dto.setDescripcion(this.getDescripcion());
+      dto.setCapacidadMaxima(this.getCapacidadMaxima());
 
       FormatoTorneo formato = this.getFormatoTorneo();
       if (formato != null) {

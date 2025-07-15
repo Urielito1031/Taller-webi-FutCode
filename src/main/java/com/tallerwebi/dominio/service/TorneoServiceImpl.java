@@ -189,6 +189,7 @@ public class TorneoServiceImpl implements TorneoService {
       torneo.setPremioMonedas(crearTorneoDTO.getMonedasPrimerLugar().doubleValue());
       torneo.setEstado(EstadoTorneoEnum.ABIERTO);
       torneo.setNombre(crearTorneoDTO.getNombre());
+      torneo.setCapacidadMaxima(crearTorneoDTO.getCantidadEquipos());
       // Asignar formato LIGA por defecto
       FormatoTorneo formato = formatoTorneoRepository.findByTipo(TipoFormato.LIGA);
       if (formato == null) {

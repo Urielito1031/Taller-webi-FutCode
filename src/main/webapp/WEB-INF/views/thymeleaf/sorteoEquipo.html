@@ -49,5 +49,14 @@
     <button type="submit">Continuar</button>
   </form>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.contenedor-jugador');
+    cards.forEach((card, i) => {
+      card.style.animationDelay = `${i * 0.12}s`;
+    });
+  });
+</script>
 </body>
 </html>

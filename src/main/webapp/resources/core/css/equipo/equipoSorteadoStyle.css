@@ -56,6 +56,19 @@ h4 {
     text-align: center;
 }
 
+/* Fade-in animation para las cards de jugadores */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.contenedor-jugador {
+    opacity: 0;
+    animation: fadeIn 0.7s ease forwards;
+}
+
+/* El delay se aplicará por JS para cada card */
+
 .contenedor-jugador {
     width: 180px;
     height: 250px;
@@ -135,6 +148,51 @@ button{
 button:hover {
     background-color: #00cfa6dd;
     box-shadow: #00cfa6dd 0 0 10px;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        padding: 1.5rem;
+    }
+    .contenedor-jugador {
+        width: 150px;
+        height: 210px;
+    }
+}
+
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        padding: 1rem;
+    }
+    .contenedor-jugador {
+        width: 120px;
+        height: 170px;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0.5rem;
+    }
+    .contenedor-jugador {
+        width: 100px;
+        height: 130px;
+        margin: 5px;
+        padding: 0.5rem;
+    }
+    .overlay {
+        font-size: 11px;
+        padding: 7px;
+    }
+    button {
+        width: 100%;
+        font-size: 16px;
+        height: 38px;
+    }
 }
 
 

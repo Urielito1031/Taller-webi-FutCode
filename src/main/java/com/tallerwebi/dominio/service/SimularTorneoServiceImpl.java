@@ -66,7 +66,8 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             // Agrego esta validacion porque no tengo los jugadores cargados en la base de
             // datos
             if (partido.getEquipoLocal().hasJugadores() && partido.getEquipoVisitante().hasJugadores()) {
-                if (partido.getEquipoLocal().getRatingEquipoGeneral() > partido.getEquipoVisitante().getRatingEquipoGeneral()) {
+                if (partido.getEquipoLocal().getRatingEquipoGeneral() > partido.getEquipoVisitante()
+                        .getRatingEquipoGeneral()) {
                     golesLocal++;
                 } else if (partido.getEquipoLocal().getRatingEquipoGeneral() < partido.getEquipoVisitante()
                         .getRatingEquipoGeneral()) {
@@ -199,12 +200,10 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
 
         // Verificar si todas las fechas están simuladas para cambiar estado a
         // FINALIZADO
-        Torneo torneoActualizado = torneoRepository.obtenerTorneoConFechas(torneoId);
-        boolean todasLasFechasSimuladas = torneoActualizado.getFechas().stream().allMatch(Fecha::isSimulada);
-
+        boolean todasLasFechasSimuladas = torneo.getFechas().stream().allMatch(Fecha::isSimulada);
         if (todasLasFechasSimuladas) {
-            torneoActualizado.setEstado(com.tallerwebi.dominio.model.enums.EstadoTorneoEnum.FINALIZADO);
-            torneoRepository.save(torneoActualizado);
+            torneo.setEstado(com.tallerwebi.dominio.model.enums.EstadoTorneoEnum.FINALIZADO);
+            torneoRepository.save(torneo);
         }
     }
 

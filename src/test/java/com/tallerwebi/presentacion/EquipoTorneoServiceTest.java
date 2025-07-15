@@ -45,7 +45,8 @@ public class EquipoTorneoServiceTest {
    @BeforeEach
    public void setUp() {
       MockitoAnnotations.openMocks(this);
-      equipoTorneoService = new EquipoTorneoServiceImpl(equipoTorneoRepository, torneoRepository, equipoRepository, torneoService);
+      equipoTorneoService = new EquipoTorneoServiceImpl(equipoTorneoRepository, torneoRepository, equipoRepository,
+            torneoService);
    }
 
    @Test
@@ -60,6 +61,7 @@ public class EquipoTorneoServiceTest {
       FormatoTorneo formato = new FormatoTorneo();
       formato.setTipo(TipoFormato.LIGA);
       torneo.setFormatoTorneo(formato);
+      torneo.setCapacidadMaxima(20); // Para test de capacidad máxima
       EquipoTorneo equipoTorneo = new EquipoTorneo();
       equipoTorneo.setEquipo(equipo);
       equipoTorneo.setTorneo(torneo);
@@ -74,6 +76,7 @@ public class EquipoTorneoServiceTest {
       assertThat(resultado.size(), is(1));
       verify(equipoTorneoRepository, times(1)).getAllByTorneoId(torneoId);
    }
+
    @Test
    public void DadoUnTorneoInexistenteDebeRetornarListaVacia() {
       // Preparación
@@ -98,13 +101,13 @@ public class EquipoTorneoServiceTest {
       FormatoTorneo formato = new FormatoTorneo();
       formato.setTipo(TipoFormato.LIGA);
       torneo.setFormatoTorneo(formato);
+      torneo.setCapacidadMaxima(20); // Para test de capacidad máxima
       Equipo equipo = new Equipo();
       equipo.setId(equipoId);
       when(torneoRepository.getById(torneoId)).thenReturn(torneo);
 
       when(torneoRepository.existsById(torneoId)).thenReturn(true);
       when(equipoRepository.existsById(equipoId)).thenReturn(true);
-
 
       when(equipoTorneoRepository.getAllByTorneoId(torneoId)).thenReturn(new ArrayList<>());
 
@@ -113,7 +116,7 @@ public class EquipoTorneoServiceTest {
 
       // Validación
       verify(torneoRepository, times(1)).getById(torneoId);
-      verify(equipoTorneoRepository, times(2)).getAllByTorneoId(torneoId);
+      verify(equipoTorneoRepository, times(3)).getAllByTorneoId(torneoId);
       verify(equipoTorneoRepository, times(1)).unirEquipoATorneo(equipoId, torneoId);
    }
 
@@ -158,6 +161,7 @@ public class EquipoTorneoServiceTest {
       FormatoTorneo formato = new FormatoTorneo();
       formato.setTipo(TipoFormato.LIGA);
       torneo.setFormatoTorneo(formato);
+      torneo.setCapacidadMaxima(20); // Para test de capacidad máxima
       Equipo equipo = new Equipo();
       equipo.setId(equipoId);
       List<EquipoTorneo> equiposTorneo = new ArrayList<>();
@@ -187,6 +191,7 @@ public class EquipoTorneoServiceTest {
       FormatoTorneo formato = new FormatoTorneo();
       formato.setTipo(TipoFormato.LIGA);
       torneo.setFormatoTorneo(formato);
+      torneo.setCapacidadMaxima(20); // Para test de capacidad máxima
       List<EquipoTorneo> equiposTorneo = new ArrayList<>();
       for (int i = 2; i <= 21; i++) {
          Equipo equipo = new Equipo();
@@ -209,6 +214,7 @@ public class EquipoTorneoServiceTest {
 
       }
    }
+
    @Test
    public void DadoTorneoCopaConCapacidadMaximaExcedidaDebeLanzarExcepcionAlUnirse() {
       // Preparación
@@ -219,6 +225,7 @@ public class EquipoTorneoServiceTest {
       FormatoTorneo formato = new FormatoTorneo();
       formato.setTipo(TipoFormato.COPA);
       torneo.setFormatoTorneo(formato);
+      torneo.setCapacidadMaxima(32); // Para test de capacidad máxima
       List<EquipoTorneo> equiposTorneo = new ArrayList<>();
       for (int i = 2; i <= 33; i++) {
          Equipo equipo = new Equipo();

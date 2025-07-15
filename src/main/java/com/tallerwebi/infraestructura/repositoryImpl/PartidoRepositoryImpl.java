@@ -24,10 +24,11 @@ public class PartidoRepositoryImpl implements PartidoRepository {
     }
 
     @Override
-    public List<Partido> obtenerPartidosPorTorneoId(Long idTorneo){
-        return  getSession().createQuery(
-                        "SELECT p FROM Partido p " +
-                                "WHERE p.torneo.id = :idTorneo", Partido.class)
+    public List<Partido> obtenerPartidosPorTorneoId(Long idTorneo) {
+        return getSession().createQuery(
+                "SELECT p FROM Partido p " +
+                        "WHERE p.torneo.id = :idTorneo",
+                Partido.class)
                 .setParameter("idTorneo", idTorneo).getResultList();
     }
 
@@ -36,32 +37,47 @@ public class PartidoRepositoryImpl implements PartidoRepository {
         return getSession().get(Partido.class, id);
     }
 
-
     @Override
-    public List<Partido> obtenerPartidosPorEquipoId(Long idEquipo){
-        return   getSession().createQuery(
-          "SELECT p " +
-            "FROM Partido p " +
-            "WHERE p.equipoLocal.id = :idEquipo" +
-            " OR p.equipoVisitante.id = :idEquipo",
-          Partido.class).setParameter("idEquipo", idEquipo).getResultList();
-    }
-
-    @Override
-    public List<Partido> obtenerPartidosJugadosPorEquipoId(Long idEquipo){
+    public Partido obtenerPartidoConRelaciones(Long id) {
         return getSession().createQuery(
-            "SELECT p " +
-              "FROM Partido p " +
-              "JOIN p.fecha f " +
-              "WHERE (p.equipoLocal.id = :idEquipo OR p.equipoVisitante.id = :idEquipo) " +
-              "AND p.resultado != :resultadoPendiente " +
-              "ORDER BY f.numeroDeFecha DESC",
-            Partido.class)
-          .setParameter("idEquipo", idEquipo)
-          .setParameter("resultadoPendiente", ResultadoPartido.PENDIENTE)
-          .getResultList();
+                "SELECT p FROM Partido p " +
+                        "LEFT JOIN FETCH p.fecha f " +
+                        "LEFT JOIN FETCH f.torneo t " +
+                        "LEFT JOIN FETCH t.formatoTorneo " +
+                        "LEFT JOIN FETCH p.equipoLocal " +
+                        "LEFT JOIN FETCH p.equipoVisitante " +
+                        "WHERE p.id = :id",
+                Partido.class)
+                .setParameter("id", id)
+                .uniqueResult();
     }
-    private Session getSession(){
+
+    @Override
+    public List<Partido> obtenerPartidosPorEquipoId(Long idEquipo) {
+        return getSession().createQuery(
+                "SELECT p " +
+                        "FROM Partido p " +
+                        "WHERE p.equipoLocal.id = :idEquipo" +
+                        " OR p.equipoVisitante.id = :idEquipo",
+                Partido.class).setParameter("idEquipo", idEquipo).getResultList();
+    }
+
+    @Override
+    public List<Partido> obtenerPartidosJugadosPorEquipoId(Long idEquipo) {
+        return getSession().createQuery(
+                "SELECT p " +
+                        "FROM Partido p " +
+                        "JOIN p.fecha f " +
+                        "WHERE (p.equipoLocal.id = :idEquipo OR p.equipoVisitante.id = :idEquipo) " +
+                        "AND p.resultado != :resultadoPendiente " +
+                        "ORDER BY f.numeroDeFecha DESC",
+                Partido.class)
+                .setParameter("idEquipo", idEquipo)
+                .setParameter("resultadoPendiente", ResultadoPartido.PENDIENTE)
+                .getResultList();
+    }
+
+    private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
 }

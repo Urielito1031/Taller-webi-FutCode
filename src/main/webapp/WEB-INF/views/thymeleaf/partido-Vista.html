@@ -263,6 +263,9 @@
         <input type="hidden" id="nombreLocalFinal" th:value="${equipoLocal.nombre}" />
         <input type="hidden" id="nombreVisitanteFinal" th:value="${equipoVisitante.nombre}" />
         <input type="hidden" id="equipoUsuarioFinal" th:value="${equipoUsuario}" />
+        <input type="hidden" id="esPartidoUnico" th:value="${esPartidoUnico}" />
+        <input type="hidden" id="premioTorneo" th:value="${premioTorneo}" />
+        <input type="hidden" id="nombreTorneo" th:value="${nombreTorneo}" />
     </div>
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
@@ -598,6 +601,11 @@ function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesR
     let nombreRival = esLocal ? nombreVisitante : nombreLocal;
     let nombreUsuario = esLocal ? nombreLocal : nombreVisitante;
 
+    // Verificar si es un torneo de partido único
+    const esPartidoUnico = document.getElementById('esPartidoUnico').value === 'true';
+    const premioTorneo = parseFloat(document.getElementById('premioTorneo').value) || 0;
+    const nombreTorneo = document.getElementById('nombreTorneo').value;
+
     // Determinar resultado real
     let resultadoTexto = '';
     let colorReal = '';
@@ -635,17 +643,47 @@ function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesR
     if (golesRecibidos.length > 0) {
         golesHtml += `<div style=\"margin-top: 10px; color: #e74c3c; font-weight: bold;\">Goles rivales:</div><div style='color:#fff;'>${extraerGoleadores(golesRecibidos)}</div>`;
     }
-    modal.innerHTML = `
-        <div class=\"victory-card\" style=\"border-color: ${colorReal}; background: linear-gradient(135deg, #2d2d2d 0%, ${colorReal}33 100%);\">
-            <div class=\"victory-title\" style=\"color: ${colorReal};\">${resultadoTexto}</div>
-            <div style=\"margin-top: 20px; font-size: 1.3rem; color: ${colorReal}; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;\">
-                <i class='bi bi-coin' style='font-size: 1.5rem;'></i> 
-                ${golesUsuario < golesRival ? '<span style=\"color:#e74c3c;\">No ganaste monedas</span>' : `+${monedas} monedas`}
+
+    // Modal específico para torneos de partido único
+    if (esPartidoUnico && golesUsuario > golesRival) {
+        modal.innerHTML = `
+            <div class=\"victory-card\" style=\"border-color: #ffd700; background: linear-gradient(135deg, #2d2d2d 0%, #ffd70033 100%);\">
+                <div class=\"victory-title\" style=\"color: #ffd700; font-size: 1.8rem; text-align: center; margin-bottom: 20px;\">
+                    <i class='bi bi-trophy-fill' style='font-size: 2rem; margin-right: 10px;'></i>
+                    ¡GANASTE EL PARTIDO ÚNICO!
+                </div>
+                <div style=\"margin-top: 15px; font-size: 1.2rem; color: #fff; text-align: center; margin-bottom: 20px;\">
+                    <strong>${nombreTorneo}</strong>
+                </div>
+                <div style=\"margin-top: 15px; font-size: 1.1rem; color: #00ffc3; text-align: center; margin-bottom: 25px;\">
+                    ${resultadoTexto}
+                </div>
+                <div style=\"margin-top: 20px; font-size: 1.5rem; color: #ffd700; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 10px; border: 2px solid #ffd700;\">
+                    <i class='bi bi-coin' style='font-size: 2rem;'></i> 
+                    <span>¡Te llevas ${premioTorneo} monedas!</span>
+                </div>
+                <div style=\"margin-top: 15px; font-size: 1rem; color: #00ffc3; text-align: center; font-weight: bold;\">
+                    ¡Felicidades! Has ganado el premio del torneo
+                </div>
+                ${golesHtml ? `<div style=\"margin-top: 20px;\">${golesHtml}</div>` : ''}
+                <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; font-weight: bold; border: none; padding: 12px 30px; border-radius: 25px;\">¡FELICIDADES!</button>
             </div>
-            ${bonus > 0 && golesUsuario >= golesRival ? `<div style=\"color:#00ffc3; font-size:1.1rem; margin-top:10px; font-weight:bold;\">+${bonus} bonus por narración completa!</div>` : ''}
-            <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px;\">OK</button>
-        </div>
-    `;
+        `;
+    } else {
+        // Modal normal para otros tipos de torneos
+        modal.innerHTML = `
+            <div class=\"victory-card\" style=\"border-color: ${colorReal}; background: linear-gradient(135deg, #2d2d2d 0%, ${colorReal}33 100%);\">
+                <div class=\"victory-title\" style=\"color: ${colorReal};\">${resultadoTexto}</div>
+                <div style=\"margin-top: 20px; font-size: 1.3rem; color: ${colorReal}; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;\">
+                    <i class='bi bi-coin' style='font-size: 1.5rem;'></i> 
+                    ${golesUsuario < golesRival ? '<span style=\"color:#e74c3c;\">No ganaste monedas</span>' : `+${monedas} monedas`}
+                </div>
+                ${bonus > 0 && golesUsuario >= golesRival ? `<div style=\"color:#00ffc3; font-size:1.1rem; margin-top:10px; font-weight:bold;\">+${bonus} bonus por narración completa!</div>` : ''}
+                <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px;\">OK</button>
+            </div>
+        `;
+    }
+    
     document.body.appendChild(modal);
     document.getElementById('cerrarPopupBtn').addEventListener('click', function() {
         modal.remove();

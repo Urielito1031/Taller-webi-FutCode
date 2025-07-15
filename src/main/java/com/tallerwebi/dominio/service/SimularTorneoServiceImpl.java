@@ -222,7 +222,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
 
     @Override
     public Partido obtenerPartidoSimulado(Long partidoId) {
-        return partidoRepository.obtenerPartidoPorId(partidoId);
+        return partidoRepository.obtenerPartidoConRelaciones(partidoId);
     }
 
     @Override

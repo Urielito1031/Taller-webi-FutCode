@@ -114,6 +114,58 @@
 </div>
 </main>
 
+<!-- Sección de Partidos Únicos -->
+<main class="contenedor-principal-torneos">
+    <h1>Partidos Únicos</h1>
+    <div class="contenedores row">
+        <section class="contenedor-torneo col-12 col-md-6 col-lg-4 mb-4" th:each="torneo : ${torneosUnicos}">
+            <div class="torneo-card card h-100 shadow-sm position-relative">
+                <!-- Estado del torneo -->
+                <th:block th:switch="${torneo.estado.name()}">
+                    <div th:case="'ABIERTO'" class="estado-badge position-absolute bg-success">
+                        <i class="bi bi-unlock"></i> Abierto
+                    </div>
+                    <div th:case="'EN_CURSO'" class="estado-badge position-absolute bg-warning">
+                        <i class="bi bi-clock-history"></i> En curso
+                    </div>
+                    <div th:case="'FINALIZADO'" class="estado-badge position-absolute bg-info">
+                        <i class="bi bi-trophy"></i> Finalizado
+                    </div>
+                    <div th:case="*" class="estado-badge position-absolute bg-danger">
+                        <i class="bi bi-lock"></i> Cerrado
+                    </div>
+                </th:block>
+
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h4 mb-3" th:text="${torneo.nombre}">
+                        Nombre del Partido Único
+                    </h2>
+                    <p class="text-muted small mb-3 overflow-auto"
+                       style="max-height: 100px;"
+                       th:text="${torneo.descripcion}">
+                        Descripción del partido único
+                    </p>
+
+                    <!-- Formato del torneo -->
+                    <div class="bg-light p-3 rounded mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="h6 mb-0">
+                                <i class="bi bi-diagram-3 me-2"></i>
+                                Partido Único
+                            </h3>
+                        </div>
+                    </div>
+                    <a th:href="@{/torneo/detalle-torneo/{id}(id=${torneo.id})}"
+                       class="btn btn-primary w-100 mt-3">
+                        Ver detalle
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>

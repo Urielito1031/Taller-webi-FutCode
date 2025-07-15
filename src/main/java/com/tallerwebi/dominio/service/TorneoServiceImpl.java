@@ -190,14 +190,21 @@ public class TorneoServiceImpl implements TorneoService {
       torneo.setEstado(EstadoTorneoEnum.ABIERTO);
       torneo.setNombre(crearTorneoDTO.getNombre());
       torneo.setCapacidadMaxima(crearTorneoDTO.getCantidadEquipos());
-      // Asignar formato LIGA por defecto
-      FormatoTorneo formato = formatoTorneoRepository.findByTipo(TipoFormato.LIGA);
+      // Si la capacidad es 2, formato PARTIDO_UNICO, si no, LIGA
+      TipoFormato tipoFormato = crearTorneoDTO.getCantidadEquipos() == 2 ? TipoFormato.PARTIDO_UNICO : TipoFormato.LIGA;
+      FormatoTorneo formato = formatoTorneoRepository.findByTipo(tipoFormato);
       if (formato == null) {
          formato = new FormatoTorneo();
-         formato.setTipo(TipoFormato.LIGA);
+         formato.setTipo(tipoFormato);
          formatoTorneoRepository.save(formato);
       }
       torneo.setFormatoTorneo(formato);
       torneoRepository.save(torneo);
+   }
+
+   @Override
+   public List<TorneoDTO> getAllByFormato(TipoFormato tipoFormato) {
+      List<Torneo> torneos = torneoRepository.findAllByFormato(tipoFormato);
+      return torneos.stream().map(Torneo::convertToDTO).collect(Collectors.toList());
    }
 }

@@ -20,4 +20,6 @@ public interface TorneoService {
    void crearFixtureConLasFechas(Long torneoId);
 
    void crearTorneoPersonalizado(CrearTorneoDTO crearTorneoDTO);
+
+   List<TorneoDTO> getAllByFormato(com.tallerwebi.dominio.model.enums.TipoFormato tipoFormato);
 }

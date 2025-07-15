@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 import com.tallerwebi.presentacion.dto.SimulacionTorneoResumenDTO;
 import javax.validation.Valid;
+import com.tallerwebi.dominio.model.enums.TipoFormato;
 
 @Controller
 @RequestMapping("/torneo")
@@ -104,6 +105,10 @@ public class TorneoController {
          if (torneosUnidos.isEmpty()) {
             model.addAttribute("mensajeTorneo", "Usted no se ha unido a ningun torneo");
          }
+
+         // Obtener torneos de formato PARTIDO_UNICO
+         List<TorneoDTO> torneosUnicos = torneoService.getAllByFormato(TipoFormato.PARTIDO_UNICO);
+         model.addAttribute("torneosUnicos", torneosUnicos);
 
          model.addAttribute("torneos", torneosUnidos);
          model.addAttribute("cantidadSobres", this.usuarioService.obtenerSobresDelUsuario(usuarioId).size());

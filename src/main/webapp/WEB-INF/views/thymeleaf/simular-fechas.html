@@ -427,14 +427,14 @@
                 <i class="fas fa-eye"></i> Ver Detalle
             </a>
             
-            <th:block th:if="${hayFechasNoSimuladas}">
+        <th:block th:if="${hayFechasNoSimuladas}">
                 <form th:action="@{/torneo/simular-torneo}" method="post" style="display: inline;">
-                    <input type="hidden" name="torneoId" th:value="${torneoId}" />
-                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #00ffc3, #00bfff); color: #0d1b2a; font-weight: bold; font-size: 1.1rem; border-radius: 25px; padding: 12px 32px; box-shadow: 0 2px 8px rgba(0,255,195,0.15);">
-                        <i class="fas fa-forward"></i> Simular Torneo (12.000 monedas)
-                    </button>
-                </form>
-            </th:block>
+                <input type="hidden" name="torneoId" th:value="${torneoId}" />
+                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #00ffc3, #00bfff); color: #0d1b2a; font-weight: bold; font-size: 1.1rem; border-radius: 25px; padding: 12px 32px; box-shadow: 0 2px 8px rgba(0,255,195,0.15);">
+                    <i class="fas fa-forward"></i> Simular Torneo (12.000 monedas)
+                </button>
+            </form>
+        </th:block>
         </div>
     </div>
 

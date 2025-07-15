@@ -1,17 +1,15 @@
 package com.tallerwebi.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -19,9 +17,6 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 
 @EnableWebMvc
 @Configuration
@@ -86,14 +81,24 @@ public class SpringWebConfig implements WebMvcConfigurer {
         return viewResolver;
     }
 
-    // @Override
-    // public void addInterceptors(InterceptorRegistry registry) {
-    // registry.addInterceptor(new LoginInterceptor())
-    // .addPathPatterns("/**")
-    // .excludePathPatterns("/login", "/validar-login", "/nuevo-usuario",
-    // "/nuevo-equipo","/registrarme", "/css/**", "/js/**", "/img/**"); //
-    // excepciones
-    // }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+          .addPathPatterns("/**")
+          .excludePathPatterns(
+            "/login",
+            "/validar-login",
+            "/nuevo-usuario",
+            "/nuevo-equipo",
+            "/seleccionar-escudo",
+            "/registrarme",
+            "/css/**",
+            "/js/**",
+            "/img/**",
+            "/resources/**",
+            "/webjars/**"
+          );
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

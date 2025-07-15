@@ -418,27 +418,28 @@
     </div>
     
     <div class="header">
-        <h1><i class="fas fa-calendar-alt"></i> Fechas del Torneo</h1>
-        <p>Calendario y resultados del campeonato</p>
-        
-        <!-- Botón Ver Detalle -->
+        <h1 th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}"><i class="fas fa-calendar-alt"></i> Partido Único</h1>
+        <h1 th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}"><i class="fas fa-calendar-alt"></i> Fechas del Torneo</h1>
+        <p th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Encuentro único: solo se disputa un partido entre los equipos participantes.</p>
+        <p th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Calendario y resultados del campeonato</p>
+        <!-- Botón Ver Detalle y Simular Torneo -->
         <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
             <a th:href="@{/torneo/detalle-torneo/{id}(id=${torneoId})}" class="btn btn-info" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white; font-weight: bold; font-size: 1rem; border-radius: 25px; padding: 10px 25px; box-shadow: 0 2px 8px rgba(23,162,184,0.15); text-decoration: none;">
                 <i class="fas fa-eye"></i> Ver Detalle
             </a>
-            
-        <th:block th:if="${hayFechasNoSimuladas}">
+            <th:block th:if="${hayFechasNoSimuladas and torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO'}">
                 <form th:action="@{/torneo/simular-torneo}" method="post" style="display: inline;">
-                <input type="hidden" name="torneoId" th:value="${torneoId}" />
-                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #00ffc3, #00bfff); color: #0d1b2a; font-weight: bold; font-size: 1.1rem; border-radius: 25px; padding: 12px 32px; box-shadow: 0 2px 8px rgba(0,255,195,0.15);">
-                    <i class="fas fa-forward"></i> Simular Torneo (12.000 monedas)
-                </button>
-            </form>
-        </th:block>
+                    <input type="hidden" name="torneoId" th:value="${torneoId}" />
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #00ffc3, #00bfff); color: #0d1b2a; font-weight: bold; font-size: 1.1rem; border-radius: 25px; padding: 12px 32px; box-shadow: 0 2px 8px rgba(0,255,195,0.15);">
+                        <i class="fas fa-forward"></i> Simular Torneo (12.000 monedas)
+                    </button>
+                </form>
+            </th:block>
         </div>
     </div>
 
-    <div class="stats-summary">
+    <!-- Ocultar stats-summary si es partido único -->
+    <div class="stats-summary" th:if="${torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO'}">
         <div class="stats-grid">
             <div class="stat-item">
                 <span class="stat-number" id="total-fechas">0</span>
@@ -471,7 +472,8 @@
             <div class="fecha-header">
                 <div class="fecha-numero">
                     <i class="fas fa-calendar-day"></i>
-                    <span>Fecha <span th:text="${fecha.numeroDeFecha}">1</span></span>
+                    <span th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Partido Único</span>
+                    <span th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Fecha <span th:text="${fecha.numeroDeFecha}">1</span></span>
                 </div>
                 <div class="estado-badge"
                      th:classappend="${fecha.simulada ? 'estado-jugada' : (iterStat.index == 0 or (fechas[iterStat.index - 1].simulada)) ? 'estado-disponible' : 'estado-proximamente'}">

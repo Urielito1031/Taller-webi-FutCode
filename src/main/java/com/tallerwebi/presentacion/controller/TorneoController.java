@@ -185,6 +185,7 @@ public class TorneoController {
       ModelAndView mav = new ModelAndView("simular-fechas");
       mav.addObject("fechas", torneo.getFechas());
       mav.addObject("torneoId", torneoId);
+      mav.addObject("torneo", torneo); // <-- Agregar el objeto torneo al modelo
 
       // Obtener información del equipo del usuario
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
@@ -196,7 +197,6 @@ public class TorneoController {
             equipoUsuarioId = usuario.getEquipo().getId();
          }
       }
-
       mav.addObject("equipoUsuarioId", equipoUsuarioId);
 
       // Nueva lógica: ¿hay fechas no simuladas?

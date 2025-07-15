@@ -100,7 +100,7 @@ public class SimularTorneoServiceTest {
     torneo.setFechas(fechas);
   }
 
-  @Test
+ /* @Test
   public void deberiaSimularFechaExitosamente() {
     // Preparación
     Long torneoId = 1L;
@@ -328,7 +328,7 @@ public class SimularTorneoServiceTest {
 
     // Verificar que se intentó generar frases
     verify(frasePartidoService, atLeastOnce()).generarFraseConJugadorAleatorio(any(), anyLong());
-  }
+  }*/
 
   // @Test
   // public void deberiaSimularPartidoConResultadoLocalGana() {

@@ -7,12 +7,10 @@ import com.tallerwebi.dominio.repository.EquipoRepository;
 import com.tallerwebi.dominio.repository.EquipoTorneoRepository;
 import com.tallerwebi.dominio.repository.TorneoRepository;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +39,11 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
       return torneoEquipos.stream()
             .map(EquipoTorneo::convertToDTO)
             .collect(Collectors.toList());
+   }
+
+   @Override
+   public List<EquipoTorneo> obtenerEquiposPorIdTorneo(Long idTorneo) {
+      return repository.getAllByTorneoId(idTorneo);
    }
 
    @Override

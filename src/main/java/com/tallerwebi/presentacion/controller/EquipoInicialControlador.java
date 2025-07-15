@@ -39,17 +39,6 @@ public class EquipoInicialControlador {
         return new ModelAndView("creacionEquipo").addObject("equipo", new EquipoDTO());
     }
 
-    // @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
-    // public String procesarNuevoEquipo(@ModelAttribute("equipo") EquipoDTO equipo,
-    // HttpSession session) {
-    // ModelAndView mav = new ModelAndView("home");
-    // mav.addObject("nombreEquipo", equipo.getNombre());
-    // mav.addObject("equipo", equipo);
-    //
-    // session.setAttribute("equipo", equipo);
-    //
-    // return "redirect:/sorteoEquipoInicial";
-    // }
 
     @RequestMapping(path = "/nuevo-equipo", method = RequestMethod.POST)
     public String procesarNuevoEquipo(@Valid @ModelAttribute("equipo") EquipoDTO equipo,
@@ -125,22 +114,25 @@ public class EquipoInicialControlador {
 
     @PostMapping("/guardar-escudo")
     public String guardarEscudo(@RequestParam String escudoSeleccionado,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
         try {
-            EquipoDTO equipo = (EquipoDTO) session.getAttribute("equipoEnCreacion");
-            if (equipo == null) {
+
+            EquipoDTO equipoViejo = (EquipoDTO) session.getAttribute("equipoEnCreacion");
+            if (equipoViejo == null) {
                 redirectAttributes.addFlashAttribute("error", "No hay un equipo en creación");
                 return "redirect:/nuevo-equipo";
             }
 
-            // Guardar el escudo seleccionado en el equipo
+
+            EquipoDTO equipo = new EquipoDTO();
+            equipo.setNombre(equipoViejo.getNombre());
             equipo.setImagen(escudoSeleccionado);
 
-            // Cargar jugadores ANTES de guardar el equipo
+
             this.jugadorService.cargarJugadoresAlEquipo(equipo);
 
-            // Obtener el usuario de la sesión
+
             Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
             if (usuarioId == null) {
                 redirectAttributes.addFlashAttribute("error", "Usuario no autenticado");
@@ -148,10 +140,14 @@ public class EquipoInicialControlador {
             }
             Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
 
+            // Guardar el equipo y asociarlo al usuario
             equipoService.saveBoth(equipo, usuario);
 
-            // Continuar con el flujo de sorteo de jugadores
+            // Guardar el equipo en sesión
             session.setAttribute("equipo", equipo);
+
+            // Eliminar el equipoEnCreacion, ya no se usa más
+            session.removeAttribute("equipoEnCreacion");
 
             redirectAttributes.addFlashAttribute("mensaje", "Escudo seleccionado exitosamente");
             return "redirect:/sorteoEquipoInicial";
@@ -161,4 +157,44 @@ public class EquipoInicialControlador {
             return "redirect:/nuevo-equipo";
         }
     }
+
+
+//    @PostMapping("/guardar-escudo")
+//    public String guardarEscudo(@RequestParam String escudoSeleccionado,
+//            HttpSession session,
+//            RedirectAttributes redirectAttributes) {
+//        try {
+//            EquipoDTO equipo = (EquipoDTO) session.getAttribute("equipoEnCreacion");
+//            if (equipo == null) {
+//                redirectAttributes.addFlashAttribute("error", "No hay un equipo en creación");
+//                return "redirect:/nuevo-equipo";
+//            }
+//
+//            // Guardar el escudo seleccionado en el equipo
+//            equipo.setImagen(escudoSeleccionado);
+//
+//            // Cargar jugadores ANTES de guardar el equipo
+//            this.jugadorService.cargarJugadoresAlEquipo(equipo);
+//
+//            // Obtener el usuario de la sesión
+//            Long usuarioId = (Long) session.getAttribute("USUARIO_ID");
+//            if (usuarioId == null) {
+//                redirectAttributes.addFlashAttribute("error", "Usuario no autenticado");
+//                return "redirect:/login";
+//            }
+//            Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
+//
+//            equipoService.saveBoth(equipo, usuario);
+//
+//            // Continuar con el flujo de sorteo de jugadores
+//            session.setAttribute("equipo", equipo);
+//
+//            redirectAttributes.addFlashAttribute("mensaje", "Escudo seleccionado exitosamente");
+//            return "redirect:/sorteoEquipoInicial";
+//
+//        } catch (Exception e) {
+//            redirectAttributes.addFlashAttribute("error", "Error al guardar el escudo: " + e.getMessage());
+//            return "redirect:/nuevo-equipo";
+//        }
+//    }
 }

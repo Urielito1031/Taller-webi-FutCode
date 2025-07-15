@@ -434,6 +434,33 @@ ul {
     transform: scale(1.06);
 }
 
+.rareza-comun {
+    color: #bfa76f;
+    font-weight: bold;
+    text-shadow: 0 0 6px #fffbe6;
+}
+.rareza-raro {
+    color: #6ec1e4;
+    font-weight: bold;
+    text-shadow: 0 0 6px #e6f7ff;
+}
+.rareza-epico {
+    color: #b97aff;
+    font-weight: bold;
+    text-shadow: 0 0 8px #f3e6ff;
+}
+.rareza-legendario {
+    color: #ffd700;
+    font-weight: bold;
+    text-shadow: 0 0 10px #fffbe6, 0 0 20px #ffd700;
+}
+.comprar-sobre-descripcion small {
+    display: block;
+    margin-top: 6px;
+    color: #b0b8c1;
+    font-size: 0.95em;
+}
+
 @media (max-width: 1100px) {
     .sobres-section-responsive {
         flex-direction: column;

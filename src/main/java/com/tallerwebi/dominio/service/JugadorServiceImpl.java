@@ -51,19 +51,6 @@ public class JugadorServiceImpl implements JugadorService {
       return new ArrayList<>(); // Retornar lista vacía en lugar de null
    }
 
-   // @Override
-   // public void cargarJugadoresAlEquipo(EquipoDTO equipo){
-   // List<Jugador> listaJugadoresEntities = sortearJugadoresIniciales(14);
-   //
-   // List<JugadorDTO> listaDeJugadoresDto = new ArrayList<>();
-   //
-   // for(Jugador j : listaJugadoresEntities){
-   // listaDeJugadoresDto.add(j.convertToDTO());
-   // }
-   //
-   // equipo.setJugadores(listaDeJugadoresDto);
-   // }
-
    @Override
    public List<Jugador> sortearJugadoresIniciales(int cantidad) {
 

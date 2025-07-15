@@ -182,6 +182,13 @@
 </head>
 <body>
 <div class="container">
+    <!-- Botón de volver -->
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/home}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> VOLVER
+        </a>
+    </div>
+    
     <div class="header">
         <h1> SIMULACIÓN DE PARTIDO</h1>
     </div>
@@ -259,12 +266,6 @@
     </div>
     <div id="boton-omitir">
         <button class="btn" id="omitebtn">OMITIR NARRACIÓN</button>
-    </div>
-
-    <div class="navigation">
-        <a th:href="@{/home}" class="btn btn-home">
-            VOLVER AL INICIO
-        </a>
     </div>
 
 

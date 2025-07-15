@@ -247,7 +247,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "GOL"));
         }
         // Eventos generales
-        int cantidadEventosGenerales = generarCantidadAleatoria(10);
+        int cantidadEventosGenerales = generarCantidadAleatoria(25);
         for (int i = 0; i < cantidadEventosGenerales; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -255,7 +255,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "GENERAL"));
         }
         // Tarjetas amarillas
-        int cantidadTarjetas = generarCantidadAleatoria(3);
+        int cantidadTarjetas = generarCantidadAleatoria(4);
         for (int i = 0; i < cantidadTarjetas; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -264,7 +264,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_AMARILLA"));
         }
         // Tarjetas rojas
-        int cantidadRojas = generarCantidadAleatoria(1);
+        int cantidadRojas = generarCantidadAleatoria(2);
         for (int i = 0; i < cantidadRojas; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -272,7 +272,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_ROJA"));
         }
         // Expulsiones
-        int cantidadExpulsados = generarCantidadAleatoria(1);
+        int cantidadExpulsados = generarCantidadAleatoria(2);
         for (int i = 0; i < cantidadExpulsados; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -280,7 +280,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "EXPULSION"));
         }
         // Lesiones
-        int cantidadLesiones = generarCantidadAleatoria(2);
+        int cantidadLesiones = generarCantidadAleatoria(3);
         for (int i = 0; i < cantidadLesiones; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);

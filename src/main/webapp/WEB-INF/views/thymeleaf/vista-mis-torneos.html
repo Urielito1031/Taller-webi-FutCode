@@ -86,6 +86,9 @@
                 <div th:case="'EN_CURSO'" class="estado-badge position-absolute bg-warning">
                     <i class="bi bi-clock-history"></i> En curso
                 </div>
+                <div th:case="'FINALIZADO'" class="estado-badge position-absolute bg-info">
+                    <i class="bi bi-trophy"></i> Finalizado
+                </div>
                 <div th:case="*" class="estado-badge position-absolute bg-danger">
                     <i class="bi bi-lock"></i> Cerrado
                 </div>
@@ -114,8 +117,7 @@
                         </div>
                     </div>
                 </th:block>
-                <a th:if="${torneo.estado.name() == 'ABIERTO'}"
-                   th:href="@{/torneo/detalle-torneo/{id}(id=${torneo.id})}"
+                <a th:href="@{/torneo/detalle-torneo/{id}(id=${torneo.id})}"
                    class="btn btn-primary w-100 mt-3">
                     Ver detalle
                     <i class="bi bi-arrow-right ms-2"></i>

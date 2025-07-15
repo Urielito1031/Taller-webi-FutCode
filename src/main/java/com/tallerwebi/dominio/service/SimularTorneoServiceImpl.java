@@ -199,6 +199,16 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
 
         fechaASimular.setSimulada(true);
         fechaRepository.save(fechaASimular);
+
+        // Verificar si todas las fechas están simuladas para cambiar estado a
+        // FINALIZADO
+        Torneo torneoActualizado = torneoRepository.obtenerTorneoConFechas(torneoId);
+        boolean todasLasFechasSimuladas = torneoActualizado.getFechas().stream().allMatch(Fecha::isSimulada);
+
+        if (todasLasFechasSimuladas) {
+            torneoActualizado.setEstado(com.tallerwebi.dominio.model.enums.EstadoTorneoEnum.FINALIZADO);
+            torneoRepository.save(torneoActualizado);
+        }
     }
 
     @Override
@@ -325,9 +335,11 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                     int golesVisitante = (int) (Math.random() * 5);
 
                     if (partido.getEquipoLocal().hasJugadores() && partido.getEquipoVisitante().hasJugadores()) {
-                        if (partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()) {
+                        if (partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante()
+                                .getRatingEquipo()) {
                             golesLocal++;
-                        } else if (partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante().getRatingEquipo()) {
+                        } else if (partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante()
+                                .getRatingEquipo()) {
                             golesVisitante++;
                         }
                     }
@@ -358,7 +370,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
 
         // Usar los EquipoTorneo existentes del torneo
         List<EquipoTorneo> tablaAnterior = new java.util.ArrayList<>(torneo.getEquipos());
-        
+
         // Resetear estadísticas para recalcular
         for (EquipoTorneo et : tablaAnterior) {
             et.setPosicion(0);
@@ -370,12 +382,13 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             et.setGolesAFavor(0);
             et.setGolesEnContra(0);
         }
-        
+
         List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
         // Buscar el equipo del usuario y su puesto
         for (EquipoTorneo eq : tabla) {
-            if (eq.getEquipo() != null && eq.getEquipo().getUsuario() != null && eq.getEquipo().getUsuario().getId().equals(usuarioId)) {
+            if (eq.getEquipo() != null && eq.getEquipo().getUsuario() != null
+                    && eq.getEquipo().getUsuario().getId().equals(usuarioId)) {
                 puestoFinal = eq.getPosicion(); // Usar la posición calculada por el servicio
                 usuario = eq.getEquipo().getUsuario();
                 break;
@@ -397,8 +410,11 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             usuarioService.actualizar(usuario);
             monedasTotales = usuario.getMonedas();
         }
+
+        // Cambiar estado del torneo a FINALIZADO ya que se simularon todas las fechas
+        torneo.setEstado(com.tallerwebi.dominio.model.enums.EstadoTorneoEnum.FINALIZADO);
+        torneoRepository.save(torneo);
+
         return new SimulacionTorneoResumenDTO(puestoFinal, monedasGanadas, monedasTotales, nombreTorneo);
     }
 }
-     
-

@@ -101,10 +101,12 @@
          <h2 class="torneo-name" th:text="*{nombre}">Nombre del Torneo</h2>
          <div class="estado-badge"
               th:classappend="${torneo.estado.name() == 'ABIERTO'} ? 'estado-abierto' :
-                                          (${torneo.estado.name() == 'CERRADO'} ? 'estado-cerrado' : 'estado-en-curso')">
+                                          (${torneo.estado.name() == 'CERRADO'} ? 'estado-cerrado' :
+                                          (${torneo.estado.name() == 'FINALIZADO'} ? 'estado-finalizado' : 'estado-en-curso'))">
             <i class="bi"
                th:classappend="${torneo.estado.name() == 'ABIERTO'} ? 'bi-door-open' :
-                                            (${torneo.estado.name() == 'CERRADO'} ? 'bi-door-closed' : 'bi-play-circle')"></i>
+                                            (${torneo.estado.name() == 'CERRADO'} ? 'bi-door-closed' :
+                                            (${torneo.estado.name() == 'FINALIZADO'} ? 'bi-trophy' : 'bi-play-circle'))"></i>
             <span th:text="*{estado}">Estado</span>
          </div>
       </div>

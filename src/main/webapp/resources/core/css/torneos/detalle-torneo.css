@@ -247,6 +247,11 @@ body {
     color: #0d1b2a;
 }
 
+.estado-finalizado {
+    background: linear-gradient(45deg, #17a2b8, #138496);
+    color: #ffffff;
+}
+
 /* Grid de información */
 .torneo-info {
     display: grid;

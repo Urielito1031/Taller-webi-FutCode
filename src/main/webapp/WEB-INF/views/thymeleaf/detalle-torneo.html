@@ -205,7 +205,7 @@
       </section>
 
       <div class="action-section">
-         <th:block th:if="${torneo.estado.name() == 'ABIERTO' and (torneoEquipos.?[equipo.usuario != null and equipo.usuario.id == usuarioId].isEmpty())}">
+         <th:block th:if="${torneo.estado.name() == 'ABIERTO' and !usuarioYaUnido}">
             <form th:action="@{/torneo/{id}/unirse(id=${torneo.id})}" method="POST">
                <button type="submit" class="btn-join">
                   <i class="bi bi-trophy"></i>
@@ -215,7 +215,7 @@
                </button>
             </form>
          </th:block>
-         <th:block th:unless="${torneo.estado.name() == 'ABIERTO' or (torneoEquipos.?[equipo.usuario != null and equipo.usuario.id == usuarioId].isEmpty())}">
+         <th:block th:unless="${torneo.estado.name() == 'ABIERTO' and !usuarioYaUnido}">
             <div class="btn-join btn-disabled">
                <i class="bi bi-lock"></i>
                <span th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">Partido no disponible</span>

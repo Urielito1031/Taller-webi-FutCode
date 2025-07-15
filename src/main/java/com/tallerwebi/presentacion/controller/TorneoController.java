@@ -140,7 +140,15 @@ public class TorneoController {
       List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
-      model.addAttribute("usuarioId", usuarioId);
+      model.addAttribute("usuarioId", usuarioId != null ? usuarioId : -1L);
+
+      boolean usuarioYaUnido = false;
+      if (usuarioId != null && usuarioId != -1L) {
+         usuarioYaUnido = tabla.stream()
+               .anyMatch(eq -> eq.getEquipo() != null && eq.getEquipo().getUsuario() != null
+                     && eq.getEquipo().getUsuario().getId().equals(usuarioId));
+      }
+      model.addAttribute("usuarioYaUnido", usuarioYaUnido);
 
       model.addAttribute("torneo", torneo);
       model.addAttribute("torneoEquipos", tabla);

@@ -467,6 +467,18 @@
         </div>
     </th:block>
 
+    <th:block th:if="${fechas == null or #lists.isEmpty(fechas)}">
+        <div class="alert alert-info text-center" style="margin-top: 40px; font-size: 1.2rem; border-radius: 18px;">
+            <i class="fas fa-info-circle"></i>
+            <span th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">
+                El partido se generará automáticamente cuando se complete la capacidad de participantes.
+            </span>
+            <span th:unless="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}">
+                Las fechas del torneo se generarán automáticamente cuando se complete la capacidad de equipos.
+            </span>
+        </div>
+    </th:block>
+
     <div class="fechas-grid">
         <div class="fecha-card" th:each="fecha, iterStat : ${fechas}">
             <div class="fecha-header">

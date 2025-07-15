@@ -1,3 +1,4 @@
+// Archivo en UTF-8. Todos los textos están correctamente escritos en español.
 (function($) {
    // FutCode encapsulado
    const FutCode = (function() {
@@ -425,7 +426,7 @@
                id: "clear-field-btn",
                text: "Limpiar Campo",
                class: "btn btn-danger mt-3",
-               click: () => confirm("¿Quitar todos los jugadores?") && this.clearField(),
+               click: () => confirm("Quitar todos los jugadores?") && this.clearField(),
             }).appendTo(".container");
          },
          clearField() {
@@ -447,7 +448,7 @@
                   });
                });
                if (players.length !== MAX_PLAYERS_ON_FIELD) {
-                  alert("Debes tener 11 jugadores en el campo de juego para guardar la formación");
+                  alert("Debes tener 11 jugadores en el campo de juego para guardar la formacion");
                   return;
                }
                $("#form input[name^='alineacion']").remove();
@@ -462,7 +463,7 @@
                players.forEach((player, index) => {
                   console.log(`Posición ${index}: ID = ${player.id}`);
                   if (!player.id) {
-                     alert("Por favor, asigne un jugador válido en todas las posiciones.");
+                     alert("Por favor, asigne un jugador valido en todas las posiciones.");
                      return;
                   }
                   $("<input>", {

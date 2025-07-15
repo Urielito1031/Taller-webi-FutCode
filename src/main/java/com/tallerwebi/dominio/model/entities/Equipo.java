@@ -1,8 +1,6 @@
 package com.tallerwebi.dominio.model.entities;
 
-import com.tallerwebi.presentacion.dto.ClubDTO;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
-import com.tallerwebi.presentacion.dto.JugadorDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,7 +39,10 @@ public class Equipo {
    @JoinTable(name = "equipo_jugador", joinColumns = @JoinColumn(name = "equipo_id"), inverseJoinColumns = @JoinColumn(name = "jugador_id"))
    private List<Jugador> jugadores = new ArrayList<>();
 
-   public Double getRatingEquipo() {
+   @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<FormacionEquipo> formacion = new ArrayList<>();
+
+   public Double getRatingEquipoGeneral() {
       double total = 0;
 
       for (Jugador j : this.jugadores) {
@@ -49,6 +50,28 @@ public class Equipo {
       }
 
       return total / this.jugadores.size();
+   }
+
+   public Double calcularRatingDelOnceTitular(){
+      if(this.formacion == null || this.formacion.isEmpty()){
+         return 0.0;
+      }
+      Double total = 0.0;
+      int cantidad = 0;
+      for (FormacionEquipo fe : this.formacion) {
+         Jugador jugador = fe.getJugador();
+         System.out.println("Jugador: " + jugador.getNombre() + " - Rating: " + jugador.getRating());
+         if(jugador != null){
+            total += jugador.getRating();
+            cantidad++; // opcional porque siempre deberia ser 11
+         }
+      }
+
+      if(cantidad == 0){
+         return 555.0;
+      }else{
+         return 600.0;
+      }
    }
 
    public void addJugador(Jugador jugador) {

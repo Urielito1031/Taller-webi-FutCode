@@ -7,7 +7,6 @@ import com.tallerwebi.dominio.model.entities.Torneo;
 import com.tallerwebi.dominio.model.enums.EventoPartido;
 import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.repository.*;
-import com.tallerwebi.presentacion.dto.FrasesPartidoDTO;
 import com.tallerwebi.presentacion.dto.NarracionDTO;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -17,8 +16,6 @@ import java.util.Random;
 import com.tallerwebi.dominio.model.entities.EquipoTorneo;
 import com.tallerwebi.dominio.model.entities.Usuario;
 import com.tallerwebi.presentacion.dto.SimulacionTorneoResumenDTO;
-import com.tallerwebi.dominio.service.TorneoService;
-import com.tallerwebi.dominio.model.entities.Equipo;
 
 @Service
 @Transactional
@@ -69,10 +66,10 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             // Agrego esta validacion porque no tengo los jugadores cargados en la base de
             // datos
             if (partido.getEquipoLocal().hasJugadores() && partido.getEquipoVisitante().hasJugadores()) {
-                if (partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante().getRatingEquipo()) {
+                if (partido.getEquipoLocal().getRatingEquipoGeneral() > partido.getEquipoVisitante().getRatingEquipoGeneral()) {
                     golesLocal++;
-                } else if (partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante()
-                        .getRatingEquipo()) {
+                } else if (partido.getEquipoLocal().getRatingEquipoGeneral() < partido.getEquipoVisitante()
+                        .getRatingEquipoGeneral()) {
                     golesVisitante++;
                 }
             }
@@ -335,11 +332,11 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                     int golesVisitante = (int) (Math.random() * 5);
 
                     if (partido.getEquipoLocal().hasJugadores() && partido.getEquipoVisitante().hasJugadores()) {
-                        if (partido.getEquipoLocal().getRatingEquipo() > partido.getEquipoVisitante()
-                                .getRatingEquipo()) {
+                        if (partido.getEquipoLocal().getRatingEquipoGeneral() > partido.getEquipoVisitante()
+                                .getRatingEquipoGeneral()) {
                             golesLocal++;
-                        } else if (partido.getEquipoLocal().getRatingEquipo() < partido.getEquipoVisitante()
-                                .getRatingEquipo()) {
+                        } else if (partido.getEquipoLocal().getRatingEquipoGeneral() < partido.getEquipoVisitante()
+                                .getRatingEquipoGeneral()) {
                             golesVisitante++;
                         }
                     }

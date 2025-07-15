@@ -32,6 +32,7 @@ public class PlantillaController {
    private final JugadorService jugadorService;
    private final UsuarioService usuarioService;
 
+
    @Autowired
    public PlantillaController(PlantillaService service, JugadorService jugadorService, UsuarioService usuarioService) {
       this.service = service;
@@ -64,7 +65,6 @@ public class PlantillaController {
 
       Long equipoId = usuario.getEquipo() != null ? usuario.getEquipo().getId() : null;
       if (equipoId == null) {
-
          return "redirect:/nuevo-equipo";
       }
 
@@ -74,6 +74,8 @@ public class PlantillaController {
       model.addAttribute("jugadores", jugadores);
 
       model.addAttribute("formacion", formacion);
+
+      model.addAttribute("ratingOnceTitular", service.getRatingOnceTitular(equipoId));
 
       List<FormacionEsquema> esquemas = Arrays.asList(FormacionEsquema.values());
       model.addAttribute("esquemas", esquemas);
@@ -139,6 +141,7 @@ public class PlantillaController {
       // Cargar la lista de jugadores del equipo
       List<JugadorDTO> jugadores = jugadorService.getAllByEquipoId(formacion.getEquipoId());
       model.addAttribute("jugadores", jugadores);
+      model.addAttribute("ratingOnceTitular", service.getRatingOnceTitular(formacion.getEquipoId()));
 
       model.addAttribute("esquemas", Arrays.asList(FormacionEsquema.values()));
       model.addAttribute("message", "Formación guardada con éxito!");

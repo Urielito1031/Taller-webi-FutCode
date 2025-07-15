@@ -38,7 +38,6 @@ public class Torneo {
    @Column(name = "premio_monedas")
    private Double premioMonedas;
 
-
    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinColumn(name = "torneo_liga_id", unique = true, nullable = true)
    private TorneoLiga torneoLiga;
@@ -66,11 +65,13 @@ public class Torneo {
       dto.setEstado(this.getEstado());
       dto.setDescripcion(this.getDescripcion());
 
-      FormatoTorneoDTO formatoDTO = new FormatoTorneoDTO();
       FormatoTorneo formato = this.getFormatoTorneo();
-      formatoDTO.setTipo(formato.getTipo());
-      dto.setFormatoTorneo(formatoDTO);
-
+      if (formato != null) {
+         FormatoTorneoDTO formatoDTO = new FormatoTorneoDTO();
+         formatoDTO.setTipo(formato.getTipo());
+         dto.setFormatoTorneo(formatoDTO);
+      }
+      // Si formato es null, no lo setea
       return dto;
    }
 }

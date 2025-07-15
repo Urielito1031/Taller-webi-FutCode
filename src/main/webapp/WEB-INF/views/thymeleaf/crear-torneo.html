@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Crear Torneo Personalizado</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d1b2a 0%, #0d1a2e 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #fff;
+            padding: 20px 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .form-card {
+            background: #1b263b;
+            border-radius: 20px;
+            padding: 40px 30px 30px 30px;
+            box-shadow: 0 4px 20px rgba(0,255,195,0.08);
+            border: 1px solid #2a3f5f;
+            margin-top: 30px;
+        }
+        .form-title {
+            color: #00ffc3;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(0,255,195,0.2);
+        }
+        .form-label {
+            color: #00ffc3;
+            font-weight: 600;
+        }
+        .form-control, .form-select {
+            background: #1c2a3a;
+            border: 1px solid #2a3f5f;
+            color: #fff;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #00ffc3;
+            box-shadow: 0 0 0 2px rgba(0,255,195,0.2);
+        }
+        .invalid-feedback {
+            color: #ff6b6b;
+            font-size: 0.95rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #00ffc3, #00bfff);
+            color: #0d1b2a;
+            font-weight: bold;
+            border-radius: 25px;
+            padding: 12px 32px;
+            box-shadow: 0 2px 8px rgba(0,255,195,0.15);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00bfff, #00ffc3);
+            color: #0d1b2a;
+        }
+        .btn-secondary {
+            border-radius: 25px;
+            padding: 10px 25px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Botón de volver -->
+    <div style="margin-bottom: 20px;">
+        <a th:href="@{/home}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> VOLVER
+        </a>
+    </div>
+    <div class="form-card">
+        <div class="form-title">
+            <i class="fas fa-trophy"></i> Crear Torneo Personalizado
+        </div>
+        <form th:action="@{/torneo/crear-personalizado}" th:object="${crearTorneoDTO}" method="post" novalidate>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre del Torneo</label>
+                <input type="text" th:field="*{nombre}" id="nombre" class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea th:field="*{descripcion}" id="descripcion" class="form-control" rows="3" th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid'"></textarea>
+                <div class="invalid-feedback" th:errors="*{descripcion}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="monedasPrimerLugar" class="form-label">Monedas para el Primer Lugar</label>
+                <input type="number" th:field="*{monedasPrimerLugar}" id="monedasPrimerLugar" class="form-control" min="5000" max="10000" th:classappend="${#fields.hasErrors('monedasPrimerLugar')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{monedasPrimerLugar}"></div>
+            </div>
+            <div class="mb-3">
+                <label for="cantidadEquipos" class="form-label">Cantidad de Equipos</label>
+                <input type="number" th:field="*{cantidadEquipos}" id="cantidadEquipos" class="form-control" min="2" max="32" step="2" th:classappend="${#fields.hasErrors('cantidadEquipos')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:errors="*{cantidadEquipos}"></div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('cantidadEquiposPar')}">
+                    <span th:errors="*{cantidadEquiposPar}"></span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Crear Torneo
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html> 

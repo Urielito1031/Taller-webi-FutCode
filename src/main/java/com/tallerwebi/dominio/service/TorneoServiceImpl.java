@@ -5,6 +5,8 @@ import com.tallerwebi.dominio.model.entities.*;
 import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
+import com.tallerwebi.presentacion.dto.CrearTorneoDTO;
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +17,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import com.tallerwebi.dominio.repository.FormatoTorneoRepository;
+import com.tallerwebi.dominio.model.enums.TipoFormato;
 
 @Service
 @Transactional
-public class TorneoServiceImpl implements TorneoService{
+public class TorneoServiceImpl implements TorneoService {
    private final TorneoRepository torneoRepository;
    private final EquipoTorneoRepository equipoTorneoRepository;
+   private final FormatoTorneoRepository formatoTorneoRepository;
 
    @Autowired
-   public TorneoServiceImpl(TorneoRepository torneoRepository, EquipoTorneoRepository equipoTorneoRepository) {
+   public TorneoServiceImpl(TorneoRepository torneoRepository, EquipoTorneoRepository equipoTorneoRepository,
+         FormatoTorneoRepository formatoTorneoRepository) {
       this.torneoRepository = torneoRepository;
-       this.equipoTorneoRepository = equipoTorneoRepository;
+      this.equipoTorneoRepository = equipoTorneoRepository;
+      this.formatoTorneoRepository = formatoTorneoRepository;
    }
 
    @Override
@@ -35,21 +42,22 @@ public class TorneoServiceImpl implements TorneoService{
    }
 
    @Override
-   public TorneoDTO getById(Long id){
+   public TorneoDTO getById(Long id) {
       Torneo torneoById = torneoRepository.getById(id);
-      if(torneoById == null){
+      if (torneoById == null) {
          return null;
       }
       return torneoById.convertToDTO();
    }
 
-   @Override @Transactional
+   @Override
+   @Transactional
    public Torneo obtenerTorneoConFechas(Long torneoId) {
       return torneoRepository.obtenerTorneoConFechas(torneoId);
    }
 
    @Override
-   public List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior){
+   public List<EquipoTorneo> calcularTablaDePosiciones(List<Partido> partidos, List<EquipoTorneo> tablaAnterior) {
       Map<Long, EquipoTorneo> tablaDePosiciones = new HashMap<>();
 
       for (EquipoTorneo equipoAnterior : tablaAnterior) {
@@ -74,13 +82,15 @@ public class TorneoServiceImpl implements TorneoService{
             // Equipo local
             tablaDePosiciones.putIfAbsent(local.getId(), new EquipoTorneo());
             EquipoTorneo equipoLocal = tablaDePosiciones.get(local.getId());
-            if (equipoLocal.getEquipo() == null) equipoLocal.setEquipo(local);
+            if (equipoLocal.getEquipo() == null)
+               equipoLocal.setEquipo(local);
             equipoLocal.actualizarConPartido(partido, true);
 
             // Equipo visitante
             tablaDePosiciones.putIfAbsent(visitante.getId(), new EquipoTorneo());
             EquipoTorneo equipoVisitante = tablaDePosiciones.get(visitante.getId());
-            if (equipoVisitante.getEquipo() == null) equipoVisitante.setEquipo(visitante);
+            if (equipoVisitante.getEquipo() == null)
+               equipoVisitante.setEquipo(visitante);
             equipoVisitante.actualizarConPartido(partido, false);
 
             equipoTorneoRepository.save(equipoLocal);
@@ -98,14 +108,15 @@ public class TorneoServiceImpl implements TorneoService{
       }
 
       return lista;
-}
+   }
 
    @Override
    public List<Fecha> generarFechas(List<Equipo> equipos, Torneo torneo) {
       int n = equipos.size();
-//    Este metodo usa el algoritmo de round-robin xD, googleenlo desp
+      // Este metodo usa el algoritmo de round-robin xD, googleenlo desp
 
-//    Esto habria que comentarlo si los equipos fuesen pares, pero no lo hago porque el max es 15 y solo se ejecuta si estan los 15
+      // Esto habria que comentarlo si los equipos fuesen pares, pero no lo hago
+      // porque el max es 15 y solo se ejecuta si estan los 15
       if (n % 2 != 0) {
          equipos.add(null);
          n++;
@@ -130,9 +141,9 @@ public class TorneoServiceImpl implements TorneoService{
                partido.setEquipoVisitante(visitante);
                partido.setFecha(fecha);
                LocalDateTime fechaEncuentro = LocalDate.now()
-                       .plusWeeks(ronda)
-                       .with(DayOfWeek.SATURDAY)
-                       .atTime(15, 0); // sábado 15:00 hs
+                     .plusWeeks(ronda)
+                     .with(DayOfWeek.SATURDAY)
+                     .atTime(15, 0); // sábado 15:00 hs
 
                fechaEncuentro = fechaEncuentro.with(java.time.DayOfWeek.SATURDAY);
                partido.setFechaEncuentro(fechaEncuentro);
@@ -162,12 +173,30 @@ public class TorneoServiceImpl implements TorneoService{
       Torneo torneo = this.torneoRepository.getById(torneoId);
 
       List<Equipo> equipos = torneo.getEquipos().stream()
-              .map(EquipoTorneo::getEquipo)
-              .collect(Collectors.toList());
+            .map(EquipoTorneo::getEquipo)
+            .collect(Collectors.toList());
 
       List<Fecha> fechas = this.generarFechas(equipos, torneo);
 
       torneo.getFechas().addAll(fechas);
+      torneoRepository.save(torneo);
+   }
+
+   @Override
+   public void crearTorneoPersonalizado(CrearTorneoDTO crearTorneoDTO) {
+      Torneo torneo = new Torneo();
+      torneo.setDescripcion(crearTorneoDTO.getDescripcion());
+      torneo.setPremioMonedas(crearTorneoDTO.getMonedasPrimerLugar().doubleValue());
+      torneo.setEstado(EstadoTorneoEnum.ABIERTO);
+      torneo.setNombre(crearTorneoDTO.getNombre());
+      // Asignar formato LIGA por defecto
+      FormatoTorneo formato = formatoTorneoRepository.findByTipo(TipoFormato.LIGA);
+      if (formato == null) {
+         formato = new FormatoTorneo();
+         formato.setTipo(TipoFormato.LIGA);
+         formatoTorneoRepository.save(formato);
+      }
+      torneo.setFormatoTorneo(formato);
       torneoRepository.save(torneo);
    }
 }

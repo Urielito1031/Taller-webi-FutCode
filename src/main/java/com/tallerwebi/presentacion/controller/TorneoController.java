@@ -7,24 +7,25 @@ import com.tallerwebi.dominio.service.SimularTorneoService;
 import com.tallerwebi.dominio.service.TorneoService;
 import com.tallerwebi.dominio.service.UsuarioService;
 import com.tallerwebi.dominio.service.FrasePartidoService;
-import com.tallerwebi.infraestructura.repositoryImpl.EquipoTorneoRepositoryImpl;
 import com.tallerwebi.presentacion.dto.EquipoDTO;
 import com.tallerwebi.presentacion.dto.EquipoTorneoDTO;
 import com.tallerwebi.presentacion.dto.TorneoDTO;
+import com.tallerwebi.presentacion.dto.CrearTorneoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 import com.tallerwebi.presentacion.dto.SimulacionTorneoResumenDTO;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/torneo")
@@ -376,4 +377,23 @@ public class TorneoController {
       return mav;
    }
 
+   @GetMapping("/crear-personalizado")
+   public String mostrarFormularioCrearTorneo(Model model) {
+      model.addAttribute("crearTorneoDTO", new CrearTorneoDTO());
+      return "crear-torneo";
+   }
+
+   @PostMapping("/crear-personalizado")
+   public String procesarFormularioCrearTorneo(@Valid @ModelAttribute("crearTorneoDTO") CrearTorneoDTO crearTorneoDTO,
+         BindingResult result,
+         Model model,
+         RedirectAttributes redirectAttributes) {
+      if (result.hasErrors()) {
+         return "crear-torneo";
+      }
+      // Lógica para crear el torneo (a implementar en el servicio)
+      torneoService.crearTorneoPersonalizado(crearTorneoDTO);
+      redirectAttributes.addFlashAttribute("mensajeTorneo", "¡Torneo creado exitosamente!");
+      return "redirect:/home";
+   }
 }

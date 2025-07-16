@@ -18,6 +18,8 @@ public class PartidoHistorialDTO {
    private Integer golesVisitante;
    private String resultado;
    private String resultadoUsuario; // Nueva propiedad para el resultado desde la perspectiva del usuario
+   private TorneoDTO torneo; // Propiedad para acceder al torneo
+   private EquipoDTO equipoUsuario; // Propiedad para el equipo del usuario
    private List<EventoPartidoDTO> eventosPartido;
 
    public PartidoHistorialDTO() {
@@ -57,12 +59,39 @@ public class PartidoHistorialDTO {
       dto.setGolesLocal(partido.getGolesLocal());
       dto.setGolesVisitante(partido.getGolesVisitante());
 
+      // Agregar información del torneo
+      if (partido.getFecha() != null && partido.getFecha().getTorneo() != null) {
+         TorneoDTO torneoDTO = new TorneoDTO();
+         torneoDTO.setId(partido.getFecha().getTorneo().getId());
+         torneoDTO.setNombre(partido.getFecha().getTorneo().getNombre());
+         torneoDTO.setDescripcion(partido.getFecha().getTorneo().getDescripcion());
+         torneoDTO.setEstado(partido.getFecha().getTorneo().getEstado());
+         torneoDTO.setPremioMonedas(partido.getFecha().getTorneo().getPremioMonedas());
+         torneoDTO.setCapacidadMaxima(partido.getFecha().getTorneo().getCapacidadMaxima());
+
+         // Convertir el formato del torneo
+         if (partido.getFecha().getTorneo().getFormatoTorneo() != null) {
+            FormatoTorneoDTO formatoDTO = new FormatoTorneoDTO();
+            formatoDTO.setTipo(partido.getFecha().getTorneo().getFormatoTorneo().getTipo());
+            torneoDTO.setFormatoTorneo(formatoDTO);
+         }
+
+         dto.setTorneo(torneoDTO);
+      }
+
+      // Determinar y establecer el equipo del usuario
+      if (partido.getEquipoLocal() != null && partido.getEquipoLocal().getId().equals(idEquipoUsuario)) {
+         dto.setEquipoUsuario(new EquipoDTO().convertFromEntity(partido.getEquipoLocal()));
+      } else if (partido.getEquipoVisitante() != null && partido.getEquipoVisitante().getId().equals(idEquipoUsuario)) {
+         dto.setEquipoUsuario(new EquipoDTO().convertFromEntity(partido.getEquipoVisitante()));
+      }
+
       if (partido.getResultado() != null) {
          dto.setResultado(partido.getResultado().name());
          // Calcular el resultado desde la perspectiva del usuario
          if (partido.getResultado().name().equals("EMPATE")) {
             dto.setResultadoUsuario("EMPATASTE");
-         } else{
+         } else {
             assert partido.getEquipoLocal() != null;
             if (partido.getEquipoLocal().getId().equals(idEquipoUsuario)) {
                // El usuario es el equipo local
@@ -73,7 +102,7 @@ public class PartidoHistorialDTO {
                } else {
                   dto.setResultadoUsuario("PENDIENTE");
                }
-            } else{
+            } else {
                assert partido.getEquipoVisitante() != null;
                if (partido.getEquipoVisitante().getId().equals(idEquipoUsuario)) {
                   // El usuario es el equipo visitante
@@ -98,15 +127,17 @@ public class PartidoHistorialDTO {
 
    public String toString() {
       return "PartidoHistorialDTO{" +
-        "id=" + id +
-        ", equipoLocal=" + equipoLocal +
-        ", equipoVisitante=" + equipoVisitante +
-        ", numeroDeFecha=" + numeroDeFecha +
-        ", golesLocal=" + golesLocal +
-        ", golesVisitante=" + golesVisitante +
-        ", resultado='" + resultado + '\'' +
-        ", resultadoUsuario='" + resultadoUsuario + '\'' +
-        ", eventosPartido=" + eventosPartido +
-        '}';
+            "id=" + id +
+            ", equipoLocal=" + equipoLocal +
+            ", equipoVisitante=" + equipoVisitante +
+            ", numeroDeFecha=" + numeroDeFecha +
+            ", golesLocal=" + golesLocal +
+            ", golesVisitante=" + golesVisitante +
+            ", resultado='" + resultado + '\'' +
+            ", resultadoUsuario='" + resultadoUsuario + '\'' +
+            ", torneo=" + torneo +
+            ", equipoUsuario=" + equipoUsuario +
+            ", eventosPartido=" + eventosPartido +
+            '}';
    }
 }

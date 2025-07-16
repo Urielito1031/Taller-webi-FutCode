@@ -83,10 +83,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuarioLocal = partido.getEquipoLocal().getUsuario();
         Usuario usuarioVisitante = partido.getEquipoVisitante().getUsuario();
 
+        // Verificar si es un torneo de partido único
+        Torneo torneo = partido.getFecha().getTorneo();
+        boolean esPartidoUnico = torneo.getFormatoTorneo().getTipo().name().equals("PARTIDO_UNICO");
+        Double premioTorneo = torneo.getPremioMonedas();
+
         switch (resultado) {
             case LOCAL_GANA:
                 if (usuarioLocal != null) {
-                    usuarioLocal.setMonedas(usuarioLocal.getMonedas() + MONEDAS_VICTORIA);
+                    if (esPartidoUnico && premioTorneo != null) {
+                        // Para torneos de partido único, el ganador recibe el premio del torneo
+                        usuarioLocal.setMonedas(usuarioLocal.getMonedas() + premioTorneo);
+                    } else {
+                        // Para otros tipos de torneo, recibe las monedas normales
+                        usuarioLocal.setMonedas(usuarioLocal.getMonedas() + MONEDAS_VICTORIA);
+                    }
                     repositorioUsuario.actualizar(usuarioLocal);
                 }
                 // El visitante pierde, NO suma monedas
@@ -94,7 +105,13 @@ public class UsuarioServiceImpl implements UsuarioService {
             case VISITANTE_GANA:
                 // El local pierde, NO suma monedas
                 if (usuarioVisitante != null) {
-                    usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + MONEDAS_VICTORIA);
+                    if (esPartidoUnico && premioTorneo != null) {
+                        // Para torneos de partido único, el ganador recibe el premio del torneo
+                        usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + premioTorneo);
+                    } else {
+                        // Para otros tipos de torneo, recibe las monedas normales
+                        usuarioVisitante.setMonedas(usuarioVisitante.getMonedas() + MONEDAS_VICTORIA);
+                    }
                     repositorioUsuario.actualizar(usuarioVisitante);
                 }
                 break;

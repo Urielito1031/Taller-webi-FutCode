@@ -112,6 +112,39 @@ public class TorneoServiceImpl implements TorneoService {
 
    @Override
    public List<Fecha> generarFechas(List<Equipo> equipos, Torneo torneo) {
+      // Verificar si es un torneo de partido único
+      boolean esPartidoUnico = torneo.getFormatoTorneo().getTipo().name().equals("PARTIDO_UNICO");
+
+      if (esPartidoUnico) {
+         // Para torneos de partido único, generar solo una fecha con un partido
+         List<Fecha> fechas = new ArrayList<>();
+         Fecha fecha = new Fecha();
+         fecha.setNumeroDeFecha(1L);
+         fecha.setTorneo(torneo);
+
+         List<Partido> partidos = new ArrayList<>();
+
+         // Crear un solo partido entre los dos equipos
+         if (equipos.size() >= 2) {
+            Partido partido = new Partido();
+            partido.setEquipoLocal(equipos.get(0));
+            partido.setEquipoVisitante(equipos.get(1));
+            partido.setFecha(fecha);
+            LocalDateTime fechaEncuentro = LocalDate.now()
+                  .with(DayOfWeek.SATURDAY)
+                  .atTime(15, 0); // sábado 15:00 hs
+
+            partido.setFechaEncuentro(fechaEncuentro);
+            partidos.add(partido);
+            partido.setResultado(ResultadoPartido.PENDIENTE);
+         }
+
+         fecha.setPartidos(partidos);
+         fechas.add(fecha);
+         return fechas;
+      }
+
+      // Lógica original para torneos de liga
       int n = equipos.size();
       // Este metodo usa el algoritmo de round-robin xD, googleenlo desp
 

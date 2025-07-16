@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion.controller;
 
 import com.tallerwebi.dominio.model.entities.*;
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import com.tallerwebi.dominio.repository.*;
 import com.tallerwebi.dominio.service.EquipoTorneoService;
 import com.tallerwebi.dominio.service.SimularTorneoService;
@@ -29,6 +30,8 @@ import javax.validation.Valid;
 import com.tallerwebi.dominio.model.enums.TipoFormato;
 import java.util.HashMap;
 import java.util.Map;
+import com.tallerwebi.dominio.service.PartidoService;
+import com.tallerwebi.presentacion.dto.HistorialTorneoDTO;
 
 @Controller
 @RequestMapping("/torneo")
@@ -44,6 +47,7 @@ public class TorneoController {
    private final PartidoRepository partidoRepository;
    private final FechaRepository fechaRepository;
    private final FrasePartidoService frasePartidoService;
+   private final PartidoService partidoService;
 
    @Autowired
    public TorneoController(TorneoService torneoService, EquipoTorneoService equipoTorneoService,
@@ -51,7 +55,8 @@ public class TorneoController {
          SimularTorneoService simularTorneoService, TorneoRepository torneoRepository,
          EquipoTorneoRepository equipoTorneoRepository, PartidoRepository partidoRepository,
          FechaRepository fechaRepository, NarracionRepository narracionRepository,
-         FrasePartidoService frasePartidoService) {
+         FrasePartidoService frasePartidoService,
+         PartidoService partidoService) {
       this.torneoService = torneoService;
       this.equipoTorneoService = equipoTorneoService;
       this.usuarioService = usuarioService;
@@ -62,6 +67,7 @@ public class TorneoController {
       this.fechaRepository = fechaRepository;
       this.narracionRepository = narracionRepository;
       this.frasePartidoService = frasePartidoService;
+      this.partidoService = partidoService;
    }
 
    @GetMapping(path = "/lista-torneos")
@@ -446,23 +452,52 @@ public class TorneoController {
       }
       Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
       if (usuario == null || usuario.getEquipo() == null) {
-         model.addAttribute("historialTorneos", null);
+         model.addAttribute("torneosGanados", null);
+         model.addAttribute("torneosOtros", null);
          return "vista-historial-torneos";
       }
       Long equipoId = usuario.getEquipo().getId();
-
       List<EquipoTorneoDTO> equiposTorneos = equipoTorneoService.getAllByEquipoId(equipoId);
-      List<Map<String, Object>> historialTorneos = new ArrayList<>();
+      List<HistorialTorneoDTO> ganados = new ArrayList<>();
+      List<HistorialTorneoDTO> otros = new ArrayList<>();
+      // Traer todos los partidos jugados por el equipo
+      List<com.tallerwebi.presentacion.dto.PartidoHistorialDTO> partidos = partidoService
+            .obtenerPartidosJugadosPorEquipoId(equipoId);
       for (EquipoTorneoDTO etdto : equiposTorneos) {
          TorneoDTO torneo = etdto.getTorneo();
-         if (torneo != null && torneo.getEstado() != null && torneo.getEstado().name().equals("FINALIZADO")) {
-            Map<String, Object> t = new HashMap<>();
-            t.put("nombre", torneo.getNombre());
-            t.put("puesto", etdto.getPosicion());
-            historialTorneos.add(t);
+         System.out.println("[HISTORIAL] Torneo: " + (torneo != null ? torneo.getNombre() : "null") +
+               " | Estado: " + (torneo != null && torneo.getEstado() != null ? torneo.getEstado().name() : "null") +
+               " | Puesto: " + etdto.getPosicion());
+         if (torneo != null && torneo.getEstado() == EstadoTorneoEnum.FINALIZADO) {
+            HistorialTorneoDTO dto = new HistorialTorneoDTO();
+            dto.setNombreTorneo(torneo.getNombre());
+            dto.setTipoTorneo(torneo.getFormatoTorneo() != null ? torneo.getFormatoTorneo().getTipo().name() : "");
+            dto.setPuesto(etdto.getPosicion());
+            dto.setGanado(etdto.getPosicion() == 1);
+            dto.setTop3(etdto.getPosicion() <= 3);
+            dto.setEstado(torneo.getEstado());
+            // Calcular goles marcados en ese torneo
+            int goles = partidos.stream()
+                  .filter(p -> p.getTorneo() != null && p.getTorneo().getId().equals(torneo.getId()))
+                  .mapToInt(p -> {
+                     if (p.getEquipoLocal() != null && p.getEquipoLocal().getId().equals(equipoId)) {
+                        return p.getGolesLocal() != null ? p.getGolesLocal() : 0;
+                     } else if (p.getEquipoVisitante() != null && p.getEquipoVisitante().getId().equals(equipoId)) {
+                        return p.getGolesVisitante() != null ? p.getGolesVisitante() : 0;
+                     } else {
+                        return 0;
+                     }
+                  }).sum();
+            dto.setGolesMarcados(goles);
+            if (dto.isGanado()) {
+               ganados.add(dto);
+            } else {
+               otros.add(dto);
+            }
          }
       }
-      model.addAttribute("historialTorneos", historialTorneos);
+      model.addAttribute("torneosGanados", ganados);
+      model.addAttribute("torneosOtros", otros);
       return "vista-historial-torneos";
    }
 }

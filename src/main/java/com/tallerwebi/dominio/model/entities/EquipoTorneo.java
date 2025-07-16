@@ -122,16 +122,9 @@ public class EquipoTorneo {
       equipoTorneoDTO.setGolesEnContra(this.golesEnContra);
       equipoTorneoDTO.setPuntos(this.puntos);
       equipoTorneoDTO.setEquipo(this.equipo.convertToDTO());
-      // Solo setear id y nombre del torneo si están inicializados
-      if (this.torneo != null && this.torneo.getId() != null) {
-         TorneoDTO torneoDTO = new TorneoDTO();
-         torneoDTO.setId(this.torneo.getId());
-         try {
-            torneoDTO.setNombre(this.torneo.getNombre());
-         } catch (org.hibernate.LazyInitializationException e) {
-            // Si no está inicializado, ignora el nombre
-         }
-         equipoTorneoDTO.setTorneo(torneoDTO);
+      // Usar el convertToDTO del torneo para asegurar el estado correcto
+      if (this.torneo != null) {
+         equipoTorneoDTO.setTorneo(this.torneo.convertToDTO());
       }
       equipoTorneoDTO.setPosicionAnterior(this.posicionAnterior != null ? this.posicionAnterior : 0);
       return equipoTorneoDTO;

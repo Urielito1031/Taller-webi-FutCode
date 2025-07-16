@@ -14,9 +14,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
-
-
+public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository {
 
    private final SessionFactory sessionFactory;
 
@@ -26,17 +24,14 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
    }
 
    @Override
-   public List<EquipoTorneo> getAllByTorneoId(Long torneoId){
+   public List<EquipoTorneo> getAllByTorneoId(Long torneoId) {
       return getSession().createQuery(
-          "FROM EquipoTorneo et " +
-             "WHERE et.torneo.id = :torneoId " +
-             "ORDER BY et.posicion",
-            EquipoTorneo.class
-      ).setParameter("torneoId", torneoId).list();
+            "SELECT et FROM EquipoTorneo et JOIN FETCH et.torneo WHERE et.torneo.id = :torneoId ORDER BY et.posicion",
+            EquipoTorneo.class).setParameter("torneoId", torneoId).list();
    }
 
    @Override
-   public void unirEquipoATorneo(Long torneoId,Long equipoId){
+   public void unirEquipoATorneo(Long torneoId, Long equipoId) {
       EquipoTorneo equipoTorneo = new EquipoTorneo();
 
       equipoTorneo.setTorneo(getSession().get(Torneo.class, torneoId));
@@ -52,13 +47,13 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
 
    @Override
    public List<EquipoTorneo> getAllByEquipoId(Long equipoId) {
+      getSession().clear(); // Forzar refresco desde la base de datos
       return getSession().createQuery(
-          "FROM EquipoTorneo et WHERE et.equipo.id = :equipoId ORDER BY et.torneo.id DESC",
-          EquipoTorneo.class
-      ).setParameter("equipoId", equipoId).list();
+            "SELECT et FROM EquipoTorneo et JOIN FETCH et.torneo WHERE et.equipo.id = :equipoId ORDER BY et.torneo.id DESC",
+            EquipoTorneo.class).setParameter("equipoId", equipoId).list();
    }
 
-   private Session getSession(){
+   private Session getSession() {
       return this.sessionFactory.getCurrentSession();
    }
 }

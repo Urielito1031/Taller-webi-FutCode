@@ -7,7 +7,7 @@
          </h1>
       </header>
 
-      <div class="contenedores row">
+            <div class="contenedores row">
          <section class="contenedor-torneo col-12 col-md-6 col-lg-4 mb-4" th:each="torneo : ${torneos}">
             <div class="torneo-card card h-100 d-flex flex-column shadow-sm position-relative p-4">
 
@@ -50,6 +50,18 @@
             </div>
          </section>
 
+      </div>
+
+      <!-- Botón Hero para Crear Torneo al final -->
+      <div class="text-center mt-5">
+         <div class="hero-create-tournament">
+            <a th:href="@{/torneo/crear-personalizado}" class="btn btn-join">
+               <i class="bi bi-trophy-fill me-2"></i>CREAR NUEVO TORNEO
+            </a>
+            <p class="hero-subtitle mt-2">
+               ¡Organiza tu propio torneo!
+            </p>
+         </div>
       </div>
 
    </main>

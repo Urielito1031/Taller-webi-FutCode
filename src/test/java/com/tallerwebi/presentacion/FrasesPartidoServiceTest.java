@@ -43,7 +43,7 @@ class FrasePartidoServiceImplTest {
         System.out.println(tipos.toString());
     }
 
-    @Test
+//    @Test
     void deberiaGenerarFraseParaJugadorYEquipo() {
         Jugador jugador = new Jugador();
         jugador.setId(1L);

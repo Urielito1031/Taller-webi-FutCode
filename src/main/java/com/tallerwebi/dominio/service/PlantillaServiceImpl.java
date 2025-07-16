@@ -201,16 +201,34 @@ public class PlantillaServiceImpl implements PlantillaService {
 
       for (FormacionEquipo fe : formaciones) {
          Jugador jugador = fe.getJugador();
+         PosicionEnum posicionJugador = jugador.getPosicion();
+         PosicionEnum posicionCampo = fe.getPosicionEnCampo();
 
-         if (jugador.getRating() != null) {
-            total += jugador.getRating();
+         if (jugador != null && jugador.getRating() != null) {
+            double rating = jugador.getRating();
+            double ratingSumado;
+
+            if (posicionJugador == posicionCampo) {
+               ratingSumado = rating;
+            }
+            else if ((posicionJugador == PosicionEnum.DEFENSOR && posicionCampo == PosicionEnum.MEDIOCAMPISTA) ||
+               (posicionJugador == PosicionEnum.DELANTERO && posicionCampo == PosicionEnum.MEDIOCAMPISTA) ||
+               (posicionJugador == PosicionEnum.MEDIOCAMPISTA && posicionCampo == PosicionEnum.DELANTERO)
+            ) {
+               ratingSumado = rating * 0.75;
+            }
+            else if (posicionJugador == PosicionEnum.ARQUERO && posicionCampo != PosicionEnum.ARQUERO) {
+               ratingSumado = rating * 0.25;
+            } else {
+               ratingSumado = rating * 0.5;
+            }
+
+            total += ratingSumado;
             cantidad++;
          }
       }
 
-      if (cantidad == 0) {
-         return 0.0;
-      }
+      if (cantidad == 0) {return 0.0;}
 
       return total / cantidad;
    }

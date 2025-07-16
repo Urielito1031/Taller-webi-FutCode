@@ -15,10 +15,15 @@ public class EquipoTorneoDTO {
    private int golesEnContra;
    private int puntos;
 
+   private int posicionAnterior;
+
    private TorneoDTO torneo;
    private EquipoDTO equipo;
 
-   public EquipoTorneoDTO(int posicion,int partidosJugados, int partidosGanados, int partidosEmpatados, int partidosPerdidos, int golesAFavor, int golesEnContra, int puntos) {
+   private Long partidoId;
+
+   public EquipoTorneoDTO(int posicion, int partidosJugados, int partidosGanados, int partidosEmpatados,
+         int partidosPerdidos, int golesAFavor, int golesEnContra, int puntos) {
       this.posicion = posicion;
       this.partidosJugados = partidosJugados;
       this.partidosGanados = partidosGanados;
@@ -32,29 +37,42 @@ public class EquipoTorneoDTO {
    public EquipoTorneoDTO() {
    }
 
-
-
    public int getDg() {
       return golesAFavor - golesEnContra;
    }
 
-   public String toString(){
-      return "EquipoTorneoDTO{" +
-        "id=" + id +
-        ", posicion=" + posicion +
-        ", partidosJugados=" + partidosJugados +
-        ", partidosGanados=" + partidosGanados +
-        ", partidosEmpatados=" + partidosEmpatados +
-        ", partidosPerdidos=" + partidosPerdidos +
-        ", golesAFavor=" + golesAFavor +
-        ", golesEnContra=" + golesEnContra +
-        ", puntos=" + puntos +
-        ", torneoDTO={id=" + (torneo != null ? torneo.getId() : "null") +
-        ", nombre='" + (torneo != null ? torneo.getNombre() : "null") + "'}" +
-        ", equipoDTO={id=" + (equipo != null ? equipo.getId() : "null") +
-        ", nombre='" + (equipo != null ? equipo.getNombre() : "null") + "'}" +
-        '}';
+   public boolean isSubio() {
+      return posicionAnterior > posicion;
    }
 
+   public boolean isBajo() {
+      return posicionAnterior < posicion;
+   }
+
+   public boolean isIgual() {
+      return posicionAnterior == posicion;
+   }
+
+   public int getVariacionPosicion() {
+      return posicion - posicionAnterior;
+   }
+
+   public String toString() {
+      return "EquipoTorneoDTO{" +
+            "id=" + id +
+            ", posicion=" + posicion +
+            ", partidosJugados=" + partidosJugados +
+            ", partidosGanados=" + partidosGanados +
+            ", partidosEmpatados=" + partidosEmpatados +
+            ", partidosPerdidos=" + partidosPerdidos +
+            ", golesAFavor=" + golesAFavor +
+            ", golesEnContra=" + golesEnContra +
+            ", puntos=" + puntos +
+            ", torneoDTO={id=" + (torneo != null ? torneo.getId() : "null") +
+            ", nombre='" + (torneo != null ? torneo.getNombre() : "null") + "'}" +
+            ", equipoDTO={id=" + (equipo != null ? equipo.getId() : "null") +
+            ", nombre='" + (equipo != null ? equipo.getNombre() : "null") + "'}" +
+            '}';
+   }
 
 }

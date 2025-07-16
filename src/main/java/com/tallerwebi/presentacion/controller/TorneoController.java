@@ -141,6 +141,24 @@ public class TorneoController {
 
       List<EquipoTorneo> tabla = torneoService.calcularTablaDePosiciones(partidos, tablaAnterior);
 
+      // Convertir a DTO y setear partidoId
+      List<EquipoTorneoDTO> torneoEquiposDTO = tabla.stream().map(et -> {
+         EquipoTorneoDTO dto = et.convertToDTO();
+         // Solo para PARTIDO_UNICO, buscar el partido correspondiente
+         if (torneo.getFormatoTorneo() != null &&
+               "PARTIDO_UNICO".equals(torneo.getFormatoTorneo().getTipo().name())) {
+            Partido partido = partidos.stream()
+                  .filter(p -> (p.getEquipoLocal() != null && p.getEquipoLocal().getId().equals(et.getEquipo().getId()))
+                        || (p.getEquipoVisitante() != null
+                              && p.getEquipoVisitante().getId().equals(et.getEquipo().getId())))
+                  .findFirst().orElse(null);
+            if (partido != null) {
+               dto.setPartidoId(partido.getId());
+            }
+         }
+         return dto;
+      }).collect(Collectors.toList());
+
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       model.addAttribute("usuarioId", usuarioId != null ? usuarioId : -1L);
 
@@ -153,7 +171,7 @@ public class TorneoController {
       model.addAttribute("usuarioYaUnido", usuarioYaUnido);
 
       model.addAttribute("torneo", torneo);
-      model.addAttribute("torneoEquipos", tabla);
+      model.addAttribute("torneoEquipos", torneoEquiposDTO);
       return "detalle-torneo";
    }
 
@@ -432,7 +450,7 @@ public class TorneoController {
          return "vista-historial-torneos";
       }
       Long equipoId = usuario.getEquipo().getId();
-      
+
       List<EquipoTorneoDTO> equiposTorneos = equipoTorneoService.getAllByEquipoId(equipoId);
       List<Map<String, Object>> historialTorneos = new ArrayList<>();
       for (EquipoTorneoDTO etdto : equiposTorneos) {

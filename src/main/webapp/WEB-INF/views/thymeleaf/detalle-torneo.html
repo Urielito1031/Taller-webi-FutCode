@@ -208,15 +208,28 @@
                </thead>
                <tbody>
                <tr th:each="equipo : ${torneoEquipos}"
-                   th:classappend="${equipo.equipo.usuario != null and equipo.equipo.usuario.id == usuarioId} ? 'mi-equipo'" >
+                   th:classappend="${equipo.equipo.usuarioId != null and equipo.equipo.usuarioId == usuarioId} ? 'mi-equipo'">
                   <td th:text="${equipo.posicion}">1</td>
                   <td>
                      <div class="team-row">
                         <div class="team-logo-table">
-                           <img th:if="${equipo.equipo.imagen}" th:src="${equipo.equipo.imagen}" alt="Escudo" class="team-escudo-table">
-                           <div th:unless="${equipo.equipo.imagen}" class="team-initials-table" th:text="${#strings.substring(equipo.equipo.nombre, 0, 2)}">EQ</div>
+                           <a th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}"
+                              th:href="@{/partido/{partidoId}/rival/{equipoId}/formacion(partidoId=${equipo.partidoId}, equipoId=${equipo.equipo.id})}">
+                              <img th:if="${equipo.equipo.imagen != null and !#strings.isEmpty(equipo.equipo.imagen)}"
+                                   th:src="${equipo.equipo.imagen}" alt="Escudo" class="team-escudo-table">
+                              <div th:if="${equipo.equipo.imagen == null or #strings.isEmpty(equipo.equipo.imagen)}"
+                                   class="team-initials-table" th:text="${#strings.substring(equipo.equipo.nombre, 0, 2)}">EQ</div>
+                           </a>
+                           <img th:if="${torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO' and equipo.equipo.imagen != null and !#strings.isEmpty(equipo.equipo.imagen)}"
+                                th:src="${equipo.equipo.imagen}" alt="Escudo" class="team-escudo-table">
+                           <div th:if="${torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO' and (equipo.equipo.imagen == null or #strings.isEmpty(equipo.equipo.imagen))}"
+                                class="team-initials-table" th:text="${#strings.substring(equipo.equipo.nombre, 0, 2)}">EQ</div>
                         </div>
-                        <span th:text="${equipo.equipo.nombre}">Equipo 1</span>
+                        <a th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'} and ${equipo.equipo.usuarioId != usuarioId}"
+                           th:href="@{/partido/{partidoId}/rival/{equipoId}/formacion(partidoId=${equipo.partidoId}, equipoId=${equipo.equipo.id})}">
+                           <span th:text="${equipo.equipo.nombre}">Equipo 1</span>
+                        </a>
+                        <span th:if="${equipo.equipo.usuarioId == usuarioId}" th:text="${equipo.equipo.nombre}">Equipo 1</span>
                      </div>
 
                      <span th:if="${equipo.subio}" class="ms-2 text-success" title="Subió de posición">

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Formación del Equipo Rival</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link th:href="@{/css/plantilla/plantilla.css}" rel="stylesheet" />
+   <link th:href="@{/css/validation-errors.css}" rel="stylesheet" />
+   <link th:href="@{/css/rareza-jugadores.css}" rel="stylesheet" />
+</head>
+<body th:style="'background: url(' + @{/img/plantilla-fondo.jpg} + ') no-repeat center center fixed; background-size: cover; min-height: 100vh;'">
+
+<div class="container main-container">
+   <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+      <span th:text="${error}"></span>
+   </div>
+
+   <header class="header text-center py-4">
+      <a th:href="@{/torneo/detalle-torneo/{id}(id=${torneoId})}" class="btn btn-secondary mb-2">VOLVER</a>
+      <h1 class="header-title">FORMACIÓN DEL EQUIPO RIVAL</h1>
+      <div class="formation-buttons d-flex justify-content-center gap-2 mt-3">
+         <span class="formation-btn active" th:text="${formacion.esquema != null} ? ${formacion.esquema.formacionTexto} : 'Esquema desconocido'"></span>
+      </div>
+   </header>
+
+   <!-- Área del campo -->
+   <div class="field-area ratio ratio-16x9 mb-4" id="field"
+        th:style="'background: url(' + @{/img/cancha-futbol.jpg} + ') no-repeat center center; background-size: cover;'"
+        th:attr="data-esquema=${formacion.esquema.formacionTexto},data-equipo-id=${formacion.equipoId},data-default-img=@{/img/jugadores/futbolista-default.png}">
+   </div>
+
+   <!-- Lista de jugadores -->
+   <section class="player-section">
+      <h2 class="section-title">Plantilla del Equipo</h2>
+      <div class="player-list d-flex flex-wrap gap-3 py-3">
+         <div th:each="posicionJugador : ${jugadores}" class="player-item">
+            <div class="player-card"
+                 th:attr="data-player-id=${posicionJugador.jugador.id}"
+                 th:classappend="${posicionJugador.jugador.rarezaCss}">
+               <div class="rareza-badge" th:classappend="${posicionJugador.jugador.rarezaCss}" th:text="${posicionJugador.jugador.rarezaJugador}">NORMAL</div>
+               <div class="player-image">
+                  <img th:src="${#uris.escapePath(posicionJugador.jugador.imagen)}" alt="Imagen futbolista" class="card-img" />
+               </div>
+               <div class="player-info p-3">
+                  <div class="player-header d-flex justify-content-between align-items-center mb-2">
+                     <span class="player-number" th:text="${posicionJugador.jugador.numeroCamiseta}"></span>
+                     <span class="player-rating" th:text="${posicionJugador.jugador.rating}"></span>
+                  </div>
+                  <h6 th:text="${posicionJugador.jugador.nombre} + ' ' + ${posicionJugador.jugador.apellido}" class="player-name mb-1"></h6>
+                  <div class="player-details">
+                     <small th:text="${posicionJugador.jugador.posicionNatural}" class="d-block"></small>
+                     <small th:text="'Estado: ' + ${posicionJugador.jugador.estadoFisico} + '%'" class="d-block"></small>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>
+
+<!-- Scripts solo para renderizado visual, sin drag and drop ni edición -->
+<script th:inline="javascript">
+   let alineacionPersistida = /*[[${formacion.alineacion}]]*/ [];
+   console.log('alineacionPersistida', alineacionPersistida);
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script th:src="@{/js/plantilla/plantilla.js}"></script>
+<script>
+   $(document).ready(function() {
+      // Forzar inicialización del campo por si acaso
+      if (window.FutCode && window.FutCode.TeamFormation) {
+         window.FutCode.TeamFormation.initializeField();
+      }
+      // Ahora sí, oculta la lista
+      $(".player-card").attr("draggable", false);
+      $(".player-card").css({cursor: "default"});
+      $(".player-section").hide();
+   });
+</script>
+</body>
+</html> 

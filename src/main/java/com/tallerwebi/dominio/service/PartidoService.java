@@ -6,7 +6,7 @@ import com.tallerwebi.presentacion.dto.PartidoHistorialDTO;
 
 import java.util.List;
 
-public interface PartidoService{
+public interface PartidoService {
       void save(Partido partido);
 
       List<PartidoDTO> obtenerPartidosPorTorneoId(Long idTorneo);
@@ -15,4 +15,5 @@ public interface PartidoService{
 
       List<PartidoHistorialDTO> obtenerPartidosJugadosPorEquipoId(Long idEquipo);
 
+      Partido obtenerPartidoConRelaciones(Long id);
 }

@@ -508,20 +508,6 @@
             $marker.attr("title", "Doble clic para quitar");
             console.log(`Jugador asignado. playersOnField: ${playersOnField}, playerId: ${playerId}`);
          },
-         setupClearFieldButton() {
-            $("<button>", {
-               id: "clear-field-btn",
-               text: "Limpiar Campo",
-               class: "btn btn-danger mt-3",
-               click: () => confirm("Quitar todos los jugadores?") && this.clearField(),
-            }).appendTo(".container");
-         },
-         clearField() {
-            $(".position-marker.occupied").each((_, marker) => MarkerFactory.removePlayerFromMarker($(marker)));
-            resetPlayerCards();
-            playersOnField = 0;
-            console.log(`Campo limpiado. playersOnField: ${playersOnField}`);
-         },
          setupFieldFormation() {
             $("#form").on("submit", function(event) {
                event.preventDefault();
@@ -588,7 +574,6 @@
          PlayerInteraction.setupDraggablePlayers();
          TeamFormation.initializeField();
          PlayerInteraction.setupDroppableField();
-         PlayerInteraction.setupClearFieldButton();
          PlayerInteraction.setupFieldFormation();
 
          $(".player-card").attr("title", "Arrastra al campo");

@@ -86,6 +86,18 @@
            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
+        .nombre-link-rival {
+           color: #fff;
+           text-decoration: none;
+           font-weight: 500;
+           cursor: pointer;
+           transition: color 0.2s;
+        }
+        .nombre-link-rival:hover {
+           color: #ffc107;
+           text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
@@ -213,23 +225,14 @@
                   <td>
                      <div class="team-row">
                         <div class="team-logo-table">
-                           <a th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'}"
-                              th:href="@{/partido/{partidoId}/rival/{equipoId}/formacion(partidoId=${equipo.partidoId}, equipoId=${equipo.equipo.id})}">
-                              <img th:if="${equipo.equipo.imagen != null and !#strings.isEmpty(equipo.equipo.imagen)}"
-                                   th:src="${equipo.equipo.imagen}" alt="Escudo" class="team-escudo-table">
-                              <div th:if="${equipo.equipo.imagen == null or #strings.isEmpty(equipo.equipo.imagen)}"
-                                   class="team-initials-table" th:text="${#strings.substring(equipo.equipo.nombre, 0, 2)}">EQ</div>
-                           </a>
-                           <img th:if="${torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO' and equipo.equipo.imagen != null and !#strings.isEmpty(equipo.equipo.imagen)}"
-                                th:src="${equipo.equipo.imagen}" alt="Escudo" class="team-escudo-table">
-                           <div th:if="${torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO' and (equipo.equipo.imagen == null or #strings.isEmpty(equipo.equipo.imagen))}"
-                                class="team-initials-table" th:text="${#strings.substring(equipo.equipo.nombre, 0, 2)}">EQ</div>
+                           <img th:src="@{${equipo.equipo.imagen}}" alt="Escudo" class="team-escudo-table">
                         </div>
+                        <span th:if="${equipo.equipo.usuarioId == usuarioId}" th:text="${equipo.equipo.nombre}"></span>
                         <a th:if="${torneo.formatoTorneo.tipo.name() == 'PARTIDO_UNICO'} and ${equipo.equipo.usuarioId != usuarioId}"
-                           th:href="@{/partido/{partidoId}/rival/{equipoId}/formacion(partidoId=${equipo.partidoId}, equipoId=${equipo.equipo.id})}">
-                           <span th:text="${equipo.equipo.nombre}">Equipo 1</span>
-                        </a>
-                        <span th:if="${equipo.equipo.usuarioId == usuarioId}" th:text="${equipo.equipo.nombre}">Equipo 1</span>
+                           th:href="@{/partido/{partidoId}/rival/{equipoId}/formacion(partidoId=${equipo.partidoId}, equipoId=${equipo.equipo.id})}"
+                           class="nombre-link-rival"
+                           th:text="${equipo.equipo.nombre}"></a>
+                        <span th:if="${torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO'} and ${equipo.equipo.usuarioId != usuarioId}" th:text="${equipo.equipo.nombre}"></span>
                      </div>
 
                      <span th:if="${equipo.subio}" class="ms-2 text-success" title="Subió de posición">

@@ -432,7 +432,7 @@ public class TorneoController {
          return "vista-historial-torneos";
       }
       Long equipoId = usuario.getEquipo().getId();
-      // Obtener todos los torneos finalizados donde participó el equipo del usuario
+      
       List<EquipoTorneoDTO> equiposTorneos = equipoTorneoService.getAllByEquipoId(equipoId);
       List<Map<String, Object>> historialTorneos = new ArrayList<>();
       for (EquipoTorneoDTO etdto : equiposTorneos) {

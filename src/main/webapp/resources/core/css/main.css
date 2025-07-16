@@ -625,3 +625,38 @@ main {
     }
 }
 
+/* Tarjetas de historial de torneos */
+.historial-torneo-card {
+  background: linear-gradient(135deg, #1e2a3c 80%, #00ffc3 10%);
+  color: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  transition: box-shadow 0.2s, transform 0.2s;
+  margin-bottom: 1.5rem;
+}
+.historial-torneo-card:hover {
+  box-shadow: 0 8px 32px rgba(0,255,195,0.18);
+  transform: translateY(-4px) scale(1.01);
+}
+.historial-torneo-card .card-title {
+  color: #00ffc3;
+  text-shadow: 0 0 10px rgba(0,255,195,0.2);
+}
+.puesto-box {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(0,255,195,0.08);
+  border-radius: 1rem;
+  padding: 0.5rem 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.historial-torneo-card .badge {
+  font-size: 1.1rem;
+  padding: 0.5em 1.2em;
+  border-radius: 1.2em;
+  background: linear-gradient(90deg, #00ffc3 60%, #00d4a3 100%);
+  color: #0d1b2a;
+  font-weight: bold;
+}
+

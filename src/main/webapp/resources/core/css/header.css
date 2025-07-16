@@ -38,6 +38,7 @@ body {
 .navbar .container {
     flex-wrap: nowrap;
     justify-content: flex-end;
+    overflow: visible;
 }
 
 ul {
@@ -83,6 +84,7 @@ ul {
 .dropdown {
     position: relative;
     display: inline-block;
+    z-index: 1100;
 }
 
 .dropdown-toggle {
@@ -110,7 +112,10 @@ ul {
     padding: 10px 0;
     border-radius: 8px;
     min-width: 150px;
-    z-index: 100;
+    z-index: 1100 !important;
+    top: 100%;
+    left: 0;
+
 }
 
 .dropdown-menu a {
@@ -141,4 +146,4 @@ ul {
     border-radius: 50px;
     padding: 0.2px 6px;
     color: white;
-} 
+}

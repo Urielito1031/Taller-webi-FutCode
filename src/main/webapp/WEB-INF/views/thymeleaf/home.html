@@ -57,7 +57,7 @@
 
     <div th:if="${mensajeTorneo}" class="alert alert-info" role="alert" th:text="${mensajeTorneo}">
     </div>
-    
+
     <!-- Sección de Acceso Rápido a Fechas -->
     <div class="row mb-4" th:if="${torneosUnidos != null and !torneosUnidos.isEmpty()}">
       <div class="col-12" th:each="torneo : ${torneosUnidos}">
@@ -82,7 +82,7 @@
         </div>
       </div>
     </div>
-    
+
     <div id="lista-torneos" th:replace="~{vista-list-torneos :: torneoList}"></div>
 
     <!-- Sección de Partidos Únicos -->

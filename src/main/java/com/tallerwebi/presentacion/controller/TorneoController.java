@@ -27,6 +27,8 @@ import com.tallerwebi.dominio.service.UsuarioServiceImpl;
 import com.tallerwebi.presentacion.dto.SimulacionTorneoResumenDTO;
 import javax.validation.Valid;
 import com.tallerwebi.dominio.model.enums.TipoFormato;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/torneo")
@@ -416,5 +418,33 @@ public class TorneoController {
       torneoService.crearTorneoPersonalizado(crearTorneoDTO);
       redirectAttributes.addFlashAttribute("mensajeTorneo", "¡Torneo creado exitosamente!");
       return "redirect:/home";
+   }
+
+   @GetMapping("/historial")
+   public String historialTorneos(Model model, HttpServletRequest request) {
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      if (usuarioId == null) {
+         return "redirect:/login";
+      }
+      Usuario usuario = this.usuarioService.buscarUsuarioPorId(usuarioId);
+      if (usuario == null || usuario.getEquipo() == null) {
+         model.addAttribute("historialTorneos", null);
+         return "vista-historial-torneos";
+      }
+      Long equipoId = usuario.getEquipo().getId();
+      // Obtener todos los torneos finalizados donde participó el equipo del usuario
+      List<EquipoTorneoDTO> equiposTorneos = equipoTorneoService.getAllByEquipoId(equipoId);
+      List<Map<String, Object>> historialTorneos = new ArrayList<>();
+      for (EquipoTorneoDTO etdto : equiposTorneos) {
+         TorneoDTO torneo = etdto.getTorneo();
+         if (torneo != null && torneo.getEstado() != null && torneo.getEstado().name().equals("FINALIZADO")) {
+            Map<String, Object> t = new HashMap<>();
+            t.put("nombre", torneo.getNombre());
+            t.put("puesto", etdto.getPosicion());
+            historialTorneos.add(t);
+         }
+      }
+      model.addAttribute("historialTorneos", historialTorneos);
+      return "vista-historial-torneos";
    }
 }

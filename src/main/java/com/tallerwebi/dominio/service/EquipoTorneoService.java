@@ -14,4 +14,5 @@ public interface EquipoTorneoService{
     //Metodo para usar cuando selecciona unirse a un torneo
    void unirseTorneo(Long torneoId, Long equipoId);
    List<EquipoTorneoDTO> getAllByTorneoId(Long torneoId);
+   List<EquipoTorneoDTO> getAllByEquipoId(Long equipoId);
 }

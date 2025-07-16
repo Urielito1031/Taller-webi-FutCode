@@ -449,7 +449,10 @@ main {
 
 .fechas-actions {
     display: flex;
+    flex-direction: row;
     align-items: center;
+    min-width: 320px;
+    gap: 18px;
 }
 
 .fechas-btn {

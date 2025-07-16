@@ -50,6 +50,14 @@ public class EquipoTorneoRepositoryImpl implements EquipoTorneoRepository{
       this.getSession().saveOrUpdate(equipoTorneo);
    }
 
+   @Override
+   public List<EquipoTorneo> getAllByEquipoId(Long equipoId) {
+      return getSession().createQuery(
+          "FROM EquipoTorneo et WHERE et.equipo.id = :equipoId ORDER BY et.torneo.id DESC",
+          EquipoTorneo.class
+      ).setParameter("equipoId", equipoId).list();
+   }
+
    private Session getSession(){
       return this.sessionFactory.getCurrentSession();
    }

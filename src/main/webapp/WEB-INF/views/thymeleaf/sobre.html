@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Jugadores del Sobre</title>
@@ -27,7 +27,7 @@
                     th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'rareza-normal' :
                     (${jugador.rarezaJugador.name() == 'RARO'} ? 'rareza-raro' :
                     (${jugador.rarezaJugador.name() == 'EPICO'} ? 'rareza-epico' : 'rareza-leyenda'))">
-                    
+
                     <div class="rareza-badge"
                          th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'normal' :
                          (${jugador.rarezaJugador.name() == 'RARO'} ? 'raro' :

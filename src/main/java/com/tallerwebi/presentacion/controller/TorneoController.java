@@ -305,6 +305,11 @@ public class TorneoController {
          return "redirect:/torneo/fechas"; // o página de error
       }
 
+      // Obtener el torneo directamente del partido (ya cargado con relaciones)
+      Torneo torneo = partido.getFecha().getTorneo();
+      boolean esPartidoUnico = torneo.getFormatoTorneo().getTipo().name().equals("PARTIDO_UNICO");
+      Double premioTorneo = torneo.getPremioMonedas();
+
       // Obtener el equipo del usuario
       Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
       String equipoUsuario = null;
@@ -322,6 +327,9 @@ public class TorneoController {
       model.addAttribute("equipoUsuario", equipoUsuario); // Agregar el equipo del usuario
       model.addAttribute("golesLocal", partido.getGolesLocal());
       model.addAttribute("golesVisitante", partido.getGolesVisitante());
+      model.addAttribute("esPartidoUnico", esPartidoUnico);
+      model.addAttribute("premioTorneo", premioTorneo);
+      model.addAttribute("nombreTorneo", torneo.getNombre());
 
       String resultado;
       int monedasGanadas = 0;

@@ -43,6 +43,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            gap: 40px;
         }
 
         .header {
@@ -61,15 +63,16 @@
         .header p {
             color: var(--text-muted);
             font-size: 1.2rem;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
         }
 
         .team-name-display {
             background: linear-gradient(145deg, rgba(30, 42, 60, 0.9), rgba(46, 61, 79, 0.9));
             backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
+            padding: 30px;
+            margin-bottom: 10px;
+            margin-top: -30px;
             border: 1px solid rgba(0, 255, 195, 0.2);
             text-align: center;
         }
@@ -84,16 +87,20 @@
         .carousel-container {
             position: relative;
             width: 100%;
+            max-width: 1500px;
             height: 500px;
-            margin: 40px 0;
+            margin-top: -70px;
             overflow: hidden;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 88px;
         }
 
         .carousel-inner {
             position: relative;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .carousel-track {
@@ -144,21 +151,22 @@
         .shield-image {
             width: 120px;
             height: 120px;
-            object-fit: cover;
-            border: none;
-            border-radius: 0;
-            background: none;
-            box-shadow: none;
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            object-fit: contain;
+            background: linear-gradient(145deg, #1c2a3a 0%, #0d1a2e 100%);
+            border-radius: 20px;
+            padding: 8px;
+            transition: all 0.3s ease;
         }
 
         .shield-item.active .shield-image {
             width: 200px;
             height: 200px;
-            background: none;
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(0,255,195,0.05) 0%, rgba(0,255,195,0.1) 100%);
+            padding: 10px;
+            box-shadow: 0 0 15px rgba(0,255,195,0.6), 0 0 30px rgba(0,255,195,0.3);
+            border: 3px solid var(--text-primary);
+            transition: all 0.4s ease;
         }
 
         .shield-item.active::before {
@@ -167,12 +175,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(255, 255, 255, 0.1) 70%, transparent 90%);
+            width: 190px;
+            height: 190px;
             border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 195, 0.2), transparent 60%);
+            box-shadow: 0 0 25px rgba(0, 255, 195, 0.4);
+            animation: breathPulse 3s ease-in-out infinite;
             z-index: -1;
-            animation: backgroundGlow 3s ease-in-out infinite;
         }
 
         /* Eliminar animaciones, glow y pseudo-elementos */
@@ -186,10 +195,10 @@
             box-shadow: none;
         }
 
-        @keyframes backgroundGlow {
-            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
-            100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+        @keyframes breathPulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
         }
 
         /* Controles del carrusel */
@@ -211,6 +220,7 @@
             color: var(--text-primary);
             z-index: 20;
             box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
+
         }
 
         .carousel-control:hover {
@@ -234,6 +244,15 @@
 
         /* Indicadores */
         .carousel-indicators {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 22220px;
+            flex-wrap: wrap;
+        }
+
+        .carousel-indicators {
             position: absolute;
             bottom: 20px;
             left: 50%;
@@ -244,27 +263,31 @@
         }
 
         .indicator {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
+
+
 
         .indicator.active {
             background: var(--text-primary);
-            box-shadow: 0 0 10px rgba(0, 255, 195, 0.5);
+            box-shadow: 0 0 10px rgba(0, 255, 195, 0.6);
+            transform: scale(1.2);
         }
 
+
         .indicator:hover {
-            background: rgba(0, 255, 195, 0.7);
+            background: rgba(0, 255, 195, 0.6);
         }
 
         /* Botones de acción */
         .action-buttons {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 0px;
         }
 
         .btn {
@@ -307,7 +330,7 @@
         /* Contador */
         .position-counter {
             text-align: center;
-            margin-top: 20px;
+            margin-top: -30px;
             color: var(--text-muted);
             font-size: 1rem;
         }
@@ -363,6 +386,14 @@
             .shield-image {
                 width: 60px;
                 height: 60px;
+            }
+
+            .shield-image img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 20px;
+                transition: all 0.3s ease;
             }
 
             .shield-item.active .shield-image {

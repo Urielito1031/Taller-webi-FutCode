@@ -18,6 +18,37 @@ public class PosicionJugadorDTO {
    public PosicionJugadorDTO() {
    }
 
+   public String getCompatibilidadCss() {
+      if (jugador == null || jugador.getPosicionNatural() == null || posicionEnCampo == null) {
+         return "posicion-desconocida"; // fallback defensivo
+      }
+
+      PosicionEnum natural = jugador.getPosicionNatural();
+      PosicionEnum campo = posicionEnCampo;
+
+      if (natural == campo) {
+         return "posicion-correcta";
+      }
+
+      boolean esPenalizacionParcial =
+              (natural == PosicionEnum.DEFENSOR && campo == PosicionEnum.MEDIOCAMPISTA) ||
+                      (natural == PosicionEnum.DELANTERO && campo == PosicionEnum.MEDIOCAMPISTA) ||
+                      (natural == PosicionEnum.MEDIOCAMPISTA && campo == PosicionEnum.DELANTERO);
+
+      boolean esPenalizacionFuerte =
+              (natural == PosicionEnum.ARQUERO && campo != PosicionEnum.ARQUERO) ||
+                      (natural != PosicionEnum.ARQUERO && campo == PosicionEnum.ARQUERO);
+
+      if (esPenalizacionParcial) {
+         return "posicion-parcial";
+      }
+
+      if (esPenalizacionFuerte) {
+         return "posicion-incorrecta";
+      }
+
+      return "posicion-incorrecta"; // por defecto si no es ni correcta ni parcial
+   }
 
 
    public static PosicionJugadorDTO convertToDTO(FormacionEquipo formacionEquipo){

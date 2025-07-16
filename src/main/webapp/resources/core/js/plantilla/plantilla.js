@@ -198,6 +198,75 @@
                const $cards = $(".player-card").not(".disabled-card");
                const totalMarkers = MAX_PLAYERS_ON_FIELD;
 
+               // // Asignar arquero
+               // if (cardIndex < totalMarkers && positions.goalkeeper.length > 0) {
+               //    const player = alineacionPersistida[cardIndex];
+               //    if (player && player.jugadorId) {
+               //       const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+               //       if ($card.length) {
+               //          const $marker = MarkerFactory.create({ role: "Arquero", position: positions.goalkeeper[0] });
+               //          $field.append($marker);
+               //          PlayerInteraction.assignPlayer($marker, $card);
+               //          cardIndex++;
+               //       } else {
+               //          console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
+               //       }
+               //    }
+               // }
+               //
+               // // Asignar defensores
+               // positions.defenders.forEach((position) => {
+               //    if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
+               //       const player = alineacionPersistida[cardIndex];
+               //       if (player && player.jugadorId) {
+               //          const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+               //          if ($card.length) {
+               //             const $marker = MarkerFactory.create({ role: "Defensor", position });
+               //             $field.append($marker);
+               //             PlayerInteraction.assignPlayer($marker, $card);
+               //             cardIndex++;
+               //          } else {
+               //             console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
+               //          }
+               //       }
+               //    }
+               // });
+               //
+               // // Asignar mediocampistas
+               // positions.midfielders.forEach((position) => {
+               //    if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
+               //       const player = alineacionPersistida[cardIndex];
+               //       if (player && player.jugadorId) {
+               //          const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+               //          if ($card.length) {
+               //             const $marker = MarkerFactory.create({ role: "Mediocampista", position });
+               //             $field.append($marker);
+               //             PlayerInteraction.assignPlayer($marker, $card);
+               //             cardIndex++;
+               //          } else {
+               //             console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
+               //          }
+               //       }
+               //    }
+               // });
+               //
+               // // Asignar delanteros
+               // positions.forwards.forEach((position) => {
+               //    if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
+               //       const player = alineacionPersistida[cardIndex];
+               //       if (player && player.jugadorId) {
+               //          const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
+               //          if ($card.length) {
+               //             const $marker = MarkerFactory.create({ role: "Delantero", position });
+               //             $field.append($marker);
+               //             PlayerInteraction.assignPlayer($marker, $card);
+               //             cardIndex++;
+               //          } else {
+               //             console.warn(`No se encontró tarjeta para playerId ${player.jugadorId} en posición ${cardIndex}`);
+               //          }
+               //       }
+               //    }
+               // });
                // Asignar arquero
                if (cardIndex < totalMarkers && positions.goalkeeper.length > 0) {
                   const player = alineacionPersistida[cardIndex];
@@ -205,6 +274,10 @@
                      const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
                      if ($card.length) {
                         const $marker = MarkerFactory.create({ role: "Arquero", position: positions.goalkeeper[0] });
+
+                        const compatClass = getCompatibilidadClase(player.jugador.posicionNatural, player.posicionEnCampo);
+                        $marker.addClass(compatClass);
+
                         $field.append($marker);
                         PlayerInteraction.assignPlayer($marker, $card);
                         cardIndex++;
@@ -214,7 +287,7 @@
                   }
                }
 
-               // Asignar defensores
+// Asignar defensores
                positions.defenders.forEach((position) => {
                   if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
                      const player = alineacionPersistida[cardIndex];
@@ -222,6 +295,10 @@
                         const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
                         if ($card.length) {
                            const $marker = MarkerFactory.create({ role: "Defensor", position });
+
+                           const compatClass = getCompatibilidadClase(player.jugador.posicionNatural, player.posicionEnCampo);
+                           $marker.addClass(compatClass);
+
                            $field.append($marker);
                            PlayerInteraction.assignPlayer($marker, $card);
                            cardIndex++;
@@ -232,7 +309,7 @@
                   }
                });
 
-               // Asignar mediocampistas
+// Asignar mediocampistas
                positions.midfielders.forEach((position) => {
                   if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
                      const player = alineacionPersistida[cardIndex];
@@ -240,6 +317,10 @@
                         const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
                         if ($card.length) {
                            const $marker = MarkerFactory.create({ role: "Mediocampista", position });
+
+                           const compatClass = getCompatibilidadClase(player.jugador.posicionNatural, player.posicionEnCampo);
+                           $marker.addClass(compatClass);
+
                            $field.append($marker);
                            PlayerInteraction.assignPlayer($marker, $card);
                            cardIndex++;
@@ -250,7 +331,7 @@
                   }
                });
 
-               // Asignar delanteros
+// Asignar delanteros
                positions.forwards.forEach((position) => {
                   if (cardIndex < totalMarkers && cardIndex < alineacionPersistida.length) {
                      const player = alineacionPersistida[cardIndex];
@@ -258,6 +339,10 @@
                         const $card = $cards.filter(`[data-player-id="${player.jugadorId}"]`).first();
                         if ($card.length) {
                            const $marker = MarkerFactory.create({ role: "Delantero", position });
+
+                           const compatClass = getCompatibilidadClase(player.jugador.posicionNatural, player.posicionEnCampo);
+                           $marker.addClass(compatClass);
+
                            $field.append($marker);
                            PlayerInteraction.assignPlayer($marker, $card);
                            cardIndex++;
@@ -267,6 +352,8 @@
                      }
                   }
                });
+
+
             } else {
                // Solo usar placePlayers si no hay alineación persistida
                this.placePlayers($field, positions);
@@ -527,6 +614,18 @@
 
 
    })();
+
+   function getCompatibilidadClase(natural, campo) {
+      if (!natural || !campo) return "posicion-incorrecta";
+      if (natural === campo) return "posicion-correcta";
+      if (
+          (natural === "DEFENSOR" && campo === "MEDIOCAMPISTA") ||
+          (natural === "DELANTERO" && campo === "MEDIOCAMPISTA") ||
+          (natural === "MEDIOCAMPISTA" && campo === "DELANTERO")
+      ) return "posicion-parcial";
+      return "posicion-incorrecta";
+   }
+
 
 
    FutCode.init();

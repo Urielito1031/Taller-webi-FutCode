@@ -505,116 +505,6 @@ main {
     }
 }
 
-/* Header estático */
-.sticky-header {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100vw !important;
-    z-index: 1000 !important;
-    background-color: #1b263b !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
-    padding: 16px 20px !important;
-    min-height: 80px !important;
-    display: flex !important;
-    align-items: center !important;
-    overflow: visible !important;
-}
-
-/* Ajustar el contenido principal para el header fijo */
-.container-principal {
-    margin-top: 120px !important;
-    padding-top: 20px;
-}
-
-/* Asegurar que el navbar tenga el comportamiento correcto */
-.navbar.sticky-header {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100vw !important;
-    z-index: 1000 !important;
-    padding: 16px 20px !important;
-    min-height: 80px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    overflow: visible !important;
-}
-
-/* Asegurar que todos los elementos del navbar sean visibles */
-.navbar.sticky-header .navbar-brand {
-    margin: 0 !important;
-    padding: 0 !important;
-    flex-shrink: 0 !important;
-}
-
-.navbar.sticky-header .container {
-    margin: 0 !important;
-    padding: 0 !important;
-    padding-right: 20px !important;
-    flex-wrap: nowrap !important;
-    overflow: visible !important;
-    min-width: 0 !important;
-}
-
-.navbar.sticky-header .nav-item {
-    margin-left: 15px !important;
-    display: flex !important;
-    align-items: center !important;
-    flex-shrink: 0 !important;
-}
-
-.navbar.sticky-header .nav-item:last-child {
-    margin-right: 10px !important;
-}
-
-.navbar.sticky-header .nav-link {
-    padding: 8px 10px !important;
-    margin: 0 !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-}
-
-.navbar.sticky-header .dropdown-toggle {
-    padding: 8px 10px !important;
-    margin: 0 !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-}
-
-.navbar.sticky-header .dropdown {
-    position: relative !important;
-    overflow: visible !important;
-}
-
-.navbar.sticky-header .dropdown-menu {
-    position: absolute !important;
-    right: 0 !important;
-    left: auto !important;
-    overflow: visible !important;
-    z-index: 1001 !important;
-}
-
-/* Responsive para pantallas pequeñas */
-@media (max-width: 768px) {
-    .navbar.sticky-header {
-        padding: 16px 15px !important;
-    }
-    
-    .navbar.sticky-header .nav-item {
-        margin-left: 10px !important;
-    }
-    
-    .navbar.sticky-header .nav-link,
-    .navbar.sticky-header .dropdown-toggle {
-        padding: 6px 8px !important;
-        font-size: 0.9rem !important;
-    }
-}
-
 /* Estilos para el botón hero de crear torneo */
 .hero-create-tournament {
     margin: 40px 0;
@@ -700,3 +590,35 @@ main {
         font-size: 1.1rem;
     }
 }
+
+/* SIDEBAR FIJO DEBAJO DEL HEADER */
+.sidebar {
+    position: static;
+    top: unset;
+    width: 220px;
+    height: auto;
+    z-index: 1100;
+    overflow-y: auto;
+    border-right: 1px solid #222c3c;
+}
+
+/* CONTENIDO PRINCIPAL AJUSTADO */
+.container-principal {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 0;
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        top: unset;
+        width: 100vw;
+        height: auto;
+        position: static;
+    }
+    .container-principal {
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+    }
+}
+

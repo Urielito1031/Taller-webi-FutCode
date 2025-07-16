@@ -57,6 +57,12 @@
     <h1 class="display-6 mb-3">
       Bienvenido, DT
       <span class="text-primary" th:text="${equipoNombre}">Coco Basile</span>
+      <ul>
+        <li>Agregue historial de torneos jugagos, falta corregir estilos</li>
+        <li>Si queres hacer alguna funcionalidad, faltaria la de ver los jugadores del equipo rival, 
+          yo lo haria como link en el nombre del equipo 
+          en la tabla de posiciones para no cargar mas la simulacion de partidos</li>
+      </ul>
     </h1>
 
     <div th:if="${mensajeTorneo}" class="alert alert-info" role="alert" th:text="${mensajeTorneo}">

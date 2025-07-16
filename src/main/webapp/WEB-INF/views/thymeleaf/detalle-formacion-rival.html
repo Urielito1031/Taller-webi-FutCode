@@ -60,18 +60,179 @@
 </div>
 
 <!-- Chat flotante -->
-<div id="chat-float" style="position:fixed;bottom:0;right:20px;width:320px;z-index:9999;box-shadow:0 0 10px #000;background:#222;border-radius:10px 10px 0 0;display:none;">
-    <div id="chat-header" style="background:#333;color:#fff;padding:8px 12px;cursor:pointer;border-radius:10px 10px 0 0;">
-        Chat con tu rival
-        <span id="chat-close" style="float:right;cursor:pointer;">&times;</span>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400&display=swap');
+  .chat-float {
+    position: fixed;
+    bottom: 0;
+    right: 16vw;
+    width: 340px;
+    z-index: 9999;
+    background: rgba(13,27,42,0.98);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 4px #00ffc3a7 inset;
+    display: none;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    border: 2px solid #00ffc3;
+    animation: chatIn 0.5s;
+  }
+  @keyframes chatIn {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .chat-header {
+    background: linear-gradient(90deg,#00ffc3 0%,#0d1b2a 100%);
+    color: #0d1b2a;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-radius: 16px 16px 0 0;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px #00ffc36b;
+    border-bottom: 2px solid #00ffc3;
+  }
+  .chat-close {
+    color: #0d1b2a;
+    font-size: 1.3rem;
+    font-weight: bold;
+    transition: color 0.2s;
+  }
+  .chat-close:hover {
+    color: #9843F9;
+  }
+  .chat-messages {
+    height: 240px;
+    overflow-y: auto;
+    background: #20202d;
+    padding: 12px 10px 8px 10px;
+    color: #fff;
+    font-size: 15px;
+    border-bottom: 1px solid #00ffc3;
+    font-family: 'Inter', Arial, sans-serif;
+    scroll-behavior: smooth;
+  }
+  .chat-input-area {
+    padding: 10px 8px;
+    background: #20202d;
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .chat-input {
+    width: 78%;
+    border-radius: 6px;
+    border: 1.5px solid #00ffc3;
+    padding: 6px 8px;
+    font-size: 15px;
+    background: #181828;
+    color: #fff;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .chat-input:focus {
+    border: 1.5px solid #9843F9;
+  }
+  .chat-send {
+    width: 20%;
+    background: linear-gradient(90deg,#00ffc3 0%,#0d1b2a 100%);
+    border: none;
+    border-radius: 6px;
+    color: #0d1b2a;
+    font-weight: bold;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #00ffc36b;
+    transition: background 0.2s, color 0.2s;
+  }
+  .chat-send:hover {
+    background: linear-gradient(90deg,#9843F9 0%,#00ffc3 100%);
+    color: #fff;
+  }
+  .chat-msg-row {
+    margin-bottom: 7px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+  }
+  .chat-msg-propio {
+    justify-content: flex-end;
+  }
+  .chat-msg-ajeno {
+    justify-content: flex-start;
+  }
+  .chat-burbuja-propio {
+    background: linear-gradient(90deg,#00ffc3 0%,#9843F9 100%);
+    color: #0d1b2a;
+    padding: 6px 12px;
+    border-radius: 16px 16px 2px 16px;
+    max-width: 80%;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 500;
+    box-shadow: 0 2px 8px #00ffc36b;
+    word-break: break-word;
+    animation: msgIn 0.3s;
+  }
+  .chat-burbuja-ajeno {
+    background: #333a4d;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 16px 16px 16px 2px;
+    max-width: 80%;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    box-shadow: 0 2px 8px #9843F96b;
+    word-break: break-word;
+    animation: msgIn 0.3s;
+  }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .chat-open-btn {
+    position: fixed;
+    bottom: 0;
+    right: 16vw;
+    z-index: 9998;
+    background: linear-gradient(90deg,#00ffc3 0%,#0d1b2a 100%);
+    color: #fff;
+    border: none;
+    border-radius: 18px 18px 0 0;
+    border: 2px solid #fff;
+    padding: 10px 24px;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 16px #00ffc36b;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+  }
+  .chat-open-btn:hover {
+    background: linear-gradient(90deg,#00ffc3 0%,#0d1b2a 100%);
+    color: #fff;
+    border: 2px solid #fff;
+    filter: brightness(1.15) drop-shadow(0 0 8px #00ffc3cc);
+  }
+</style>
+<div id="chat-float" class="chat-float">
+    <div id="chat-header" class="chat-header">
+        <span>Picanteá el partido</span>
+        <span id="chat-close" class="chat-close">&times;</span>
     </div>
-    <div id="chat-messages" style="height:220px;overflow-y:auto;background:#222;padding:10px;color:#fff;font-size:14px;"></div>
-    <div style="padding:8px;background:#222;">
-        <input id="chat-input" type="text" style="width:80%;border-radius:4px;border:none;padding:4px;">
-        <button id="chat-send" style="width:18%;background:#ffc107;border:none;border-radius:4px;color:#222;">Enviar</button>
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="chat-input-area">
+        <input id="chat-input" class="chat-input" type="text" placeholder="Escribe un mensaje...">
+        <button id="chat-send" class="chat-send">Enviar</button>
     </div>
 </div>
-<button id="chat-open" style="position:fixed;bottom:0;right:20px;z-index:9998;background:#ffc107;color:#222;border:none;border-radius:10px 10px 0 0;padding:8px 16px;">Chat</button>
+<button id="chat-open" class="chat-open-btn">Picanteá el partido</button>
 
 <!-- Scripts solo para renderizado visual, sin drag and drop ni edición -->
 <script th:inline="javascript">
@@ -94,8 +255,8 @@ function cargarMensajes() {
         let html = '';
         data.forEach(msg => {
             const propio = msg.remitenteId === usuarioId;
-            html += `<div style="text-align:${propio ? 'right' : 'left'};margin-bottom:4px;">
-                        <span style="background:${propio ? '#ffc107' : '#444'};color:${propio ? '#222' : '#fff'};padding:4px 8px;border-radius:6px;display:inline-block;max-width:80%;">${msg.contenido}</span>
+            html += `<div class='chat-msg-row ${propio ? 'chat-msg-propio' : 'chat-msg-ajeno'}'>
+                        <span class='${propio ? 'chat-burbuja-propio' : 'chat-burbuja-ajeno'}'>${msg.contenido}</span>
                     </div>`;
         });
         $('#chat-messages').html(html);

@@ -343,10 +343,10 @@ function inicializarPartido() {
     narracionIndex = 0;
     tiempo = 0;
     stats = {goles: 0, faltas: 0, tarjetas: 0, lesionados: 0};
-    golesLocal = 0;
-    golesVisitante = 0;
+    
+    // NO inicializar goles aquí - usar siempre datos del backend
     actualizarEstadisticas();
-    actualizarMarcador();
+    actualizarMarcador(); // Esto usará los datos del backend
     matchTime.textContent = "0'";
     statusIndicator.textContent = "LISTO";
     statusIndicator.className = "status-indicator ready";
@@ -367,6 +367,9 @@ function iniciarPartido() {
     startBtn.disabled = true;
     // pauseBtn.disabled = false; // Eliminado
     // resetBtn.disabled = true; // Eliminado
+    
+    // Inicializar marcador en 0-0
+    actualizarMarcador();
     
     // Mostrar mensaje de inicio del partido
     const mensajeInicio = document.createElement('div');
@@ -424,6 +427,7 @@ function actualizarTiempo() {
         mostrarNarracion(narraciones[narracionIndex]);
         narracionIndex++;
     }
+    
     // Solo terminar cuando llegue a los 90 minutos
     if (tiempo >= 90) {
         terminarPartido();
@@ -433,6 +437,10 @@ function actualizarTiempo() {
 function mostrarNarracion(narracion) {
     const nuevaNarracion = document.createElement('div');
     nuevaNarracion.className = 'commentary-item';
+    
+    // Establecer los atributos data necesarios para el marcador
+    nuevaNarracion.setAttribute('data-minuto', narracion.minuto);
+    nuevaNarracion.setAttribute('data-tipo', narracion.tipo);
 
     // Lógica de color robusta y explícita para goles
     const tipoEvento = narracion.tipo.toLowerCase();
@@ -473,22 +481,7 @@ function procesarNarracion(tipo, texto) {
     switch(tipo) {
         case 'GOL': 
             stats.goles++; 
-            // Determinar qué equipo marcó basándose en el texto de la narración
-            const equipoLocal = document.getElementById('team1Name').textContent;
-            const equipoVisitante = document.getElementById('team2Name').textContent;
-            
-            if (texto.includes(equipoLocal)) {
-                golesLocal++;
-            } else if (texto.includes(equipoVisitante)) {
-                golesVisitante++;
-            } else {
-                // Si no se puede determinar, alternar
-                if (stats.goles % 2 === 1) {
-                    golesLocal++;
-                } else {
-                    golesVisitante++;
-                }
-            }
+            // Actualizar marcador cuando aparece un gol
             actualizarMarcador();
             break;
         case 'TARJETA_AMARILLA':
@@ -501,8 +494,36 @@ function procesarNarracion(tipo, texto) {
 }
 
 function actualizarMarcador() {
-    team1Score.textContent = golesLocal;
-    team2Score.textContent = golesVisitante;
+    // Si el partido no ha comenzado, mostrar 0-0
+    if (!partidoEnCurso) {
+        team1Score.textContent = "0";
+        team2Score.textContent = "0";
+        return;
+    }
+    
+    // Si el partido está en curso, mostrar goles basados en narraciones mostradas
+    let golesLocalMostrados = 0;
+    let golesVisitanteMostrados = 0;
+    
+    // Contar goles de las narraciones ya mostradas
+    Array.from(commentaryList.querySelectorAll('.commentary-item')).forEach(item => {
+        const tipo = item.getAttribute('data-tipo');
+        if (tipo && tipo.toUpperCase() === 'GOL') {
+            const texto = item.textContent.trim();
+            const nombreLocal = document.getElementById('team1Name').textContent.trim();
+            const nombreVisitante = document.getElementById('team2Name').textContent.trim();
+            
+            // Buscar el nombre del equipo en el texto de la narración
+            if (texto.toLowerCase().includes(nombreLocal.toLowerCase())) {
+                golesLocalMostrados++;
+            } else if (texto.toLowerCase().includes(nombreVisitante.toLowerCase())) {
+                golesVisitanteMostrados++;
+            }
+        }
+    });
+    
+    team1Score.textContent = golesLocalMostrados;
+    team2Score.textContent = golesVisitanteMostrados;
 }
 
 function actualizarEstadisticas() {
@@ -531,18 +552,24 @@ function terminarPartido(motivoOmitir = false) {
         narracionFinal.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Calcular resultado y goles
+    // Calcular resultado y goles usando SIEMPRE datos del backend
     let golesUsuario = 0, golesRival = 0, resultado = '', color = '', monedasGanadas = parseInt(document.getElementById('monedasGanadas') ? document.getElementById('monedasGanadas').value : 0), bonus = 0;
-    // --- NUEVO: Extraer goles hechos y recibidos de manera robusta ---
-    let golesHechos = [], golesRecibidos = [];
+    
+    // Obtener goles reales del backend
+    const golesLocal = parseInt(document.getElementById('golesLocalFinal').value);
+    const golesVisitante = parseInt(document.getElementById('golesVisitanteFinal').value);
     const nombreLocal = document.getElementById('nombreLocalFinal').value.trim();
     const nombreVisitante = document.getElementById('nombreVisitanteFinal').value.trim();
     const equipoUsuarioNombre = document.getElementById('equipoUsuarioFinal').value.trim().toLowerCase();
     let esLocal = equipoUsuarioNombre === nombreLocal.toLowerCase();
     const miEquipo = esLocal ? nombreLocal : nombreVisitante;
     const rivalEquipo = esLocal ? nombreVisitante : nombreLocal;
-
-    // Recorrer todos los .commentary-item con data-tipo="GOL"
+    
+    golesUsuario = esLocal ? golesLocal : golesVisitante;
+    golesRival = esLocal ? golesVisitante : golesLocal;
+    
+    // Extraer goles de las narraciones para mostrar en el modal
+    let golesHechos = [], golesRecibidos = [];
     Array.from(commentaryList.querySelectorAll('.commentary-item')).forEach(item => {
         const tipo = item.getAttribute('data-tipo');
         if (tipo && tipo.toUpperCase() === 'GOL') {
@@ -559,12 +586,6 @@ function terminarPartido(motivoOmitir = false) {
             }
         }
     });
-
-    // Obtener goles reales del backend
-    const golesLocal = parseInt(document.getElementById('golesLocalFinal').value);
-    const golesVisitante = parseInt(document.getElementById('golesVisitanteFinal').value);
-    golesUsuario = esLocal ? golesLocal : golesVisitante;
-    golesRival = esLocal ? golesVisitante : golesLocal;
 
     if (golesUsuario > golesRival) {
         resultado = '¡VICTORIA!';
@@ -665,7 +686,6 @@ function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesR
                 <div style=\"margin-top: 15px; font-size: 1rem; color: #00ffc3; text-align: center; font-weight: bold;\">
                     ¡Felicidades! Has ganado el premio del torneo
                 </div>
-                ${golesHtml ? `<div style=\"margin-top: 20px;\">${golesHtml}</div>` : ''}
                 <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; font-weight: bold; border: none; padding: 12px 30px; border-radius: 25px;\">¡FELICIDADES!</button>
             </div>
         `;

@@ -67,7 +67,8 @@ public class PartidoCotroller {
    }
 
    @GetMapping("/{partidoId}/rival/{equipoId}/formacion")
-   public String verFormacionRival(@PathVariable Long partidoId, @PathVariable Long equipoId, Model model) {
+   public String verFormacionRival(@PathVariable Long partidoId, @PathVariable Long equipoId, Model model,
+         HttpServletRequest request) {
       Partido partido = partidoService.obtenerPartidoConRelaciones(partidoId);
       if (partido == null || partido.getFecha() == null || partido.getFecha().getTorneo() == null) {
          model.addAttribute("error", "No se pudo encontrar el partido o el torneo asociado.");
@@ -79,10 +80,23 @@ public class PartidoCotroller {
          return "detalle-formacion-rival";
       }
       EsquemaDTO formacionRival = plantillaService.getFormacionPorEquipoId(equipoId);
-      // Solo pasar la alineación titular
       model.addAttribute("formacion", formacionRival);
       model.addAttribute("jugadores", formacionRival.getAlineacion());
       model.addAttribute("torneoId", torneo.getId());
+
+      // IDs para el chat
+      Long usuarioId = (Long) request.getSession().getAttribute("USUARIO_ID");
+      model.addAttribute("usuarioId", usuarioId);
+      // Buscar el usuarioId del rival
+      Long rivalId = null;
+      if (partido.getEquipoLocal() != null && partido.getEquipoLocal().getId().equals(equipoId)) {
+         rivalId = partido.getEquipoLocal().getUsuario() != null ? partido.getEquipoLocal().getUsuario().getId() : null;
+      } else if (partido.getEquipoVisitante() != null && partido.getEquipoVisitante().getId().equals(equipoId)) {
+         rivalId = partido.getEquipoVisitante().getUsuario() != null ? partido.getEquipoVisitante().getUsuario().getId()
+               : null;
+      }
+      model.addAttribute("rivalId", rivalId);
+
       return "detalle-formacion-rival";
    }
 }

@@ -59,15 +59,79 @@
    </section>
 </div>
 
+<!-- Chat flotante -->
+<div id="chat-float" style="position:fixed;bottom:0;right:20px;width:320px;z-index:9999;box-shadow:0 0 10px #000;background:#222;border-radius:10px 10px 0 0;display:none;">
+    <div id="chat-header" style="background:#333;color:#fff;padding:8px 12px;cursor:pointer;border-radius:10px 10px 0 0;">
+        Chat con tu rival
+        <span id="chat-close" style="float:right;cursor:pointer;">&times;</span>
+    </div>
+    <div id="chat-messages" style="height:220px;overflow-y:auto;background:#222;padding:10px;color:#fff;font-size:14px;"></div>
+    <div style="padding:8px;background:#222;">
+        <input id="chat-input" type="text" style="width:80%;border-radius:4px;border:none;padding:4px;">
+        <button id="chat-send" style="width:18%;background:#ffc107;border:none;border-radius:4px;color:#222;">Enviar</button>
+    </div>
+</div>
+<button id="chat-open" style="position:fixed;bottom:0;right:20px;z-index:9998;background:#ffc107;color:#222;border:none;border-radius:10px 10px 0 0;padding:8px 16px;">Chat</button>
+
 <!-- Scripts solo para renderizado visual, sin drag and drop ni edición -->
 <script th:inline="javascript">
    let alineacionPersistida = /*[[${formacion.alineacion}]]*/ [];
    console.log('alineacionPersistida', alineacionPersistida);
+   // IDs para el chat
+   const usuarioId = /*[[${usuarioId}]]*/ 0;
+   const rivalId = /*[[${rivalId}]]*/ 0;
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script th:src="@{/js/plantilla/plantilla.js}"></script>
 <script>
+function scrollChatToBottom() {
+    const chat = document.getElementById('chat-messages');
+    chat.scrollTop = chat.scrollHeight;
+}
+function cargarMensajes() {
+    $.get('/spring/chat/mensajes', {usuario1: usuarioId, usuario2: rivalId}, function(data) {
+        let html = '';
+        data.forEach(msg => {
+            const propio = msg.remitenteId === usuarioId;
+            html += `<div style="text-align:${propio ? 'right' : 'left'};margin-bottom:4px;">
+                        <span style="background:${propio ? '#ffc107' : '#444'};color:${propio ? '#222' : '#fff'};padding:4px 8px;border-radius:6px;display:inline-block;max-width:80%;">${msg.contenido}</span>
+                    </div>`;
+        });
+        $('#chat-messages').html(html);
+        scrollChatToBottom();
+    });
+}
+function enviarMensaje() {
+    const texto = $('#chat-input').val().trim();
+    if (!texto) return;
+    $.ajax({
+        url: '/spring/chat/mensaje',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({remitenteId: usuarioId, destinatarioId: rivalId, contenido: texto}),
+        success: function() {
+            $('#chat-input').val('');
+            cargarMensajes();
+        }
+    });
+}
+let chatInterval = null;
+$('#chat-open').click(function() {
+    $('#chat-float').show();
+    $('#chat-open').hide();
+    cargarMensajes();
+    chatInterval = setInterval(cargarMensajes, 2000);
+});
+$('#chat-close').click(function() {
+    $('#chat-float').hide();
+    $('#chat-open').show();
+    clearInterval(chatInterval);
+});
+$('#chat-send').click(enviarMensaje);
+$('#chat-input').keypress(function(e) {
+    if (e.which === 13) enviarMensaje();
+});
    $(document).ready(function() {
       // Forzar inicialización del campo por si acaso
       if (window.FutCode && window.FutCode.TeamFormation) {

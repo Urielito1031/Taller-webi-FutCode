@@ -116,6 +116,12 @@
            gap: 8px;
        }
 
+       .filters-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+           gap: 15px;
+       }
+
        .filter-group {
            display: flex;
            flex-direction: column;
@@ -135,6 +141,38 @@
            outline: none;
            border-color: var(--text-primary);
            box-shadow: 0 0 0 2px rgba(0, 255, 195, 0.2);
+       }
+
+       /* Estilos especiales para partidos únicos */
+       .match-card.partido-unico {
+           border: 2px solid #ffd700;
+           background: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(255, 215, 0, 0.05) 100%);
+           position: relative;
+       }
+
+       .match-card.partido-unico::before {
+           background: linear-gradient(90deg, #ffd700, rgba(255, 215, 0, 0.5));
+       }
+
+       .match-card.partido-unico::after {
+           content: '🏆';
+           position: absolute;
+           top: 10px;
+           right: 10px;
+           font-size: 1.5rem;
+           z-index: 1;
+       }
+
+       .partido-unico-badge {
+           background: linear-gradient(135deg, #ffd700, #ffed4e);
+           color: #000;
+           padding: 4px 8px;
+           border-radius: 12px;
+           font-size: 0.7rem;
+           font-weight: 700;
+           text-transform: uppercase;
+           letter-spacing: 0.5px;
+           border: 1px solid #ffd700;
        }
 
        .message {
@@ -471,8 +509,8 @@
             <span class="stat-label">Total Partidos</span>
          </div>
          <div class="stat-item">
-            <span class="stat-number" id="total-goles">0</span>
-            <span class="stat-label">Goles Totales</span>
+            <span class="stat-number" id="mis-goles">0</span>
+            <span class="stat-label">Mis Goles</span>
          </div>
          <div class="stat-item">
             <span class="stat-number" id="promedio-goles">0.0</span>
@@ -496,6 +534,14 @@
                <option value="PERDISTE">Perdiste</option>
             </select>
          </div>
+         <div class="filter-group">
+            <label class="stat-label">Tipo de Partido</label>
+            <select class="filter-input" id="filter-tipo-partido">
+               <option value="">Todos los partidos</option>
+               <option value="PARTIDO_UNICO">Partidos Únicos</option>
+               <option value="TORNEO_NORMAL">Torneos Normales</option>
+            </select>
+         </div>
       </div>
    </div>
 
@@ -517,11 +563,15 @@
 
    <div th:if="${not #lists.isEmpty(historialPartidosJugados)}" class="matches-container">
       <div th:each="partido : ${historialPartidosJugados}" class="match-card"
-           th:attr="data-resultado=${partido.resultadoUsuario}">
+           th:attr="data-resultado=${partido.resultadoUsuario},data-tipo-partido=${partido.torneo.formatoTorneo.tipo},data-equipo-usuario=${partido.equipoUsuario.nombre}"
+           th:classappend="${partido.torneo.formatoTorneo.tipo == 'PARTIDO_UNICO' ? 'partido-unico' : ''}">
          <div class="match-header">
             <div class="fecha-badge">
                <i class="fas fa-calendar-day"></i>
                <span th:text="|Fecha ${partido.numeroDeFecha}|">Fecha X</span>
+               <span th:if="${partido.torneo.formatoTorneo.tipo == 'PARTIDO_UNICO'}" class="partido-unico-badge" style="margin-left: 8px;">
+                  <i class="fas fa-star"></i> ÚNICO
+               </span>
             </div>
             <div th:if="${partido.resultadoUsuario}"
                  class="resultado-badge"
@@ -571,11 +621,11 @@
          <div class="match-details">
             <div class="detail-item">
                <i class="fas fa-futbol detail-icon"></i>
-               <span class="detail-text">Goles totales: <span th:text="${partido.golesLocal + partido.golesVisitante}">0</span></span>
+               <span class="detail-text">Mis goles: <span th:if="${partido.equipoUsuario.nombre == partido.equipoLocal.nombre}" th:text="${partido.golesLocal}">0</span><span th:if="${partido.equipoUsuario.nombre == partido.equipoVisitante.nombre}" th:text="${partido.golesVisitante}">0</span></span>
             </div>
             <div class="detail-item">
                <i class="fas fa-chart-line detail-icon"></i>
-               <span class="detail-text">Diferencia: <span th:text="${#numbers.formatInteger(partido.golesLocal - partido.golesVisitante, 0, 'COMMA')}">0</span></span>
+               <span class="detail-text">Diferencia: <span th:if="${partido.equipoUsuario.nombre == partido.equipoLocal.nombre}" th:text="${#numbers.formatInteger(partido.golesLocal - partido.golesVisitante, 0, 'COMMA')}">0</span><span th:if="${partido.equipoUsuario.nombre == partido.equipoVisitante.nombre}" th:text="${#numbers.formatInteger(partido.golesVisitante - partido.golesLocal, 0, 'COMMA')}">0</span></span>
             </div>
             <div class="detail-item">
                <i class="fas fa-clock detail-icon"></i>
@@ -601,41 +651,67 @@
 
    function calcularEstadisticas() {
       const partidos = document.querySelectorAll('.match-card');
-      let totalGoles = 0;
+      const partidosVisibles = Array.from(partidos).filter(partido => 
+         partido.style.display !== 'none'
+      );
+      
+      let misGoles = 0;
 
-      partidos.forEach(partido => {
+      partidosVisibles.forEach(partido => {
          const golesLocal = parseInt(partido.querySelector('.score-display span:first-child').textContent) || 0;
          const golesVisitante = parseInt(partido.querySelector('.score-display span:last-child').textContent) || 0;
-         totalGoles += golesLocal + golesVisitante;
+         const equipoUsuario = partido.getAttribute('data-equipo-usuario');
+         const equipoLocal = partido.querySelector('.team-section.home .team-name').textContent.trim();
+         const equipoVisitante = partido.querySelector('.team-section.away .team-name').textContent.trim();
+         
+         // Determinar si el usuario jugó como local o visitante
+         if (equipoUsuario === equipoLocal) {
+            misGoles += golesLocal;
+         } else if (equipoUsuario === equipoVisitante) {
+            misGoles += golesVisitante;
+         }
       });
 
-      const promedio = partidos.length > 0 ? (totalGoles / partidos.length).toFixed(1) : 0;
+      const promedio = partidosVisibles.length > 0 ? (misGoles / partidosVisibles.length).toFixed(1) : 0;
 
-      document.getElementById('total-partidos').textContent = partidos.length;
-      document.getElementById('total-goles').textContent = totalGoles;
+      document.getElementById('total-partidos').textContent = partidosVisibles.length;
+      document.getElementById('mis-goles').textContent = misGoles;
       document.getElementById('promedio-goles').textContent = promedio;
    }
 
    function configurarFiltros() {
       const filterResultado = document.getElementById('filter-resultado');
+      const filterTipoPartido = document.getElementById('filter-tipo-partido');
 
       function filtrarPartidos() {
          const partidos = document.querySelectorAll('.match-card');
          const resultadoFilter = filterResultado.value;
+         const tipoPartidoFilter = filterTipoPartido.value;
 
          partidos.forEach(partido => {
             const resultado = partido.getAttribute('data-resultado');
+            const tipoPartido = partido.getAttribute('data-tipo-partido');
             let mostrar = true;
 
+            // Filtro por resultado
             if (resultadoFilter && resultado && resultado !== resultadoFilter) {
+               mostrar = false;
+            }
+
+            // Filtro por tipo de partido
+            if (tipoPartidoFilter && tipoPartido && tipoPartido !== tipoPartidoFilter) {
                mostrar = false;
             }
 
             partido.style.display = mostrar ? 'block' : 'none';
          });
+
+         // Actualizar estadísticas después del filtrado
+         calcularEstadisticas();
       }
 
       filterResultado.addEventListener('change', filtrarPartidos);
+      filterTipoPartido.addEventListener('change', filtrarPartidos);
    }
 
    function animarEntrada() {

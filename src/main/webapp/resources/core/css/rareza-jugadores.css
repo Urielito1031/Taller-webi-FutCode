@@ -19,7 +19,7 @@
 .rareza-leyenda {
     border: 3px solid #9933cc !important; /* Violeta */
     box-shadow: 0 0 25px rgba(153, 51, 204, 0.6) !important;
-    animation: leyendaGlow 2s ease-in-out infinite alternate !important;
+    /*animation: leyendaGlow 2s ease-in-out infinite alternate !important;*/
 }
 
 /* Animación especial para leyendas */

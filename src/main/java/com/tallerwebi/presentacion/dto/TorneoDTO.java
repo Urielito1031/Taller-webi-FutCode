@@ -8,7 +8,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-
 public class TorneoDTO {
 
    private Long id;
@@ -21,8 +20,7 @@ public class TorneoDTO {
    private Integer capacidadMaxima;
 
    public TorneoDTO() {
-      this.estado = EstadoTorneoEnum.ABIERTO;
-
+      // No setear estado por defecto
    }
 
    public TorneoDTO(Long id, String nombre, String descripcion, FormatoTorneoDTO formatoTorneo) {
@@ -30,8 +28,7 @@ public class TorneoDTO {
       this.nombre = nombre;
       this.descripcion = descripcion;
       this.formatoTorneo = formatoTorneo;
-      this.estado = EstadoTorneoEnum.ABIERTO;
-
+      // No setear estado por defecto
    }
 
    @Override

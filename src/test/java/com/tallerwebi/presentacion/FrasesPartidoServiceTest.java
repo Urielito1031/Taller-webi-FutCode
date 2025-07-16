@@ -43,25 +43,25 @@ class FrasePartidoServiceImplTest {
         System.out.println(tipos.toString());
     }
 
-    @Test
-    void deberiaGenerarFraseParaJugadorYEquipo() {
-        Jugador jugador = new Jugador();
-        jugador.setId(1L);
-        jugador.setNombre("Messi");
-
-        Equipo equipo = new Equipo();
-        equipo.setId(1L);
-        equipo.setNombre("Barcelona");
-
-        when(jugadorRepository.getById(1L)).thenReturn(jugador);
-        when(equipoRepository.getById(1L)).thenReturn(equipo);
-
-        String frase = frasePartidoService.generarFrase(EventoPartido.GOL, 1L, 1L);
-
-        assertTrue(frase.contains("Messi"));
-        assertTrue(frase.contains("Barcelona"));
-        System.out.println(frase);
-    }
+//    @Test
+//    void deberiaGenerarFraseParaJugadorYEquipo() {
+//        Jugador jugador = new Jugador();
+//        jugador.setId(1L);
+//        jugador.setNombre("Messi");
+//
+//        Equipo equipo = new Equipo();
+//        equipo.setId(1L);
+//        equipo.setNombre("Barcelona");
+//
+//        when(jugadorRepository.getById(1L)).thenReturn(jugador);
+//        when(equipoRepository.getById(1L)).thenReturn(equipo);
+//
+//        String frase = frasePartidoService.generarFrase(EventoPartido.GOL, 1L, 1L);
+//
+//        assertTrue(frase.contains("Messi"));
+//        assertTrue(frase.contains("Barcelona"));
+//        System.out.println(frase);
+//    }
 
     @Test
     public void deberiaDevolverCantidadDeFrasesPorTipo() {

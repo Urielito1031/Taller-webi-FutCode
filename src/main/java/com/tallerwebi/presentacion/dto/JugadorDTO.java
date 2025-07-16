@@ -103,4 +103,22 @@ public class JugadorDTO {
 
       return dto;
    }
+
+   public String getRarezaCss() {
+      if (rarezaJugador == null) {
+         return "rareza-normal";
+      }
+      switch (rarezaJugador) {
+         case NORMAL:
+            return "rareza-normal";
+         case RARO:
+            return "rareza-raro";
+         case EPICO:
+            return "rareza-epico";
+         case LEYENDA:
+            return "rareza-leyenda";
+         default:
+            return "rareza-normal";
+      }
+   }
 }

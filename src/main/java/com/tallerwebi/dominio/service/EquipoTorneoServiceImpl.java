@@ -74,6 +74,14 @@ public class EquipoTorneoServiceImpl implements EquipoTorneoService {
       verificarCapacidadMaximaYActualizarEstado(torneoId, torneo);
    }
 
+   @Override
+   public List<EquipoTorneoDTO> getAllByEquipoId(Long equipoId) {
+      List<EquipoTorneo> equipoTorneos = repository.getAllByEquipoId(equipoId);
+      return equipoTorneos.stream()
+              .map(EquipoTorneo::convertToDTO)
+              .collect(Collectors.toList());
+   }
+
    private boolean validarEquipoNoUnidoATorneo(Long torneoId, Long equipoId) {
       List<EquipoTorneo> equiposTorneo = repository.getAllByTorneoId(torneoId);
       return equiposTorneo.stream()

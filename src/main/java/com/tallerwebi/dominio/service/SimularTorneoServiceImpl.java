@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.model.entities.Fecha;
 import com.tallerwebi.dominio.model.entities.Narracion;
 import com.tallerwebi.dominio.model.entities.Partido;
 import com.tallerwebi.dominio.model.entities.Torneo;
+import com.tallerwebi.dominio.model.enums.EstadoTorneoEnum;
 import com.tallerwebi.dominio.model.enums.EventoPartido;
 import com.tallerwebi.dominio.model.enums.ResultadoPartido;
 import com.tallerwebi.dominio.repository.*;
@@ -202,19 +203,23 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         // FINALIZADO
         boolean todasLasFechasSimuladas = torneo.getFechas().stream().allMatch(Fecha::isSimulada);
         if (todasLasFechasSimuladas) {
-            torneo.setEstado(com.tallerwebi.dominio.model.enums.EstadoTorneoEnum.FINALIZADO);
+            System.out.println("[SIMULACION] Antes de finalizar: Torneo " + torneo.getNombre() + " | Estado: "
+                    + torneo.getEstado());
+            torneo.setEstado(EstadoTorneoEnum.FINALIZADO);
             torneoRepository.save(torneo);
+            System.out.println("[SIMULACION] Después de finalizar: Torneo " + torneo.getNombre() + " | Estado: "
+                    + torneo.getEstado());
         }
     }
 
     @Override
     public Long simularFechaYDevolverPrimerPartido(Long torneoId, Long numeroDeFecha) {
-        simularFecha(torneoId, numeroDeFecha); // Ya lo tenés hecho
+        simularFecha(torneoId, numeroDeFecha);
 
         Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha);
 
         if (fecha != null && !fecha.getPartidos().isEmpty()) {
-            return fecha.getPartidos().get(0).getId(); // Primer partido simulado
+            return fecha.getPartidos().get(0).getId();
         }
 
         return null;
@@ -408,9 +413,12 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             monedasTotales = usuario.getMonedas();
         }
 
-        // Cambiar estado del torneo a FINALIZADO ya que se simularon todas las fechas
-        torneo.setEstado(com.tallerwebi.dominio.model.enums.EstadoTorneoEnum.FINALIZADO);
+        torneo.setEstado(EstadoTorneoEnum.FINALIZADO);
+        System.out.println("[SIMULACION] (RAPIDO) Antes de guardar: Torneo " + torneo.getNombre() + " | Estado: "
+                + torneo.getEstado());
         torneoRepository.save(torneo);
+        System.out.println("[SIMULACION] (RAPIDO) Después de guardar: Torneo " + torneo.getNombre() + " | Estado: "
+                + torneo.getEstado());
 
         return new SimulacionTorneoResumenDTO(puestoFinal, monedasGanadas, monedasTotales, nombreTorneo);
     }

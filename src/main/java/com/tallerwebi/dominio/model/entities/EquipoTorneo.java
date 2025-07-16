@@ -7,9 +7,11 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
+import com.tallerwebi.presentacion.dto.TorneoDTO;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "equipo_torneo")
 public class EquipoTorneo {
    @Id
@@ -26,22 +28,22 @@ public class EquipoTorneo {
    private Integer partidosJugados = 0;
 
    @Column(name = "partidos_ganados")
-   private Integer partidosGanados= 0;
+   private Integer partidosGanados = 0;
 
    @Column(name = "partidos_empatados")
-   private Integer partidosEmpatados= 0;
+   private Integer partidosEmpatados = 0;
 
    @Column(name = "partidos_perdidos")
-   private Integer partidosPerdidos= 0;
+   private Integer partidosPerdidos = 0;
 
    @Column(name = "goles_a_favor")
-   private Integer golesAFavor= 0;
+   private Integer golesAFavor = 0;
 
    @Column(name = "goles_en_contra")
-   private Integer golesEnContra= 0;
+   private Integer golesEnContra = 0;
 
    @Column(name = "puntos")
-   private Integer puntos= 0;
+   private Integer puntos = 0;
 
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "equipo_id")
@@ -51,14 +53,14 @@ public class EquipoTorneo {
    @JoinColumn(name = "torneo_id", nullable = false)
    private Torneo torneo;
 
-   public void actualizarConPartido(Partido partido, Boolean esLocal){
+   public void actualizarConPartido(Partido partido, Boolean esLocal) {
       int golesEquipo = 0;
       int golesRival = 0;
 
-      if(esLocal){
+      if (esLocal) {
          golesEquipo = partido.getGolesLocal();
          golesRival = partido.getGolesVisitante();
-      }else{
+      } else {
          golesEquipo = partido.getGolesVisitante();
          golesRival = partido.getGolesLocal();
       }
@@ -67,14 +69,14 @@ public class EquipoTorneo {
       this.golesAFavor += golesEquipo;
       this.golesEnContra += golesRival;
 
-      if(partido.getResultado() != ResultadoPartido.PENDIENTE){ /* agrego para fix en tabla */
-         if(golesEquipo > golesRival){
+      if (partido.getResultado() != ResultadoPartido.PENDIENTE) { /* agrego para fix en tabla */
+         if (golesEquipo > golesRival) {
             this.partidosGanados += 1;
             this.puntos += 3;
          } else if (golesEquipo == golesRival) {
             this.partidosEmpatados += 1;
             this.puntos += 1;
-         }else{
+         } else {
             this.partidosPerdidos += 1;
          }
       }
@@ -97,10 +99,11 @@ public class EquipoTorneo {
 
    @Transient
    public int getVariacionPosicion() {
-      return posicion - posicionAnterior ;
+      return posicion - posicionAnterior;
    }
 
-   public EquipoTorneo() {}
+   public EquipoTorneo() {
+   }
 
    public EquipoTorneo(Equipo equipo, Torneo torneo) {
       this.equipo = equipo;
@@ -119,24 +122,28 @@ public class EquipoTorneo {
       equipoTorneoDTO.setGolesEnContra(this.golesEnContra);
       equipoTorneoDTO.setPuntos(this.puntos);
       equipoTorneoDTO.setEquipo(this.equipo.convertToDTO());
-      equipoTorneoDTO.setTorneo(this.torneo.convertToDTO());
+      // Usar el convertToDTO del torneo para asegurar el estado correcto
+      if (this.torneo != null) {
+         equipoTorneoDTO.setTorneo(this.torneo.convertToDTO());
+      }
+      equipoTorneoDTO.setPosicionAnterior(this.posicionAnterior != null ? this.posicionAnterior : 0);
       return equipoTorneoDTO;
    }
 
    @Override
    public String toString() {
       return "EquipoTorneo{" +
-        "id=" + id +
-        ", posicion=" + posicion +
-        ", partidosJugados=" + partidosJugados +
-        ", partidosGanados=" + partidosGanados +
-        ", partidosEmpatados=" + partidosEmpatados +
-        ", partidosPerdidos=" + partidosPerdidos +
-        ", golesAFavor=" + golesAFavor +
-        ", golesEnContra=" + golesEnContra +
-        ", puntos=" + puntos +
-        ", torneo=" + (torneo != null ? torneo.getId() : null) +
-        ", equipo=" + (equipo != null ? equipo.getId() : null) +
-        '}';
+            "id=" + id +
+            ", posicion=" + posicion +
+            ", partidosJugados=" + partidosJugados +
+            ", partidosGanados=" + partidosGanados +
+            ", partidosEmpatados=" + partidosEmpatados +
+            ", partidosPerdidos=" + partidosPerdidos +
+            ", golesAFavor=" + golesAFavor +
+            ", golesEnContra=" + golesEnContra +
+            ", puntos=" + puntos +
+            ", torneo=" + (torneo != null ? torneo.getId() : null) +
+            ", equipo=" + (equipo != null ? equipo.getId() : null) +
+            '}';
    }
 }

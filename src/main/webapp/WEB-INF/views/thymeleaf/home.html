@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FutCode</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
-  <link th:href="@{./css/main.css}" rel="stylesheet" />
-  <link th:href="@{./css/list-torneos.css}" rel="stylesheet" />
-  <link th:href="@{./css/sidebar.css}" rel="stylesheet" />
-
+  <link th:href="@{/css/list-torneos.css}" rel="stylesheet" />
+  <link th:href="@{/css/main.css}" rel="stylesheet" />
+  <link th:href="@{/css/sidebar.css}" rel="stylesheet" />
 </head>
 <body>
 <!-- Indicador de menú lateral - MÁS VISIBLE -->
@@ -39,6 +38,11 @@
         <i class="bi bi-clock-history"></i> Historial de Partidos
       </a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" th:href="@{/torneo/historial}">
+        <i class="bi bi-trophy"></i> Historial de Torneos
+      </a>
+    </li>
 
   </ul>
 </aside>
@@ -53,6 +57,12 @@
     <h1 class="display-6 mb-3">
       Bienvenido, DT
       <span class="text-primary" th:text="${equipoNombre}">Coco Basile</span>
+      <ul>
+        <li>Agregue historial de torneos jugagos, falta corregir estilos</li>
+        <li>Si queres hacer alguna funcionalidad, faltaria la de ver los jugadores del equipo rival, 
+          yo lo haria como link en el nombre del equipo 
+          en la tabla de posiciones para no cargar mas la simulacion de partidos</li>
+      </ul>
     </h1>
 
     <div th:if="${mensajeTorneo}" class="alert alert-info" role="alert" th:text="${mensajeTorneo}">
@@ -73,6 +83,10 @@
               </div>
             </div>
             <div class="fechas-actions">
+              <a th:href="@{/torneo/tabla-posiciones(torneoId=${torneo.id})}" class="fechas-btn me-3">
+                <i class="bi bi-list-ol"></i>
+                <span>POSICIONES</span>
+              </a>
               <a th:href="@{/torneo/fechas(torneoId=${torneo.id})}" class="fechas-btn">
                 <i class="bi bi-play-circle"></i>
                 <span>Ver fechas</span>

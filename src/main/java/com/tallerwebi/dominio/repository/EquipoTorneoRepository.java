@@ -7,6 +7,7 @@ import java.util.List;
 public interface EquipoTorneoRepository{
 
    List<EquipoTorneo> getAllByTorneoId(Long torneoId);
+   List<EquipoTorneo> getAllByEquipoId(Long equipoId);
 
 
    void unirEquipoATorneo(Long torneoId, Long equipoId);

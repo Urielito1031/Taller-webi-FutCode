@@ -34,6 +34,31 @@
          text-shadow: 1px 1px 2px #000;
       }
 
+      .posicion-correcta {
+         box-shadow: 0 0 10px 2px #28a745 !important;
+         border: 2px solid #28a745 !important;
+      }
+      .posicion-parcial {
+         box-shadow: 0 0 10px 2px #ffc107 !important;
+         border: 2px solid #ffc107 !important;
+      }
+      .posicion-incorrecta {
+         box-shadow: 0 0 10px 2px #dc3545 !important;
+         border: 2px solid #dc3545 !important;
+      }
+
+      /*.ui-draggable-dragging {*/
+      /*   box-shadow: none !important;*/
+      /*   outline: none !important;*/
+      /*}*/
+      /*.player-card:focus,*/
+      /* .player-card.ui-draggable:focus,*/
+      /* .player-card.ui-draggable-dragging,*/
+      /* .ui-draggable-dragging {*/
+      /*    outline: none !important;*/
+      /*    box-shadow: none !important;*/
+      /*    border: none !important;*/
+      /* }*/
    </style>
 </head>
 <body th:style="'background: url(' + @{/img/plantilla-fondo.jpg} + ') no-repeat center center fixed; background-size: cover; min-height: 100vh;'">
@@ -91,9 +116,7 @@
                  th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'rareza-normal' :
                                 (${jugador.rarezaJugador.name() == 'RARO'} ? 'rareza-raro' :
                                 (${jugador.rarezaJugador.name() == 'EPICO'} ? 'rareza-epico' : 'rareza-leyenda'))">
-               
-               <!-- Badge de rareza -->
-               <div class="rareza-badge" 
+               <div class="rareza-badge"
                     th:classappend="${jugador.rarezaJugador.name() == 'NORMAL'} ? 'normal' :
                                    (${jugador.rarezaJugador.name() == 'RARO'} ? 'raro' :
                                    (${jugador.rarezaJugador.name() == 'EPICO'} ? 'epico' : 'leyenda'))"

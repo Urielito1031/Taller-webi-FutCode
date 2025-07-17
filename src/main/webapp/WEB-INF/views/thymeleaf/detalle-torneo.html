@@ -235,19 +235,19 @@
                         <span th:if="${torneo.formatoTorneo.tipo.name() != 'PARTIDO_UNICO'} and ${equipo.equipo.usuarioId != usuarioId}" th:text="${equipo.equipo.nombre}"></span>
                      </div>
 
-                     <span th:if="${equipo.subio}" class="ms-2 text-success" title="Subió de posición">
-                         <i class="bi bi-arrow-up"></i>
-                         <span th:text="${-equipo.variacionPosicion}"></span>
-                     </span>
+<!--                     <span th:if="${equipo.subio}" class="ms-2 text-success" title="Subió de posición">-->
+<!--                         <i class="bi bi-arrow-up"></i>-->
+<!--                         <span th:text="${-equipo.variacionPosicion}"></span>-->
+<!--                     </span>-->
 
-                     <span th:if="${equipo.bajo}" class="ms-2 text-danger" title="Bajó de posición">
-                         <i class="bi bi-arrow-down"></i>
-                         <span th:text="${equipo.variacionPosicion}"></span>
-                     </span>
+<!--                     <span th:if="${equipo.bajo}" class="ms-2 text-danger" title="Bajó de posición">-->
+<!--                         <i class="bi bi-arrow-down"></i>-->
+<!--                         <span th:text="${equipo.variacionPosicion}"></span>-->
+<!--                     </span>-->
 
-                     <span th:if="${equipo.igual}" class="ms-2 text-muted" title="Se mantuvo">
-                         <i class="bi bi-minus"></i>
-                     </span>
+<!--                     <span th:if="${equipo.igual}" class="ms-2 text-muted" title="Se mantuvo">-->
+<!--                         <i class="bi bi-minus"></i>-->
+<!--                     </span>-->
                   </td>
                   <td th:text="${equipo.partidosJugados}">0</td>
                   <td th:text="${equipo.partidosGanados}">0</td>

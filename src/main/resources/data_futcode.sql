@@ -306,7 +306,7 @@ INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating
     (44, 'Keylor', 'Navas', 'https://tomaszfutcode.free.nf/jugadoresFutcode/46_Keylor_Navas.png', 37, 1, 28.6, 0, 92.90, 10, 'NORMAL', 'ARQUERO', NULL),
     (45, 'David', 'de Gea', 'https://tomaszfutcode.free.nf/jugadoresFutcode/47_David_de_Gea.png', 34, 1, 23.5, 0, 92.80, 3, 'NORMAL', 'ARQUERO', NULL),
     (46, 'Mike', 'Maignan', 'https://futcodejugadores.free.nf/jugadores/mike_maignan.png', 29, 16, 26.9, 0, 92.70, 4, 'NORMAL', 'ARQUERO', NULL),
-    (47, 'Edin', 'Džeko', 'https://tomaszfutcode.free.nf/jugadoresFutcode/49_Edin_Džeko.png', 38, 9, 21.3, 0, 92.60, 6, 'NORMAL', 'DELANTERO', NULL),
+    (47, 'Edin', 'Džeko', 'https://i.imgur.com/T4hcGVs.png', 38, 9, 21.3, 0, 92.60, 6, 'NORMAL', 'DELANTERO', NULL),
     (49, 'Gabriel', 'Jesus', 'https://futcodejugadores.free.nf/jugadores/Gabriel-Jesus.png', 27, 9, 24.2, 0, 92.40, 2, 'NORMAL', 'DELANTERO', NULL),
     (50, 'Raheem', 'Sterling', 'https://tomaszfutcode.free.nf/jugadoresFutcode/52_Raheem_Sterling.png', 29, 7, 28.8, 0, 92.30, 7, 'NORMAL', 'DELANTERO', NULL),
     (51, 'João', 'Félix', 'https://tomaszfutcode.free.nf/jugadoresFutcode/53_João_Félix.png', 25, 11, 20.4, 0, 92.20, 11, 'NORMAL', 'MEDIOCAMPISTA', NULL),

@@ -34,6 +34,7 @@ aside.sidebar.active {
 .sidebar ul {
     padding: 0;
     list-style: none;
+    margin-top: 140px;
 }
 
 .sidebar .nav-item {

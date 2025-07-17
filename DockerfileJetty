@@ -14,10 +14,7 @@ RUN apt-get update && apt-get install -y wget && \
 
 # Copia el archivo WAR al directorio webapps de Jetty con nombre ROOT.war
 #COPY target/tallerwebi-base-1.0-SNAPSHOT.war $JETTY_HOME/webapps/ROOT.war
-
 COPY target/tallerwebi-base-1.0-SNAPSHOT.war $JETTY_HOME/webapps/spring.war
-
-
 
 # Expone el puerto en el que Jetty corre (por defecto 8080)
 EXPOSE 8080

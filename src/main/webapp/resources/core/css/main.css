@@ -815,3 +815,79 @@ body::-webkit-scrollbar-track {
     border-radius: 8px 8px 0 0;
     z-index: 200;
 }
+
+/* Estilos para el mensaje de torneo creado exitosamente */
+.alert {
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 255, 195, 0.1);
+    animation: slideInDown 0.5s ease-out;
+}
+
+.alert::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(0, 255, 195, 0.1));
+    z-index: -1;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(0, 255, 195, 0.15));
+    color: #00ffc3;
+    border: 1px solid rgba(0, 255, 195, 0.2);
+}
+
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20% {
+        transform: translateY(-50%);
+    }
+    40% {
+        transform: translateY(-60%);
+    }
+    60% {
+        transform: translateY(-55%);
+    }
+}
+
+/* Efecto hover para el alert */
+.alert:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 255, 195, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Responsive para el alert */
+@media (max-width: 768px) {
+    .alert {
+        padding: 0.75rem;
+        margin: 1rem 0;
+        font-size: 0.9em;
+    }
+    
+    .alert-info::after {
+        font-size: 1rem;
+        right: 0.75em;
+    }
+}

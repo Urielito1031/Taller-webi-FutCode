@@ -116,11 +116,11 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                 }
             }
 
-            int cantidadEventosGenerales = generarCantidadAleatoria(25);
-            int cantidadTarjetas = generarCantidadAleatoria(5);
-            int cantidadExpulsados = generarCantidadAleatoria(3);
-            int cantidadLesiones = generarCantidadAleatoria(5);
-            ;
+            int cantidadEventosGenerales = generarCantidadAleatoria(15, 25);
+            int cantidadTarjetas = generarCantidadAleatoria(2, 5);
+            int cantidadExpulsados = generarCantidadAleatoria(0, 3);
+            int cantidadLesiones = generarCantidadAleatoria(1, 5);
+
 
             // GENERAL
             for (int i = 0; i < cantidadEventosGenerales; i++) {
@@ -235,9 +235,10 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         return fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroDeFecha);
     }
 
-    private int generarCantidadAleatoria(int max) {
-        return random.nextInt(max + 1);
+    public int generarCantidadAleatoria(int minimo, int maximo) {
+        return minimo + new Random().nextInt(maximo - minimo + 1);
     }
+
 
     private Long randomEquipo(Partido partido) {
         if (Math.random() < 0.5) {
@@ -271,7 +272,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "GOL"));
         }
         // Eventos generales
-        int cantidadEventosGenerales = generarCantidadAleatoria(10);
+        int cantidadEventosGenerales = generarCantidadAleatoria(15, 25);
         for (int i = 0; i < cantidadEventosGenerales; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -279,7 +280,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "GENERAL"));
         }
         // Tarjetas amarillas
-        int cantidadTarjetas = generarCantidadAleatoria(3);
+        int cantidadTarjetas = generarCantidadAleatoria(1, 3);
         for (int i = 0; i < cantidadTarjetas; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -288,7 +289,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_AMARILLA"));
         }
         // Tarjetas rojas
-        int cantidadRojas = generarCantidadAleatoria(1);
+        int cantidadRojas = generarCantidadAleatoria(1, 3);
         for (int i = 0; i < cantidadRojas; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -296,7 +297,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "TARJETA_ROJA"));
         }
         // Expulsiones
-        int cantidadExpulsados = generarCantidadAleatoria(1);
+        int cantidadExpulsados = generarCantidadAleatoria(1, 2);
         for (int i = 0; i < cantidadExpulsados; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);
@@ -304,7 +305,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             narraciones.add(new NarracionDTO(frase, minuto, "EXPULSION"));
         }
         // Lesiones
-        int cantidadLesiones = generarCantidadAleatoria(2);
+        int cantidadLesiones = generarCantidadAleatoria(1,3);
         for (int i = 0; i < cantidadLesiones; i++) {
             int minuto = 1 + random.nextInt(minutoMax);
             Long equipoId = randomEquipo(partido);

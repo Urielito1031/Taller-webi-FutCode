@@ -21,6 +21,19 @@ body {
     overflow-x: hidden;
 }
 
+.navbar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00ffc3, #1c2a3a);
+    border-radius: 8px 8px 0 0;
+    z-index: 1200;
+}
+
+
 .navbar-brand, #titulo-nav {
     font-size: 2rem;
     font-weight: bold;
@@ -38,6 +51,7 @@ body {
 .navbar .container {
     flex-wrap: nowrap;
     justify-content: flex-end;
+    overflow: visible;
 }
 
 ul {
@@ -83,6 +97,7 @@ ul {
 .dropdown {
     position: relative;
     display: inline-block;
+    z-index: 1100;
 }
 
 .dropdown-toggle {
@@ -110,7 +125,10 @@ ul {
     padding: 10px 0;
     border-radius: 8px;
     min-width: 150px;
-    z-index: 100;
+    z-index: 1100 !important;
+    top: 100%;
+    left: 0;
+
 }
 
 .dropdown-menu a {
@@ -141,4 +159,4 @@ ul {
     border-radius: 50px;
     padding: 0.2px 6px;
     color: white;
-} 
+}

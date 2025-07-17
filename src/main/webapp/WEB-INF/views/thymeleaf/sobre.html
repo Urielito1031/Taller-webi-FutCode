@@ -20,7 +20,7 @@
 
     <div id="contenedor-principal">
         <div id="subContenedor">
-            <ul class="container">
+            <ul class="container d-flex align-items-center justify-content-center">
                 <li class="contenedor-jugador animate__animated animate__backInLeft jugador-card" 
                     th:each="jugador : ${sobre.jugadores}" 
                     th:style="'background-image: url(' + ${jugador.imagen} + ');'"

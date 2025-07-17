@@ -319,7 +319,7 @@ INSERT INTO jugador (id, nombre, apellido, imagen, edad, numero_camiseta, rating
     (58, 'Darwin', 'Núñez', 'https://futcodejugadores.free.nf/jugadores/darwin_nunez.png', 25, 19, 28.1, 0, 92.10, 9, 'NORMAL', 'DELANTERO', NULL),
     (59, 'Sebastien', 'Haller', 'https://tomaszfutcode.free.nf/jugadoresFutcode/61_Sebastien_Haller.png', 30, 9, 19.8, 0, 92.00, 12, 'NORMAL', 'DELANTERO', NULL),
     (60, 'Victor', 'Osimhen', 'https://futcodejugadores.free.nf/jugadores/victor_osimhen.png', 26, 9, 29.5, 0, 91.90, 8, 'NORMAL', 'DELANTERO', NULL),
-    (61, 'Dušan', 'Tadić', 'https://tomaszfutcode.free.nf/jugadoresFutcode/63_Dušan_Tadić.png', 35, 10, 22.2, 0, 91.80, 13, 'NORMAL', 'MEDIOCAMPISTA', NULL),
+    (61, 'Dušan', 'Tadić', 'https://i.imgur.com/V7Jo0Db.png', 35, 10, 22.2, 0, 91.80, 13, 'NORMAL', 'MEDIOCAMPISTA', NULL),
     (62, 'Lucas', 'Paquetá', 'https://tomaszfutcode.free.nf/jugadoresFutcode/64_Lucas_Paquetá.png', 27, 11, 26.7, 0, 91.70, 2, 'NORMAL', 'MEDIOCAMPISTA', NULL),
     (63, 'James', 'Maddison', 'https://tomaszfutcode.free.nf/jugadoresFutcode/65_James_Maddison.png', 28, 10, 21.4, 0, 91.60, 7, 'NORMAL', 'MEDIOCAMPISTA', NULL),
     (64, 'Karim', 'Benzema', 'https://tomaszfutcode.free.nf/jugadoresFutcode/66_Karim_Benzema.png', 37, 9, 95.6, 0, 98.50, 3, 'LEYENDA', 'DELANTERO', NULL),

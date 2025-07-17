@@ -47,7 +47,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
     }
 
     @Override
-    public void simularFecha(Long torneoId, Long numeroDeFecha) {
+    public void simularFecha(Long torneoId, Long numeroDeFecha, Long idEquipo) {
         Torneo torneo = torneoRepository.obtenerTorneoConFechas(torneoId);
 
         // SE PUEDE CAMBIAR POR UNA EXCEPTION
@@ -90,6 +90,9 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
             // Generar y guardar frases de goles
 
             // Generar frases de goles solo si hay jugadores
+            if(partido.getEquipoLocal().getId().equals(idEquipo) || partido.getEquipoVisitante().getId().equals(idEquipo)) {
+
+
             if (partido.getEquipoLocal().hasJugadores()) {
                 for (int i = 0; i < golesLocal; i++) {
                     try {
@@ -179,6 +182,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
                     System.err.println("Error generando frase LESION: " + e.getMessage());
                 }
             }
+            }
 
             partido.setGolesLocal(golesLocal);
             partido.setGolesVisitante(golesVisitante);
@@ -212,7 +216,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         }
     }
 
-    @Override
+   /* @Override
     public Long simularFechaYDevolverPrimerPartido(Long torneoId, Long numeroDeFecha) {
         simularFecha(torneoId, numeroDeFecha);
 
@@ -223,7 +227,7 @@ public class SimularTorneoServiceImpl implements SimularTorneoService {
         }
 
         return null;
-    }
+    }*/
 
     @Override
     public Partido obtenerPartidoSimulado(Long partidoId) {

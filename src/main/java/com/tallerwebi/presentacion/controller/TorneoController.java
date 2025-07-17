@@ -269,10 +269,11 @@ public class TorneoController {
          return "redirect:/torneo/fechas?torneoId=" + torneoId;
       }
 
-      // 1. Simular toda la fecha
-      simularTorneoService.simularFecha(torneoId, numeroFecha);
-
       Long equipoId = usuario.getEquipo().getId();
+
+      // 1. Simular toda la fecha
+      simularTorneoService.simularFecha(torneoId, numeroFecha, equipoId);
+
 
       // Fecha fecha = fechaRepository.getFechaByTorneoIdAndNumeroDeFecha(torneoId, numeroFecha);
 

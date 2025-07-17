@@ -21,6 +21,19 @@ body {
     overflow-x: hidden;
 }
 
+.navbar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00ffc3, #1c2a3a);
+    border-radius: 8px 8px 0 0;
+    z-index: 1200;
+}
+
+
 .navbar-brand, #titulo-nav {
     font-size: 2rem;
     font-weight: bold;

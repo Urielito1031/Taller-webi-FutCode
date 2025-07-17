@@ -1,13 +1,32 @@
 .contenedor-principal-torneos {
-    background-color: #1e2a3c;
+    position: relative;
     border-radius: 12px;
-    width: 100%;
+
     margin-bottom: 50px;
     margin-top: 20px;
     padding: 20px 10px;
+    background: linear-gradient(135deg, #1b263b 0%, #1c2a3a 100%);
+    border: 1px solid rgba(0, 255, 195, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 255, 195, 0.1);
+    transition: all 0.3s ease;
 }
 
+.contenedor-principal-torneos::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #00ffc3, #1c2a3a);
+    border-radius: 16px 16px 0 0;
+}
 
+.contenedor-principal-torneos:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 255, 195, 0.15);
+    border-color: rgba(0, 255, 195, 0.3);
+}
 
 .contenedores {
     display: grid;
@@ -18,18 +37,53 @@
 
 .contenedor-torneo {
     background-color: #0d1b2a;
-    padding: 15px;
+    padding: 25px;
     border-radius: 10px;
-    width: 250px;
-    height: 320px;
     margin: 10px 5px;
+    border: 1px solid rgba(0, 255, 195, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 255, 195, 0.1);
+    transition: all 0.3s ease;
+    width: 250px;
+    height: 400px;
 }
 
+.contenedor-torneo:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 255, 195, 0.15);
+    border-color: rgba(0, 255, 195, 0.3);
+}
 
+.my-3{
+    margin-top: 20px;
+    margin-bottom: 30px;
+    background-color: #1b263b;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(32, 248, 255, 0.1);
+    width: 60%;
+}
 
+.btn {
+    background-color: #00ffc3;
+    color: #0d1b2a;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 110px;
+    width: 100px;
 
+}
 
-
+.btn:hover {
+    background-color: #0d1b2a;
+    color: #00ffc3;
+    transform: scale(1.05);
+}
 
 .estado-badge {
     background-color: #1b263b;
@@ -54,7 +108,6 @@
     background-color: #dc3545;
     color: #ffffff;
 }
-
 
 
 

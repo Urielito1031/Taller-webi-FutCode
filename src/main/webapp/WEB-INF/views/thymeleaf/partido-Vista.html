@@ -230,7 +230,7 @@
             <div class="stat-value" id="totalGoals">0</div>
         </div>
         <div class="stat-card">
-            <div class="stat-title">Faltas</div>
+            <div class="stat-title">Expulsados</div>
             <div class="stat-value" id="totalFouls">0</div>
         </div>
         <div class="stat-card">
@@ -273,6 +273,15 @@
 
 
 </div>
+
+<audio id="ambient-tribuna" th:src="@{/audio/estadio.mp3}"></audio>
+<audio id="gol" th:src="@{/audio/gol.mp3}"></audio>
+<audio id="comienzo" th:src="@{/audio/comienzo.mp3}"></audio>
+<audio id="final" th:src="@{/audio/final.mp3}"></audio>
+<audio id="amarilla" th:src="@{/audio/amarilla.mp3}"></audio>
+<audio id="roja" th:src="@{/audio/roja.mp3}"></audio>
+
+
 <script>
 // Elementos del DOM
 const matchTime = document.getElementById("matchTime");
@@ -286,6 +295,11 @@ const totalInjuries = document.getElementById("totalInjuries");
 const commentaryList = document.getElementById("commentaryList");
 const startBtn = document.getElementById("startBtn");
 const omiteBtn = document.getElementById("omitebtn");
+const sonidoComienzo = document.getElementById("comienzo");
+const sonidoFinal = document.getElementById("final");
+const sonidoAmarilla = document.getElementById("amarilla");
+const sonidoRoja = document.getElementById("roja");
+
 
 // Obtener el equipo del usuario desde el backend
 const equipoLocal = document.getElementById("equipoLocal").value.trim().toLowerCase();
@@ -383,7 +397,9 @@ function iniciarPartido() {
 <span><strong>¡EL PARTIDO HA COMENZADO!</strong></span>`;
     commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
     mensajeInicio.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    
+    sonidoComienzo.play().catch(e => console.warn("No se pudo reproducir sonido de comienzo", e));
+
+
     // Mostrar animación de puntos suspensivos
     document.getElementById('loadingDots').style.display = 'inline-block';
     
@@ -456,16 +472,20 @@ function mostrarNarracion(narracion) {
             // Si no se puede determinar, por defecto gol en contra
             nuevaNarracion.classList.add('gol-contra');
         }
-    } else if (tipoEvento.includes('expulsion')) {
+    } else if (tipoEvento.includes('expulsion')|| tipoEvento.includes('roja') ||
+        textoNarracion.includes('expulsado') || textoNarracion.includes('expulsión') || textoNarracion.includes('roja')) {
         if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
             nuevaNarracion.classList.add('expulsion-propia');
         } else {
             nuevaNarracion.classList.add('expulsion-rival');
         }
+        sonidoRoja.play().catch(e => console.warn("Expulsión: no se pudo reproducir", e));
     } else if (tipoEvento.includes('amarilla')) {
         nuevaNarracion.classList.add('tarjeta-amarilla');
+        sonidoAmarilla.play().catch(e => console.warn("Amarilla: no se pudo reproducir", e));
     } else if (tipoEvento.includes('roja')) {
         nuevaNarracion.classList.add('tarjeta-roja');
+        sonidoRoja.play().catch(e => console.warn("Roja: no se pudo reproducir", e));
     } else if (tipoEvento.includes('lesion')) {
         nuevaNarracion.classList.add('lesion');
     }
@@ -483,10 +503,23 @@ function procesarNarracion(tipo, texto) {
             stats.goles++; 
             // Actualizar marcador cuando aparece un gol
             actualizarMarcador();
+            const golSound = document.getElementById("gol");
+            if (golSound) {
+                const nuevoSonidoGol = golSound.cloneNode(); // clona el audio
+                nuevoSonidoGol.volume = 0.6;
+
+                // Opción: remover el nodo del DOM cuando termine
+                nuevoSonidoGol.addEventListener('ended', () => {
+                    nuevoSonidoGol.remove();
+                });
+
+                document.body.appendChild(nuevoSonidoGol); // <- IMPORTANTE
+                nuevoSonidoGol.play().catch(e => console.warn("Gol: no se pudo reproducir", e));
+            }
             break;
-        case 'TARJETA_AMARILLA':
-        case 'TARJETA_ROJA':
-        case 'EXPULSION': stats.tarjetas++; break;
+        case 'TARJETA_AMARILLA': stats.tarjetas++; break;
+        case 'TARJETA_ROJA': stats.tarjetas++; stats.faltas++;break;
+        case 'EXPULSION': stats.tarjetas++; stats.faltas++; break;
         case 'LESION': stats.lesionados++; break;
         case 'GENERAL': break;
         default: break;
@@ -539,6 +572,7 @@ function terminarPartido(motivoOmitir = false) {
     clearInterval(intervalo);
     intervalo = null;
     statusIndicator.textContent = "FINALIZADO";
+    sonidoFinal.play().catch(e => console.warn("No se pudo reproducir sonido final", e));
     statusIndicator.className = "status-indicator finished";
     startBtn.disabled = true;
     document.getElementById('loadingDots').style.display = 'none';
@@ -703,12 +737,29 @@ function mostrarPopupFinal(resultado, color, monedas, bonus, golesHechos, golesR
             </div>
         `;
     }
-    
+
+
     document.body.appendChild(modal);
     document.getElementById('cerrarPopupBtn').addEventListener('click', function() {
         modal.remove();
     });
 }
+
+window.addEventListener('DOMContentLoaded', function() {
+    const ambientSound = document.getElementById("ambient-tribuna");
+
+    // Esperar interacción del usuario (por políticas de autoplay)
+    document.getElementById("startBtn").addEventListener("click", function () {
+        ambientSound.volume = 0.2; // volumen moderado
+        ambientSound.play().catch(e => console.warn("El navegador bloqueó el autoplay:", e));
+    });
+
+    // Opción para detener el sonido si se desea
+    document.getElementById("omitebtn").addEventListener("click", function () {
+        ambientSound.pause();
+    });
+});
+
 
 // Event listeners
 startBtn.addEventListener('click', iniciarPartido);
@@ -717,3 +768,5 @@ omiteBtn.addEventListener('click', () => terminarPartido(true));
 // Inicializar el partido al cargar la página
 inicializarPartido();
 </script>
+</body>
+</html>

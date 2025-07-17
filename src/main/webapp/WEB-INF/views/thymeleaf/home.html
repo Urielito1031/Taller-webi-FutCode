@@ -24,7 +24,6 @@
 
 <!-- Barra lateral -->
 <aside class="sidebar" id="sidebar">
-  <a th:href="@{/home}" class="sidebar-brand">FUTCODE</a>
   <ul>
     <li class="nav-item">
       <a class="nav-link" th:href="@{/plantilla}">
@@ -65,9 +64,6 @@
       Gestiona tu equipo <span class="team-name" th:text="${equipoNombre}">Thomas</span> y participa en torneos épicos
     </p>
     </section>
-
-
-
     <div th:if="${mensajeTorneo}" class="alert alert-info" role="alert" th:text="${mensajeTorneo}">
     </div>
 

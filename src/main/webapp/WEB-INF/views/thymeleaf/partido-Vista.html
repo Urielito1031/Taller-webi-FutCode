@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -182,7 +183,7 @@
 </head>
 <body>
 <div class="container">
-    <!-- Botón de volver -->
+    &lt;!&ndash; Botón de volver &ndash;&gt;
     <div style="margin-bottom: 20px;">
         <a th:href="@{/home}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> VOLVER
@@ -220,8 +221,8 @@
 
     <div class="controls">
         <button class="btn btn-primary" id="startBtn">INICIAR PARTIDO</button>
-        <!-- <button class="btn btn-secondary" id="pauseBtn">PAUSAR</button> -->
-        <!-- <button class="btn btn-secondary" id="resetBtn">REINICIAR</button> -->
+        &lt;!&ndash; <button class="btn btn-secondary" id="pauseBtn">PAUSAR</button> &ndash;&gt;
+        &lt;!&ndash; <button class="btn btn-secondary" id="resetBtn">REINICIAR</button> &ndash;&gt;
     </div>
 
     <div class="stats-section">
@@ -769,4 +770,1571 @@ omiteBtn.addEventListener('click', () => terminarPartido(true));
 inicializarPartido();
 </script>
 </body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulación de Partido - FutCode</title>
+    <link rel="stylesheet" th:href="@{/css/partidoStyle.css}" />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Arial", sans-serif;
+            background: linear-gradient(
+                    135deg,
+                    #0a0f1c 0%,
+                    #1e3a5f 50%,
+                    #0a0f1c 100%
+            );
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                    circle at 20% 20%,
+                    rgba(0, 255, 195, 0.1) 0%,
+                    transparent 50%
+            ),
+            radial-gradient(
+                    circle at 80% 80%,
+                    rgba(0, 255, 195, 0.05) 0%,
+                    transparent 50%
+            ),
+            radial-gradient(
+                    circle at 40% 60%,
+                    rgba(0, 255, 195, 0.03) 0%,
+                    transparent 50%
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header y botón volver */
+        .back-button {
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+            color: #0a0f1c;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 195, 0.4);
+            background: linear-gradient(135deg, #00d4a3 0%, #00ffc3 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #415a77 0%, #778da9 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(65, 90, 119, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(65, 90, 119, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+
+            top: 0;
+
+            z-index: 100;
+            padding-top: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #00ffc3 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 255, 195, 0.5);
+        }
+
+        /* Match Info - Equipos */
+        .match-info {
+            background: linear-gradient(135deg, rgba(30,58,95,0.6) 0%, rgba(10,15,28,0.8) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,255,195,0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .match-info::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 40%, rgba(0,255,195,0.10) 0%, transparent 70%),
+            radial-gradient(circle at 30% 70%, rgba(0,255,195,0.07) 0%, transparent 80%);
+            opacity: 0.7;
+            animation: matchGlow 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes matchGlow {
+            0%, 100% { opacity: 0.7; filter: blur(0px); }
+            50% { opacity: 1; filter: blur(2px); }
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .team:hover {
+            transform: scale(1.05);
+        }
+
+        .team-logo {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 10px;
+        }
+
+
+
+        .team:hover .team-logo::before {
+            opacity: 0.2;
+        }
+
+        .team-escudo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            box-shadow: 0 4px 15px rgba(0, 255, 195, 0.3);
+        }
+
+
+
+        .team-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .team-score {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00ffc3 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 255, 195, 0.5);
+        }
+
+        .vs {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #778da9;
+            margin: 0 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estado del partido */
+        .match-status {
+            background: linear-gradient(
+                    135deg,
+                    rgba(30, 58, 95, 0.4) 0%,
+                    rgba(10, 15, 28, 0.6) 100%
+            );
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 195, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00ffc3 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .status-indicator.ready {
+            background: linear-gradient(135deg, #415a77 0%, #778da9 100%);
+            color: #ffffff;
+        }
+
+        .status-indicator.playing {
+            background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+            color: #0a0f1c;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.finished {
+            background: linear-gradient(135deg, #e74c3c 0%, #ff6b6b 100%);
+            color: #ffffff;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 195, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 255, 195, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 195, 0);
+            }
+        }
+
+        /* Controles */
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+            color: #0a0f1c;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 6px 20px rgba(0, 255, 195, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 195, 0.5);
+        }
+
+        .btn-primary:disabled {
+            background: linear-gradient(135deg, #415a77 0%, #778da9 100%);
+            color: #ffffff;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Estadísticas */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(
+                    135deg,
+                    rgba(30, 58, 95, 0.4) 0%,
+                    rgba(10, 15, 28, 0.6) 100%
+            );
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 195, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: box-shadow 0.4s, transform 0.3s, background 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                    45deg,
+                    transparent,
+                    rgba(0, 255, 195, 0.13),
+                    transparent
+            );
+            opacity: 0;
+            transition: opacity 0.4s, transform 0.4s;
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(0,255,195,0.18), 0 2px 20px rgba(0,255,195,0.10);
+            background: linear-gradient(135deg, rgba(0,255,195,0.10) 0%, rgba(30,58,95,0.6) 100%);
+        }
+
+
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: #778da9;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00ffc3 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Sección de comentarios */
+        .commentary-section {
+            background: linear-gradient(
+                    135deg,
+                    rgba(30, 58, 95, 0.4) 0%,
+                    rgba(10, 15, 28, 0.6) 100%
+            );
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 195, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .commentary-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #00ffc3;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes golAnim {
+            0% { box-shadow: 0 0 0 0 #00ffc3; }
+            50% { box-shadow: 0 0 40px 20px #00ffc3; }
+            100% { box-shadow: 0 0 0 0 #00ffc3; }
+        }
+        .team-score.gol {
+            animation: golAnim 1s;
+        }
+
+
+
+        .commentary-section.scrollbar {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .commentary-section.scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .commentary-section.scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .commentary-section.scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00ffc3 0%, #00d4a3 100%);
+            border-radius: 10px;
+        }
+
+        .commentary-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border-left: 4px solid #778da9;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .commentary-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(0, 255, 195, 0.1),
+                    transparent
+            );
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .commentary-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .commentary-item:hover {
+            transform: translateX(5px);
+        }
+
+        .commentary-minute {
+            font-weight: bold;
+            color: #00ffc3;
+            margin-right: 10px;
+        }
+
+        /* Estilos específicos para tipos de eventos */
+        .commentary-item.gol-favor {
+            border-left: 6px solid #2ecc40;
+            background: linear-gradient(
+                    135deg,
+                    rgba(46, 204, 64, 0.2) 0%,
+                    rgba(25, 61, 28, 0.4) 100%
+            );
+            color: #2ecc40;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(46, 204, 64, 0.3);
+        }
+
+        .commentary-item.gol-contra,
+        .commentary-item.expulsion-propia {
+            border-left: 6px solid #e74c3c;
+            background: linear-gradient(
+                    135deg,
+                    rgba(231, 76, 60, 0.2) 0%,
+                    rgba(58, 26, 26, 0.4) 100%
+            );
+            color: #e74c3c;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .commentary-item.expulsion-rival {
+            border-left: 6px solid #2ecc40;
+            background: linear-gradient(
+                    135deg,
+                    rgba(46, 204, 64, 0.2) 0%,
+                    rgba(25, 61, 28, 0.4) 100%
+            );
+            color: #2ecc40;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(46, 204, 64, 0.3);
+        }
+
+        .commentary-item.tarjeta-amarilla {
+            border-left: 6px solid #ffe066;
+            background: linear-gradient(
+                    135deg,
+                    rgba(255, 224, 102, 0.2) 0%,
+                    rgba(58, 56, 26, 0.4) 100%
+            );
+            color: #ffe066;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 224, 102, 0.3);
+        }
+
+        .commentary-item.tarjeta-roja {
+            border-left: 6px solid #e74c3c;
+            background: linear-gradient(
+                    135deg,
+                    rgba(231, 76, 60, 0.2) 0%,
+                    rgba(58, 26, 26, 0.4) 100%
+            );
+            color: #e74c3c;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .commentary-item.lesion {
+            border-left: 6px solid #ff8800;
+            background: linear-gradient(
+                    135deg,
+                    rgba(255, 136, 0, 0.2) 0%,
+                    rgba(58, 42, 26, 0.4) 100%
+            );
+            color: #ff8800;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 136, 0, 0.3);
+        }
+
+        /* Animación de puntos suspensivos */
+        .loading-dots {
+            display: inline-block;
+            color: #00ffc3;
+            font-weight: bold;
+        }
+
+        .loading-dots::after {
+            content: "";
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%,
+            20% {
+                content: "";
+            }
+            40% {
+                content: ".";
+            }
+            60% {
+                content: "..";
+            }
+            80%,
+            100% {
+                content: "...";
+            }
+        }
+
+        /* Botón omitir */
+        #boton-omitir {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #omitebtn {
+            background: linear-gradient(135deg, #415a77 0%, #778da9 100%);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(65, 90, 119, 0.3);
+        }
+
+        #omitebtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(65, 90, 119, 0.4);
+        }
+
+        /* Modal de victoria mejorado */
+        .victory-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.5s ease-in;
+            backdrop-filter: blur(10px);
+        }
+
+        .victory-card {
+            background: linear-gradient(
+                    135deg,
+                    rgba(30, 58, 95, 0.9) 0%,
+                    rgba(10, 15, 28, 0.9) 100%
+            );
+            backdrop-filter: blur(20px);
+            border: 2px solid #ffd700;
+            border-radius: 25px;
+            padding: 40px 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            animation: slideIn 0.6s ease-out;
+            max-width: 700px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .victory-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                    from 0deg,
+                    transparent,
+                    rgba(255, 215, 0, 0.1),
+                    transparent
+            );
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+        }
+
+        .victory-title {
+            color: #ffd700;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .victory-subtitle {
+            color: #ffffff;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .match-info {
+                flex-direction: column;
+                gap: 20px;
+                padding: 30px 20px;
+            }
+
+            .vs {
+                margin: 0;
+                transform: rotate(90deg);
+            }
+
+            .team-score {
+                font-size: 2.5rem;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .team-score {
+                font-size: 2rem;
+            }
+        }
+
+        .time-progress {
+            position: relative;
+            display: inline-block;
+            width: 90px;
+            height: 90px;
+            margin-bottom: 15px;
+        }
+        .progress-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .progress-bg {
+            fill: none;
+            stroke: #415a77;
+            stroke-width: 8;
+            opacity: 0.3;
+        }
+        .progress-bar {
+            fill: none;
+            stroke: #00ffc3;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dasharray 0.3s;
+        }
+        .time-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00ffc3 0%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Botón de volver -->
+    <div class="back-button">
+        <a th:href="@{/home}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> VOLVER
+        </a>
+    </div>
+
+    <div class="header">
+        <h1> SIMULACIÓN DE PARTIDO</h1>
+    </div>
+
+    <div class="match-info">
+        <div class="team">
+            <div class="team-logo">
+                <img
+                        th:if="${equipoLocal.imagen}"
+                        th:src="${equipoLocal.imagen}"
+                        alt="Escudo Local"
+                        class="team-escudo"
+                />
+
+            </div>
+            <div class="team-name" id="team1Name" th:text="${equipoLocal.nombre}">
+                River Plate
+            </div>
+            <div class="team-score" id="team1Score">0</div>
+        </div>
+        <div class="vs">VS</div>
+        <div class="team">
+            <div class="team-logo">
+                <img
+                        th:if="${equipoVisitante.imagen}"
+                        th:src="${equipoVisitante.imagen}"
+                        alt="Escudo Visitante"
+                        class="team-escudo"
+                />
+
+            </div>
+            <div
+                    class="team-name"
+                    id="team2Name"
+                    th:text="${equipoVisitante.nombre}"
+            >
+                Boca Juniors
+            </div>
+            <div class="team-score" id="team2Score">0</div>
+        </div>
+    </div>
+
+    <div class="match-status">
+        <!-- Dentro de .match-status -->
+        <div class="time-progress">
+            <svg class="progress-circle" width="90" height="90">
+                <circle class="progress-bg" cx="45" cy="45" r="40" />
+                <circle class="progress-bar" cx="45" cy="45" r="40" />
+            </svg>
+            <div class="time-display" id="matchTime">0'</div>
+        </div>
+        <div class="status-indicator ready" id="statusIndicator">LISTO</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-primary" id="startBtn">
+            <i class="bi bi-play-fill"></i> INICIAR PARTIDO
+        </button>
+    </div>
+
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-title">Goles Total</div>
+            <div class="stat-value" id="totalGoals">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Expulsados</div>
+            <div class="stat-value" id="totalFouls">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Tarjetas</div>
+            <div class="stat-value" id="totalCards">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Lesionados</div>
+            <div class="stat-value" id="totalInjuries">0</div>
+        </div>
+    </div>
+
+    <div class="commentary-section scrollbar">
+        <div class="commentary-title">
+             NARRACIÓN EN VIVO
+            <span id="loadingDots" class="loading-dots"></span>
+        </div>
+        <div id="commentaryList">
+            <div
+                    th:each="narracion : ${narraciones}"
+                    class="commentary-item"
+                    th:attr="data-minuto=${narracion.minuto},data-tipo=${narracion.tipoEvento}"
+            >
+            <span
+                    class="commentary-minute"
+                    th:text="${narracion.minuto} + '\''"
+            ></span>
+                <span th:text="${narracion.texto}">Aquí va una frase...</span>
+            </div>
+        </div>
+        <input type="hidden" id="equipoUsuario" th:value="${equipoUsuario}" />
+        <input type="hidden" id="equipoLocal" th:value="${equipoLocal}" />
+        <input
+                type="hidden"
+                id="equipoVisitante"
+                th:value="${equipoVisitante}"
+        />
+        <input type="hidden" id="monedasGanadas" th:value="${monedasGanadas}" />
+        <input type="hidden" id="golesLocalFinal" th:value="${golesLocal}" />
+        <input
+                type="hidden"
+                id="golesVisitanteFinal"
+                th:value="${golesVisitante}"
+        />
+        <input
+                type="hidden"
+                id="nombreLocalFinal"
+                th:value="${equipoLocal.nombre}"
+        />
+        <input
+                type="hidden"
+                id="nombreVisitanteFinal"
+                th:value="${equipoVisitante.nombre}"
+        />
+        <input
+                type="hidden"
+                id="equipoUsuarioFinal"
+                th:value="${equipoUsuario}"
+        />
+        <input type="hidden" id="esPartidoUnico" th:value="${esPartidoUnico}" />
+        <input type="hidden" id="premioTorneo" th:value="${premioTorneo}" />
+        <input type="hidden" id="nombreTorneo" th:value="${nombreTorneo}" />
+    </div>
+
+    <div id="boton-omitir">
+        <button class="btn" id="omitebtn">
+            <i class="bi bi-fast-forward-fill"></i> OMITIR NARRACIÓN
+        </button>
+    </div>
+</div>
+
+<audio id="ambient-tribuna" th:src="@{/audio/estadio.mp3}"></audio>
+<audio id="gol" th:src="@{/audio/gol.mp3}"></audio>
+<audio id="comienzo" th:src="@{/audio/comienzo.mp3}"></audio>
+<audio id="final" th:src="@{/audio/final.mp3}"></audio>
+<audio id="amarilla" th:src="@{/audio/amarilla.mp3}"></audio>
+<audio id="roja" th:src="@{/audio/roja.mp3}"></audio>
+
+<script>
+    // Elementos del DOM
+    const matchTime = document.getElementById("matchTime");
+    const statusIndicator = document.getElementById("statusIndicator");
+    const team1Score = document.getElementById("team1Score");
+    const team2Score = document.getElementById("team2Score");
+    const totalGoals = document.getElementById("totalGoals");
+    const totalFouls = document.getElementById("totalFouls");
+    const totalCards = document.getElementById("totalCards");
+    const totalInjuries = document.getElementById("totalInjuries");
+    const commentaryList = document.getElementById("commentaryList");
+    const startBtn = document.getElementById("startBtn");
+    const omiteBtn = document.getElementById("omitebtn");
+    const sonidoComienzo = document.getElementById("comienzo");
+    const sonidoFinal = document.getElementById("final");
+    const sonidoAmarilla = document.getElementById("amarilla");
+    const sonidoRoja = document.getElementById("roja");
+
+    // Obtener el equipo del usuario desde el backend
+    const equipoLocal = document
+        .getElementById("equipoLocal")
+        .value.trim()
+        .toLowerCase();
+    const equipoVisitante = document
+        .getElementById("equipoVisitante")
+        .value.trim()
+        .toLowerCase();
+
+    // Determinar cuál es realmente el equipo del usuario
+    // Necesitamos verificar si el usuario juega como local o visitante
+    const equipoUsuario = document
+        .getElementById("equipoUsuario")
+        .value.trim()
+        .toLowerCase();
+
+    // Determinar cuál es el rival del usuario
+    let equipoRival;
+    if (equipoUsuario === equipoLocal) {
+        equipoRival = equipoVisitante;
+    } else if (equipoUsuario === equipoVisitante) {
+        equipoRival = equipoLocal;
+    } else {
+        // Si no coincide con ninguno, asumir que es local
+        equipoRival = equipoVisitante;
+    }
+
+    // Obtener todas las narraciones enriquecidas
+    const narraciones = Array.from(
+        commentaryList.querySelectorAll(".commentary-item")
+    ).map((item) => ({
+        minuto: parseInt(item.getAttribute("data-minuto")),
+        tipo: item.getAttribute("data-tipo"),
+        texto: item.querySelector("span:nth-child(2)").textContent,
+        node: item,
+    }));
+
+    narraciones.sort((a, b) => a.minuto - b.minuto);
+
+    // Estado
+    let tiempo = 0;
+    let partidoEnCurso = false;
+    let partidoTerminado = false;
+    let intervalo = null;
+    let narracionIndex = 0;
+    let velocidadNarracion = 1000;
+    let omitirNarracion = false;
+    let bonusMonedas = 500;
+
+    let stats = {
+        goles: 0,
+        faltas: 0,
+        tarjetas: 0,
+        lesionados: 0,
+    };
+
+    // Variables para rastrear goles por equipo
+    let golesLocal = 0;
+    let golesVisitante = 0;
+
+    function inicializarPartido() {
+        commentaryList.innerHTML = "";
+        narracionIndex = 0;
+        tiempo = 0;
+        stats = { goles: 0, faltas: 0, tarjetas: 0, lesionados: 0 };
+
+        // NO inicializar goles aquí - usar siempre datos del backend
+        actualizarEstadisticas();
+        actualizarMarcador(); // Esto usará los datos del backend
+        matchTime.textContent = "0'";
+        statusIndicator.textContent = "LISTO";
+        statusIndicator.className = "status-indicator ready";
+        startBtn.disabled = false;
+        // pauseBtn.disabled = true; // Eliminado
+        // resetBtn.disabled = true; // Eliminado
+
+        // Ocultar animación de puntos suspensivos
+        document.getElementById("loadingDots").style.display = "none";
+        actualizarBarraTiempo()
+    }
+
+    function iniciarPartido() {
+        if (partidoEnCurso) return;
+        partidoEnCurso = true;
+        partidoTerminado = false;
+        statusIndicator.textContent = "EN JUEGO";
+        statusIndicator.className = "status-indicator playing";
+        startBtn.disabled = true;
+        // pauseBtn.disabled = false; // Eliminado
+        // resetBtn.disabled = true; // Eliminado
+
+        // Inicializar marcador en 0-0
+        actualizarMarcador();
+
+        // Mostrar mensaje de inicio del partido
+        const mensajeInicio = document.createElement("div");
+        mensajeInicio.className = "commentary-item";
+        mensajeInicio.style.borderLeft = "6px solid #00ffc3";
+        mensajeInicio.style.background = "#1a3a2a";
+        mensajeInicio.style.color = "#00ffc3";
+        mensajeInicio.style.fontWeight = "bold";
+        mensajeInicio.innerHTML = `<span class="commentary-minute">0'</span>
+<span><strong>¡EL PARTIDO HA COMENZADO!</strong></span>`;
+        commentaryList.insertBefore(mensajeInicio, commentaryList.firstChild);
+        mensajeInicio.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        sonidoComienzo
+            .play()
+            .catch((e) =>
+                console.warn("No se pudo reproducir sonido de comienzo", e)
+            );
+
+        // Mostrar animación de puntos suspensivos
+        document.getElementById("loadingDots").style.display = "inline-block";
+
+        if (!intervalo) {
+            intervalo = setInterval(actualizarTiempo, velocidadNarracion);
+        }
+    }
+
+    function pausarPartido() {
+        if (!partidoEnCurso) return;
+        partidoEnCurso = false;
+        statusIndicator.textContent = "PAUSADO";
+        statusIndicator.className = "status-indicator paused";
+        startBtn.disabled = false;
+        // pauseBtn.disabled = true; // Eliminado
+        // resetBtn.disabled = true; // Eliminado
+        clearInterval(intervalo);
+        intervalo = null;
+
+        // Ocultar animación de puntos suspensivos
+        document.getElementById("loadingDots").style.display = "none";
+    }
+
+    function reiniciarPartido() {
+        clearInterval(intervalo);
+        intervalo = null;
+        partidoEnCurso = false;
+        partidoTerminado = false;
+        inicializarPartido();
+
+        // Ocultar animación de puntos suspensivos
+        document.getElementById("loadingDots").style.display = "none";
+    }
+
+    function actualizarBarraTiempo() {
+        const circle = document.querySelector('.progress-bar');
+        const max = 90;
+        const percent = Math.min(tiempo / max, 1);
+        const radius = 40;
+        const circumference = 2 * Math.PI * radius;
+        circle.style.strokeDasharray = `${circumference * percent},${circumference}`;
+    }
+
+
+    function actualizarTiempo() {
+        if (!partidoEnCurso) return;
+        tiempo++;
+        matchTime.textContent = `${tiempo}'`;
+        actualizarBarraTiempo();
+        // Mostrar todas las narraciones de este minuto
+        while (
+            narracionIndex < narraciones.length &&
+            narraciones[narracionIndex].minuto === tiempo
+            ) {
+            mostrarNarracion(narraciones[narracionIndex]);
+            narracionIndex++;
+        }
+
+        // Solo terminar cuando llegue a los 90 minutos
+        if (tiempo >= 90) {
+            terminarPartido();
+        }
+    }
+
+
+
+    function mostrarNarracion(narracion) {
+        const nuevaNarracion = document.createElement("div");
+        nuevaNarracion.className = "commentary-item";
+
+        // Establecer los atributos data necesarios para el marcador
+        nuevaNarracion.setAttribute("data-minuto", narracion.minuto);
+        nuevaNarracion.setAttribute("data-tipo", narracion.tipo);
+
+        // Lógica de color robusta y explícita para goles
+        const tipoEvento = narracion.tipo.toLowerCase();
+        const textoNarracion = narracion.texto.toLowerCase();
+
+        if (tipoEvento.includes("gol")) {
+            // Verificar si el gol es del equipo del usuario
+            if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+                nuevaNarracion.classList.add("gol-favor");
+            } else if (textoNarracion.includes(equipoRival.toLowerCase())) {
+                nuevaNarracion.classList.add("gol-contra");
+            } else {
+                // Si no se puede determinar, por defecto gol en contra
+                nuevaNarracion.classList.add("gol-contra");
+            }
+        } else if (
+            tipoEvento.includes("expulsion") ||
+            tipoEvento.includes("roja") ||
+            textoNarracion.includes("expulsado") ||
+            textoNarracion.includes("expulsión") ||
+            textoNarracion.includes("roja")
+        ) {
+            if (textoNarracion.includes(equipoUsuario.toLowerCase())) {
+                nuevaNarracion.classList.add("expulsion-propia");
+            } else {
+                nuevaNarracion.classList.add("expulsion-rival");
+            }
+            sonidoRoja
+                .play()
+                .catch((e) => console.warn("Expulsión: no se pudo reproducir", e));
+        } else if (tipoEvento.includes("amarilla")) {
+            nuevaNarracion.classList.add("tarjeta-amarilla");
+            sonidoAmarilla
+                .play()
+                .catch((e) => console.warn("Amarilla: no se pudo reproducir", e));
+        } else if (tipoEvento.includes("roja")) {
+            nuevaNarracion.classList.add("tarjeta-roja");
+            sonidoRoja
+                .play()
+                .catch((e) => console.warn("Roja: no se pudo reproducir", e));
+        } else if (tipoEvento.includes("lesion")) {
+            nuevaNarracion.classList.add("lesion");
+        }
+
+        nuevaNarracion.innerHTML = `<span class="commentary-minute">${narracion.minuto}'</span><span>${narracion.texto}</span>`;
+        commentaryList.insertBefore(nuevaNarracion, commentaryList.firstChild);
+        nuevaNarracion.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        procesarNarracion(narracion.tipo, narracion.texto);
+        actualizarEstadisticas();
+    }
+
+    function procesarNarracion(tipo, texto) {
+        switch (tipo) {
+            case "GOL":
+                stats.goles++;
+                // Actualizar marcador cuando aparece un gol
+                actualizarMarcador();
+                const golSound = document.getElementById("gol");
+                if (golSound) {
+                    const nuevoSonidoGol = golSound.cloneNode(); // clona el audio
+                    nuevoSonidoGol.volume = 0.6;
+
+                    // Opción: remover el nodo del DOM cuando termine
+                    nuevoSonidoGol.addEventListener("ended", () => {
+                        nuevoSonidoGol.remove();
+                    });
+
+                    document.body.appendChild(nuevoSonidoGol); // <- IMPORTANTE
+                    nuevoSonidoGol
+                        .play()
+                        .catch((e) => console.warn("Gol: no se pudo reproducir", e));
+                }
+                break;
+            case "TARJETA_AMARILLA":
+                stats.tarjetas++;
+                break;
+            case "TARJETA_ROJA":
+                stats.tarjetas++;
+                stats.faltas++;
+                break;
+            case "EXPULSION":
+                stats.tarjetas++;
+                stats.faltas++;
+                break;
+            case "LESION":
+                stats.lesionados++;
+                break;
+            case "GENERAL":
+                break;
+            default:
+                break;
+        }
+    }
+
+    function actualizarMarcador() {
+        // Si el partido no ha comenzado, mostrar 0-0
+        if (!partidoEnCurso) {
+            team1Score.textContent = "0";
+            team2Score.textContent = "0";
+            return;
+        }
+
+        // Si el partido está en curso, mostrar goles basados en narraciones mostradas
+        let golesLocalMostrados = 0;
+        let golesVisitanteMostrados = 0;
+
+        // Contar goles de las narraciones ya mostradas
+        Array.from(commentaryList.querySelectorAll(".commentary-item")).forEach(
+            (item) => {
+                const tipo = item.getAttribute("data-tipo");
+                if (tipo && tipo.toUpperCase() === "GOL") {
+                    const texto = item.textContent.trim();
+                    const nombreLocal = document
+                        .getElementById("team1Name")
+                        .textContent.trim();
+                    const nombreVisitante = document
+                        .getElementById("team2Name")
+                        .textContent.trim();
+
+                    // Buscar el nombre del equipo en el texto de la narración
+                    if (texto.toLowerCase().includes(nombreLocal.toLowerCase())) {
+                        golesLocalMostrados++;
+                    } else if (
+                        texto.toLowerCase().includes(nombreVisitante.toLowerCase())
+                    ) {
+                        golesVisitanteMostrados++;
+                    }
+                }
+            }
+        );
+
+        team1Score.textContent = golesLocalMostrados;
+        team2Score.textContent = golesVisitanteMostrados;
+    }
+
+    function actualizarEstadisticas() {
+        totalGoals.textContent = stats.goles;
+        totalFouls.textContent = stats.faltas;
+        totalCards.textContent = stats.tarjetas;
+        totalInjuries.textContent = stats.lesionados;
+    }
+
+    function terminarPartido(motivoOmitir = false) {
+        partidoEnCurso = false;
+        partidoTerminado = true;
+        clearInterval(intervalo);
+        intervalo = null;
+        statusIndicator.textContent = "FINALIZADO";
+        sonidoFinal
+            .play()
+            .catch((e) => console.warn("No se pudo reproducir sonido final", e));
+        statusIndicator.className = "status-indicator finished";
+        startBtn.disabled = true;
+        document.getElementById("loadingDots").style.display = "none";
+        matchTime.textContent = "90'";
+
+        tiempo = 90;
+        matchTime.textContent = "90'";
+        actualizarBarraTiempo();
+
+        if (!motivoOmitir) {
+            const narracionFinal = document.createElement("div");
+            narracionFinal.className = "commentary-item";
+            narracionFinal.innerHTML = `<span class="commentary-minute">90'</span><span><strong>¡FINAL DEL PARTIDO!</strong></span>`;
+            commentaryList.insertBefore(
+                narracionFinal,
+                commentaryList.firstChild
+            );
+            narracionFinal.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+            });
+        }
+
+        // Calcular resultado y goles usando SIEMPRE datos del backend
+        let golesUsuario = 0,
+            golesRival = 0,
+            resultado = "",
+            color = "",
+            monedasGanadas = parseInt(
+                document.getElementById("monedasGanadas")
+                    ? document.getElementById("monedasGanadas").value
+                    : 0
+            ),
+            bonus = 0;
+
+        // Obtener goles reales del backend
+        const golesLocal = parseInt(
+            document.getElementById("golesLocalFinal").value
+        );
+        const golesVisitante = parseInt(
+            document.getElementById("golesVisitanteFinal").value
+        );
+        const nombreLocal = document
+            .getElementById("nombreLocalFinal")
+            .value.trim();
+        const nombreVisitante = document
+            .getElementById("nombreVisitanteFinal")
+            .value.trim();
+        const equipoUsuarioNombre = document
+            .getElementById("equipoUsuarioFinal")
+            .value.trim()
+            .toLowerCase();
+        let esLocal = equipoUsuarioNombre === nombreLocal.toLowerCase();
+        const miEquipo = esLocal ? nombreLocal : nombreVisitante;
+        const rivalEquipo = esLocal ? nombreVisitante : nombreLocal;
+
+        golesUsuario = esLocal ? golesLocal : golesVisitante;
+        golesRival = esLocal ? golesVisitante : golesLocal;
+
+        // Extraer goles de las narraciones para mostrar en el modal
+        let golesHechos = [],
+            golesRecibidos = [];
+        Array.from(commentaryList.querySelectorAll(".commentary-item")).forEach(
+            (item) => {
+                const tipo = item.getAttribute("data-tipo");
+                if (tipo && tipo.toUpperCase() === "GOL") {
+                    const minuto = item.getAttribute("data-minuto");
+                    const texto = item.textContent.trim();
+                    // Buscar el nombre del jugador (primeras dos palabras después del minuto)
+                    const match = texto.match(
+                        /\d+'\s*([A-Za-záéíóúÁÉÍÓÚñÑ]+\s+[A-Za-záéíóúÁÉÍÓÚñÑ]+)/
+                    );
+                    let nombre = match ? match[1].trim() : "";
+                    // Determinar si es gol propio o rival
+                    if (texto.toLowerCase().includes(miEquipo.toLowerCase())) {
+                        golesHechos.push(`${minuto}' ${nombre}`);
+                    } else if (
+                        texto.toLowerCase().includes(rivalEquipo.toLowerCase())
+                    ) {
+                        golesRecibidos.push(`${minuto}' ${nombre}`);
+                    }
+                }
+            }
+        );
+
+        if (golesUsuario > golesRival) {
+            resultado = "¡VICTORIA!";
+            color = "#ffd700";
+        } else if (golesUsuario === golesRival) {
+            resultado = "EMPATE";
+            color = "#b0b0b0";
+        } else {
+            resultado = "DERROTA";
+            color = "#e74c3c";
+        }
+
+        if (!motivoOmitir) {
+            monedasGanadas += bonusMonedas;
+            bonus = bonusMonedas;
+        }
+
+        mostrarPopupFinal(
+            resultado,
+            color,
+            monedasGanadas,
+            bonus,
+            golesHechos,
+            golesRecibidos,
+            motivoOmitir
+        );
+    }
+
+    function mostrarPopupFinal(
+        resultado,
+        color,
+        monedas,
+        bonus,
+        golesHechos,
+        golesRecibidos,
+        omitido
+    ) {
+        const modal = document.createElement("div");
+        modal.className = "victory-modal";
+
+        // Obtener datos reales del backend SIEMPRE
+        const golesLocal = parseInt(
+            document.getElementById("golesLocalFinal").value
+        );
+        const golesVisitante = parseInt(
+            document.getElementById("golesVisitanteFinal").value
+        );
+        const nombreLocal = document.getElementById("nombreLocalFinal").value;
+        const nombreVisitante = document.getElementById(
+            "nombreVisitanteFinal"
+        ).value;
+        const equipoUsuarioNombre = document
+            .getElementById("equipoUsuarioFinal")
+            .value.trim()
+            .toLowerCase();
+        let esLocal = equipoUsuarioNombre === nombreLocal.trim().toLowerCase();
+        let golesUsuario = esLocal ? golesLocal : golesVisitante;
+        let golesRival = esLocal ? golesVisitante : golesLocal;
+        let nombreRival = esLocal ? nombreVisitante : nombreLocal;
+        let nombreUsuario = esLocal ? nombreLocal : nombreVisitante;
+
+        // Verificar si es un torneo de partido único
+        const esPartidoUnico =
+            document.getElementById("esPartidoUnico").value === "true";
+        const premioTorneo =
+            parseFloat(document.getElementById("premioTorneo").value) || 0;
+        const nombreTorneo = document.getElementById("nombreTorneo").value;
+
+        // Determinar resultado real
+        let resultadoTexto = "";
+        let colorReal = "";
+        if (golesUsuario > golesRival) {
+            resultadoTexto = `¡Ganaste ${golesUsuario}-${golesRival} a ${nombreRival}!`;
+            colorReal = "#ffd700";
+        } else if (golesUsuario < golesRival) {
+            resultadoTexto = `Perdiste ${golesUsuario}-${golesRival} contra ${nombreRival}`;
+            colorReal = "#e74c3c";
+        } else {
+            resultadoTexto = `Empataste ${golesUsuario}-${golesRival} con ${nombreRival}`;
+            colorReal = "#b0b0b0";
+        }
+
+        // Extraer solo los goles: minuto y nombre completo
+        function extraerGoleadores(arr) {
+            return arr
+                .map((texto) => {
+                    // Buscar minuto y nombre (no narración)
+                    // Ejemplo de narración: 59' Uriel Gómez presiona fuerte y busca el gol
+                    const match = texto.match(/(\d+)'\s+([A-Za-záéíóúÁÉÍÓÚñÑ ]+)/);
+                    if (match) {
+                        const minuto = match[1];
+                        let nombre = match[2].trim();
+                        // Solo el primer nombre y apellido (hasta el primer verbo o palabra no nombre)
+                        nombre = nombre.split(" ").slice(0, 2).join(" ");
+                        return `<b>${minuto}'</b> ${nombre}`;
+                    }
+                    return "";
+                })
+                .filter(Boolean)
+                .join("<br>");
+        }
+        let golesHtml = "";
+        if (golesHechos.length > 0) {
+            golesHtml += `<div style=\"margin-top: 10px; color: #00ffc3; font-weight: bold;\">Tus goles:</div><div style='color:#fff;'>${extraerGoleadores(
+                golesHechos
+            )}</div>`;
+        }
+        if (golesRecibidos.length > 0) {
+            golesHtml += `<div style=\"margin-top: 10px; color: #e74c3c; font-weight: bold;\">Goles rivales:</div><div style='color:#fff;'>${extraerGoleadores(
+                golesRecibidos
+            )}</div>`;
+        }
+
+        // Modal específico para torneos de partido único
+        if (esPartidoUnico && golesUsuario > golesRival) {
+            modal.innerHTML = `
+            <div class=\"victory-card\" style=\"border-color: #ffd700; background: linear-gradient(135deg, #2d2d2d 0%, #ffd70033 100%);\">
+                <div class=\"victory-title\" style=\"color: #ffd700; font-size: 1.8rem; text-align: center; margin-bottom: 20px;\">
+                    <i class='bi bi-trophy-fill' style='font-size: 2rem; margin-right: 10px;'></i>
+                    ¡GANASTE EL PARTIDO ÚNICO!
+                </div>
+                <div style=\"margin-top: 15px; font-size: 1.2rem; color: #fff; text-align: center; margin-bottom: 20px;\">
+                    <strong>${nombreTorneo}</strong>
+                </div>
+                <div style=\"margin-top: 15px; font-size: 1.1rem; color: #00ffc3; text-align: center; margin-bottom: 25px;\">
+                    ${resultadoTexto}
+                </div>
+                <div style=\"margin-top: 20px; font-size: 1.5rem; color: #ffd700; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 10px; border: 2px solid #ffd700;\">
+                    <i class='bi bi-coin' style='font-size: 2rem;'></i>
+                    <span>¡Te llevas ${premioTorneo} monedas!</span>
+                </div>
+                <div style=\"margin-top: 15px; font-size: 1rem; color: #00ffc3; text-align: center; font-weight: bold;\">
+                    ¡Felicidades! Has ganado el premio del torneo
+                </div>
+                <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px; background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; font-weight: bold; border: none; padding: 12px 30px; border-radius: 25px;\">¡FELICIDADES!</button>
+            </div>
+        `;
+        } else {
+            // Modal normal para otros tipos de torneos
+            modal.innerHTML = `
+            <div class=\"victory-card\" style=\"border-color: ${colorReal}; background: linear-gradient(135deg, #2d2d2d 0%, ${colorReal}33 100%);\">
+                <div class=\"victory-title\" style=\"color: ${colorReal};\">${resultadoTexto}</div>
+                <div style=\"margin-top: 20px; font-size: 1.3rem; color: ${colorReal}; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;\">
+                    <i class='bi bi-coin' style='font-size: 1.5rem;'></i>
+                    ${
+                golesUsuario < golesRival
+                    ? '<span style="color:#e74c3c;">No ganaste monedas</span>'
+                    : `+${monedas} monedas`
+            }
+                </div>
+                ${
+                bonus > 0 && golesUsuario >= golesRival
+                    ? `<div style=\"color:#00ffc3; font-size:1.1rem; margin-top:10px; font-weight:bold;\">+${bonus} bonus por narración completa!</div>`
+                    : ""
+            }
+                <button id=\"cerrarPopupBtn\" class=\"btn btn-primary\" style=\"margin-top: 30px;\">OK</button>
+            </div>
+        `;
+        }
+
+        document.body.appendChild(modal);
+        document
+            .getElementById("cerrarPopupBtn")
+            .addEventListener("click", function () {
+                modal.remove();
+            });
+    }
+
+    window.addEventListener("DOMContentLoaded", function () {
+        const ambientSound = document.getElementById("ambient-tribuna");
+
+        // Esperar interacción del usuario (por políticas de autoplay)
+        document
+            .getElementById("startBtn")
+            .addEventListener("click", function () {
+                ambientSound.volume = 0.2; // volumen moderado
+                ambientSound
+                    .play()
+                    .catch((e) =>
+                        console.warn("El navegador bloqueó el autoplay:", e)
+                    );
+            });
+
+        // Opción para detener el sonido si se desea
+        document
+            .getElementById("omitebtn")
+            .addEventListener("click", function () {
+                ambientSound.pause();
+            });
+    });
+
+    // Event listeners
+    startBtn.addEventListener("click", iniciarPartido);
+    omiteBtn.addEventListener("click", () => terminarPartido(true));
+
+    // Inicializar el partido al cargar la página
+    inicializarPartido();
+</script>
+</body>
 </html>
+
